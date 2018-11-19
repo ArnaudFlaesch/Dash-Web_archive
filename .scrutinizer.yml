@@ -1,0 +1,21 @@
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - js-scrutinizer-run
+          -
+            command : 'npm test'
+  dependencies:
+        before:
+            - npm install -g istanbul
+  environment:
+        node: '8.11.3'
+
+checks:
+    javascript: true
+
+
+filter:
+    excluded_paths:
+       - node_modules/

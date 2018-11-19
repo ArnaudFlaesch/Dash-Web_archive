@@ -1,0 +1,21 @@
+.dashboard {
+  display : flex; flex-direction : row;
+}
+
+.widget {
+	margin : 10px;
+	border : 2px solid black;
+	min-width: 300px;
+	max-width: 500px;
+	max-height: 400px;
+	overflow: scroll;
+}
+
+.imgLogoRSS {
+	max-width: 30px;
+}
+
+.article {
+	margin : 10px;
+	border : 2px solid black;
+}
