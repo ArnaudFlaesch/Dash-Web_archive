@@ -5,7 +5,7 @@ build:
         override:
           - js-scrutinizer-run
           -
-            command : 'npm test'
+            command : 'npm test -- --coverage'
   dependencies:
         before:
             - npm install -g istanbul

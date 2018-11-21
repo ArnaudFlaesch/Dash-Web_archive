@@ -11,6 +11,7 @@ env:
 before_install:
   - npm install -g coveralls codacy-coverage
 
+script: npm test -- --coverage
 
 after_success:
   - cat ./coverage/lcov.info | coveralls
