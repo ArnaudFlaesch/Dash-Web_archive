@@ -4,17 +4,18 @@ checks:
 build:
   environment:
     node: v10.13.0
-    nodes:
-        analysis:
-            project_setup:
-                override: true
-            tests:
-                override:
-                - js-scrutinizer-run
-                - command : 'npm test -- --coverage'
-                coverage:
-                   file: path/to/coverage-data
-                   format: lcov
+  nodes:
+    analysis:
+      project_setup:
+        override: true
+    coverage:
+      tests:
+        override:
+           - js-scrutinizer-run
+           - command : 'npm test -- --coverage'
+             coverage:
+              file: path/to/coverage-data
+              format: lcov
                   
 filter:
     excluded_paths:
