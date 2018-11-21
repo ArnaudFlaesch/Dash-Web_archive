@@ -14,7 +14,7 @@ build:
            - js-scrutinizer-run
            - command : 'npm test -- --coverage'
              coverage:
-              file: path/to/coverage-data
+              file: ./coverage/lcov.info
               format: lcov
                   
 filter:
