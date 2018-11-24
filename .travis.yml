@@ -14,5 +14,5 @@ before_install:
 script: npm test -- --coverage
 
 after_success:
-  - cat ./coverage/lcov.info | coveralls
-  - cat ./coverage/lcov.info | codacy-coverage
+  - cat ./coverage/clover.xml | coveralls
+  - cat ./coverage/clover.xml | codacy-coverage

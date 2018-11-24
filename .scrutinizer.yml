@@ -14,8 +14,8 @@ build:
            - js-scrutinizer-run
            - command : 'npm test -- --coverage'
              coverage:
-              file: ./coverage/lcov.info
-              format: lcov
+              file: ./coverage/clover.xml
+              format: clover
                   
 filter:
     excluded_paths:
