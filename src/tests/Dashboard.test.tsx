@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Dashboard } from '../components/Dashboard';
 
 it('renders without crashing', () => {
