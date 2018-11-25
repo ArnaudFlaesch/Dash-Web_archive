@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as winston from 'winston';
 import { IProperties } from '../IProperties';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
@@ -15,7 +16,14 @@ export class Dashboard extends React.Component<IProps, IState> {
 
 	constructor(props: IProps) {
 		super(props);
-		this.state = { properties: require('../properties.json') };
+		this.state = {};
+		try {
+			const propertiesJSON = require('../properties.json');
+			this.state = { properties: propertiesJSON };
+		}
+		catch (error) {
+			winston.log('debug', error.message);
+		}
 	}
 
 	public render() {
