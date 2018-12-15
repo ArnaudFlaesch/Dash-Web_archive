@@ -23,6 +23,11 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
   integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
 
+"@types/fb@^0.0.23":
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/@types/fb/-/fb-0.0.23.tgz#8f601579bf41f968c5a55150f578e66dac37dcf8"
+  integrity sha512-hbJdzpyEOHHB1CZwnDkFGkODdqtgDNNiU3JKFWdKXzaGTEQArzHTX8IRlI9WphULMbKue1soxvnVZVnSal92lA==
+
 "@types/jest@^23.3.9":
   version "23.3.9"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.9.tgz#c16b55186ee73ae65e001fbee69d392c51337ad1"

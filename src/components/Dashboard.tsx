@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as winston from 'winston';
 import { IProperties } from '../IProperties';
+import { FacebookWidget } from './widgets/facebook/FacebookWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
 
@@ -32,6 +33,7 @@ export class Dashboard extends React.Component<IProps, IState> {
 				{this.state.properties &&
 					<WeatherWidget weather_api_key={this.state.properties.weather_api_key} />
 				}
+				<FacebookWidget />
 				{this.state.properties &&
 					this.state.properties.urls.map((url: string) => {
 						return (<RSSWidget key={url} url={url} />)
