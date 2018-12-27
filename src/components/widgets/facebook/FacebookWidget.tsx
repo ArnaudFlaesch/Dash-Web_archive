@@ -1,74 +1,89 @@
 import * as React from 'react';
-import * as winston from 'winston';
+import logger from "../../../utils/LogUtils";
+
+declare var window: any;
+declare var FB: any;
 
 interface IProps {
     appId?: string;
 }
 
-interface IFBResponse {
-    name: string;
+interface IState {
+    username: string
 }
 
-
-export class FacebookWidget extends React.Component<IProps> {
-
+export default class FacebookWidget extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
-        ((d, s, id) => {
-            let js : any = d.getElementsByTagName(s)[0];
-            const fjs : any = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return };
+        window.fbAsyncInit = () => {
+            FB.init({
+                appId: props.appId,
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v3.2'
+            });
+
+            // Broadcast an event when FB object is ready
+            const fbInitEvent = new Event('FBObjectReady');
+            document.dispatchEvent(fbInitEvent);
+        };
+        (((d, s, id) => {
+            let js: any = d.getElementsByTagName(s)[0];
+            const fjs: any = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
             js = d.createElement(s); js.id = id;
             js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-          })(document, 'script', 'facebook-jssdk');
-    }
-
-    
-
-    public statusChangeCallback(response: any) {
-        winston.log("debug", 'statusChangeCallback');
-        winston.log("debug", response);
-        // The response object is returned with a status field that lets the
-        // app know the current login status of the person.
-        // Full docs on the response object can be found in the documentation
-        // for FB.getLoginStatus().
-        if (response.status === 'connected') {
-            // Logged into your app and Facebook.
-            this.testAPI();
-        } else {
-            // The person is not logged into your app or we are unable to tell.
-            if (document.getElementById('status') !== null) {
-                winston.log("debug", 'Please log ' +
-                    'into this app.');
+            if (fjs) {
+                fjs.parentNode.insertBefore(js, fjs);
             }
+        })(document, 'script', 'facebook-jssdk'));
+        document.addEventListener('FBObjectReady', this.checkLoginStatus);
+    }
 
+    public componentWillUnmount() {
+        document.removeEventListener('FBObjectReady', this.checkLoginStatus);
+    }
+
+    public checkLoginStatus = () => {
+        FB.getLoginStatus(this.facebookLoginHandler);
+    }
+
+    /**
+     * Check login status and call login api is user is not logged in
+     */
+    public facebookLogin = () => {
+        FB.getLoginStatus((response: any) => {
+            if (response.status !== 'connected') {
+                FB.login(this.facebookLoginHandler, {
+                    scope: 'user_birthday,user_hometown,user_likes,user_photos,user_friends,user_status,user_tagged_places,user_posts,user_gender,user_link,email,public_profile'
+                });
+            }
+        });
+    }
+
+    public facebookLoginHandler = (response: any) => {
+        if (response.status === 'connected') {
+            FB.api('/me', (userData: any) => {
+                logger.debug(userData);
+            },
+                {
+                    "fields": "id,email,gender,hometown,link,location,feed,events,music,games"
+                }
+            );
         }
-    }
-
-    // This function is called when someone finishes with the Login
-    // Button.  See the onlogin handler attached to it in the sample
-    // code below.
-    public checkLoginState() {
-        FB.getLoginStatus(response => {
-            this.statusChangeCallback(response);
-        });
-    }
-
-
-    public testAPI() {
-        winston.log("debug", 'Welcome!  Fetching your information.... ');
-        FB.api('/me', (response: IFBResponse) => {
-            winston.log("debug", 'Successful login for: ' + response.name);
-            winston.log("debug", 'Thanks for logging in, ' + response.name + '!');
-        });
-    }
+    };
 
     public render() {
         return (
-            <div>
-                fb
+            <div className="widget">
+                <div onClick={this.facebookLogin}
+                    className="fb-login-button"
+                    data-max-rows="1"
+                    data-size="large"
+                    data-button-type="continue_with"
+                    data-use-continue-as="true"
+                />
             </div>
-        )
+        );
     }
 }

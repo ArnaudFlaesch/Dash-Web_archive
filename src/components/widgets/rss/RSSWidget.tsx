@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
 import * as winston from 'winston';
-import {IArticle, ImageContent, IRSSHeader} from "./IArticle";
+import { IArticle, ImageContent, IRSSHeader } from "./IArticle";
 import { RSSArticle } from './RSSArticle';
 
 interface IProps {
@@ -13,7 +13,7 @@ interface IState {
 	url: string;
 	title: string;
 	description: string;
-	image? : ImageContent;
+	image?: ImageContent;
 	link: string;
 	feed: IArticle[];
 	parser: any;
@@ -27,7 +27,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			CORS_PROXY: 'https://cors-anywhere.herokuapp.com/',
 			description: "",
 			feed: [],
-			image : undefined,
+			image: undefined,
 			link: "",
 			parser: new RSSParser(),
 			title: "",
@@ -38,29 +38,25 @@ export class RSSWidget extends React.Component<IProps, IState> {
 
 	public fetchDataFromRssFeed() {
 		this.state.parser.parseURL(this.state.CORS_PROXY + this.state.url)
-			.then((result : IRSSHeader) => {
+			.then((result: IRSSHeader) => {
 				this.setState({
-					description : result.description,
-					feed : result.items,
-					image : result.image,
-					link : result.link,
-					title : result.title,
+					description: result.description,
+					feed: result.items,
+					image: result.image,
+					link: result.link,
+					title: result.title,
 				})
 			})
-			.catch((error : Error) => {
+			.catch((error: Error) => {
 				winston.log('debug', error.message);
 			});
 	}
 
-	public getFeedFromRSS(data : IArticle[]) {
+	public getFeedFromRSS(data: IArticle[]) {
 		return (
-			<div>
-				{
-					data.map(article => {
-						return (<RSSArticle key={article.guid || article.link} article={article} />)
-					})
-				}
-			</div>
+			data.map(article => {
+				return (<RSSArticle key={article.guid || article.link} article={article} />)
+			})
 		)
 	}
 
