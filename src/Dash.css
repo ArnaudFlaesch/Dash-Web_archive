@@ -1,5 +1,7 @@
-.dashboard {
-  display : flex; flex-direction : row;
+.dash {
+  display : flex;
+  flex-direction : row;
+  flex-wrap: wrap;
 }
 
 .flexRow {
@@ -11,6 +13,8 @@
 	margin : 10px;
 	border : 2px solid black;
 	min-width: 300px;
+	max-width: 500px;
+	max-height: 500px;
 	overflow: scroll;
 }
 
