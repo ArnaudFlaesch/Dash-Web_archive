@@ -1,16 +1,37 @@
 import * as React from 'react';
 import logger from "../../../utils/LogUtils";
+import ITab from "../../ITab";
+import TabNavigation from '../../TabNavigation';
+import EventsTab from './events/EventsTab';
+import { getProfileInfo } from "./FacebookAPI";
+import GroupsTab from './groups/GroupsTab';
+import IFBUser from "./IFBUser";
 
-declare var window: any;
-declare var FB: any;
+declare const window: any;
+declare const FB: FBSDK;
 
 interface IProps {
     appId?: string;
 }
 
 interface IState {
-    username: string
+    loginStatusResponse?: FB.LoginStatusResponse,
+    userData?: IFBUser
 }
+
+const tabs: ITab[] = [
+    {
+        title: "Groupes",
+        component: GroupsTab,
+        path: "/groups/"
+
+    },
+    {
+        title: "Events",
+        component: EventsTab,
+        path: "/events/"
+    }
+];
 
 export default class FacebookWidget extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -18,7 +39,6 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
         window.fbAsyncInit = () => {
             FB.init({
                 appId: props.appId,
-                autoLogAppEvents: true,
                 xfbml: true,
                 version: 'v3.2'
             });
@@ -52,7 +72,10 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
      * Check login status and call login api is user is not logged in
      */
     public facebookLogin = () => {
-        FB.getLoginStatus((response: any) => {
+        logger.debug("facebookLogin");
+        FB.getLoginStatus((response: FB.LoginStatusResponse) => {
+            logger.debug(response);
+            this.setState({ loginStatusResponse: response });
             if (response.status !== 'connected') {
                 FB.login(this.facebookLoginHandler, {
                     scope: 'user_birthday,user_hometown,user_likes,user_photos,user_friends,user_status,user_tagged_places,user_posts,user_gender,user_link,email,public_profile'
@@ -61,28 +84,55 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
         });
     }
 
+    public facebookLogout = () => {
+        FB.logout((response: any) => {
+            logger.debug(response);
+            this.setState({ userData: undefined, loginStatusResponse: response });
+        });
+    }
+
     public facebookLoginHandler = (response: any) => {
+        logger.debug("facebookLoginHandler");
+        this.setState({ loginStatusResponse: response });
         if (response.status === 'connected') {
-            FB.api('/me', (userData: any) => {
-                logger.debug(userData);
-            },
-                {
-                    "fields": "id,email,gender,hometown,link,location,feed,events,music,games"
-                }
-            );
+            logger.debug("Connected");
+            getProfileInfo()
+                .then((result: IFBUser) => {
+                    logger.debug("Result");
+                    logger.debug(result);
+                    this.setState({ userData: result })
+                })
+                .catch((error: Error) => {
+                    logger.debug(error);
+                });
         }
     };
 
     public render() {
+        let element = null;
+        if (this.state && this.state.loginStatusResponse && this.state.loginStatusResponse.status === "connected" && this.state.userData) {
+            const userData: IFBUser = this.state.userData;
+            element = <div>
+                <div>{userData.first_name} {userData.last_name}</div>
+                <div onClick={this.facebookLogout}>Se déconnecter</div>
+            </div>;
+        } else {
+            element = <div onClick={this.facebookLogin}
+                className="fb-login-button"
+                data-max-rows="1"
+                data-size="large"
+                data-button-type="continue_with"
+                data-use-continue-as="true"
+            />;
+        }
         return (
             <div className="widget">
-                <div onClick={this.facebookLogin}
-                    className="fb-login-button"
-                    data-max-rows="1"
-                    data-size="large"
-                    data-button-type="continue_with"
-                    data-use-continue-as="true"
-                />
+                {element}
+                {this.state && this.state.userData &&
+                    <div>
+                        <TabNavigation tabList={tabs} />
+                    </div>
+                }
             </div>
         );
     }
