@@ -1,7 +1,7 @@
 import * as React from 'react';
 import logger from "../../../utils/LogUtils";
-import ITab from "../../ITab";
-import TabNavigation from '../../TabNavigation';
+import ITab from "../../tab/ITab";
+import TabNavigation from '../../tab/TabNavigation';
 import EventsTab from './events/EventsTab';
 import { getProfileInfo } from "./FacebookAPI";
 import GroupsTab from './groups/GroupsTab';

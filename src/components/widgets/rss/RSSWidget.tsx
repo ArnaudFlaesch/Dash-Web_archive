@@ -1,8 +1,9 @@
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
 import * as winston from 'winston';
+import ComponentWithDetail from '../../detailComponent/ComponentWithDetail';
 import { IArticle, ImageContent, IRSSHeader } from "./IArticle";
-import { RSSArticle } from './RSSArticle';
+import  RSSArticle from './RSSArticle';
 
 interface IProps {
 	url: string;
@@ -33,7 +34,6 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			title: "",
 			url: props.url,
 		}
-
 	}
 
 	public fetchDataFromRssFeed() {
@@ -54,8 +54,10 @@ export class RSSWidget extends React.Component<IProps, IState> {
 
 	public getFeedFromRSS(data: IArticle[]) {
 		return (
-			data.map(article => {
-				return (<RSSArticle key={article.guid || article.link} article={article} />)
+			data.map((article) => {
+				return (
+					<ComponentWithDetail key={article.guid} componentRoot={article.title || article.link} componentDetail={<RSSArticle {...article} />} link={article.link} />
+				)
 			})
 		)
 	}

@@ -14,9 +14,9 @@ export interface IRSSHeader {
 }
 
 export interface IArticle {
-	guid?: string;
+	guid: string;
 	title?: string;
-	link?: string;
+	link: string;
 	content?: string;
 	author?: string;
 	pubDate?: string;
