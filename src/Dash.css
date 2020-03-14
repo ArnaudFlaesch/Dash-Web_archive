@@ -1,28 +1,23 @@
 .dash {
-  display : flex;
-  flex-direction : row;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .flexRow {
-	display : flex;
-	flex-direction : row;
+    display: flex;
+    flex-direction: row;
 }
 
 .widget {
-	margin : 10px;
-	border : 2px solid black;
-	min-width: 300px;
-	max-width: 500px;
-	max-height: 500px;
-	overflow: scroll;
+    margin: 10px;
+    border: 2px solid black;
+    min-width: 300px;
+    max-width: 500px;
+    max-height: 500px;
+    overflow: scroll;
 }
 
 .imgLogoRSS {
-	max-width: 30px;
-}
-
-.article {
-	margin : 10px;
-	border : 2px solid black;
+    max-width: 30px;
 }
