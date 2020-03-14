@@ -26,4 +26,4 @@ export interface ImageContent {
 	link: string,
 	url: string,
 	title: string
-};
+}
