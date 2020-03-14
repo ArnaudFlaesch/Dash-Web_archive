@@ -3,7 +3,8 @@ import * as RSSParser from 'rss-parser';
 import * as winston from 'winston';
 import ComponentWithDetail from '../../detailComponent/ComponentWithDetail';
 import { IArticle, ImageContent, IRSSHeader } from "./IArticle";
-import  RSSArticle from './RSSArticle';
+import RSSArticle from './RSSArticle';
+import "./RSSWidget.scss";
 
 interface IProps {
 	url: string;
@@ -71,13 +72,17 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			<div key={this.state.title} className="widget">
 				<div className="widgetHeader">
 					<a href={this.state.link}>
-						{this.state.image &&
-							<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
-						}
-						{this.state.title}
+						<div className="rssWidgetTitle">
+							{this.state.image &&
+								<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
+							}
+							<div>
+								{this.state.title}
+							</div>
+						</div>
 					</a>
 				</div>
-				<div>{this.state.description}</div>
+				<div className="rssDescription">{this.state.description}</div>
 				<div className="feed">
 					{this.getFeedFromRSS(this.state.feed)}
 				</div>

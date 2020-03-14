@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Collapse } from "react-bootstrap";
+import {  Card, CardBody, Collapse } from 'reactstrap';
 import "./ComponentWithDetail.css";
 
 interface IProps {
@@ -13,7 +13,6 @@ interface IState {
 }
 
 export default class ComponentWithDetail extends React.Component<IProps, IState> {
-
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -28,12 +27,14 @@ export default class ComponentWithDetail extends React.Component<IProps, IState>
     public render() {
         return (
             <div>
-                <div onClick={this.toggleCollapse}>{this.props.componentRoot}</div>
+                <div onClick={this.toggleCollapse} className="title">{this.props.componentRoot}</div>
                 <div>
-                    <Collapse in={this.state.openCollapse}>
-                        <div>
-                            {this.props.componentDetail}
-                        </div>
+                    <Collapse isOpen={this.state.openCollapse}>
+                        <Card>
+                            <CardBody>
+                                {this.props.componentDetail}
+                            </CardBody>
+                        </Card>
                     </Collapse>
                 </div>
             </div>

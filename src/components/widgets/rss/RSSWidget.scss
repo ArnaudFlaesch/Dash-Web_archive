@@ -1,0 +1,14 @@
+.widgetHeader {
+    .rssWidgetTitle {
+        display: flex;
+        flex-direction: row;
+    }
+    font-weight: bold;
+    a:link {
+        text-decoration: none;
+    }
+}
+
+.rssDescription {
+    font-weight: bold;
+}
