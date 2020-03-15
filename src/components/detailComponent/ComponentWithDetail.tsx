@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {  Card, CardBody, Collapse } from 'reactstrap';
-import "./ComponentWithDetail.css";
+import "./ComponentWithDetail.scss";
 
 interface IProps {
     componentRoot: React.ReactNode | string;
