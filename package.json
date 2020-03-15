@@ -1,33 +1,41 @@
 {
-  "name": "dash",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.18.0",
-    "express": "^4.16.4",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-scripts-ts": "3.1.0",
-    "rss-parser": "^3.5.4",
-    "winston": "^3.1.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^23.3.9",
-    "@types/node": "^10.12.10",
-    "@types/react": "^16.7.7",
-    "@types/react-dom": "^16.0.10",
-    "@types/xml2js": "^0.4.3",
-    "typescript": "^3.1.6"
-  },
-  "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "serve": "node src/server.js",
-    "test": "react-scripts-ts test --env=jsdom"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+    "name": "dash",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "axios": "^0.18.0",
+        "bootstrap": "^4.4.1",
+        "express": "^4.16.4",
+        "react": "^16.6.3",
+        "react-bootstrap": "0.33.0",
+        "react-dom": "^16.6.3",
+        "react-router-dom": "^4.3.1",
+        "react-scripts-ts": "^4.0.8",
+        "reactstrap": "^8.4.1",
+        "rss-parser": "^3.5.4",
+        "winston": "^3.1.0"
+    },
+    "devDependencies": {
+        "@types/fb": "^0.0.23",
+        "@types/jest": "^23.3.9",
+        "@types/node": "^10.12.10",
+        "@types/react": "^16.7.7",
+        "@types/react-dom": "^16.0.10",
+        "@types/react-router-dom": "^4.3.1",
+        "@types/reactstrap": "^8.4.2",
+        "@types/xml2js": "^0.4.3",
+        "node-sass": "^4.13.1",
+        "typescript": "^3.1.6"
+    },
+    "scripts": {
+        "start": "set HTTPS=true&&react-scripts-ts start",
+        "build": "react-scripts-ts build",
+        "serve": "node src/server.js",
+        "test": "react-scripts-ts test --env=jsdom"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not ie <= 11",
+        "not op_mini all"
+    ]
 }
