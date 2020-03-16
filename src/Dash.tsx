@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as winston from 'winston';
-import FacebookWidget from './components/widgets/facebook/FacebookWidget';
-import { RSSWidget } from "./components/widgets/rss/RSSWidget";
+import FacebookWidget from './widgets/facebook/FacebookWidget';
+import { RSSWidget } from "./widgets/rss/RSSWidget";
 import'./Dash.css';
 import { IProperties } from './IProperties';
 

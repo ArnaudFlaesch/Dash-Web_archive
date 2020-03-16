@@ -1,6 +1,6 @@
-import logger from "../../../utils/LogUtils";
+import logger from "../../utils/LogUtils";
 import IGroup from './groups/IGroup';
-declare const FB: FBSDK;
+declare const FB: any;
 
 export function getProfileInfo(): any {
     return (new Promise((resolve, reject) => {

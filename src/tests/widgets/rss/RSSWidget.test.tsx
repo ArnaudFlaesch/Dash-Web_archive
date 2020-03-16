@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { RSSWidget } from '../../components/widgets/rss/RSSWidget';
+import { RSSWidget } from '../../../widgets/rss/RSSWidget';
 
 it('renders without crashing', () => {
     const div = document.createElement('div');

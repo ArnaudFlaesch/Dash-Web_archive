@@ -5,7 +5,7 @@ import "./ComponentWithDetail.scss";
 interface IProps {
     componentRoot: React.ReactNode | string;
     componentDetail: React.ReactNode | string;
-    link: string;
+    link?: string;
 }
 
 interface IState {

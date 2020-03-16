@@ -1,5 +1,5 @@
 import * as React from "react";
-import logger from "../../../../utils/LogUtils";
+import logger from "../../../utils/LogUtils";
 import {getGroupsData} from "../FacebookAPI";
 import IGroup from "./IGroup";
 

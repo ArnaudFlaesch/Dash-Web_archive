@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as React from 'react';
 import * as winston from 'winston';
-import { formatDayFromUTC, formatTimeFromDate } from "../../../utils/DateUtils";
+import { formatDayFromUTC, formatTimeFromDate } from "../../utils/DateUtils";
 import {ICurrent, IForecast, ILocation} from "./IWeather";
 
 export interface IProps {
