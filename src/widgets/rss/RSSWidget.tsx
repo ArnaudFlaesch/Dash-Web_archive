@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
 import * as winston from 'winston';
-import ComponentWithDetail from '../../detailComponent/ComponentWithDetail';
+import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { IArticle, ImageContent, IRSSHeader } from "./IArticle";
 import RSSArticle from './RSSArticle';
 import "./RSSWidget.scss";

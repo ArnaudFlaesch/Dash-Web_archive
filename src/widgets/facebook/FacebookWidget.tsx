@@ -1,5 +1,5 @@
 import * as React from 'react';
-import logger from "../../../utils/LogUtils";
+import logger from "../../utils/LogUtils";
 import ITab from "../../tab/ITab";
 import TabNavigation from '../../tab/TabNavigation';
 import EventsTab from './events/EventsTab';
@@ -8,14 +8,14 @@ import GroupsTab from './groups/GroupsTab';
 import IFBUser from "./IFBUser";
 
 declare const window: any;
-declare const FB: FBSDK;
+declare const FB: any;
 
 interface IProps {
     appId?: string;
 }
 
 interface IState {
-    loginStatusResponse?: FB.LoginStatusResponse,
+    loginStatusResponse: any,
     userData?: IFBUser
 }
 
@@ -73,7 +73,7 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
      */
     public facebookLogin = () => {
         logger.debug("facebookLogin");
-        FB.getLoginStatus((response: FB.LoginStatusResponse) => {
+        FB.getLoginStatus((response: any) => {
             logger.debug(response);
             this.setState({ loginStatusResponse: response });
             if (response.status !== 'connected') {

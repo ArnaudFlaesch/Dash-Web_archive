@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { formatDateFromUTC } from "../../../utils/DateUtils";
+import { formatDateFromUTC } from "../../utils/DateUtils";
 import { IArticle } from "./IArticle";
 import "./RSSArticle.scss";
 

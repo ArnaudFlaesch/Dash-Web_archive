@@ -1,5 +1,5 @@
 import * as React from "react";
-import logger from "../../../../utils/LogUtils";
+import logger from "../../../utils/LogUtils";
 
 export default class EventsTab extends React.Component {
     constructor(props: any) {

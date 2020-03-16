@@ -4,15 +4,13 @@ interface IProps {
     token? : string;
 }
 
-export class DiscordWidget extends React.Component<IProps> {
+export class StravaWidget extends React.Component {
 
     constructor(props : IProps) {
         super(props);
     }
 
     public render() {
-        return {
-            
-        }
+        return (<div></div>)
     }
 }
