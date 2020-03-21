@@ -3,8 +3,8 @@ import * as ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import { IArticle } from "../../../widgets/rss/IArticle";
 import RSSArticle from '../../../widgets/rss/RSSArticle';
-import * as Enzyme from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
+import * as Enzyme from 'enzyme';
 
 Enzyme.configure({ adapter: new Adapter() });
 

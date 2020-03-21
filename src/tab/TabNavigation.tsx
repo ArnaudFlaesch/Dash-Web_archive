@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import ITab from "./ITab";
-import "./TabNavigation.css"
+import "./TabNavigation.scss"
 
 interface IProps {
     tabList: ITab[];

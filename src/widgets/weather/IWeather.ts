@@ -1,72 +1,53 @@
-export interface ILocation {
-    name : string;
-    region : string;
-    country : string;
-    lat : number;
-    lon : number;
-    tz_id : string;
-    localtime_epoch : number;
-    localtime : string;
+export interface IWeatherAPIResponse {
+    cod: string;
+    message: number;
+    cnt: number;
+    list: IForecast[];
+    city: ICity;
 }
 
-export interface ICurrent {
-    last_updated_epoch : number;
-    last_updated : string;
-    temp_c : number;
-    temp_f : number;
-    is_day : number;
-    condition : {
-        text : string;
-        icon : string;
-        code : number;
+export interface ICity {
+    id: number;
+    name: string;
+    coord: {
+        lat: number;
+        lon: number;
     }
-    wind_mph : number;
-    wind_kph : number;
-    wind_degree : number;
-    wind_dir : string;
-    pressure_mb : number;
-    pressure_in : number;
-    precip_mm : number;
-    precip_in : number;
-    humidity : number;
-    cloud : number;
-    feelslike_c : number;
-    feelslike_f : number;
-    vis_km : number;
-    vis_miles : number;
-    uv : number;
+    country: string;
+    population: number;
+    timezone: number;
+    sunrise: number;
+    sunset: number;
 }
 
 export interface IForecast {
-    forecastday : [{
-        date : string;
-        date_epoch : number;
-        day : {
-            maxtemp_c : number;
-            maxtemp_f : number;
-            mintemp_c : number;
-            mintemp_f : number;
-            avgtemp_c : number;
-            avgtemp_f : number;
-            maxwind_mph : number;
-            maxwind_kph : number;
-            totalprecip_mm : number;
-            totalprecip_in : number;
-            avgvis_km : number;
-            avgvis_miles : number;
-            avghumidity : number;
-            condition : {
-                text : string;
-                icon : string;
-                code : number;
-            }
-            uv : number;
-        },
-        astro : {
-            sunrise : string;
-            sunset : string;
-            moonrise : string;
-            moonset : string;
-        }
-    }]
+    dt: number;
+    dt_text: string;
+    main: {
+        temp: number;
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        sea_level: number;
+        grnd_level: number;
+        humidity: number;
+        temp_kf: number;
+    },
+    weather: [{
+        id: number;
+        main: string;
+        description: string;
+        icon: string;
+    }],
+    clouds: {
+        all: number
+    },
+    wind: {
+        speed: number;
+        deg: number;
+    },
+    sys: {
+        pod: string
+    }
 }

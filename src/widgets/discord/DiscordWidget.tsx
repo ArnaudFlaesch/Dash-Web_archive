@@ -12,7 +12,7 @@ export class DiscordWidget extends React.Component<IProps> {
 
     public render() {
         return (
-            <div></div>
+            <div />
         )
     }
 }

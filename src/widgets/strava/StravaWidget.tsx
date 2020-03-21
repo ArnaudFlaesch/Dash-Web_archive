@@ -11,6 +11,6 @@ export class StravaWidget extends React.Component {
     }
 
     public render() {
-        return (<div></div>)
+        return (<div />)
     }
 }
