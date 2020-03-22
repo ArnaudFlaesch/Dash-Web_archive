@@ -26,10 +26,6 @@ describe('RSS Article component tests', () => {
     const component = shallow(
       <RSSArticle {...article} />,
     );
-    //expect(component.text()).toEqual('Off');
-
-    //component.find('input').simulate('change');
-
     expect(component.find('a').text()).toEqual('Test titre article');
   });
 });

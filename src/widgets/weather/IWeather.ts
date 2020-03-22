@@ -20,6 +20,49 @@ export interface ICity {
     sunset: number;
 }
 
+export interface IWeather {
+    coord: {
+        lon: number;
+        lat: number;
+    };
+    weather: [{
+        id: number;
+        main: string;
+        description: string;
+        icon: string;
+    }];
+    base: string;
+    main: {
+        temp: number;
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        humidity: number;
+    };
+    visibility: number;
+    wind: {
+        speed: number;
+        deg: number;
+        gust: number;
+    };
+    clouds: {
+        all: string | number;
+    };
+    dt: number;
+    sys: {
+        id: number;
+        type: number;
+        country: string;
+        sunrise: number;
+        sunset: number;
+    };
+    timezone: number;
+    id: number;
+    name: string;
+    cod: number;
+}
+
 export interface IForecast {
     dt: number;
     dt_text: string;

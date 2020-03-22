@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as winston from 'winston';
 import FacebookWidget from './widgets/facebook/FacebookWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
-import './Dash.scss';
-import { IProperties } from './IProperties';
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
+import { IProperties } from './IProperties';
+import './Dash.scss';
 
 export interface IProps {
 	token?: string;

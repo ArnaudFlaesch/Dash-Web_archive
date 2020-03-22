@@ -3,9 +3,9 @@ import EventsTab from './events/EventsTab';
 import { getProfileInfo } from "./FacebookAPI";
 import GroupsTab from './groups/GroupsTab';
 import IFBUser from "./IFBUser";
-import logger from "../../utils/LogUtils";
 import ITab from "../../tab/ITab";
 import TabNavigation from '../../tab/TabNavigation';
+import logger from "../../utils/LogUtils";
 
 declare const window: any;
 declare const FB: any;
