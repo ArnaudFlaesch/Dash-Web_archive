@@ -1,10 +1,10 @@
 import * as React from 'react';
-import * as winston from 'winston';
 import FacebookWidget from './widgets/facebook/FacebookWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
 import { IProperties } from './IProperties';
 import './Dash.scss';
+import { logger } from './utils/logger';
 
 export interface IProps {
 	token?: string;
@@ -24,7 +24,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 			this.state = { properties: propertiesJSON };
 		}
 		catch (error) {
-			winston.log('debug', error.message);
+			logger.debug(error.message);
 		}
 	}
 

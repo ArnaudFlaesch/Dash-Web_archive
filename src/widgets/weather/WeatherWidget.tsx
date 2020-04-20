@@ -90,7 +90,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 							<div>Lever du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunrise, adjustTimeWithOffset(this.state.weather.timezone))}</div>
 							<div>Coucher du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunset, adjustTimeWithOffset(this.state.weather.timezone))}</div>
 						</div>
-						<div>Dernière mise à jour à : {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+						<div>Dernière mise à jour le : {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone))}</div>
 					</div>
 				}
 				<br />

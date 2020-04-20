@@ -1,10 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { WeatherWidget } from '../../../widgets/weather/WeatherWidget';
-import { IWeather } from 'src/widgets/weather/IWeather';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { shallow } from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
 import * as Enzyme from 'enzyme';
 
