@@ -10,6 +10,7 @@
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
+    "types": ["@types/jest"],
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -26,6 +27,6 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "cypress"
   ]
 }

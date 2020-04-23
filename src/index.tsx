@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Dash from './Dash';
-import './index.css';
+import './index.scss';
 import registerServiceWorker from './registerServiceWorker';
 
 
