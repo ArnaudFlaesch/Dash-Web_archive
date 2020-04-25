@@ -1,3 +1,13 @@
+#header {
+    font-weight: bold;
+}
+
 .forecast {
     border: 2px solid black;
+    min-width: 100px;
+}
+
+.smallImage {
+    max-width: 50px;
+    max-height: 50px;
 }

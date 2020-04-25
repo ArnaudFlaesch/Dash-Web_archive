@@ -1,10 +1,10 @@
 import * as React from 'react';
+import './Dash.scss';
+import { IProperties } from './IProperties';
+import { logger } from './utils/logger';
 import FacebookWidget from './widgets/facebook/FacebookWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
-import { IProperties } from './IProperties';
-import './Dash.scss';
-import { logger } from './utils/logger';
 
 export interface IProps {
 	token?: string;

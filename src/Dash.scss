@@ -17,9 +17,8 @@
 .widget {
     margin: 10px;
     border: 2px solid black;
-    min-width: 300px;
-    max-width: 500px;
-    max-height: 500px;
+    max-height: 400px;
+    flex-basis: 31.5%;
     overflow: scroll;
 }
 

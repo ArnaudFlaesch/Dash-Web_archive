@@ -5,6 +5,12 @@ node_js:
   - 9
   - 8
 
+install: npm ci
+
+cache:
+  directories:
+  - "$HOME/.npm"
+
 env:
   - NODE_ENV=travis
 

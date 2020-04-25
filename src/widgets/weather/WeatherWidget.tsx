@@ -1,9 +1,9 @@
 import axios from "axios";
 import * as React from 'react';
-import { formatDateFromTimestamp, adjustTimeWithOffset } from '../../utils/DateUtils';
+import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
+import { logger } from '../../utils/logger';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
-import { logger } from '../../utils/logger';
 
 export interface IProps {
 	weather_api_key?: string;
@@ -52,7 +52,6 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 		)
 			.then(result => {
 				this.setState({
-					location: result.data.name,
 					weather: result.data
 				});
 			})
@@ -83,33 +82,37 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 				{this.state.location && this.state.weather &&
 					<div>
 						<div id="header">La météo aujourd'hui à {this.props.city}</div>
-						<div><img src={`https://openweathermap.org/img/wn/${this.state.weather.weather[0].icon}@2x.png`} title={this.state.weather.weather[0].description} alt={this.state.weather.weather[0].description} /></div>
-						<div>{this.state.weather.weather[0].description}</div>
-						<div>Température : {this.state.weather.main.temp}°</div>
-						<div>
-							<div>Lever du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunrise, adjustTimeWithOffset(this.state.weather.timezone))}</div>
-							<div>Coucher du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunset, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+						<div className="flexRow">
+							<div><img src={`https://openweathermap.org/img/wn/${this.state.weather.weather[0].icon}@2x.png`} title={this.state.weather.weather[0].description} alt={this.state.weather.weather[0].description} /></div>
+							<div>
+								<div>{this.state.weather.weather[0].description}</div>
+								<div>Température : {this.state.weather.main.temp}°</div>
+								<div>
+									<div>Lever du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunrise, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+									<div>Coucher du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunset, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+								</div>
+								<div>Dernière mise à jour le : {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+							</div>
 						</div>
-						<div>Dernière mise à jour le : {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone))}</div>
 					</div>
 				}
 				<br />
 
 				<div>
-					<span>Prévisions</span>
+					<span className="bold">Prévisions</span>
 					<br />
-					<div className="flexColumn">
+					<div className="flexRow">
 						{this.state.location && this.state.forecast && this.state.forecast.map(forecastDay => {
 							return (
 								<div key={forecastDay.dt} className='forecast'>
 									<div>{formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(this.state.location!!.timezone))}</div>
 									<div>
-										<img src={`https://openweathermap.org/img/wn/${forecastDay.weather[0].icon}@2x.png`} title={forecastDay.weather[0].description} alt={forecastDay.weather[0].description} />
+										<img src={`https://openweathermap.org/img/wn/${forecastDay.weather[0].icon}@2x.png`} className="smallImage" title={forecastDay.weather[0].description} alt={forecastDay.weather[0].description} />
 									</div>
 									<div>
 										<div>Min : {forecastDay.main.temp_min}°</div>
 										<div>Max : {forecastDay.main.temp_max}°</div>
-										<div>Humidité {forecastDay.main.humidity}%</div>
+										<div>Humidité : {forecastDay.main.humidity}%</div>
 									</div>
 								</div>
 							)
