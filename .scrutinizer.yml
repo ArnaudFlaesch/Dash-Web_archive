@@ -3,7 +3,7 @@ checks:
 
 build:
   environment:
-    node: v10.13.0
+    node: v12.16.2
   nodes:
     analysis:
       project_setup:
