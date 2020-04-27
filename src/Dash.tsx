@@ -2,6 +2,7 @@ import * as React from 'react';
 import './Dash.scss';
 import { IProperties } from './IProperties';
 import { logger } from './utils/logger';
+import CalendarWidget from './widgets/calendar/CalendarWidget';
 import FacebookWidget from './widgets/facebook/FacebookWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
@@ -36,6 +37,10 @@ export default class Dashboard extends React.Component<IProps, IState> {
 					this.state.properties.cities.map((city: string) => {
 						return (<WeatherWidget key={city} city={city} weather_api_key={this.state.properties?.weather_api_key} />)
 					})
+				}
+				{
+					this.state.properties?.calendarsUrls &&
+					<CalendarWidget calendars={this.state.properties?.calendarsUrls} />
 				}
 				{this.state.properties &&
 					this.state.properties.urls.map((url: string) => {
