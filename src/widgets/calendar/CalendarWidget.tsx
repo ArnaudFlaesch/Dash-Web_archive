@@ -9,12 +9,17 @@ import axios from 'axios';
 import * as ical from 'ical';
 import * as React from 'react';
 import './CalendarWidget.scss';
+import logger from '../../utils/LogUtils';
 
 export interface IProps {
     calendars: string[]
 }
 
-export default class CalendarWidget extends React.Component<any, any> {
+export interface IState {
+    events: any[]
+}
+
+export default class CalendarWidget extends React.Component<IProps, IState> {
 
     private calendarOptions: OptionsInput = {
         firstDay: 1,
@@ -52,6 +57,9 @@ export default class CalendarWidget extends React.Component<any, any> {
                             }
                         }))
                     });
+                })
+                .catch(error => {
+                    logger.error(error);
                 });
         })
 
