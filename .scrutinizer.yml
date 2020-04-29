@@ -10,6 +10,8 @@ build:
         override: true
     coverage:
       tests:
+        before:
+          - 'npm install -g typescript'
         override:
            - js-scrutinizer-run
            - command : 'npm test -- --coverage'
