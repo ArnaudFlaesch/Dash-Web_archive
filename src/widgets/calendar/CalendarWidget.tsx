@@ -8,8 +8,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
 import * as ical from 'ical';
 import * as React from 'react';
-import './CalendarWidget.scss';
 import logger from '../../utils/LogUtils';
+import './CalendarWidget.scss';
 
 export interface IProps {
     calendars: string[]

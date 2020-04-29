@@ -15,7 +15,7 @@ env:
   - NODE_ENV=travis
 
 before_install:
-  - npm install -g coveralls codacy-coverage
+  - npm install -g typescript coveralls codacy-coverage
 
 script: npm test -- --coverage
 
