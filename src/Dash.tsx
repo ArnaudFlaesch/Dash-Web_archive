@@ -68,48 +68,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 							</div>
 						);
 					})
-				/*
-					this.state.properties?.weather_api_key &&
-					this.state.properties.cities.map((city: string) => {
-						return (
-							<div key={city} className="widget">
-								<div className="header">
-									Header
-								</div>
-								<div className="widgetBody">
-									<WeatherWidget city={city} weather_api_key={this.state.properties?.weather_api_key} />
-								</div>
-							</div>)
-					})
 				}
-				{
-					this.state.properties?.calendarsUrls &&
-					<div className="widget">
-						<div className="header">
-							Header
-						</div>
-						<div className="widgetBody">
-							<CalendarWidget calendars={this.state.properties?.calendarsUrls} />
-						</div>
-					</div>
-				}
-				{this.state.properties &&
-					this.state.properties.urls.map((url: string) => {
-						return (
-							<div key={url} className="widget">
-								<div className="header">
-									Header
-								</div>
-								<div className="widgetBody">
-									<RSSWidget url={url} />
-								</div>
-							</div>
-						)
-					})
-				}
-				{this.state.properties &&
-					<FacebookWidget  {...this.state.properties.facebook} />
-				*/}
 
 			</div>
 
