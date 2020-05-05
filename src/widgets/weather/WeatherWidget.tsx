@@ -39,9 +39,14 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			forecast: undefined,
 			location: undefined
 		}
+		this.updateWidget = this.updateWidget.bind(this)
 	}
 
 	public componentDidMount() {
+		this.fetchDataFromWeatherApi();
+	}
+
+	public fetchDataFromWeatherApi() {
 		axios.get(
 			this.state.CORS_PROXY
 			+ this.state.WEATHER_API
@@ -76,12 +81,28 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			});
 	}
 
+	public updateWidget() {
+		this.setState({
+			weather: undefined,
+			forecast: undefined,
+			location: undefined
+		});
+		this.fetchDataFromWeatherApi();
+	}
+
 	public render() {
 		return (
-			<div className="widget">
+			<div>
+				<div className="header">
+					<div className="leftGroup widgetHeader">
+						La météo aujourd'hui à {this.props.city}
+					</div>
+					<div className="rightGroup">
+						<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+					</div>
+				</div>
 				{this.state.location && this.state.weather &&
 					<div>
-						<div id="header">La météo aujourd'hui à {this.props.city}</div>
 						<div className="flexRow">
 							<div><img src={`https://openweathermap.org/img/wn/${this.state.weather.weather[0].icon}@2x.png`} title={this.state.weather.weather[0].description} alt={this.state.weather.weather[0].description} /></div>
 							<div>

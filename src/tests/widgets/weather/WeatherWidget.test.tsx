@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as Enzyme from 'enzyme';
-import { ShallowWrapper } from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -28,11 +27,11 @@ describe('Weather widget tests', () => {
       return Promise.resolve(apiWeatherResponse)
     });
 
-    let component : ShallowWrapper;
+    let component : Enzyme.ShallowWrapper;
     await act(async () => {
-      component = Enzyme.shallow(<WeatherWidget city={"Montréal"} weather_api_key={"d10750704319701c3f9436134add4d7d"} />);
+      component = Enzyme.shallow(<WeatherWidget city={"Montréal"} weather_api_key={"342535667748234148989"} />);
     }).then(()=>  {
-      expect(component.find('#header').text()).toEqual('La météo aujourd\'hui à Montréal');
+      expect(component.find('.header').text()).toEqual('La météo aujourd\'hui à Montréal');
       expect(component.find('.forecast').length).toEqual(40);
 
     });

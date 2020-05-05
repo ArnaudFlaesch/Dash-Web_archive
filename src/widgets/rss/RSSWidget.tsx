@@ -18,7 +18,7 @@ interface IState {
 	image?: ImageContent;
 	link: string;
 	feed: IArticle[];
-	parser: any;
+	parser: RSSParser;
 }
 
 export class RSSWidget extends React.Component<IProps, IState> {
@@ -35,6 +35,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			title: "",
 			url: props.url,
 		}
+		this.updateWidget = this.updateWidget.bind(this);
 	}
 
 	public fetchDataFromRssFeed() {
@@ -53,6 +54,11 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			});
 	}
 
+	public updateWidget() {
+		this.setState({feed: []});
+		this.fetchDataFromRssFeed();
+	}
+
 	public getFeedFromRSS(data: IArticle[]) {
 		return (
 			data.map((article) => {
@@ -69,18 +75,25 @@ export class RSSWidget extends React.Component<IProps, IState> {
 
 	public render() {
 		return (
-			<div key={this.state.title} className="widget">
-				<div className="widgetHeader">
-					<a href={this.state.link}>
+			<div>
+				<div className="header">
+					<div className="leftGroup widgetHeader">
 						<div className="rssWidgetTitle">
-							{this.state.image &&
-								<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
-							}
-							<div>
-								{this.state.title}
-							</div>
+							<a href={this.state.link} className="flexRow">
+								{this.state.image &&
+								<div>
+									<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
+								</div>
+								}
+								<div className="rssTitle">
+									{this.state.title}
+								</div>
+							</a>
 						</div>
-					</a>
+					</div>
+					<div className="rightGroup">
+						<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+					</div>
 				</div>
 				<div className="rssDescription">{this.state.description}</div>
 				<div className="feed">
