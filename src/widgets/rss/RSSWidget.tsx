@@ -18,7 +18,7 @@ interface IState {
 	image?: ImageContent;
 	link: string;
 	feed: IArticle[];
-	parser: any;
+	parser: RSSParser;
 }
 
 export class RSSWidget extends React.Component<IProps, IState> {
