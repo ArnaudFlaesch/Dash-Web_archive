@@ -32,7 +32,7 @@ describe('Weather widget tests', () => {
     await act(async () => {
       component = Enzyme.shallow(<WeatherWidget city={"Montréal"} weather_api_key={"d10750704319701c3f9436134add4d7d"} />);
     }).then(()=>  {
-      expect(component.find('#header').text()).toEqual('La météo aujourd\'hui à Montréal');
+      expect(component.find('.widgetHeader').text()).toEqual('La météo aujourd\'hui à Montréal');
       expect(component.find('.forecast').length).toEqual(40);
 
     });

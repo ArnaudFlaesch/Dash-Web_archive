@@ -95,9 +95,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			<div>
 				<div className="header">
 					<div className="leftGroup widgetHeader">
-						<div className="rssWidgetTitle">
-							{this.props.city}
-						</div>
+						La météo aujourd'hui à {this.props.city}
 					</div>
 					<div className="rightGroup">
 						<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
