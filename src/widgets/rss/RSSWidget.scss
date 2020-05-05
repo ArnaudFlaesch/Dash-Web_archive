@@ -6,8 +6,11 @@
 
 .widgetHeader {
     .rssWidgetTitle {
-        display: flex;
-        flex-direction: row;
+        .rssTitle {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
     }
     font-weight: bold;
     a:link {

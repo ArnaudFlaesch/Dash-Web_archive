@@ -20,6 +20,29 @@
     max-height: 400px;
     flex-basis: 31.5%;
     overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    .header {
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .leftGroup {
+            text-align: start;
+            width: calc(100% - 40px);
+        }
+        .rightGroup {
+            text-align: end;
+            .refreshButton {
+                color: white;
+            }
+        }
+    }
+    .widgetBody {
+        height: 100%;
+    }
 }
 
 .imgLogoRSS {

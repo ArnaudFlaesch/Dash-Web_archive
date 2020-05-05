@@ -126,7 +126,7 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
             />;
         }
         return (
-            <div className="widget">
+            <div>
                 {element}
                 {this.state && this.state.userData &&
                     <div>

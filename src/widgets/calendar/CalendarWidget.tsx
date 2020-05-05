@@ -67,7 +67,7 @@ export default class CalendarWidget extends React.Component<IProps, IState> {
 
     public render() {
         return (
-            <div className="widget">
+            <div>
                 <FullCalendar {...this.calendarOptions} defaultView="dayGridMonth" events={this.state?.events}
                     plugins={[bootstrap, dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin]} themeSystem={'bootstrap'} />
             </div>
