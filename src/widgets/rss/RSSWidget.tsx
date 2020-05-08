@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import logger from 'src/utils/LogUtils';
+import logger from '../../utils/LogUtils';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
