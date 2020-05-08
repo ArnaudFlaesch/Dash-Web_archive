@@ -1,18 +1,19 @@
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import * as winston from 'winston';
+import logger from '../../utils/LogUtils';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
-import { IArticle, ImageContent, IRSSHeader } from "./IArticle";
-import RSSArticle from './RSSArticle';
+import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
+import RSSArticle from './article/RSSArticle';
+import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import "./RSSWidget.scss";
 
 interface IProps {
-	url: string;
+	url?: string;
 }
 
 interface IState {
 	CORS_PROXY: string;
-	url: string;
+	url?: string;
 	title: string;
 	description: string;
 	image?: ImageContent;
@@ -33,9 +34,10 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			link: "",
 			parser: new RSSParser(),
 			title: "",
-			url: props.url,
+			url: props.url
 		}
 		this.updateWidget = this.updateWidget.bind(this);
+		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
 	}
 
 	public fetchDataFromRssFeed() {
@@ -50,13 +52,17 @@ export class RSSWidget extends React.Component<IProps, IState> {
 				})
 			})
 			.catch((error: Error) => {
-				winston.log('debug', error.message);
+				logger.debug(error.message);
 			});
 	}
 
-	public updateWidget() {
-		this.setState({feed: []});
+	public updateWidget(): void {
+		this.setState({ feed: [] });
 		this.fetchDataFromRssFeed();
+	}
+
+	public onUrlSubmitted(rssUrl: string) {
+		this.setState({ url: rssUrl }, this.updateWidget);
 	}
 
 	public getFeedFromRSS(data: IArticle[]) {
@@ -76,29 +82,35 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	public render() {
 		return (
 			<div>
-				<div className="header">
-					<div className="leftGroup widgetHeader">
-						<div className="rssWidgetTitle">
-							<a href={this.state.link} className="flexRow">
-								{this.state.image &&
-								<div>
-									<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
+				{this.state.url && this.state.feed.length
+					?
+					<div>
+						<div className="header">
+							<div className="leftGroup widgetHeader">
+								<div className="rssWidgetTitle">
+									<a href={this.state.link} className="flexRow">
+										{this.state.image &&
+											<div>
+												<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
+											</div>
+										}
+										<div className="rssTitle">
+											{this.state.title}
+										</div>
+									</a>
 								</div>
-								}
-								<div className="rssTitle">
-									{this.state.title}
-								</div>
-							</a>
+							</div>
+							<div className="rightGroup">
+								<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+							</div>
+						</div>
+						<div className="rssDescription">{this.state.description}</div>
+						<div className="feed">
+							{this.getFeedFromRSS(this.state.feed)}
 						</div>
 					</div>
-					<div className="rightGroup">
-						<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
-					</div>
-				</div>
-				<div className="rssDescription">{this.state.description}</div>
-				<div className="feed">
-					{this.getFeedFromRSS(this.state.feed)}
-				</div>
+					: <EmptyRSSWidget onUrlSubmitted={this.onUrlSubmitted} />
+				}
 			</div>
 		);
 	}
