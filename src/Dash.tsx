@@ -41,7 +41,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 				});
 			})
 			.catch((error: Error) => {
-				logger.debug(error);
+				logger.debug(error.message);
 			});
 	}
 

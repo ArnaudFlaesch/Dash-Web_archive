@@ -21,14 +21,14 @@ app.get("/db", (request, response) => {
             host: 'localhost',
             password: 'postgres',
             port: 5432,
-            user: 'postgres',
+            user: 'postgres'
         };
 
         const pool = new Pool(loginData);
         pool.query('SELECT * FROM widgets', (error, result) => {
             response.status(200).send(result.rows);
             pool.end()
-        })
+        });
 
     } catch (err) {
         response.status(400).send(err);
