@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import logger from '../../utils/LogUtils';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
+import logger from '../../utils/LogUtils';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
@@ -62,7 +62,9 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		this.setState({ url: rssUrl }, this.updateWidget);
+		this.setState({ url: rssUrl }, () => {
+			this.updateWidget();
+		} );
 	}
 
 	public getFeedFromRSS(data: IArticle[]) {

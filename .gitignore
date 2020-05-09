@@ -25,3 +25,4 @@ API URLS\.txt
 
 /.vscode
 src/widgets.json
+src/data.sql

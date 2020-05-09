@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as React from 'react';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
-import { logger } from '../../utils/logger';
+import logger from '../../utils/LogUtils';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
 

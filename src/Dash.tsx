@@ -2,7 +2,7 @@ import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import './Dash.scss';
 import { WidgetTypes } from './enums/WidgetsEnum';
-import { logger } from './utils/logger';
+import logger from './utils/LogUtils';
 import CalendarWidget from './widgets/calendar/CalendarWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
@@ -31,12 +31,18 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	}
 
 	public componentDidMount() {
-		try {
-			this.setState({widgets : require('./widgets.json')})
-		}
-		catch (error) {
-			logger.debug(error.message);
-		}
+		fetch('http://localhost:9000/db')
+			.then((result) => {
+				return result.json();
+			})
+			.then(result => {
+				this.setState({
+					widgets: result
+				});
+			})
+			.catch((error: Error) => {
+				logger.debug(error);
+			});
 	}
 
 	public createWidget(widgetConfig: IWidgetConfig) {

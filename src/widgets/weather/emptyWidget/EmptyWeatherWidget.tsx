@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface IProps {
-    onConfigSubmitted: (weather_api_key: string, city: string) => void;
+    onConfigSubmitted: (weatherApiKey: string, city: string) => void;
 }
 
 interface IState {
