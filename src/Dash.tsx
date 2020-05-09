@@ -31,7 +31,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	}
 
 	public componentDidMount() {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}:${process.env.PORT || process.env.REACT_APP_BACKEND_PORT}/db`)
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/db`)
 			.then((result) => {
 				return result.json();
 			})

@@ -63,7 +63,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		axios.post(`http://${process.env.REACT_APP_BACKEND_URL}:${process.env.PORT || process.env.REACT_APP_BACKEND_PORT}/db/newWidget`, { url: rssUrl })
+		axios.post(`http://${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { url: rssUrl })
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
 					this.updateWidget();
