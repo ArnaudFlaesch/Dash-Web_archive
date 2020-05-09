@@ -65,6 +65,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	public render() {
 		return (
 			<div className="dash">
+				<RSSWidget />
 				{
 					this.state.widgets &&
 					this.state.widgets.map((widgetConfig: IWidgetConfig) => {

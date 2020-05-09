@@ -11,19 +11,19 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
+const loginData = (process.env.DATABASE_URL) ? {
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+} : {
+    database: 'dash',
+    host: 'localhost',
+    password: 'postgres',
+    port: 5432,
+    user: 'postgres'
+};
+
 app.get("/db", (request, response) => {
     try {
-        const loginData = (process.env.DATABASE_URL) ? {
-            connectionString: process.env.DATABASE_URL,
-            ssl: true
-        } : {
-            database: 'dash',
-            host: 'localhost',
-            password: 'postgres',
-            port: 5432,
-            user: 'postgres'
-        };
-
         const pool = new Pool(loginData);
         pool.query('SELECT * FROM widgets', (error, result) => {
             response.status(200).send(result.rows);
@@ -36,7 +36,18 @@ app.get("/db", (request, response) => {
 });
 
 app.post('/db/newWidget', (request, response) => {
-    response.send(200);
+    try {
+        const pool = new Pool(loginData);
+        const type = 2;
+        const sql = `INSERT INTO public.widgets(type, data) VALUES (${type}, '{ "url": ${request.url} }')`;
+        pool.query(sql, (error, result) => {
+            response.status(200).send(result);
+            pool.end()
+        });
+
+    } catch (err) {
+        response.status(400).send(err);
+    }
 });
 
 app.listen(process.env.PORT || 9000);
