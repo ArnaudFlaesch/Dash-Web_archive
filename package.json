@@ -54,6 +54,7 @@
     "scripts": {
         "start": "node src/server.js",
         "build": "react-scripts-ts build",
+        "preinstall": "npm i -g typescript",
         "dev": "set HTTPS=true&&react-scripts-ts start",
         "test": "react-scripts-ts test --env=jsdom",
         "coverage": "react-scripts-ts test --env=jsdom --coverage",
