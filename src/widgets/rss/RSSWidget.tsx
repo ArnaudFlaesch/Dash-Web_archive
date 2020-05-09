@@ -1,6 +1,6 @@
+import axios from "axios";
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import axios from "axios";
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import logger from '../../utils/LogUtils';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
@@ -63,7 +63,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		axios.post("localhost:" + process.env.PORT || 9000 + "/db/newWidget", { url: rssUrl })
+		axios.post(`http://localhost:${process.env.PORT || 9000}/db/newWidget`, { url: rssUrl })
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
 					this.updateWidget();

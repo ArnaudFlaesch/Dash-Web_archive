@@ -31,7 +31,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	}
 
 	public componentDidMount() {
-		fetch('http://localhost:' + process.env.PORT || 9000 + '/db')
+		fetch(`http://localhost:${process.env.PORT || 9000}/db`)
 			.then((result) => {
 				return result.json();
 			})
@@ -41,7 +41,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 				});
 			})
 			.catch((error: Error) => {
-				logger.debug(error.message);
+				logger.error(error.message);
 			});
 	}
 
