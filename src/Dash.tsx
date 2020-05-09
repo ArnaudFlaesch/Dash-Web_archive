@@ -31,7 +31,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	}
 
 	public componentDidMount() {
-		fetch('http://localhost:9000/db')
+		fetch('http://localhost' + process.env.PORT + '/db')
 			.then((result) => {
 				return result.json();
 			})
@@ -47,16 +47,16 @@ export default class Dashboard extends React.Component<IProps, IState> {
 
 	public createWidget(widgetConfig: IWidgetConfig) {
 		switch (widgetConfig.type) {
-			case 1 : {
+			case 1: {
 				return <WeatherWidget {...widgetConfig.data} />
 			}
-			case 2 : {
+			case 2: {
 				return <RSSWidget {...widgetConfig.data} />
 			}
-			case 3 : {
+			case 3: {
 				return <CalendarWidget {...widgetConfig.data} />
 			}
-			default : {
+			default: {
 				return;
 			}
 		}
@@ -70,7 +70,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 					this.state.widgets.map((widgetConfig: IWidgetConfig) => {
 						return (
 							<div key={widgetConfig.id} className="widget">
-								{ this.createWidget(widgetConfig) }
+								{this.createWidget(widgetConfig)}
 							</div>
 						);
 					})
