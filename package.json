@@ -47,7 +47,6 @@
         "@types/reactstrap": "^8.4.2",
         "@types/xml2js": "^0.4.3",
         "axios-mock-adapter": "^1.17.0",
-        "cypress": "^4.3.0",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "1.15.2",
         "node-sass": "^4.13.1",
