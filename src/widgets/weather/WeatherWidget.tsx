@@ -30,7 +30,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 		this.state = {
 			API_KEY: props.weather_api_key,
 			city: props.city,
-			CORS_PROXY: 'https://cors-anywhere.herokuapp.com/',
+			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			WEATHER_API: "http://api.openweathermap.org/data/2.5/",
 			WEATHER_ENDPOINT: "weather",
 			FORECAST_ENDPOINT: "forecast",

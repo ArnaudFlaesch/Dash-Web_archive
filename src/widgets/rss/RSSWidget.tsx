@@ -19,7 +19,7 @@ interface IState {
 	description: string;
 	image?: ImageContent;
 	link: string;
-	feed: IArticle[];
+	feed?: IArticle[];
 	parser: RSSParser;
 }
 
@@ -28,9 +28,9 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
-			CORS_PROXY: 'https://cors-anywhere.herokuapp.com/',
+			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			description: "",
-			feed: [],
+			feed: undefined,
 			image: undefined,
 			link: "",
 			parser: new RSSParser(),
@@ -63,7 +63,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		axios.post(`https://${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { url: rssUrl })
+		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { url: rssUrl })
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
 					this.updateWidget();
@@ -91,7 +91,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	public render() {
 		return (
 			<div>
-				{this.state.url && this.state.feed.length
+				{this.state.url && this.state.feed
 					?
 					<div>
 						<div className="header">
