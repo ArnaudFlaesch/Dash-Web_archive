@@ -1,15 +1,14 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const corsProxy = require('cors-anywhere');
 const path = require('path');
-const bodyParser = require('body-parser');
-
-const app = express();
 const { Pool } = require('pg');
+const winston = require('winston');
+const app = express();
 
 app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.json())
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
@@ -30,7 +29,7 @@ app.get("/db", (request, response) => {
     try {
         const pool = new Pool(loginData);
         pool.query('SELECT * FROM widgets', (error, result) => {
-            response.status(200).send(result.rows);
+            response.status(200).json(result.rows);
             pool.end()
         });
 
@@ -42,13 +41,11 @@ app.get("/db", (request, response) => {
 app.post('/db/newWidget', (request, response) => {
     try {
         const pool = new Pool(loginData);
-        const type = 2;
-        const sql = `INSERT INTO public.widgets(type, data) VALUES (${type}, '{ "url": "${request.body.url}" }')`;
+        const sql = `INSERT INTO public.widgets(type, data) VALUES (${request.body.type}, to_json('${JSON.stringify(request.body.data)}'::json))`;
         pool.query(sql, (error, result) => {
-            response.status(200).send(result);
+            response.status(200).json(result);
             pool.end()
         });
-
     } catch (err) {
         response.status(400).send(err);
     }
@@ -66,11 +63,21 @@ var host = process.env.HOST || '0.0.0.0';
 // Listen on a specific port via the PORT environment variable
 var port = process.env.CORS_PORT || 8090;
 
-var cors_proxy = require('cors-anywhere');
-cors_proxy.createServer({
+corsProxy.createServer({
     originWhitelist: [], // Allow all origins
-    requireHeader: ['origin', 'x-requested-with'],
-    removeHeaders: ['cookie', 'cookie2']
-}).listen(port, host, function() {
-    console.log('Running CORS Anywhere on ' + host + ':' + port);
+    removeHeaders: ['cookie', 'cookie2'],
+    requireHeader: ['origin', 'x-requested-with']
+}).listen(port, host, () => {
+    logger.info('Running CORS Anywhere on ' + host + ':' + port);
+});
+
+const logger = winston.createLogger({
+    format: winston.format.combine(
+        winston.format.json(),
+        winston.format.colorize({ all: true })
+    ),
+    level: 'debug',
+    transports: [
+        new winston.transports.Console()
+    ]
 });

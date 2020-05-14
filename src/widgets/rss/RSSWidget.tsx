@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
+import { WidgetTypes } from 'src/enums/WidgetsEnum';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import logger from '../../utils/LogUtils';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
@@ -37,7 +38,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			title: "",
 			url: props.url
 		}
-		this.updateWidget = this.updateWidget.bind(this);
+		this.refreshWidget = this.refreshWidget.bind(this);
 		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
 	}
 
@@ -57,16 +58,21 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			});
 	}
 
-	public updateWidget(): void {
+	public refreshWidget(): void {
 		this.setState({ feed: [] });
 		this.fetchDataFromRssFeed();
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { url: rssUrl })
+		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { "type": WidgetTypes.RSS, "data": { "url": rssUrl } },
+		{
+			headers: {
+			  'Content-type': 'application/json'
+			}
+		  })
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
-					this.updateWidget();
+					this.refreshWidget();
 				});
 			})
 			.catch(error => {
@@ -110,7 +116,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 								</div>
 							</div>
 							<div className="rightGroup">
-								<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+								<button onClick={this.refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
 							</div>
 						</div>
 						<div className="rssDescription">{this.state.description}</div>
