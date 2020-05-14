@@ -1,7 +1,9 @@
+import axios from "axios";
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import logger from '../../utils/LogUtils';
+import { WidgetTypes } from 'src/enums/WidgetsEnum';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
+import logger from '../../utils/LogUtils';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
@@ -18,7 +20,7 @@ interface IState {
 	description: string;
 	image?: ImageContent;
 	link: string;
-	feed: IArticle[];
+	feed?: IArticle[];
 	parser: RSSParser;
 }
 
@@ -27,16 +29,16 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
-			CORS_PROXY: 'https://cors-anywhere.herokuapp.com/',
+			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			description: "",
-			feed: [],
+			feed: undefined,
 			image: undefined,
 			link: "",
 			parser: new RSSParser(),
 			title: "",
 			url: props.url
 		}
-		this.updateWidget = this.updateWidget.bind(this);
+		this.refreshWidget = this.refreshWidget.bind(this);
 		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
 	}
 
@@ -56,13 +58,26 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			});
 	}
 
-	public updateWidget(): void {
+	public refreshWidget(): void {
 		this.setState({ feed: [] });
 		this.fetchDataFromRssFeed();
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		this.setState({ url: rssUrl }, this.updateWidget);
+		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { "type": WidgetTypes.RSS, "data": { "url": rssUrl } },
+		{
+			headers: {
+			  'Content-type': 'application/json'
+			}
+		  })
+			.then(response => {
+				this.setState({ url: rssUrl }, () => {
+					this.refreshWidget();
+				});
+			})
+			.catch(error => {
+				logger.error(error.message);
+			})
 	}
 
 	public getFeedFromRSS(data: IArticle[]) {
@@ -82,7 +97,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	public render() {
 		return (
 			<div>
-				{this.state.url && this.state.feed.length
+				{this.state.url && this.state.feed
 					?
 					<div>
 						<div className="header">
@@ -101,7 +116,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 								</div>
 							</div>
 							<div className="rightGroup">
-								<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+								<button onClick={this.refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
 							</div>
 						</div>
 						<div className="rssDescription">{this.state.description}</div>

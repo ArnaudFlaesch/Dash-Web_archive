@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as React from 'react';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
-import { logger } from '../../utils/logger';
+import logger from '../../utils/LogUtils';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
 
@@ -30,7 +30,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 		this.state = {
 			API_KEY: props.weather_api_key,
 			city: props.city,
-			CORS_PROXY: 'https://cors-anywhere.herokuapp.com/',
+			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			WEATHER_API: "http://api.openweathermap.org/data/2.5/",
 			WEATHER_ENDPOINT: "weather",
 			FORECAST_ENDPOINT: "forecast",

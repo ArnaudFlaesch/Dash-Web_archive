@@ -24,4 +24,4 @@ src/properties.json
 API URLS\.txt
 
 /.vscode
-src/widgets.json
+data.sql
