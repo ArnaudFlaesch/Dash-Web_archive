@@ -1,8 +1,8 @@
-import axios from "axios";
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
+import { updateWidget } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
@@ -78,12 +78,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
-		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/updateWidget`, { "id": this.state.id, "data": { "url": rssUrl } },
-			{
-				headers: {
-					'Content-type': 'application/json'
-				}
-			})
+		updateWidget(this.state.id, { url: rssUrl })
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
 					this.refreshWidget();
