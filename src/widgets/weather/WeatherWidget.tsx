@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as React from 'react';
-import { ModeEnum } from 'src/enums/ModeEnum';
+import { ModeEnum } from '../../enums/ModeEnum';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import { ICity, IForecast, IWeather } from "./IWeather";
