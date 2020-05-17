@@ -45,13 +45,13 @@ export default class Dashboard extends React.Component<any, IState> {
 
 	public createWidget(widgetConfig: IWidgetConfig) {
 		switch (widgetConfig.type) {
-			case 1: {
+			case WidgetTypes.WEATHER: {
 				return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
 			}
-			case 2: {
+			case WidgetTypes.RSS: {
 				return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
 			}
-			case 3: {
+			case WidgetTypes.CALENDAR: {
 				return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
 			}
 			default: {
@@ -84,7 +84,6 @@ export default class Dashboard extends React.Component<any, IState> {
 	public render() {
 		return (
 			<div className="dash">
-
 				{
 					this.state.widgets &&
 					this.state.widgets.map((widgetConfig: IWidgetConfig) => {

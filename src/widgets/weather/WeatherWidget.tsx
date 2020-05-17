@@ -183,7 +183,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 								<div className="flexRow forecastRow">
 									{this.state.city && this.state.forecast && this.state.forecast.map(forecastDay => {
 										return (
-											<div key={forecastDay.dt_text}>
+											<div className='forecastContainer' key={forecastDay.dt_text}>
 												<Forecast  {...forecastDay} city={this.state.city!!} />
 											</div>
 										)

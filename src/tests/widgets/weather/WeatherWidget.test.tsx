@@ -32,8 +32,7 @@ describe('Weather widget tests', () => {
       component = Enzyme.shallow(<WeatherWidget id={2} city={"Montréal"} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />);
     }).then(()=>  {
       expect(component.find('.header').text()).toEqual('La météo aujourd\'hui à Montréal');
-      expect(component.find('.forecast').length).toEqual(40);
-
+      expect(component.find('.forecastContainer').length).toEqual(40);
     });
 
     mockedAxios.get.mockRestore();
