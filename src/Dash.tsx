@@ -7,23 +7,19 @@ import CalendarWidget from './widgets/calendar/CalendarWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
 import { WeatherWidget } from './widgets/weather/WeatherWidget';
 
-export interface IProps {
-	token?: string;
-}
-
 interface IState {
 	widgets: IWidgetConfig[];
 }
 
 interface IWidgetConfig {
-	id: string;
+	id: number;
 	type: WidgetTypes;
 	data: any;
 }
 
-export default class Dashboard extends React.Component<IProps, IState> {
+export default class Dashboard extends React.Component<any, IState> {
 
-	constructor(props: IProps) {
+	constructor(props: any) {
 		super(props);
 		this.state = {
 			widgets: []
@@ -48,13 +44,13 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	public createWidget(widgetConfig: IWidgetConfig) {
 		switch (widgetConfig.type) {
 			case 1: {
-				return <WeatherWidget {...widgetConfig.data} />
+				return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} />
 			}
 			case 2: {
-				return <RSSWidget {...widgetConfig.data} />
+				return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} />
 			}
 			case 3: {
-				return <CalendarWidget {...widgetConfig.data} />
+				return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} />
 			}
 			default: {
 				return;
@@ -65,7 +61,7 @@ export default class Dashboard extends React.Component<IProps, IState> {
 	public render() {
 		return (
 			<div className="dash">
-				<RSSWidget />
+				
 				{
 					this.state.widgets &&
 					this.state.widgets.map((widgetConfig: IWidgetConfig) => {

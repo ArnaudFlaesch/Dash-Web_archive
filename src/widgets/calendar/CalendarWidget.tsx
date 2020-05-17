@@ -12,11 +12,13 @@ import logger from '../../utils/LogUtils';
 import './CalendarWidget.scss';
 
 export interface IProps {
-    calendars: string[]
+    id: number;
+    calendars?: string[];
 }
 
 export interface IState {
-    events: any[]
+    id: number;
+    events: any[];
 }
 
 export default class CalendarWidget extends React.Component<IProps, IState> {
@@ -34,12 +36,13 @@ export default class CalendarWidget extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
+            id: this.props.id,
             events: []
         }
     }
 
     public componentDidMount() {
-        this.props.calendars.map((calendarUrl: string) => {
+        this.props.calendars?.map((calendarUrl: string) => {
             axios.get('https://cors-anywhere.herokuapp.com/' + calendarUrl)
                 .then((response) => {
                     const data = ical.parseICS(response.data);

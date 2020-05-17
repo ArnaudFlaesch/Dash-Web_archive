@@ -1,6 +1,9 @@
 import * as React from 'react';
+import "./EmptyWeatherWidget.scss";
 
 interface IProps {
+    weather_api_key?: string;
+	city?: string;
     onConfigSubmitted: (weatherApiKey: string, city: string) => void;
 }
 
@@ -33,9 +36,9 @@ export default class EmptyWeatherWidget extends React.Component<IProps, IState> 
     public render() {
         return (
             <div>
-                <input name="url" onChange={this.onWeatherApiKeyChangeHandler} placeholder="Saisissez la cle d'API"/>
-                <input name="url" onChange={this.onCityChangeHandler} placeholder="Saisissez de nom de la ville"/>
-                <button onClick={this.onValidation} className="btn btn-success">Valider</button>
+                <input name="url" onChange={this.onWeatherApiKeyChangeHandler} value={this.state.weather_api_key} placeholder="Saisissez la cle d'API"/>
+                <input name="url" onChange={this.onCityChangeHandler} value={this.state.city} placeholder="Saisissez de nom de la ville"/>
+                <button onClick={this.onValidation} disabled={this.state?.city.length < 1 || this.state?.city.length < 1 } className="btn btn-success">Valider</button>
             </div>
         )
     }

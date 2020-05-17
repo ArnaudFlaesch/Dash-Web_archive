@@ -1,16 +1,20 @@
 import axios from "axios";
 import * as React from 'react';
+import { ModeEnum } from 'src/enums/ModeEnum';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
 
 export interface IProps {
+	id: number;
 	weather_api_key?: string;
 	city?: string;
 }
 
 interface IState {
+	id: number;
+	mode: ModeEnum;
 	API_KEY?: string;
 	CORS_PROXY: string;
 	city?: string;
@@ -28,6 +32,8 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
+			id : this.props.id,
+			mode: ModeEnum.READ,
 			API_KEY: props.weather_api_key,
 			city: props.city,
 			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
@@ -39,6 +45,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			forecast: undefined,
 			location: undefined
 		}
+		this.editWidget = this.editWidget.bind(this);
 		this.updateWidget = this.updateWidget.bind(this)
 	}
 
@@ -81,6 +88,10 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			});
 	}
 
+	public editWidget(): void {
+		this.setState({mode: ModeEnum.EDIT});
+	}
+
 	public updateWidget() {
 		this.setState({
 			weather: undefined,
@@ -98,6 +109,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 						La météo aujourd'hui à {this.props.city}
 					</div>
 					<div className="rightGroup">
+					<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
 						<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
 					</div>
 				</div>

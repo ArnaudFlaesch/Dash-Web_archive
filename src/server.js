@@ -51,6 +51,19 @@ app.post('/db/newWidget', (request, response) => {
     }
 });
 
+app.post('/db/updateWidget', (request, response) => {
+    try {
+        const pool = new Pool(loginData);
+        const sql = `UPDATE public.widgets SET data=to_json('${JSON.stringify(request.body.data)}'::json) WHERE id = ${request.body.id}`;
+        pool.query(sql, (error, result) => {
+            response.status(200).json(result);
+            pool.end()
+        });
+    } catch (err) {
+        response.status(400).send(err);
+    }
+});
+
 app.listen(process.env.PORT || 9000);
 
 
