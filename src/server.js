@@ -64,6 +64,19 @@ app.post('/db/updateWidget', (request, response) => {
     }
 });
 
+app.post('/db/deleteWidget', (request, response) => {
+    try {
+        const pool = new Pool(loginData);
+        const sql = `DELETE FROM public.widgets WHERE id = ${request.body.id}`;
+        pool.query(sql, (error, result) => {
+            response.status(200).json(result);
+            pool.end()
+        });
+    } catch (err) {
+        response.status(400).send(err);
+    }
+});
+
 app.listen(process.env.PORT || 9000);
 
 

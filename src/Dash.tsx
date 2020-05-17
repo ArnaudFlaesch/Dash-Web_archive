@@ -1,3 +1,4 @@
+import axios from "axios";
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import './Dash.scss';
@@ -24,6 +25,7 @@ export default class Dashboard extends React.Component<any, IState> {
 		this.state = {
 			widgets: []
 		};
+		this.deleteWidget = this.deleteWidget.bind(this);
 	}
 
 	public componentDidMount() {
@@ -44,13 +46,13 @@ export default class Dashboard extends React.Component<any, IState> {
 	public createWidget(widgetConfig: IWidgetConfig) {
 		switch (widgetConfig.type) {
 			case 1: {
-				return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} />
+				return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
 			}
 			case 2: {
-				return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} />
+				return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
 			}
 			case 3: {
-				return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} />
+				return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
 			}
 			default: {
 				return;
@@ -58,10 +60,31 @@ export default class Dashboard extends React.Component<any, IState> {
 		}
 	}
 
+	public deleteWidget(id: number) {
+		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/deleteWidget`, { "id": id },
+			{
+				headers: {
+					'Content-type': 'application/json'
+				}
+			})
+			.then(response => {
+				if (response) {
+					this.setState({
+						widgets: this.state.widgets.filter((widget) => {
+							return widget.id !== id;
+						})
+					});
+				}
+			})
+			.catch(error => {
+				logger.error(error.message);
+			})
+	}
+
 	public render() {
 		return (
 			<div className="dash">
-				
+
 				{
 					this.state.widgets &&
 					this.state.widgets.map((widgetConfig: IWidgetConfig) => {

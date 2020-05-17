@@ -4,6 +4,7 @@ import * as RSSParser from 'rss-parser';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
 import logger from '../../utils/LogUtils';
+import DeleteWidget from '../utils/DeleteWidget';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
@@ -12,6 +13,7 @@ import "./RSSWidget.scss";
 interface IProps {
 	id: number;
 	url?: string;
+	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
 interface IState {
@@ -46,6 +48,8 @@ export class RSSWidget extends React.Component<IProps, IState> {
 		this.refreshWidget = this.refreshWidget.bind(this);
 		this.editWidget = this.editWidget.bind(this);
 		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
+		this.cancelDeletion = this.cancelDeletion.bind(this);
+		this.deleteWidget = this.deleteWidget.bind(this);
 	}
 
 	public fetchDataFromRssFeed() {
@@ -70,25 +74,33 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public editWidget(): void {
-		this.setState({mode: ModeEnum.EDIT});
+		this.setState({ mode: ModeEnum.EDIT });
 	}
 
 	public onUrlSubmitted(rssUrl: string) {
 		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/updateWidget`, { "id": this.state.id, "data": { "url": rssUrl } },
-		{
-			headers: {
-			  'Content-type': 'application/json'
-			}
-		  })
+			{
+				headers: {
+					'Content-type': 'application/json'
+				}
+			})
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
 					this.refreshWidget();
-					this.setState({mode: ModeEnum.READ});
+					this.setState({ mode: ModeEnum.READ });
 				});
 			})
 			.catch(error => {
 				logger.error(error.message);
 			})
+	}
+
+	public cancelDeletion() {
+		this.setState({ mode: ModeEnum.READ });
+	}
+
+	public deleteWidget() {
+		this.setState({ mode: ModeEnum.DELETE });
 	}
 
 	public getFeedFromRSS(data: IArticle[]) {
@@ -129,6 +141,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 							<div className="rightGroup">
 								<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
 								<button onClick={this.refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+								<button onClick={this.deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
 							</div>
 						</div>
 						<div className="rssDescription">{this.state.description}</div>
@@ -136,7 +149,9 @@ export class RSSWidget extends React.Component<IProps, IState> {
 							{this.getFeedFromRSS(this.state.feed)}
 						</div>
 					</div>
-					: <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
+					: (this.state.mode === ModeEnum.EDIT)
+						? <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
+						: <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
 				}
 			</div>
 		);

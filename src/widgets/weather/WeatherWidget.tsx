@@ -32,7 +32,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
-			id : this.props.id,
+			id: this.props.id,
 			mode: ModeEnum.READ,
 			API_KEY: props.weather_api_key,
 			city: props.city,
@@ -89,7 +89,15 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 	}
 
 	public editWidget(): void {
-		this.setState({mode: ModeEnum.EDIT});
+		this.setState({ mode: ModeEnum.EDIT });
+	}
+
+	public cancelDeletion() {
+		this.setState({ mode: ModeEnum.READ });
+	}
+
+	public deleteWidget() {
+		this.setState({ mode: ModeEnum.DELETE });
 	}
 
 	public updateWidget() {
@@ -109,8 +117,9 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 						La météo aujourd'hui à {this.props.city}
 					</div>
 					<div className="rightGroup">
-					<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
+						<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
 						<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+						<button onClick={this.deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
 					</div>
 				</div>
 				{this.state.location && this.state.weather &&
