@@ -14,7 +14,7 @@ describe('Weather widget tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<WeatherWidget id={1} />, div);
+    ReactDOM.render(<WeatherWidget id={1} onDeleteButtonClicked={function () { return null }} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 
@@ -29,7 +29,7 @@ describe('Weather widget tests', () => {
 
     let component : Enzyme.ShallowWrapper;
     await act(async () => {
-      component = Enzyme.shallow(<WeatherWidget id={2} city={"Montréal"} weather_api_key={"342535667748234148989"} />);
+      component = Enzyme.shallow(<WeatherWidget id={2} city={"Montréal"} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />);
     }).then(()=>  {
       expect(component.find('.header').text()).toEqual('La météo aujourd\'hui à Montréal');
       expect(component.find('.forecast').length).toEqual(40);
