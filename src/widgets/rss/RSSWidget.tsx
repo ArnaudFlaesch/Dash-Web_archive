@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import { WidgetTypes } from 'src/enums/WidgetsEnum';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
+import { ModeEnum } from '../../enums/ModeEnum';
 import logger from '../../utils/LogUtils';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
@@ -10,10 +10,12 @@ import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import "./RSSWidget.scss";
 
 interface IProps {
+	id: number;
 	url?: string;
 }
 
 interface IState {
+	id: number;
 	CORS_PROXY: string;
 	url?: string;
 	title: string;
@@ -21,6 +23,7 @@ interface IState {
 	image?: ImageContent;
 	link: string;
 	feed?: IArticle[];
+	mode: ModeEnum;
 	parser: RSSParser;
 }
 
@@ -29,16 +32,19 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
+			id: props.id,
 			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			description: "",
 			feed: undefined,
 			image: undefined,
 			link: "",
+			mode: ModeEnum.READ,
 			parser: new RSSParser(),
 			title: "",
 			url: props.url
 		}
 		this.refreshWidget = this.refreshWidget.bind(this);
+		this.editWidget = this.editWidget.bind(this);
 		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
 	}
 
@@ -63,8 +69,12 @@ export class RSSWidget extends React.Component<IProps, IState> {
 		this.fetchDataFromRssFeed();
 	}
 
+	public editWidget(): void {
+		this.setState({mode: ModeEnum.EDIT});
+	}
+
 	public onUrlSubmitted(rssUrl: string) {
-		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/newWidget`, { "type": WidgetTypes.RSS, "data": { "url": rssUrl } },
+		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/updateWidget`, { "id": this.state.id, "data": { "url": rssUrl } },
 		{
 			headers: {
 			  'Content-type': 'application/json'
@@ -73,6 +83,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 			.then(response => {
 				this.setState({ url: rssUrl }, () => {
 					this.refreshWidget();
+					this.setState({mode: ModeEnum.READ});
 				});
 			})
 			.catch(error => {
@@ -97,7 +108,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	public render() {
 		return (
 			<div>
-				{this.state.url && this.state.feed
+				{this.state.url && this.state.feed && this.state.mode === ModeEnum.READ
 					?
 					<div>
 						<div className="header">
@@ -116,6 +127,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 								</div>
 							</div>
 							<div className="rightGroup">
+								<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
 								<button onClick={this.refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
 							</div>
 						</div>
@@ -124,7 +136,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 							{this.getFeedFromRSS(this.state.feed)}
 						</div>
 					</div>
-					: <EmptyRSSWidget onUrlSubmitted={this.onUrlSubmitted} />
+					: <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
 				}
 			</div>
 		);

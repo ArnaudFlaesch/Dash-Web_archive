@@ -1,6 +1,8 @@
 import * as React from 'react';
+import "./EmptyRSSWidget.scss";
 
 interface IProps {
+    url?: string;
     onUrlSubmitted: (url: string) => void;
 }
 
@@ -12,12 +14,15 @@ export default class EmptyRSSWidget extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
+        if (this.props.url) {
+            this.state = { url: this.props.url };
+        }
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onValidation = this.onValidation.bind(this);
     }
 
     public onChangeHandler(event: any) {
-        this.setState({url: event.target.value});
+        this.setState({ url: event.target.value });
     }
 
     public onValidation() {
@@ -27,8 +32,8 @@ export default class EmptyRSSWidget extends React.Component<IProps, IState> {
     public render() {
         return (
             <div>
-                <input name="url" onChange={this.onChangeHandler} placeholder="Saisissez l'URL du flux RSS"/>
-                <button onClick={this.onValidation} className="btn btn-success">Valider</button>
+                <input name="url" onChange={this.onChangeHandler} value={this.state.url} placeholder="Saisissez l'URL du flux RSS" />
+                <button onClick={this.onValidation} disabled={this.state?.url.length < 1} className="btn btn-success">Valider</button>
             </div>
         )
     }

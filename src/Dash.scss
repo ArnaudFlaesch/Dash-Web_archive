@@ -30,11 +30,13 @@
         align-items: center;
         .leftGroup {
             text-align: start;
-            width: calc(100% - 40px);
+            width: calc(100% - 80px);
         }
         .rightGroup {
+            display: flex;
+            flex-direction: row;
             text-align: end;
-            .refreshButton {
+            button {
                 color: white;
             }
         }
