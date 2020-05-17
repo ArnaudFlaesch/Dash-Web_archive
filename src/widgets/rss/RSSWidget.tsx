@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as React from 'react';
 import * as RSSParser from 'rss-parser';
-import { ModeEnum } from '../../enums/ModeEnum';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
+import { ModeEnum } from '../../enums/ModeEnum';
 import logger from '../../utils/LogUtils';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
