@@ -108,7 +108,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 	}
 
 	public onConfigSubmitted(weatherApiKey: string, city: string) {
-		updateWidget(this.state.id, { city: city, weather_api_key: weatherApiKey })
+		updateWidget(this.state.id, { city, weather_api_key: weatherApiKey })
 			.then(response => {
 				this.setState({
 					cityToQuery: city,

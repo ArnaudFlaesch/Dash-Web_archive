@@ -38,6 +38,19 @@ app.get("/db", (request, response) => {
     }
 });
 
+app.post('/db/addWidget', (request, response) => {
+    try {
+        const pool = new Pool(loginData);
+        const sql = `INSERT INTO public.widgets(type) VALUES (${request.body.type}) RETURNING *`;
+        pool.query(sql, (error, result) => {
+            response.status(200).json(result.rows[0]);
+            pool.end()
+        });
+    } catch (err) {
+        response.status(400).send(err);
+    }
+});
+
 app.post('/db/newWidget', (request, response) => {
     try {
         const pool = new Pool(loginData);
@@ -85,7 +98,7 @@ app.listen(process.env.PORT || 9000);
  */
 
 // Listen on a specific host via the HOST environment variable
-const host = process.env.HOST || '0.0.0.0';
+const host = process.env.HOST || 'localhost';
 // Listen on a specific port via the PORT environment variable
 const port = process.env.REACT_APP_CORS_PORT || 8090;
 
