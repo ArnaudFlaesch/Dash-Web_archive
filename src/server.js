@@ -23,6 +23,7 @@ const allowCrossDomain = function(req, res, next) {
         next();
     }
 };
+app.use(cors(corsOptions));
 app.use(allowCrossDomain);
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
