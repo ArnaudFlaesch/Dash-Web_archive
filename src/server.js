@@ -7,7 +7,7 @@ const winston = require('winston');
 const app = express();
 
 const corsOptions = {
-    origin: process.env.HOST || 'localhost',
+    origin: process.env.HOST || '0.0.0.0',
     optionsSuccessStatus: 200
 }
 
@@ -15,7 +15,12 @@ app.use(cors(corsOptions))
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
-app.options('*', cors())
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', process.env.HOST || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+    next();
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
