@@ -6,6 +6,11 @@ const { Pool } = require('pg');
 const winston = require('winston');
 const app = express();
 
+const corsOptions = {
+    origin: process.env.HOST || 'localhost',
+    optionsSuccessStatus: 200
+}
+
 app.use(cors())
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
@@ -98,7 +103,7 @@ app.listen(process.env.PORT || 9000);
  */
 
 // Listen on a specific host via the HOST environment variable
-const host = process.env.HOST || 'localhost';
+const host = process.env.HOST || '0.0.0.0';
 // Listen on a specific port via the PORT environment variable
 const port = process.env.REACT_APP_CORS_PORT || 8090;
 
