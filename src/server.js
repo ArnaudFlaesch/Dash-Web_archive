@@ -15,6 +15,8 @@ app.use(cors(corsOptions))
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
+app.options('*', cors())
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
