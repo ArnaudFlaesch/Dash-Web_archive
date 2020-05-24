@@ -6,19 +6,9 @@ const { Pool } = require('pg');
 const winston = require('winston');
 const app = express();
 
-const whitelist = ['http://localhost:8090'];
-
 const corsOptions = {
     origin: function(origin, callback) {
-        if (!origin) {
-            return callback(null, true);
-        }
-
-        if (whitelist.indexOf(origin) === -1) {
-            var msg = 'The CORS policy for this site does not ' +
-                'allow access from the specified Origin.';
-            return callback(new Error(msg), false);
-        }
+        logger.info(origin)
         return callback(null, true);
     }
 }
