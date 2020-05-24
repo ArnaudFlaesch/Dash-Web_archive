@@ -6,23 +6,23 @@ const { Pool } = require('pg');
 const winston = require('winston');
 const app = express();
 
+const whitelist = ['http://localhost:3000'];
+
 const corsOptions = {
-    origin: process.env.HOST || '0.0.0.0',
-    optionsSuccessStatus: 200
+    origin: function(origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        if (whitelist.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
 }
 
-const allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-        res.send(200);
-    } else {
-        next();
-    }
-};
 app.use(cors(corsOptions));
 app.use(allowCrossDomain);
 app.use(express.static(path.join(__dirname, '../build')));
