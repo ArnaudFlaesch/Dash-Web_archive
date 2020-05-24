@@ -97,7 +97,9 @@ app.post('/db/deleteWidget', (request, response) => {
     }
 });
 
-app.listen(process.env.PORT || 9000);
+app.listen(process.env.PORT || 9000, () => {
+    logger.info(`Server running on port ${process.env.PORT || 9000}`);
+});
 
 
 /**********
