@@ -6,6 +6,17 @@ const { Pool } = require('pg');
 const winston = require('winston');
 const app = express();
 
+const logger = winston.createLogger({
+    format: winston.format.combine(
+        winston.format.json(),
+        winston.format.colorize({ all: true })
+    ),
+    level: 'debug',
+    transports: [
+        new winston.transports.Console()
+    ]
+});
+
 const corsOptions = {
     origin: function(origin, callback) {
         logger.info(origin)
@@ -117,15 +128,4 @@ corsProxy.createServer({
     requireHeader: ['origin', 'x-requested-with']
 }).listen(port, host, () => {
     logger.info('Running CORS Anywhere on ' + host + ':' + port);
-});
-
-const logger = winston.createLogger({
-    format: winston.format.combine(
-        winston.format.json(),
-        winston.format.colorize({ all: true })
-    ),
-    level: 'debug',
-    transports: [
-        new winston.transports.Console()
-    ]
 });

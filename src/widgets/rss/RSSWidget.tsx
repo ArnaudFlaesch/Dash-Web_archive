@@ -35,7 +35,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 		super(props);
 		this.state = {
 			id: props.id,
-			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
+			CORS_PROXY: `${process.env.HOST || process.env.REACT_APP_PROXY_URL }:${process.env.REACT_APP_CORS_PORT}/`,
 			description: "",
 			feed: undefined,
 			image: undefined,
