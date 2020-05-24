@@ -6,7 +6,7 @@ const { Pool } = require('pg');
 const winston = require('winston');
 const app = express();
 
-const whitelist = ['http://localhost:3000'];
+const whitelist = ['http://localhost:8090'];
 
 const corsOptions = {
     origin: function(origin, callback) {
