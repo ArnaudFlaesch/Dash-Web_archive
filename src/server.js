@@ -124,8 +124,8 @@ const port = process.env.REACT_APP_CORS_PORT || 8090;
 
 corsProxy.createServer({
     originWhitelist: [], // Allow all origins
-    removeHeaders: ['cookie', 'cookie2'],
-    requireHeader: ['origin', 'x-requested-with']
+    //removeHeaders: ['cookie', 'cookie2'],
+    //requireHeader: ['origin', 'x-requested-with']
 }).listen(port, host, () => {
     logger.info('Running CORS Anywhere on ' + host + ':' + port);
 });
