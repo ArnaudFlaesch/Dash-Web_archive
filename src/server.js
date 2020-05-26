@@ -17,14 +17,7 @@ const logger = winston.createLogger({
     ]
 });
 
-const corsOptions = {
-    origin: function(origin, callback) {
-        logger.info(origin)
-        return callback(null, true);
-    }
-}
-
-app.use(cors(corsOptions));
+//app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
