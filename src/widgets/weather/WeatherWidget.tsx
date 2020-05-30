@@ -21,7 +21,6 @@ interface IState {
 	id: number;
 	mode: ModeEnum;
 	API_KEY?: string;
-	CORS_PROXY: string;
 	cityToQuery?: string;
 	city?: ICity;
 	weather?: IWeather,
@@ -41,7 +40,6 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			mode: ModeEnum.READ,
 			API_KEY: props.weather_api_key,
 			cityToQuery: props.city,
-			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			WEATHER_API: "http://api.openweathermap.org/data/2.5/",
 			WEATHER_ENDPOINT: "weather",
 			FORECAST_ENDPOINT: "forecast",
@@ -64,14 +62,12 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 	}
 
 	public fetchDataFromWeatherApi() {
-		axios.get(
-			this.state.CORS_PROXY
-			+ this.state.WEATHER_API
-			+ this.state.WEATHER_ENDPOINT
-			+ this.state.API_OPTIONS
-			+ this.state.API_KEY
-			+ "&q=" + this.state.cityToQuery
-		)
+		axios.get(`
+			${process.env.REACT_APP_BACKEND_URL}/proxy`, {
+			params: {
+				url: `${this.state.WEATHER_API}${this.state.WEATHER_ENDPOINT}${this.state.API_OPTIONS}${this.state.API_KEY}&q=${this.state.cityToQuery}`
+			}
+		})
 			.then(result => {
 				this.setState({
 					weather: result.data
@@ -80,14 +76,12 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			.catch((error: Error) => {
 				logger.debug(error);
 			});
-		axios.get(this.state.CORS_PROXY
-			+ this.state.WEATHER_API
-			+ this.state.FORECAST_ENDPOINT
-			+ this.state.API_OPTIONS
-			+ this.state.API_KEY
-			+ "&q=" + this.state.cityToQuery
-		)
-			.then(result => {
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy`, {
+			params: {
+				url: `${this.state.WEATHER_API}${this.state.FORECAST_ENDPOINT}${this.state.API_OPTIONS}${this.state.API_KEY}&q=${this.state.cityToQuery}`
+			}
+		})
+			.then((result: any) => {
 				this.setState({
 					forecast: result.data.list,
 					city: result.data.city
