@@ -18,7 +18,6 @@ interface IProps {
 
 interface IState {
 	id: number;
-	CORS_PROXY: string;
 	url?: string;
 	title: string;
 	description: string;
@@ -35,7 +34,6 @@ export class RSSWidget extends React.Component<IProps, IState> {
 		super(props);
 		this.state = {
 			id: props.id,
-			CORS_PROXY: `${process.env.REACT_APP_PROXY_URL}:${process.env.REACT_APP_CORS_PORT}/`,
 			description: "",
 			feed: undefined,
 			image: undefined,
@@ -53,7 +51,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 	}
 
 	public fetchDataFromRssFeed() {
-		this.state.parser.parseURL(this.state.CORS_PROXY + this.state.url)
+		this.state.parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy?url=${this.state.url}`)
 			.then((result: IRSSHeader) => {
 				this.setState({
 					description: result.description,
@@ -144,9 +142,9 @@ export class RSSWidget extends React.Component<IProps, IState> {
 							{this.getFeedFromRSS(this.state.feed)}
 						</div>
 					</div>
-					: (this.state.mode === ModeEnum.EDIT)
-						? <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
-						: <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
+					: (this.state.mode === ModeEnum.DELETE)
+						? <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
+						: <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
 				}
 			</div>
 		);
