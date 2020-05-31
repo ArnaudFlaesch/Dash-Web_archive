@@ -14,9 +14,7 @@ export default class EmptyRSSWidget extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        if (this.props.url) {
-            this.state = { url: this.props.url };
-        }
+        this.state = (this.props.url) ? { url: this.props.url } : { url: "" }
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onValidation = this.onValidation.bind(this);
     }
