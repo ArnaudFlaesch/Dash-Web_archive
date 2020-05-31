@@ -186,10 +186,10 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 							</div>
 						}
 					</div>
-					: (this.state.mode === ModeEnum.EDIT)
-						? <EmptyWeatherWidget city={this.state.cityToQuery} weather_api_key={this.state.API_KEY} onConfigSubmitted={this.onConfigSubmitted} />
-						: <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
-				}
+					: (this.state.mode === ModeEnum.DELETE)
+						? <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
+						: <EmptyWeatherWidget city={this.state.cityToQuery} weather_api_key={this.state.API_KEY} onConfigSubmitted={this.onConfigSubmitted} />
+					}
 			</div>
 		)
 	}

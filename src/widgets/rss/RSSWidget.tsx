@@ -142,9 +142,9 @@ export class RSSWidget extends React.Component<IProps, IState> {
 							{this.getFeedFromRSS(this.state.feed)}
 						</div>
 					</div>
-					: (this.state.mode === ModeEnum.EDIT)
-						? <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
-						: <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
+					: (this.state.mode === ModeEnum.DELETE)
+						? <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
+						: <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
 				}
 			</div>
 		);
