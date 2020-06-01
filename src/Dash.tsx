@@ -1,12 +1,12 @@
-import axios from "axios";
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import './Dash.scss';
 import { WidgetTypes } from './enums/WidgetsEnum';
 import Navbar from './navbar/Navbar';
 import Store from './pages/store/Store';
-import { addWidget } from './services/WidgetService';
+import { addWidget, deleteWidget } from './services/WidgetService';
 import logger from './utils/LogUtils';
 import CalendarWidget from './widgets/calendar/CalendarWidget';
 import { RSSWidget } from "./widgets/rss/RSSWidget";
@@ -14,6 +14,7 @@ import { WeatherWidget } from './widgets/weather/WeatherWidget';
 
 interface IState {
 	widgets: IWidgetConfig[];
+	activeTab: string;
 }
 
 interface IWidgetConfig {
@@ -28,6 +29,10 @@ export interface IMenu {
 }
 
 export default class Dashboard extends React.Component<any, IState> {
+
+	private toggle(tab: string) {
+		if (this.state.activeTab !== tab) this.setState({ activeTab: tab });
+	}
 
 	private navItems: IMenu[] = [
 		{
@@ -47,7 +52,8 @@ export default class Dashboard extends React.Component<any, IState> {
 	constructor(props: any) {
 		super(props);
 		this.state = {
-			widgets: []
+			widgets: [],
+			activeTab: '1'
 		};
 		this.createWidget = this.createWidget.bind(this);
 		this.onWidgetAdded = this.onWidgetAdded.bind(this);
@@ -55,7 +61,7 @@ export default class Dashboard extends React.Component<any, IState> {
 	}
 
 	public componentDidMount() {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/db`)
+		fetch(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget`)
 			.then((result) => {
 				return result.json();
 			})
@@ -76,12 +82,12 @@ export default class Dashboard extends React.Component<any, IState> {
 					const widgetData: IWidgetConfig = response.data;
 					this.createWidget(widgetData);
 					this.setState({ widgets: this.state.widgets.concat(widgetData) })
+					this.props.history.push('/home');
 				}
 			})
 			.catch(error => {
 				logger.error(error.message);
 			})
-
 	}
 
 	public createWidget(widgetConfig: IWidgetConfig) {
@@ -102,12 +108,7 @@ export default class Dashboard extends React.Component<any, IState> {
 	}
 
 	public deleteWidget(id: number) {
-		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/deleteWidget`, { "id": id },
-			{
-				headers: {
-					'Content-type': 'application/json'
-				}
-			})
+		deleteWidget(id)
 			.then(response => {
 				if (response) {
 					this.setState({
@@ -131,17 +132,38 @@ export default class Dashboard extends React.Component<any, IState> {
 
 						<Switch>
 							<Route exact path="/">
-								<div className='widgetList'>
-									{
-										this.state.widgets &&
-										this.state.widgets.map((widgetConfig: IWidgetConfig) => {
-											return (
-												<div key={widgetConfig.id} className="widget">
-													{this.createWidget(widgetConfig)}
-												</div>
-											);
-										})
-									}
+								<div className='flexColumn tabsBar'>
+									<Nav tabs={true}>
+										<NavItem>
+											<NavLink onClick={() => { this.toggle('1'); }}>
+												Tab1
+											</NavLink>
+										</NavItem>
+										<NavItem>
+											<NavLink onClick={() => { this.toggle('2'); }}>
+												Moar Tabs
+          									</NavLink>
+										</NavItem>
+									</Nav>
+									<TabContent activeTab={this.state.activeTab}>
+										<TabPane tabId="1">
+											<div className='widgetList'>
+												{
+													this.state.widgets &&
+													this.state.widgets.map((widgetConfig: IWidgetConfig) => {
+														return (
+															<div key={widgetConfig.id} className="widget">
+																{this.createWidget(widgetConfig)}
+															</div>
+														);
+													})
+												}
+											</div>
+										</TabPane>
+										<TabPane tabId="2">
+											Tab 2
+										</TabPane>
+									</TabContent>
 								</div>
 							</Route>
 							<Route path="/store">
@@ -153,7 +175,7 @@ export default class Dashboard extends React.Component<any, IState> {
 						</Switch>
 					</div>
 				</Router>
-			</div>
+			</div >
 
 		);
 	}

@@ -14,7 +14,7 @@ const Navbar: React.FunctionComponent<IProps> = props => {
             <Nav vertical navbar={true}>
                 {props.navItems.map(menu => {
                     return (
-                        <NavItem className="dashNavbarLink">
+                        <NavItem key={menu.link} className="dashNavbarLink">
                             <Link to={menu.link}><i className={menu.icon} aria-hidden="true" /></Link>
                         </NavItem>
                     )

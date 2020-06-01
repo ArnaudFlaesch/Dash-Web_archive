@@ -1,7 +1,7 @@
 import * as React from 'react';
-import './Store.scss';
+import { Button, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle } from 'reactstrap';
 import { WidgetTypes } from '../../enums/WidgetsEnum';
-import { Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button } from 'reactstrap';
+import './Store.scss';
 
 interface IProps {
     onWidgetAdded: (type: any) => void;
@@ -13,9 +13,9 @@ const Store: React.FunctionComponent<IProps> = props => {
             {
                 Object.keys(WidgetTypes).map((key) => {
                     return (
-                        isNaN(parseInt(key)) &&
+                        isNaN(parseInt(key, 0)) &&
                         <Card>
-                            <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" />
+                            <CardImg top={true} width="100%" src="/assets/318x180.svg" alt="Card image cap" />
                             <CardBody>
                                 <CardTitle>{key}</CardTitle>
                                 <CardSubtitle>Widget {key}</CardSubtitle>
