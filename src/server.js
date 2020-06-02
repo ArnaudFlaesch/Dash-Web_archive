@@ -6,6 +6,7 @@ const winston = require('winston');
 const app = express();
 const server = require("http").Server(app);
 const defaultRouter = express.Router();
+const tabRouter = require("./routes/tab.route");
 const widgetRouter = require("./routes/widget.route");
 
 const logger = winston.createLogger({
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
 app.use('/', defaultRouter);
+app.use("/tab", tabRouter);
 app.use("/widget", widgetRouter);
 
 app.get('/', (req, res) => {

@@ -43,19 +43,6 @@ widgetRouter.post('/addWidget', (request, response) => {
     }
 });
 
-widgetRouter.post('/newWidget', (request, response) => {
-    try {
-        const pool = new Pool(loginData);
-        const sql = `INSERT INTO public.widgets(type, data) VALUES (${request.body.type}, to_json('${JSON.stringify(request.body.data)}'::json))`;
-        pool.query(sql, (error, result) => {
-            response.status(200).json(result);
-            pool.end()
-        });
-    } catch (err) {
-        response.status(400).send(err);
-    }
-});
-
 widgetRouter.post('/updateWidget', (request, response) => {
     try {
         const pool = new Pool(loginData);

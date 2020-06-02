@@ -176,7 +176,6 @@ export default class Dashboard extends React.Component<any, IState> {
 					</div>
 				</Router>
 			</div >
-
 		);
 	}
 }
