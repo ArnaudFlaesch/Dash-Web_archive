@@ -54,11 +54,13 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 		this.onConfigSubmitted = this.onConfigSubmitted.bind(this);
 		this.updateWidget = this.updateWidget.bind(this)
 		this.cancelDeletion = this.cancelDeletion.bind(this);
+		this.fetchDataFromWeatherApi = this.fetchDataFromWeatherApi.bind(this);
 		this.deleteWidget = this.deleteWidget.bind(this);
 	}
 
 	public componentDidMount() {
 		this.fetchDataFromWeatherApi();
+		setInterval(this.fetchDataFromWeatherApi, 60000);
 	}
 
 	public fetchDataFromWeatherApi() {
@@ -159,12 +161,12 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 									<div><img src={`https://openweathermap.org/img/wn/${this.state.weather.weather[0].icon}@2x.png`} title={this.state.weather.weather[0].description} alt={this.state.weather.weather[0].description} /></div>
 									<div>
 										<div>{this.state.weather.weather[0].description}</div>
-										<div>Température : {this.state.weather.main.temp}°</div>
-										<div>
-											<div>Lever du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunrise, adjustTimeWithOffset(this.state.weather.timezone))}</div>
-											<div>Coucher du soleil : {formatDateFromTimestamp(this.state.weather.sys.sunset, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+										<div><i className="fa fa-thermometer-three-quarters fa-md" /> {this.state.weather.main.temp}°</div>
+										<div className="space-between">
+											<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(this.state.weather.sys.sunrise, adjustTimeWithOffset(this.state.weather.timezone)).toLocaleTimeString('fr')}</div>
+											<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(this.state.weather.sys.sunset, adjustTimeWithOffset(this.state.weather.timezone)).toLocaleTimeString('fr')}</div>
 										</div>
-										<div>Dernière mise à jour le : {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone))}</div>
+										<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone)).toLocaleString('fr')}</div>
 									</div>
 								</div>
 							</div>
@@ -188,7 +190,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 					: (this.state.mode === ModeEnum.DELETE)
 						? <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
 						: <EmptyWeatherWidget city={this.state.cityToQuery} weather_api_key={this.state.API_KEY} onConfigSubmitted={this.onConfigSubmitted} />
-					}
+				}
 			</div>
 		)
 	}
