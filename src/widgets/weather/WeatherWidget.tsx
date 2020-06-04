@@ -62,8 +62,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 	}
 
 	public fetchDataFromWeatherApi() {
-		axios.get(`
-			${process.env.REACT_APP_BACKEND_URL}/proxy`, {
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
 			params: {
 				url: `${this.state.WEATHER_API}${this.state.WEATHER_ENDPOINT}${this.state.API_OPTIONS}${this.state.API_KEY}&q=${this.state.cityToQuery}`
 			}
@@ -76,7 +75,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 			.catch((error: Error) => {
 				logger.debug(error);
 			});
-		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy`, {
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
 			params: {
 				url: `${this.state.WEATHER_API}${this.state.FORECAST_ENDPOINT}${this.state.API_OPTIONS}${this.state.API_KEY}&q=${this.state.cityToQuery}`
 			}
@@ -146,7 +145,7 @@ export class WeatherWidget extends React.Component<IProps, IState> {
 					<div>
 						<div className="header">
 							<div className="leftGroup widgetHeader">
-								La météo aujourd'hui à {this.props.city}
+								La météo aujourd'hui à {this.state.city?.name}
 							</div>
 							<div className="rightGroup">
 								<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>

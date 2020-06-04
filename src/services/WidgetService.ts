@@ -1,20 +1,28 @@
 import axios from 'axios';
-import { WidgetTypes } from 'src/enums/WidgetsEnum';
+import { WidgetTypes } from '../enums/WidgetsEnum';
 
-export const addWidget = (type: WidgetTypes) => {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/addWidget`, { "type": type },
+const headers = {
+    'Content-type': 'application/json'
+};
+
+
+export function addWidget(type: WidgetTypes) {
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/addWidget`, { "type": type },
 		{
-			headers: {
-				'Content-type': 'application/json'
-			}
+			headers: headers
 		});
 }
 
-export const updateWidget = (id: number, data: any) => {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/updateWidget`, { "id": id, "data": data },
+export function updateWidget(id: number, data: any) {
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/updateWidget`, { "id": id, "data": data },
 		{
-			headers: {
-				'Content-type': 'application/json'
-			}
+			headers: headers
+		});
+}
+
+export function deleteWidget(id: number) {
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/deleteWidget`, { "id": id },
+		{
+			headers: headers
 		});
 }

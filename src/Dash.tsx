@@ -1,25 +1,18 @@
-import axios from "axios";
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Nav, NavItem, NavLink, TabContent } from 'reactstrap';
 import './Dash.scss';
-import { WidgetTypes } from './enums/WidgetsEnum';
 import Navbar from './navbar/Navbar';
 import Store from './pages/store/Store';
 import { addWidget } from './services/WidgetService';
+import TabDash from './tab/TabContent';
 import logger from './utils/LogUtils';
-import CalendarWidget from './widgets/calendar/CalendarWidget';
-import { RSSWidget } from "./widgets/rss/RSSWidget";
-import { WeatherWidget } from './widgets/weather/WeatherWidget';
+
 
 interface IState {
-	widgets: IWidgetConfig[];
-}
-
-interface IWidgetConfig {
-	id: number;
-	type: WidgetTypes;
-	data: any;
+	activeTab?: string;
+	tabs: any[]
 }
 
 export interface IMenu {
@@ -28,6 +21,10 @@ export interface IMenu {
 }
 
 export default class Dashboard extends React.Component<any, IState> {
+
+	private toggle(tab: string) {
+		if (this.state.activeTab !== tab) this.setState({ activeTab: tab });
+	}
 
 	private navItems: IMenu[] = [
 		{
@@ -47,21 +44,22 @@ export default class Dashboard extends React.Component<any, IState> {
 	constructor(props: any) {
 		super(props);
 		this.state = {
-			widgets: []
+			activeTab: undefined,
+			tabs: []
 		};
-		this.createWidget = this.createWidget.bind(this);
+		//this.createWidget = this.createWidget.bind(this);
 		this.onWidgetAdded = this.onWidgetAdded.bind(this);
-		this.deleteWidget = this.deleteWidget.bind(this);
 	}
 
 	public componentDidMount() {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/db`)
+		fetch(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/tab`)
 			.then((result) => {
 				return result.json();
 			})
 			.then(result => {
 				this.setState({
-					widgets: result
+					tabs: result,
+					activeTab: result[0].id.toString()
 				});
 			})
 			.catch((error: Error) => {
@@ -73,48 +71,9 @@ export default class Dashboard extends React.Component<any, IState> {
 		addWidget(type.target.value)
 			.then((response) => {
 				if (response) {
-					const widgetData: IWidgetConfig = response.data;
-					this.createWidget(widgetData);
-					this.setState({ widgets: this.state.widgets.concat(widgetData) })
-				}
-			})
-			.catch(error => {
-				logger.error(error.message);
-			})
-
-	}
-
-	public createWidget(widgetConfig: IWidgetConfig) {
-		switch (widgetConfig.type) {
-			case WidgetTypes.WEATHER: {
-				return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
-			}
-			case WidgetTypes.RSS: {
-				return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
-			}
-			case WidgetTypes.CALENDAR: {
-				return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={this.deleteWidget} />
-			}
-			default: {
-				return;
-			}
-		}
-	}
-
-	public deleteWidget(id: number) {
-		axios.post(`${process.env.REACT_APP_BACKEND_URL}/db/deleteWidget`, { "id": id },
-			{
-				headers: {
-					'Content-type': 'application/json'
-				}
-			})
-			.then(response => {
-				if (response) {
-					this.setState({
-						widgets: this.state.widgets.filter((widget) => {
-							return widget.id !== id;
-						})
-					});
+					//const widgetData: IWidgetConfig = response.data;
+					//this.createWidget(widgetData);
+					//this.setState({ widgets: this.state.widgets.concat(widgetData) })
 				}
 			})
 			.catch(error => {
@@ -131,17 +90,28 @@ export default class Dashboard extends React.Component<any, IState> {
 
 						<Switch>
 							<Route exact path="/">
-								<div className='widgetList'>
-									{
-										this.state.widgets &&
-										this.state.widgets.map((widgetConfig: IWidgetConfig) => {
+								<div className='flexColumn tabsBar'>
+									<Nav tabs={true}>
+										{
+											this.state.tabs.map(tab => {
+												return (
+													<NavItem className="clickable-item" key={tab.id}>
+														<NavLink onClick={() => { this.toggle(tab.id.toString()); }}>
+															{tab.label}
+														</NavLink>
+													</NavItem>
+												)
+											})
+										}
+									</Nav>
+									<TabContent activeTab={this.state.activeTab}>
+										{this.state.tabs.map(tab => {
 											return (
-												<div key={widgetConfig.id} className="widget">
-													{this.createWidget(widgetConfig)}
-												</div>
-											);
+												<TabDash key={tab.id} tabId={tab.id.toString()} />
+											)
 										})
-									}
+										}
+									</TabContent>
 								</div>
 							</Route>
 							<Route path="/store">
@@ -153,8 +123,7 @@ export default class Dashboard extends React.Component<any, IState> {
 						</Switch>
 					</div>
 				</Router>
-			</div>
-
+			</div >
 		);
 	}
 }

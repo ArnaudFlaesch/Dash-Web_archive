@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import "./EmptyRSSWidget.scss";
 
 interface IProps {
@@ -6,33 +7,19 @@ interface IProps {
     onUrlSubmitted: (url: string) => void;
 }
 
-interface IState {
-    url: string;
-}
-
-export default class EmptyRSSWidget extends React.Component<IProps, IState> {
-
-    constructor(props: IProps) {
-        super(props);
-        this.state = (this.props.url) ? { url: this.props.url } : { url: "" }
-        this.onChangeHandler = this.onChangeHandler.bind(this);
-        this.onValidation = this.onValidation.bind(this);
+export default function EmptyRSSWidget(props: IProps) {
+    const [url, setUrl] = useState(props.url);
+    const onChangeHandler = (event: any) => setUrl(event.target.value);
+    const onValidation = () => {
+        props.onUrlSubmitted(url!!);
     }
 
-    public onChangeHandler(event: any) {
-        this.setState({ url: event.target.value });
-    }
-
-    public onValidation() {
-        this.props.onUrlSubmitted(this.state.url);
-    }
-
-    public render() {
-        return (
-            <div>
-                <input name="url" onChange={this.onChangeHandler} value={this.state.url} placeholder="Saisissez l'URL du flux RSS" />
-                <button onClick={this.onValidation} disabled={this.state?.url.length < 1} className="btn btn-success">Valider</button>
-            </div>
-        )
-    }
+    return (
+        <div>
+            <input name="url" onChange={onChangeHandler} value={url} placeholder="Saisissez l'URL du flux RSS" />
+            <button onClick={onValidation} disabled={!url || url?.length < 1} className="btn btn-success">
+                Valider
+            </button>
+        </div>
+    )
 }
