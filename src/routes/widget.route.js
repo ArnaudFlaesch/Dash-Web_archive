@@ -1,6 +1,7 @@
 const express = require("express");
 const widgetRouter = express.Router();
 const { Pool } = require('pg');
+const winston = require('winston');
 
 const loginData = (process.env.DATABASE_URL) ? {
     connectionString: process.env.DATABASE_URL,
@@ -13,6 +14,17 @@ const loginData = (process.env.DATABASE_URL) ? {
     user: 'postgres'
 };
 
+const logger = winston.createLogger({
+    format: winston.format.combine(
+        winston.format.json(),
+        winston.format.colorize({ all: true })
+    ),
+    level: 'debug',
+    transports: [
+        new winston.transports.Console()
+    ]
+});
+
 widgetRouter.use((req, res, next) => {
     next();
 });
@@ -20,7 +32,7 @@ widgetRouter.use((req, res, next) => {
 widgetRouter.get("/", (request, response) => {
     try {
         const pool = new Pool(loginData);
-        pool.query('SELECT * FROM widgets', (error, result) => {
+        pool.query(`SELECT * FROM widgets WHERE tab_id = ${request.query.tabId}`, (error, result) => {
             response.status(200).json(result.rows);
             pool.end()
         });
