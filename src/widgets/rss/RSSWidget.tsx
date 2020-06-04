@@ -47,6 +47,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 		this.editWidget = this.editWidget.bind(this);
 		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
 		this.cancelDeletion = this.cancelDeletion.bind(this);
+		this.fetchDataFromRssFeed = this.fetchDataFromRssFeed.bind(this);
 		this.deleteWidget = this.deleteWidget.bind(this);
 	}
 
@@ -108,6 +109,7 @@ export class RSSWidget extends React.Component<IProps, IState> {
 
 	public componentDidMount() {
 		this.fetchDataFromRssFeed();
+		setInterval(this.fetchDataFromRssFeed, 60000);
 	}
 
 	public render() {

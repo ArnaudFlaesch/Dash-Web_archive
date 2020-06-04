@@ -1,6 +1,5 @@
-export function formatDateFromTimestamp(date: number, offset = 0) {
-	const parsedDate = new Date(date * 1000 + offset * 1000);
-	return (parsedDate.toLocaleString("fr"));
+export function formatDateFromTimestamp(timestamp: number, offset = 0) {
+	return new Date(timestamp * 1000 + offset * 1000);
 }
 
 export function formatDateFromUTC(date: string) {

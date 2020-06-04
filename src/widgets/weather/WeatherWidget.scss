@@ -2,6 +2,11 @@
     font-weight: bold;
 }
 
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
 .smallImage {
     max-width: 50px;
     max-height: 50px;
