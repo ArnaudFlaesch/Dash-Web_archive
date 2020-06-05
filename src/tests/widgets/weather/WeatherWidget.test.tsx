@@ -23,6 +23,8 @@ describe('Weather widget tests', () => {
       data: montrealWeatherSample
     };
 
+    jest.spyOn(React, "useEffect").mockImplementation(f => f());
+
     jest.spyOn(mockedAxios, "get").mockImplementation(() => {
       return Promise.resolve(apiWeatherResponse)
     });
