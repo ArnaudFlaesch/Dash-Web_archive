@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { RSSWidget } from '../../../widgets/rss/RSSWidget';
+import RSSWidget from '../../../widgets/rss/RSSWidget';
 
 describe('RSS Widget tests', () => {
     it('renders without crashing', () => {
