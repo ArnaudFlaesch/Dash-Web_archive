@@ -31,11 +31,6 @@ export default function WeatherWidget(props: IProps) {
 	const [city, setCity] = useState<ICity>();
 	const [mode, setMode] = useState(ModeEnum.READ);
 
-	useEffect(() => {
-		fetchDataFromWeatherApi();
-		setInterval(fetchDataFromWeatherApi, 60000);
-	}, [])
-
 	const fetchDataFromWeatherApi = () => {
 		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
 			params: {
@@ -61,6 +56,11 @@ export default function WeatherWidget(props: IProps) {
 				logger.debug(error.message);
 			});
 	}
+
+	useEffect(() => {
+		fetchDataFromWeatherApi();
+		setInterval(fetchDataFromWeatherApi, 60000);
+	}, [cityToQuery, apiKey])
 
 	const refreshWidget = () => {
 		setWeather(undefined);
@@ -132,7 +132,7 @@ export default function WeatherWidget(props: IProps) {
 							<div className="flexRow forecastRow">
 								{city && forecast && forecast?.map(forecastDay => {
 									return (
-										<div className='forecastContainer' key={forecastDay.dt_text}>
+										<div className='forecastContainer' key={forecastDay.dt}>
 											<Forecast  {...forecastDay} city={city!!} />
 										</div>
 									)
