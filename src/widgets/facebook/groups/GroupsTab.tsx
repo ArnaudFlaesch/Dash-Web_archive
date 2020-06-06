@@ -1,29 +1,24 @@
 import * as React from "react";
+import { useEffect } from 'react';
 import logger from "../../../utils/LogUtils";
-import {getGroupsData} from "../FacebookAPI";
+import { getGroupsData } from "../FacebookAPI";
 import IGroup from "./IGroup";
 
-export default class GroupsTab extends React.Component {
+export default function GroupsTab() {
 
-    constructor(props: any) {
-        super(props);
-    }
-
-    public componentDidMount() {
+    useEffect(() => {
         getGroupsData()
-            .then((result : IGroup[]) => {
+            .then((result: IGroup[]) => {
                 logger.debug(result);
             })
-            .catch((error : Error) => {
+            .catch((error: Error) => {
                 logger.debug(error);
             })
-    }
+    }, [])
 
-    public render() {
-        return (
-            <div>
-                Liste des groupes auxquels vous appartenez
-            </div>
-        )
-    }
+    return (
+        <div>
+            Liste des groupes auxquels vous appartenez
+        </div>
+    )
 }

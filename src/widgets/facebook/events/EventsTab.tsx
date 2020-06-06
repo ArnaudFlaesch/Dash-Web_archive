@@ -1,20 +1,16 @@
 import * as React from "react";
+import { useEffect } from 'react';
 import logger from "../../../utils/LogUtils";
 
-export default class EventsTab extends React.Component {
-    constructor(props: any) {
-        super(props);
-    }
+export default function EventsTab() {
 
-    public componentDidmount() {
+    useEffect(() => {
         logger.debug("onComponentDidMount");
-    }
+    })
 
-    public render() {
-        return (
-            <div>
-                Liste des prochains évènements
-            </div>
-        )
-    }
+    return (
+        <div>
+            Liste des prochains évènements
+        </div>
+    )
 }

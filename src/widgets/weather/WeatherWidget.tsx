@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { ModeEnum } from '../../enums/ModeEnum';
 import { updateWidget } from '../../services/WidgetService';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
@@ -17,181 +18,133 @@ export interface IProps {
 	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-interface IState {
-	id: number;
-	mode: ModeEnum;
-	API_KEY?: string;
-	cityToQuery?: string;
-	city?: ICity;
-	weather?: IWeather,
-	forecast?: IForecast[];
-	WEATHER_API: string;
-	WEATHER_ENDPOINT: string;
-	FORECAST_ENDPOINT: string;
-	API_OPTIONS: string;
-}
+export default function WeatherWidget(props: IProps) {
+	const WEATHER_API = "http://api.openweathermap.org/data/2.5/";
+	const WEATHER_ENDPOINT = "weather";
+	const FORECAST_ENDPOINT = "forecast";
+	const API_OPTIONS = "?units=metric&lang=fr&appid=";
 
-export class WeatherWidget extends React.Component<IProps, IState> {
+	const [cityToQuery, setCityToQuery] = useState(props.city);
+	const [apiKey, setApiKey] = useState(props.weather_api_key);
+	const [weather, setWeather] = useState<IWeather>();
+	const [forecast, setForecast] = useState<IForecast[]>();
+	const [city, setCity] = useState<ICity>();
+	const [mode, setMode] = useState(ModeEnum.READ);
 
-	constructor(props: IProps) {
-		super(props);
-		this.state = {
-			id: this.props.id,
-			mode: ModeEnum.READ,
-			API_KEY: props.weather_api_key,
-			cityToQuery: props.city,
-			WEATHER_API: "http://api.openweathermap.org/data/2.5/",
-			WEATHER_ENDPOINT: "weather",
-			FORECAST_ENDPOINT: "forecast",
-			API_OPTIONS: "?units=metric&lang=fr&appid=",
-			weather: undefined,
-			forecast: undefined,
-			city: undefined
-		}
-
-		this.refreshWidget = this.refreshWidget.bind(this);
-		this.editWidget = this.editWidget.bind(this);
-		this.onConfigSubmitted = this.onConfigSubmitted.bind(this);
-		this.updateWidget = this.updateWidget.bind(this)
-		this.cancelDeletion = this.cancelDeletion.bind(this);
-		this.fetchDataFromWeatherApi = this.fetchDataFromWeatherApi.bind(this);
-		this.deleteWidget = this.deleteWidget.bind(this);
-	}
-
-	public componentDidMount() {
-		this.fetchDataFromWeatherApi();
-		setInterval(this.fetchDataFromWeatherApi, 60000);
-	}
-
-	public fetchDataFromWeatherApi() {
+	const fetchDataFromWeatherApi = () => {
 		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
 			params: {
-				url: `${this.state.WEATHER_API}${this.state.WEATHER_ENDPOINT}${this.state.API_OPTIONS}${this.state.API_KEY}&q=${this.state.cityToQuery}`
+				url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
 			}
 		})
 			.then(result => {
-				this.setState({
-					weather: result.data
-				});
+				setWeather(result.data);
 			})
 			.catch((error: Error) => {
 				logger.debug(error);
 			});
 		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
 			params: {
-				url: `${this.state.WEATHER_API}${this.state.FORECAST_ENDPOINT}${this.state.API_OPTIONS}${this.state.API_KEY}&q=${this.state.cityToQuery}`
+				url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
 			}
 		})
 			.then((result: any) => {
-				this.setState({
-					forecast: result.data.list,
-					city: result.data.city
-				});
+				setForecast(result.data.list)
+				setCity(result.data.city);
 			})
 			.catch((error: Error) => {
 				logger.debug(error.message);
 			});
 	}
 
-	public refreshWidget(): void {
-		this.setState({
-			weather: undefined,
-			forecast: undefined,
-			city: undefined
-		});
-		this.fetchDataFromWeatherApi();
+	useEffect(() => {
+		fetchDataFromWeatherApi();
+		setInterval(fetchDataFromWeatherApi, 60000);
+	}, [cityToQuery, apiKey])
+
+	const refreshWidget = () => {
+		setWeather(undefined);
+		setForecast(undefined);
+		setCity(undefined);
+		fetchDataFromWeatherApi();
 	}
 
-	public onConfigSubmitted(weatherApiKey: string, city: string) {
-		updateWidget(this.state.id, { city, weather_api_key: weatherApiKey })
+	const onConfigSubmitted = (weatherApiKey: string, city: string) => {
+		updateWidget(props.id, { city, weather_api_key: weatherApiKey })
 			.then(response => {
-				this.setState({
-					cityToQuery: city,
-					API_KEY: weatherApiKey
-				}, () => {
-					this.refreshWidget();
-					this.setState({ mode: ModeEnum.READ });
-				});
+				setCityToQuery(city);
+				setApiKey(weatherApiKey);
+				refreshWidget();
+				setMode(ModeEnum.READ);
 			})
 			.catch(error => {
 				logger.error(error.message);
 			})
 	}
 
-	public editWidget(): void {
-		this.setState({ mode: ModeEnum.EDIT });
+	const editWidget = () => {
+		setMode(ModeEnum.EDIT);
 	}
 
-	public cancelDeletion() {
-		this.setState({ mode: ModeEnum.READ });
+	const cancelDeletion = () => {
+		setMode(ModeEnum.READ);
 	}
 
-	public deleteWidget() {
-		this.setState({ mode: ModeEnum.DELETE });
+	const deleteWidget = () => {
+		setMode(ModeEnum.DELETE);
 	}
 
-	public updateWidget() {
-		this.setState({
-			weather: undefined,
-			forecast: undefined,
-			city: undefined
-		});
-		this.fetchDataFromWeatherApi();
-	}
-
-	public render() {
-		return (
-			<div>
-				{this.state.mode === ModeEnum.READ
-					?
-					<div>
-						<div className="header">
-							<div className="leftGroup widgetHeader">
-								La météo aujourd'hui à {this.state.city?.name}
-							</div>
-							<div className="rightGroup">
-								<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
-								<button onClick={this.updateWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
-								<button onClick={this.deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
+	return (
+		<div>
+			{mode === ModeEnum.READ
+				?
+				<div>
+					<div className="header">
+						<div className="leftGroup widgetHeader">
+							La météo aujourd'hui à {city?.name}
+						</div>
+						<div className="rightGroup">
+							<button onClick={editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
+							<button onClick={refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+							<button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
+						</div>
+					</div>
+					{city && weather &&
+						<div>
+							<div className="flexRow">
+								<div><img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} title={weather.weather[0].description} alt={weather.weather[0].description} /></div>
+								<div>
+									<div>{weather.weather[0].description}</div>
+									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°</div>
+									<div className="space-between">
+										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
+										<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunset, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
+									</div>
+									<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(weather.dt, adjustTimeWithOffset(weather.timezone)).toLocaleString('fr')}</div>
+								</div>
 							</div>
 						</div>
-						{this.state.city && this.state.weather &&
-							<div>
-								<div className="flexRow">
-									<div><img src={`https://openweathermap.org/img/wn/${this.state.weather.weather[0].icon}@2x.png`} title={this.state.weather.weather[0].description} alt={this.state.weather.weather[0].description} /></div>
-									<div>
-										<div>{this.state.weather.weather[0].description}</div>
-										<div><i className="fa fa-thermometer-three-quarters fa-md" /> {this.state.weather.main.temp}°</div>
-										<div className="space-between">
-											<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(this.state.weather.sys.sunrise, adjustTimeWithOffset(this.state.weather.timezone)).toLocaleTimeString('fr')}</div>
-											<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(this.state.weather.sys.sunset, adjustTimeWithOffset(this.state.weather.timezone)).toLocaleTimeString('fr')}</div>
+					}
+					{city && forecast &&
+						<div>
+							<span className="bold">Prévisions</span>
+							<br />
+							<div className="flexRow forecastRow">
+								{city && forecast && forecast?.map(forecastDay => {
+									return (
+										<div className='forecastContainer' key={forecastDay.dt}>
+											<Forecast  {...forecastDay} city={city!!} />
 										</div>
-										<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(this.state.weather.dt, adjustTimeWithOffset(this.state.weather.timezone)).toLocaleString('fr')}</div>
-									</div>
-								</div>
+									)
+								})}
 							</div>
-						}
-						{this.state.city && this.state.forecast &&
-							<div>
-								<span className="bold">Prévisions</span>
-								<br />
-								<div className="flexRow forecastRow">
-									{this.state.city && this.state.forecast && this.state.forecast.map(forecastDay => {
-										return (
-											<div className='forecastContainer' key={forecastDay.dt_text}>
-												<Forecast  {...forecastDay} city={this.state.city!!} />
-											</div>
-										)
-									})}
-								</div>
-							</div>
-						}
-					</div>
-					: (this.state.mode === ModeEnum.DELETE)
-						? <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
-						: <EmptyWeatherWidget city={this.state.cityToQuery} weather_api_key={this.state.API_KEY} onConfigSubmitted={this.onConfigSubmitted} />
-				}
-			</div>
-		)
-	}
+						</div>
+					}
+				</div>
+				: (mode === ModeEnum.DELETE)
+					? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
+					: <EmptyWeatherWidget city={cityToQuery} weather_api_key={apiKey} onConfigSubmitted={onConfigSubmitted} />
+			}
+		</div>
+	)
 }

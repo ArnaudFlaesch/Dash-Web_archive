@@ -32,7 +32,7 @@ widgetRouter.use((req, res, next) => {
 widgetRouter.get("/", (request, response) => {
     try {
         const pool = new Pool(loginData);
-        pool.query(`SELECT * FROM widgets WHERE tab_id = ${request.query.tabId}`, (error, result) => {
+        pool.query(`SELECT * FROM widgets WHERE tab_id = ${request.query.tabId} ORDER BY "order" ASC`, (error, result) => {
             response.status(200).json(result.rows);
             pool.end()
         });

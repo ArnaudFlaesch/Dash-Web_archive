@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import * as RSSParser from 'rss-parser';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
@@ -16,88 +17,65 @@ interface IProps {
 	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-interface IState {
-	id: number;
-	url?: string;
-	title: string;
-	description: string;
-	image?: ImageContent;
-	link: string;
-	feed?: IArticle[];
-	mode: ModeEnum;
-	parser: RSSParser;
-}
+export default function RSSWidget(props: IProps) {
+	const [mode, setMode] = useState(ModeEnum.READ);
+	const parser = new RSSParser();
+	const [feed, setFeed] = useState<IArticle[]>([]);
+	const [url, setUrl] = useState(props.url);
+	const [description, setDecription] = useState("");
+	const [image, setImage] = useState<ImageContent>();
+	const [link, setLink] = useState("");
+	const [title, setTitle] = useState("");
 
-export class RSSWidget extends React.Component<IProps, IState> {
+	useEffect(() => {
+		fetchDataFromRssFeed();
+		setInterval(fetchDataFromRssFeed, 60000);
+	}, [])
 
-	constructor(props: IProps) {
-		super(props);
-		this.state = {
-			id: props.id,
-			description: "",
-			feed: undefined,
-			image: undefined,
-			link: "",
-			mode: ModeEnum.READ,
-			parser: new RSSParser(),
-			title: "",
-			url: props.url
-		}
-		this.refreshWidget = this.refreshWidget.bind(this);
-		this.editWidget = this.editWidget.bind(this);
-		this.onUrlSubmitted = this.onUrlSubmitted.bind(this);
-		this.cancelDeletion = this.cancelDeletion.bind(this);
-		this.fetchDataFromRssFeed = this.fetchDataFromRssFeed.bind(this);
-		this.deleteWidget = this.deleteWidget.bind(this);
-	}
-
-	public fetchDataFromRssFeed() {
-		this.state.parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy?url=${this.state.url}`)
+	const fetchDataFromRssFeed = () => {
+		parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy?url=${url}`)
 			.then((result: IRSSHeader) => {
-				this.setState({
-					description: result.description,
-					feed: result.items,
-					image: result.image,
-					link: result.link,
-					title: result.title,
-				})
+				setDecription(result.description);
+				setFeed(result.items);
+				setImage(result.image);
+				setLink(result.link);
+				setTitle(result.title);
 			})
 			.catch((error: Error) => {
 				logger.debug(error.message);
 			});
 	}
 
-	public refreshWidget(): void {
-		this.setState({ feed: [] });
-		this.fetchDataFromRssFeed();
+	const refreshWidget = () => {
+		setFeed([]);
+		fetchDataFromRssFeed();
 	}
 
-	public editWidget(): void {
-		this.setState({ mode: ModeEnum.EDIT });
+	const editWidget = () => {
+		setMode(ModeEnum.EDIT);
 	}
 
-	public onUrlSubmitted(rssUrl: string) {
-		updateWidget(this.state.id, { url: rssUrl })
+	const onUrlSubmitted = (rssUrl: string) => {
+		updateWidget(props.id, { url: rssUrl })
 			.then(response => {
-				this.setState({ url: rssUrl }, () => {
-					this.refreshWidget();
-					this.setState({ mode: ModeEnum.READ });
-				});
+				setUrl(rssUrl);
+				refreshWidget();
+				setMode(ModeEnum.READ);
 			})
 			.catch(error => {
 				logger.error(error.message);
 			})
 	}
 
-	public cancelDeletion() {
-		this.setState({ mode: ModeEnum.READ });
+	const cancelDeletion = () => {
+		setMode(ModeEnum.READ);
 	}
 
-	public deleteWidget() {
-		this.setState({ mode: ModeEnum.DELETE });
+	const deleteWidget = () => {
+		setMode(ModeEnum.DELETE);
 	}
 
-	public getFeedFromRSS(data: IArticle[]) {
+	const getFeedFromRSS = (data: IArticle[]) => {
 		return (
 			data.map((article) => {
 				return (
@@ -107,48 +85,41 @@ export class RSSWidget extends React.Component<IProps, IState> {
 		)
 	}
 
-	public componentDidMount() {
-		this.fetchDataFromRssFeed();
-		setInterval(this.fetchDataFromRssFeed, 60000);
-	}
-
-	public render() {
-		return (
-			<div>
-				{this.state.url && this.state.feed && this.state.mode === ModeEnum.READ
-					?
-					<div>
-						<div className="header">
-							<div className="leftGroup widgetHeader">
-								<div className="rssWidgetTitle">
-									<a href={this.state.link} className="flexRow">
-										{this.state.image &&
-											<div>
-												<img className="imgLogoRSS" src={this.state.image.url} alt="logo" />
-											</div>
-										}
-										<div className="rssTitle">
-											{this.state.title}
+	return (
+		<div>
+			{url && feed && mode === ModeEnum.READ
+				?
+				<div>
+					<div className="header">
+						<div className="leftGroup widgetHeader">
+							<div className="rssWidgetTitle">
+								<a href={link} className="flexRow">
+									{image &&
+										<div>
+											<img className="imgLogoRSS" src={image?.url} alt="logo" />
 										</div>
-									</a>
-								</div>
-							</div>
-							<div className="rightGroup">
-								<button onClick={this.editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
-								<button onClick={this.refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
-								<button onClick={this.deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
+									}
+									<div className="rssTitle">
+										{title}
+									</div>
+								</a>
 							</div>
 						</div>
-						<div className="rssDescription">{this.state.description}</div>
-						<div className="feed">
-							{this.getFeedFromRSS(this.state.feed)}
+						<div className="rightGroup">
+							<button onClick={editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
+							<button onClick={refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+							<button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
 						</div>
 					</div>
-					: (this.state.mode === ModeEnum.DELETE)
-						? <DeleteWidget idWidget={this.props.id} onDeleteButtonClicked={this.props.onDeleteButtonClicked} onCancelButtonClicked={this.cancelDeletion} />
-						: <EmptyRSSWidget url={this.state.url} onUrlSubmitted={this.onUrlSubmitted} />
-				}
-			</div>
-		);
-	}
+					<div className="rssDescription">{description}</div>
+					<div className="feed">
+						{getFeedFromRSS(feed)}
+					</div>
+				</div>
+				: (mode === ModeEnum.DELETE)
+					? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
+					: <EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />
+			}
+		</div>
+	);
 }

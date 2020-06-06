@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { TabPane } from 'reactstrap';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { deleteWidget } from '../services/WidgetService';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
-import { RSSWidget } from '../widgets/rss/RSSWidget';
-import { WeatherWidget } from '../widgets/weather/WeatherWidget';
-import {TabPane} from 'reactstrap';
+import RSSWidget from '../widgets/rss/RSSWidget';
+import WeatherWidget from '../widgets/weather/WeatherWidget';
 
 interface IWidgetConfig {
     id: number;
@@ -49,7 +49,6 @@ function deleteWidgetFromDashboard(id: number) {
 
 export default function TabDash(props: any) {
     const [widgets, setWidgets] = useState([]);
-
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget?tabId=${props.tabId}`)
