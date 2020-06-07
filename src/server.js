@@ -5,9 +5,6 @@ const path = require('path');
 const winston = require('winston');
 const app = express();
 const server = require("http").Server(app);
-const defaultRouter = express.Router();
-const tabRouter = require("./routes/tab.route");
-const widgetRouter = require("./routes/widget.route");
 
 const logger = winston.createLogger({
     format: winston.format.combine(
@@ -24,16 +21,16 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
-app.use('/', defaultRouter);
-app.use("/tab", tabRouter);
-app.use("/widget", widgetRouter);
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
-defaultRouter.use((req, res, next) => {
+app.use((req, res, next) => {
     next();
+});
+
+app.use(function(err, req, res, next) {
+    res.status(500).json({ "error": err.message });
 });
 
 app.get("/proxy", (request, response) => {
