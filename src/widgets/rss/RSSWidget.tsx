@@ -33,7 +33,7 @@ export default function RSSWidget(props: IProps) {
 	}, [])
 
 	const fetchDataFromRssFeed = () => {
-		parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy?url=${url}`)
+		parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
 			.then((result: IRSSHeader) => {
 				setDecription(result.description);
 				setFeed(result.items);

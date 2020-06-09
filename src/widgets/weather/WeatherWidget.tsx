@@ -32,7 +32,7 @@ export default function WeatherWidget(props: IProps) {
 	const [mode, setMode] = useState(ModeEnum.READ);
 
 	const fetchDataFromWeatherApi = () => {
-		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy/`, {
 			params: {
 				url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
 			}
@@ -43,7 +43,7 @@ export default function WeatherWidget(props: IProps) {
 			.catch((error: Error) => {
 				logger.debug(error);
 			});
-		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy`, {
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy/`, {
 			params: {
 				url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
 			}
