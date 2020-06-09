@@ -48,6 +48,6 @@ app.get("/proxy", (request, response) => {
         })
 });
 
-server.listen(process.env.REACT_APP_BACKEND_PORT || 80, () => {
-    logger.info(`Server running on port ${process.env.REACT_APP_BACKEND_PORT || 80}`);
+server.listen(process.env.PORT || 80, () => {
+    logger.info(`Server running on port ${process.env.PORT || 80}`);
 });
