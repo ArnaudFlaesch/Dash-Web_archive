@@ -7,21 +7,21 @@ const headers = {
 
 
 export function addWidget(type: WidgetTypes) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/addWidget`, { "type": type },
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/addWidget`, { "type": type },
 		{
 			headers
 		});
 }
 
 export function updateWidget(id: number, data: any) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/updateWidget`, { "id": id, "data": data },
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/updateWidget`, { "id": id, "data": data },
 		{
 			headers
 		});
 }
 
 export function deleteWidget(id: number) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/deleteWidget`, { "id": id },
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/deleteWidget`, { "id": id },
 		{
 			headers
 		});

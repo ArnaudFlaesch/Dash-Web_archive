@@ -53,7 +53,7 @@ export default function Dash(props: any) {
 	];
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/tab/`)
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
 			.then((result) => {
 				return result.json();
 			})

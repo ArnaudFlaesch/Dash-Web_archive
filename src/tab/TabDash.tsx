@@ -51,7 +51,7 @@ export default function TabDash(props: any) {
     const [widgets, setWidgets] = useState([]);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/widget/?tabId=${props.tabId}`)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`)
             .then((result) => {
                 return result.json();
             })

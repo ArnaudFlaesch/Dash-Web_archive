@@ -36,7 +36,7 @@ export default function CalendarWidget(props: IProps) {
 
     useEffect(() => {
         props.calendars?.map((calendarUrl: string) => {
-            axios.get(`${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}/proxy/?url=${calendarUrl}`)
+            axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
                 .then((response) => {
                     const data = ical.parseICS(response.data);
                     setEvents(events.concat(Object.keys(data).map((eventKey) => {

@@ -33,21 +33,6 @@ app.use(function(err, req, res, next) {
     res.status(500).json({ "error": err.message });
 });
 
-app.get("/proxy", (request, response) => {
-    const url = request.query.url;
-    axios.get(encodeURI(url), {
-            headers: {
-                'Content-type': 'application/json; charset=utf-8'
-            }
-        })
-        .then((result) => {
-            response.status(200).send(result.data);
-        })
-        .catch((error) => {
-            response.status(400).send(error);
-        })
-});
-
 server.listen(process.env.PORT || 80, () => {
     logger.info(`Server running on port ${process.env.PORT || 80}`);
 });
