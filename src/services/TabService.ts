@@ -19,7 +19,7 @@ export function updateTab(id: number, label: any) {
 }
 
 export function deleteTab(id: number) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/tab/deleteTab`, { "id": id },
+	return axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tab/deleteTab/?id=${id}`,
 		{
 			headers
 		});

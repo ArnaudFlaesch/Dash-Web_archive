@@ -21,7 +21,7 @@ export function updateWidgetData(id: number, data: any) {
 }
 
 export function deleteWidget(id: number) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/deleteWidget`, { "id": id },
+	return axios.delete(`${process.env.REACT_APP_BACKEND_URL}/widget/deleteWidget/?id=${id}`,
 		{
 			headers
 		});
