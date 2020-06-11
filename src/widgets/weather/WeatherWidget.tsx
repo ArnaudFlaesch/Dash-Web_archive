@@ -2,7 +2,7 @@ import axios from "axios";
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { ModeEnum } from '../../enums/ModeEnum';
-import { updateWidget } from '../../services/WidgetService';
+import { updateWidgetData } from '../../services/WidgetService';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
@@ -69,10 +69,10 @@ export default function WeatherWidget(props: IProps) {
 		fetchDataFromWeatherApi();
 	}
 
-	const onConfigSubmitted = (weatherApiKey: string, city: string) => {
-		updateWidget(props.id, { city, weather_api_key: weatherApiKey })
+	const onConfigSubmitted = (weatherApiKey: string, updatedCity: string) => {
+		updateWidgetData(props.id, { city: updatedCity, weather_api_key: weatherApiKey })
 			.then(response => {
-				setCityToQuery(city);
+				setCityToQuery(updatedCity);
 				setApiKey(weatherApiKey);
 				refreshWidget();
 				setMode(ModeEnum.READ);

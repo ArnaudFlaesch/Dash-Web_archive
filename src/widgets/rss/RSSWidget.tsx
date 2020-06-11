@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import * as RSSParser from 'rss-parser';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
-import { updateWidget } from '../../services/WidgetService';
+import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
 import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
@@ -56,7 +56,7 @@ export default function RSSWidget(props: IProps) {
 	}
 
 	const onUrlSubmitted = (rssUrl: string) => {
-		updateWidget(props.id, { url: rssUrl })
+		updateWidgetData(props.id, { url: rssUrl })
 			.then(response => {
 				setUrl(rssUrl);
 				refreshWidget();

@@ -13,8 +13,8 @@ export function addWidget(type: WidgetTypes) {
 		});
 }
 
-export function updateWidget(id: number, data: any) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/updateWidget`, { "id": id, "data": data },
+export function updateWidgetData(id: number, data: any) {
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData`, { "id": id, "data": data },
 		{
 			headers
 		});

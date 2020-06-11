@@ -9,10 +9,12 @@ import axios from 'axios';
 import * as ical from 'ical';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { updateWidgetData } from '../../services/WidgetService';
 import { ModeEnum } from '../../enums/ModeEnum';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
 import './CalendarWidget.scss';
+import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
 
 export interface IProps {
     id: number;
@@ -23,6 +25,7 @@ export interface IProps {
 export default function CalendarWidget(props: IProps) {
     const [events, setEvents] = useState<any[]>([]);
     const [mode, setMode] = useState(ModeEnum.READ);
+    const [calendarUrls, setCalendarUrls] = useState(props.calendars);
 
     const calendarOptions: OptionsInput = {
         firstDay: 1,
@@ -35,7 +38,7 @@ export default function CalendarWidget(props: IProps) {
     }
 
     useEffect(() => {
-        props.calendars?.map((calendarUrl: string) => {
+        calendarUrls?.map((calendarUrl: string) => {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
                 .then((response) => {
                     const data = ical.parseICS(response.data);
@@ -56,9 +59,21 @@ export default function CalendarWidget(props: IProps) {
                     logger.error(error);
                 });
         })
-    }, [])
+    }, [calendarUrls])
+
+    const onConfigSubmitted = (calendars: string[]) => {
+		updateWidgetData(props.id, { calendars })
+			.then(response => {
+				setCalendarUrls(calendars);
+				setMode(ModeEnum.READ);
+			})
+			.catch(error => {
+				logger.error(error.message);
+			})
+	}
 
     const editWidget = () => {
+        setEvents([]);
         setMode(ModeEnum.EDIT);
     }
 
@@ -90,7 +105,7 @@ export default function CalendarWidget(props: IProps) {
                 </div>
                 : (mode === ModeEnum.DELETE)
                     ? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
-                    : <div />
+                    : <EmptyCalendarWidget calendarUrls={calendarUrls} onConfigSubmitted={onConfigSubmitted} />
             }
         </div>
     )
