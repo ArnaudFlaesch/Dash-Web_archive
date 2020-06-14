@@ -31,6 +31,6 @@ describe("TabDash tests", () => {
         await act(async () => {
             ReactDOM.render(<TabDash tabId={1} />, container);
         });
-        expect(container.getElementsByClassName('.widget').length).toEqual(5);
+        expect(container.querySelectorAll('.widget').length).toEqual(5);
     });
 });
