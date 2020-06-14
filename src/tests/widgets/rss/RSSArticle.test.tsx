@@ -11,7 +11,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('RSS Article component tests', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    const article: IArticle = { "guid": "1", "link": "http://google.com" }
+    const article: IArticle = { "guid": "1", "link": "http://google.com", content: "" }
     ReactDOM.render(<RSSArticle {...article} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
