@@ -30,7 +30,7 @@ describe("Navbar tests", () => {
         const component = shallow(
             <Navbar navItems={navItems} />,
           );
-        expect(component.find('.dashNavbar').length).toEqual(3);
+        expect(component.find('.dashNavbarLink').length).toEqual(3);
       });
   });
   
