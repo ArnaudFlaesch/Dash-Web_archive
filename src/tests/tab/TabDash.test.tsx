@@ -1,4 +1,6 @@
 import axios from 'axios';
+import * as Enzyme from 'enzyme';
+import * as Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
@@ -6,7 +8,7 @@ import TabDash from "../../tab/TabDash";
 import * as widgetDataSample from './widgetDataSample.json';
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-
+Enzyme.configure({ adapter: new Adapter() });
 
 describe("TabDash tests", () => {
     it('renders without crashing', () => {
