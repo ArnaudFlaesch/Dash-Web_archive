@@ -5,7 +5,6 @@ import * as ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import TabDash from "../../tab/TabDash";
 import * as widgetDataSample from './widgetDataSample.json';
-import { TabContent } from 'reactstrap';
 
 const globalAny: any = global;
 Enzyme.configure({ adapter: new Adapter() });
