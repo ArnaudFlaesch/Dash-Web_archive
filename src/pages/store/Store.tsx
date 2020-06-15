@@ -14,7 +14,7 @@ const Store: React.FunctionComponent<IProps> = props => {
                 Object.keys(WidgetTypes).map((key) => {
                     return (
                         isNaN(parseInt(key, 0)) &&
-                        <Card>
+                        <Card key={key}>
                             <CardImg top={true} width="100%" src="/assets/318x180.svg" alt="Card image cap" />
                             <CardBody>
                                 <CardTitle>{key}</CardTitle>

@@ -14,8 +14,8 @@ export default function DeleteWidget(props: IProps) {
     return (
         <div>
             <h4>Êtes-vous sûr de vouloir supprimer ce widget ?</h4>
-            <button onClick={props.onCancelButtonClicked} className="btn btn-primary">Annuler</button>
-            <button onClick={confirmDeleteWidget} className="btn btn-danger">Supprimer</button>
+            <button onClick={props.onCancelButtonClicked} className="btn btn-primary cancelButton">Annuler</button>
+            <button onClick={confirmDeleteWidget} className="btn btn-danger validateDeletionButton">Supprimer</button>
         </div>
     )
 }
