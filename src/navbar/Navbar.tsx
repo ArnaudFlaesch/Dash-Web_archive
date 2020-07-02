@@ -11,7 +11,7 @@ interface IProps {
 const Navbar: React.FunctionComponent<IProps> = props => {
     return (
         <div className='dashNavbar'>
-            <Nav vertical navbar={true}>
+            <Nav vertical={true} navbar={true}>
                 {props.navItems.map(menu => {
                     return (
                         <NavItem key={menu.link} className="dashNavbarLink">

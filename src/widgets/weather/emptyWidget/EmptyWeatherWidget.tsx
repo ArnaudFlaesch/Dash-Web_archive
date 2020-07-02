@@ -21,7 +21,7 @@ export default function EmptyWeatherWidget(props: IProps) {
         <div>
             <input name="weatherApiKey" onChange={onWeatherApiKeyChangeHandler} value={weatherApiKey} placeholder="Saisissez la clé d'API" />
             <input name="city" onChange={onCityChangeHandler} value={city} placeholder="Saisissez de nom de la ville" />
-            <button onClick={onValidation} disabled={!city || !weatherApiKey || city?.length < 1 || weatherApiKey?.length < 1} className="btn btn-success">
+            <button className="validateButton btn btn-success" onClick={onValidation} disabled={!city || !weatherApiKey || city?.length < 1 || weatherApiKey?.length < 1}>
                 Valider
             </button>
         </div>
