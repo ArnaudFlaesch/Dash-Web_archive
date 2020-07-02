@@ -20,7 +20,9 @@ export default function Dash(props: any) {
 	const [activeTab, setActiveTab] = useState('1');
 
 	const toggle = (tab: string) => {
-		if (activeTab !== tab) setActiveTab(tab);
+		if (activeTab !== tab){
+			setActiveTab(tab);
+		}
 	}
 
 	const onWidgetAdded = (type: any) => {
@@ -100,9 +102,6 @@ export default function Dash(props: any) {
 						</Route>
 						<Route path="/store">
 							<Store onWidgetAdded={onWidgetAdded} />
-						</Route>
-						<Route path="/profile">
-
 						</Route>
 					</Switch>
 				</div>

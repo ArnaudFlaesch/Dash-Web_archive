@@ -6,7 +6,6 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from "react-dom/test-utils";
 import WeatherWidget from '../../../widgets/weather/WeatherWidget';
 import * as montrealWeatherSample from './montrealWeatherSample.json';
-import * as parisWeatherSample from './parisWeatherSample.json';
 
 Enzyme.configure({ adapter: new Adapter() });
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -56,9 +55,9 @@ describe('Weather widget tests', () => {
       data: montrealWeatherSample
     };
 
-    const apiParisWeatherResponse = {
-      data: parisWeatherSample
-    };
+    //const apiParisWeatherResponse = {
+   //   data: parisWeatherSample
+   // };
 
     jest.spyOn(mockedAxios, "get").mockImplementation(() => {
       return Promise.resolve(apiMontrealWeatherResponse)
