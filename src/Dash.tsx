@@ -2,13 +2,14 @@ import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Nav, NavItem, NavLink, TabContent } from 'reactstrap';
+import { Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
-import Navbar from './navbar/Navbar';
 import Store from './pages/store/Store';
 import { addWidget } from './services/WidgetService';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
+import NavDash from './navigation/navDash/NavDash';
+import Navbar from './navigation/navbar/Navbar';
 
 export interface IMenu {
 	link: string;
@@ -81,11 +82,7 @@ export default function Dash(props: any) {
 									{
 										tabs.map((tab: any) => {
 											return (
-												<NavItem className="clickable-item" key={tab.id}>
-													<NavLink onClick={() => { toggle(tab.id.toString()); }}>
-														{tab.label}
-													</NavLink>
-												</NavItem>
+												<NavDash id={tab.id} label={tab.label} onTabClicked={() => toggle(tab.id.toString())} />
 											)
 										})
 									}

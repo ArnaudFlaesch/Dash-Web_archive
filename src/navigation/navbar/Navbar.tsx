@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Nav, NavItem } from 'reactstrap';
-import { IMenu } from '../Dash';
+import { IMenu } from '../../Dash';
 import './Navbar.scss';
 
 interface IProps {

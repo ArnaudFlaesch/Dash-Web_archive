@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Navbar from "../../navbar/Navbar";
+import Navbar from '../../navigation/navbar/Navbar';
 
 Enzyme.configure({ adapter: new Adapter() });
 
