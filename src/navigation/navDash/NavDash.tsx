@@ -1,7 +1,7 @@
 import { NavItem, NavLink } from 'reactstrap';
 import * as React from 'react';
 import { useState } from 'react';
-import { updateTab } from 'src/services/TabService';
+import { updateTab } from '../../services/TabService';
 
 interface IProps {
     id: number;
