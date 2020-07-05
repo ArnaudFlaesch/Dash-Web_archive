@@ -4,7 +4,6 @@ const headers = {
 	'Content-type': 'application/json'
 };
 
-
 export function addWidget(type: WidgetTypes, tabId: number) {
 	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/widget/addWidget`, { "type": type, "tab": {"id": tabId} },
 		{

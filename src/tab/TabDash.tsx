@@ -62,7 +62,6 @@ export default function TabDash(props: IProps) {
     }, [])
 
     useEffect(() => {
-        console.log(props.newWidget)
         if (props.newWidget) {
             setWidgets(((widgets as any[]).concat([props.newWidget])) as []);
         }
