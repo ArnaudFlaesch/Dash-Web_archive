@@ -29,7 +29,7 @@ export default function RSSWidget(props: IProps) {
 
 	useEffect(() => {
 		fetchDataFromRssFeed();
-		setInterval(fetchDataFromRssFeed, 60000);
+		setInterval(fetchDataFromRssFeed, 300000);
 	}, [])
 
 	const fetchDataFromRssFeed = () => {
