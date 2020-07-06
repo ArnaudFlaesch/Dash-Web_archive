@@ -60,7 +60,7 @@ export default function WeatherWidget(props: IProps) {
 
 	useEffect(() => {
 		fetchDataFromWeatherApi();
-		setInterval(fetchDataFromWeatherApi, 60000);
+		setInterval(fetchDataFromWeatherApi, 300000);
 	}, [cityToQuery, apiKey])
 
 	const refreshWidget = () => {

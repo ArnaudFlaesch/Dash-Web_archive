@@ -1,5 +1,14 @@
 .dash {
     width: 100%;
+    .dashNavbar {
+        text-align: center;
+        min-width: 5vw;
+        background-color: black;
+        min-height: 100vh;
+        .dashNavbarLink {
+            margin: 10px;
+        }
+    }
     .tabsBar {
         max-width: calc(100% - 70px);
         .widgetList {

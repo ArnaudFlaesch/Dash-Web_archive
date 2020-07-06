@@ -12,7 +12,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("TabDash tests", () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<TabDash />, div);
+        ReactDOM.render(<TabDash tabId={'1'} newWidget={null} />, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 
@@ -30,7 +30,7 @@ describe("TabDash tests", () => {
         const container = document.createElement("div");
         document.body.appendChild(container);
         await act(async () => {
-            ReactDOM.render(<TabDash tabId={1} />, container);
+            ReactDOM.render(<TabDash tabId={'1'} newWidget={null} />, container);
         });
 
         expect(globalAny.fetch).toHaveBeenCalledTimes(1);
