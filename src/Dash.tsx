@@ -1,7 +1,7 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Nav, TabContent, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Nav, TabContent, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import './Dash.scss';
 import NavDash from './navigation/navDash/NavDash';
 import Store from './pages/store/Store';
@@ -9,6 +9,7 @@ import { addWidget } from './services/WidgetService';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
+import { addTab } from './services/TabService';
 
 export interface IMenu {
 	link: string;
@@ -25,6 +26,12 @@ export default function Dash() {
 		if (activeTab !== tab) {
 			setActiveTab(tab);
 		}
+	}
+
+	function addNewTab() {
+		const newTabLabel = "Nouvel onglet";
+		addTab(newTabLabel)
+			.then(response => setTabs(tabs.concat(response.data)))
 	}
 
 	function getNewWidget(tabId: number) {
@@ -92,6 +99,7 @@ export default function Dash() {
 								)
 							})
 						}
+						<Button onClick={addNewTab} className="fa fa-plus-circle fa-lg"></Button>
 					</Nav>
 					<TabContent activeTab={activeTab}>
 						{tabs.map((tab: any, index: number) => {
