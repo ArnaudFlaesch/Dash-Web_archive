@@ -113,9 +113,9 @@ export default function WeatherWidget(props: IProps) {
 					{city && weather &&
 						<div>
 							<div className="flexRow">
-								<div><img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} title={weather.weather[0].description} alt={weather.weather[0].description} /></div>
+								<div><img src={`https://openweathermap.org/img/wn/${weather.weather[0]?.icon}@2x.png`} title={weather.weather[0]?.description} alt={weather.weather[0]?.description} /></div>
 								<div>
-									<div>{weather.weather[0].description}</div>
+									<div>{weather.weather[0]?.description}</div>
 									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°</div>
 									<div className="space-between">
 										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>

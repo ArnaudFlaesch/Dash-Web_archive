@@ -55,7 +55,7 @@ describe('Weather widget tests', () => {
       data: montrealWeatherSample
     };
 
-    //const apiParisWeatherResponse = {
+    // const apiParisWeatherResponse = {
    //   data: parisWeatherSample
    // };
 

@@ -13,8 +13,8 @@ export default function NavDash(props: IProps) {
     const [label, setLabel] = useState(props.label);
     const [isToggled, toggle] = useState(false);
 
-    const saveTabName = (label: String) => {
-        updateTab(props.id, label)
+    const saveTabName = (newLabel: string) => {
+        updateTab(props.id, newLabel)
             .then(response => {
                 toggle(!isToggled);
             });

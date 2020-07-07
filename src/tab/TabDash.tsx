@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { TabPane } from 'reactstrap';
+import { WidgetTypes } from '../enums/WidgetsEnum';
 import { deleteWidget } from '../services/WidgetService';
 import logger from '../utils/LogUtils';
-import { IWidgetConfig } from '../widgets/IWidgetConfig';
-import { WidgetTypes } from '../enums/WidgetsEnum';
-import WeatherWidget from '../widgets/weather/WeatherWidget';
-import RSSWidget from '../widgets/rss/RSSWidget';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
+import { IWidgetConfig } from '../widgets/IWidgetConfig';
+import RSSWidget from '../widgets/rss/RSSWidget';
+import WeatherWidget from '../widgets/weather/WeatherWidget';
 
 interface IProps {
     tabId: string;
