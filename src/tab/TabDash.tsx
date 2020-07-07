@@ -65,7 +65,7 @@ export default function TabDash(props: IProps) {
         if (props.newWidget) {
             setWidgets(((widgets as any[]).concat([props.newWidget])) as []);
         }
-    }, [props.newWidget != null])
+    }, [props.newWidget != null && props.newWidget.id])
 
     return (
         <TabPane tabId={props.tabId}>

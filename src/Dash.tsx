@@ -10,7 +10,6 @@ import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
 
-
 export interface IMenu {
 	link: string;
 	icon: string;
@@ -53,7 +52,6 @@ export default function Dash() {
 			})
 	}
 
-
 	useEffect(() => {
 		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
 			.then((result) => {
@@ -75,11 +73,11 @@ export default function Dash() {
 					<Nav vertical={true} navbar={true}>
 						<button className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></button>
 						<Modal isOpen={modal} toggle={toggleModal}>
-							<ModalHeader toggle={toggleModal}>Modal title</ModalHeader>
+							<ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
 							<ModalBody>
-								<Store onWidgetAdded={onWidgetAdded} />        </ModalBody>
+								<Store onWidgetAdded={onWidgetAdded} /></ModalBody>
 							<ModalFooter>
-								<button color="primary" onClick={toggleModal}>Do Something</button>
+								<button color="primary" onClick={toggleModal}>Fermer</button>
 							</ModalFooter>
 						</Modal>
 					</Nav>
@@ -90,7 +88,7 @@ export default function Dash() {
 						{
 							tabs.map((tab: any) => {
 								return (
-									<NavDash id={tab.id} label={tab.label} onTabClicked={() => toggleTab(tab.id.toString())} />
+									<NavDash key={tab.id} id={tab.id} label={tab.label} onTabClicked={() => toggleTab(tab.id.toString())} />
 								)
 							})
 						}
