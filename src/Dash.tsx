@@ -16,8 +16,14 @@ export interface IMenu {
 	icon: string;
 }
 
+interface Tab {
+	id: number;
+	label: string;
+	tabOrder: number;
+}
+
 export default function Dash() {
-	const [tabs, setTabs] = useState([]);
+	const [tabs, setTabs] = useState<Tab[]>([]);
 	const [activeTab, setActiveTab] = useState('1');
 	const [newWidget, setNewWidget] = useState<IWidgetConfig>()
 	const [modal, setModal] = useState(false);
@@ -59,6 +65,13 @@ export default function Dash() {
 			})
 	}
 
+	function onTabDeleted(id: number) {
+		setTabs(tabs.filter(tab => tab.id !== id))
+		if (activeTab === id.toString()) {
+			setActiveTab(tabs[0].id.toString())
+		}
+	}
+
 	useEffect(() => {
 		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
 			.then((result) => {
@@ -78,13 +91,13 @@ export default function Dash() {
 			<div className='flexRow'>
 				<div className='dashNavbar'>
 					<Nav vertical={true} navbar={true}>
-						<button className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></button>
+						<Button className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></Button>
 						<Modal isOpen={modal} toggle={toggleModal}>
 							<ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
 							<ModalBody>
 								<Store onWidgetAdded={onWidgetAdded} /></ModalBody>
 							<ModalFooter>
-								<button color="primary" onClick={toggleModal}>Fermer</button>
+								<Button color="primary" onClick={toggleModal}>Fermer</Button>
 							</ModalFooter>
 						</Modal>
 					</Nav>
@@ -95,7 +108,7 @@ export default function Dash() {
 						{
 							tabs.map((tab: any) => {
 								return (
-									<NavDash key={tab.id} id={tab.id} label={tab.label} onTabClicked={() => toggleTab(tab.id.toString())} />
+									<NavDash key={tab.id} tab={tab} onTabClicked={() => toggleTab(tab.id.toString())} onTabDeleted={onTabDeleted} />
 								)
 							})
 						}

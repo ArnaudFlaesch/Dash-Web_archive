@@ -11,8 +11,8 @@ export function addTab(label: string) {
 		});
 }
 
-export function updateTab(id: number, label: any) {
-	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/tab/updateTab`, { "id": id, "label": label },
+export function updateTab(id: number, label: any, tabOrder: number) {
+	return axios.post(`${process.env.REACT_APP_BACKEND_URL}/tab/updateTab`, { "id": id, "label": label, "tabOrder": tabOrder},
 		{
 			headers
 		});
