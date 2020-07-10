@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
@@ -11,7 +12,6 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
-import * as dayjs from 'dayjs';
 
 export interface IProps {
 	id: number;
@@ -114,15 +114,15 @@ export default function WeatherWidget(props: IProps) {
 					{city && weather &&
 						<div>
 							<div className="flexRow">
-								<div><img src={`https://openweathermap.org/img/wn/${weather.weather[0]?.icon}@2x.png`} title={weather.weather[0]?.description} alt={weather.weather[0]?.description} /></div>
+								<div><img src={`https://openweathermap.org/img/wn/${weather?.weather[0]?.icon}@2x.png`} title={weather?.weather[0]?.description} alt={weather?.weather[0]?.description} /></div>
 								<div>
-									<div>{weather.weather[0]?.description}</div>
-									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°</div>
+									<div>{weather?.weather[0]?.description}</div>
+									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather?.main.temp}°</div>
 									<div className="space-between">
-										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
-										<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunset, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
+										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather?.sys.sunrise, adjustTimeWithOffset(weather?.timezone)).toLocaleTimeString('fr')}</div>
+										<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(weather?.sys.sunset, adjustTimeWithOffset(weather?.timezone)).toLocaleTimeString('fr')}</div>
 									</div>
-									<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(weather.dt, adjustTimeWithOffset(weather.timezone)).toLocaleString('fr')}</div>
+									<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(weather?.dt, adjustTimeWithOffset(weather?.timezone)).toLocaleString('fr')}</div>
 								</div>
 							</div>
 						</div>
@@ -142,18 +142,18 @@ export default function WeatherWidget(props: IProps) {
 							</div>
 							<div>
 								<Line data={{
-									labels: forecast.filter(forecastDay => dayjs(forecastDay.dt * 1000).hour() === 17)
+									labels: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17)
 										.map(forecastDay => dayjs(forecastDay.dt * 1000).format('ddd DD')),
 									datasets: [
 										{
 										label: 'Température',
 										borderColor: 'orange',
-										data: forecast.filter(forecastDay => dayjs(forecastDay.dt * 1000).hour() === 17).map(forecastDay => forecastDay.main.temp_max)
+										data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.temp_max)
 									},
 									{
 										label: 'Ressenti',
 										borderColor: 'red',
-										data: forecast.filter(forecastDay => dayjs(forecastDay.dt * 1000).hour() === 17).map(forecastDay => forecastDay.main.feels_like)
+										data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.feels_like)
 									}
 								]
 								}}
