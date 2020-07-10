@@ -1,9 +1,12 @@
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/fr';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Dash from './Dash';
 import './index.scss';
 import registerServiceWorker from './registerServiceWorker';
 
+dayjs.locale('fr')
 
 ReactDOM.render(<Dash />, document.getElementById('root') as HTMLElement);
 

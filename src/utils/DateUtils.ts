@@ -1,3 +1,9 @@
+import * as dayjs from 'dayjs';
+
+export function getDayFromNow(numberOfDays: number) {
+	return dayjs().add(numberOfDays, 'day').startOf('day');
+}
+
 export function formatDateFromTimestamp(timestamp: number, offset = 0) {
 	return new Date(timestamp * 1000 + offset * 1000);
 }

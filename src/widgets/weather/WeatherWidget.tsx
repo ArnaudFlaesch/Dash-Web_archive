@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { ModeEnum } from '../../enums/ModeEnum';
 import { updateWidgetData } from '../../services/WidgetService';
-import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
+import { adjustTimeWithOffset, formatDateFromTimestamp, getDayFromNow } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
 import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
+import * as dayjs from 'dayjs';
 
 export interface IProps {
 	id: number;
@@ -130,27 +131,8 @@ export default function WeatherWidget(props: IProps) {
 						<div>
 							<span className="bold">Prévisions</span>
 							<br />
-							<div>
-								<Line data={{
-									labels: forecast.filter(forecastDay => forecastDay.dt * 1000 < new Date(Date.now() + 24 * 60 * 60 * 1000).getTime())
-										.map(forecastDay => formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone)).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })),
-									datasets: [
-										{
-										label: 'Température',
-										borderColor: 'orange',
-										data: forecast.filter(forecastDay => forecastDay.dt * 1000 < new Date(Date.now() + 24 * 60 * 60 * 1000).getTime()).map(forecastDay => forecastDay.main.temp_max)
-									},
-									{
-										label: 'Ressenti',
-										borderColor: 'red',
-										data: forecast.filter(forecastDay => forecastDay.dt * 1000 < new Date(Date.now() + 24 * 60 * 60 * 1000).getTime()).map(forecastDay => forecastDay.main.feels_like)
-									}
-								]
-								}}
-									options={{ maintainAspectRatio: false }} />
-							</div>
 							<div className="flexRow forecastRow">
-								{city && forecast && forecast.filter(forecastDay => forecastDay.dt * 1000 < new Date(Date.now() + 24 * 60 * 60 * 1000).getTime()).map(forecastDay => {
+								{city && forecast && forecast.filter(forecastDay => forecastDay.dt * 1000 < getDayFromNow(2).toDate().getTime()).map(forecastDay => {
 									return (
 										<div className='forecastContainer' key={forecastDay.dt}>
 											<Forecast  {...forecastDay} city={city!!} />
@@ -158,8 +140,27 @@ export default function WeatherWidget(props: IProps) {
 									)
 								})}
 							</div>
+							<div>
+								<Line data={{
+									labels: forecast.filter(forecastDay => dayjs(forecastDay.dt * 1000).hour() === 17)
+										.map(forecastDay => dayjs(forecastDay.dt * 1000).format('ddd DD')),
+									datasets: [
+										{
+										label: 'Température',
+										borderColor: 'orange',
+										data: forecast.filter(forecastDay => dayjs(forecastDay.dt * 1000).hour() === 17).map(forecastDay => forecastDay.main.temp_max)
+									},
+									{
+										label: 'Ressenti',
+										borderColor: 'red',
+										data: forecast.filter(forecastDay => dayjs(forecastDay.dt * 1000).hour() === 17).map(forecastDay => forecastDay.main.feels_like)
+									}
+								]
+								}}
+									options={{ maintainAspectRatio: false }} />
+							</div>
 							<div className="flexRow forecastRow">
-								{city && forecast && forecast.filter(forecastDay => forecastDay.dt * 1000 > new Date(Date.now() + 24 * 60 * 60 * 1000).getTime()).map(forecastDay => {
+								{city && forecast && forecast.filter(forecastDay => forecastDay.dt * 1000 > getDayFromNow(2).toDate().getTime()).map(forecastDay => {
 									return (
 										<div className='forecastContainer' key={forecastDay.dt}>
 											<Forecast  {...forecastDay} city={city!!} />
