@@ -1,9 +1,8 @@
+import FullCalendar, { CalendarOptions } from '@fullcalendar/react';
 import bootstrap from '@fullcalendar/bootstrap';
-import { OptionsInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
 import * as ical from 'ical';
@@ -15,10 +14,12 @@ import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
 import './CalendarWidget.scss';
 import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
+import frLocale from '@fullcalendar/core/locales/fr';
 
 export interface IProps {
     id: number;
     calendars?: string[];
+    isOnActiveTab: boolean;
     onDeleteButtonClicked: (idWidget: number) => void;
 }
 
@@ -27,12 +28,12 @@ export default function CalendarWidget(props: IProps) {
     const [mode, setMode] = useState(ModeEnum.READ);
     const [calendarUrls, setCalendarUrls] = useState(props.calendars);
 
-    const calendarOptions: OptionsInput = {
+    const calendarOptions: CalendarOptions = {
         firstDay: 1,
-        header: {
-            left: 'prev,next today',
+        headerToolbar: {
+            start: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridMonth,timeGridDay,listMonth'
+            end: 'dayGridMonth,timeGridMonth,timeGridDay,listMonth'
         },
         weekNumbers: true,
     }
@@ -100,7 +101,7 @@ export default function CalendarWidget(props: IProps) {
                             <button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
                         </div>
                     </div>
-                    <FullCalendar {...calendarOptions} defaultView="dayGridMonth" events={events}
+                    <FullCalendar locale={ frLocale } {...calendarOptions} initialView="dayGridMonth" events={events}
                         plugins={[bootstrap, dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin]} themeSystem={'bootstrap'} />
                 </div>
                 : (mode === ModeEnum.DELETE)

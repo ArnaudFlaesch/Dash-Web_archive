@@ -12,6 +12,7 @@ import WeatherWidget from '../widgets/weather/WeatherWidget';
 interface IProps {
     tabId: string;
     newWidget: any;
+    isActiveTab: boolean;
 }
 
 export default function TabDash(props: IProps) {
@@ -20,13 +21,13 @@ export default function TabDash(props: IProps) {
     const createWidget = (widgetConfig: IWidgetConfig) => {
         switch (widgetConfig.type) {
             case WidgetTypes.WEATHER: {
-                return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} isOnActiveTab={props.isActiveTab} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             case WidgetTypes.RSS: {
-                return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} isOnActiveTab={props.isActiveTab} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             case WidgetTypes.CALENDAR: {
-                return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} isOnActiveTab={props.isActiveTab} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             default: {
                 return;
@@ -69,18 +70,19 @@ export default function TabDash(props: IProps) {
 
     return (
         <TabPane tabId={props.tabId}>
+            {props.isActiveTab}
             <div className='widgetList'>
                 {
                     widgets &&
                     widgets.map((widgetConfig: IWidgetConfig) => {
                         return (
-                            <div key={widgetConfig.id} className="widget" >
+                            <div key={widgetConfig.id} className="widget">
                                 {createWidget(widgetConfig)}
                             </div>
                         );
                     })
                 }
             </div>
-        </TabPane >
+        </TabPane>
     )
 }

@@ -17,6 +17,7 @@ export interface IProps {
 	id: number;
 	weather_api_key?: string;
 	city?: string;
+	isOnActiveTab: boolean;
 	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
@@ -34,35 +35,46 @@ export default function WeatherWidget(props: IProps) {
 	const [mode, setMode] = useState(ModeEnum.READ);
 
 	const fetchDataFromWeatherApi = () => {
-		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-			params: {
-				url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
-			}
-		})
-			.then(result => {
-				setWeather(result.data);
+		if (props.isOnActiveTab) {
+			axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+				params: {
+					url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+				}
 			})
-			.catch((error: Error) => {
-				logger.debug(error);
-			});
-		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-			params: {
-				url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
-			}
-		})
-			.then((result: any) => {
-				setForecast(result.data.list)
-				setCity(result.data.city);
+				.then(result => {
+					setWeather(result.data);
+				})
+				.catch((error: Error) => {
+					logger.debug(error);
+				});
+			axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+				params: {
+					url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+				}
 			})
-			.catch((error: Error) => {
-				logger.debug(error.message);
-			});
+				.then((result: any) => {
+					setForecast(result.data.list)
+					setCity(result.data.city);
+				})
+				.catch((error: Error) => {
+					logger.debug(error.message);
+				});
+		}
 	}
 
 	useEffect(() => {
+		setInterval(fetchDataFromWeatherApi, 60000);
+	}, []);
+
+	useEffect(() => {
 		fetchDataFromWeatherApi();
-		setInterval(fetchDataFromWeatherApi, 300000);
 	}, [cityToQuery, apiKey])
+
+	useEffect(() => {
+		if (!weather || !forecast) {
+			fetchDataFromWeatherApi();
+		}
+	}, [props.isOnActiveTab])
 
 	const refreshWidget = () => {
 		setWeather(undefined);
@@ -103,6 +115,7 @@ export default function WeatherWidget(props: IProps) {
 				<div>
 					<div className="header">
 						<div className="leftGroup widgetHeader">
+							{props.isOnActiveTab}
 							La météo aujourd'hui à {city?.name}
 						</div>
 						<div className="rightGroup">
@@ -111,18 +124,18 @@ export default function WeatherWidget(props: IProps) {
 							<button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
 						</div>
 					</div>
-					{city && weather &&
+					{city && weather && weather.weather &&
 						<div>
 							<div className="flexRow">
-								<div><img src={`https://openweathermap.org/img/wn/${weather?.weather[0]?.icon}@2x.png`} title={weather?.weather[0]?.description} alt={weather?.weather[0]?.description} /></div>
+								<div><img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} title={weather.weather[0].description} alt={weather.weather[0].description} /></div>
 								<div>
-									<div>{weather?.weather[0]?.description}</div>
-									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather?.main.temp}°</div>
+									<div>{weather.weather[0].description}</div>
+									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°</div>
 									<div className="space-between">
-										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather?.sys.sunrise, adjustTimeWithOffset(weather?.timezone)).toLocaleTimeString('fr')}</div>
-										<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(weather?.sys.sunset, adjustTimeWithOffset(weather?.timezone)).toLocaleTimeString('fr')}</div>
+										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
+										<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunset, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
 									</div>
-									<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(weather?.dt, adjustTimeWithOffset(weather?.timezone)).toLocaleString('fr')}</div>
+									<div><i className="fa fa-clock-o fa-md" /> {formatDateFromTimestamp(weather.dt, adjustTimeWithOffset(weather.timezone)).toLocaleString('fr')}</div>
 								</div>
 							</div>
 						</div>
@@ -146,16 +159,16 @@ export default function WeatherWidget(props: IProps) {
 										.map(forecastDay => dayjs(forecastDay.dt * 1000).format('ddd DD')),
 									datasets: [
 										{
-										label: 'Température',
-										borderColor: 'orange',
-										data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.temp_max)
-									},
-									{
-										label: 'Ressenti',
-										borderColor: 'red',
-										data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.feels_like)
-									}
-								]
+											label: 'Température',
+											borderColor: 'orange',
+											data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.temp_max)
+										},
+										{
+											label: 'Ressenti',
+											borderColor: 'red',
+											data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.feels_like)
+										}
+									]
 								}}
 									options={{ maintainAspectRatio: false }} />
 							</div>

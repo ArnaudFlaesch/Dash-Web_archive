@@ -30,7 +30,7 @@ export interface IWeather {
         main: string;
         description: string;
         icon: string;
-    }?];
+    }];
     base: string;
     main: {
         temp: number;

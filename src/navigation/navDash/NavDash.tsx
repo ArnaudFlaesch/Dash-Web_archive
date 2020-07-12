@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { NavItem, NavLink, Button } from 'reactstrap';
-import { updateTab, deleteTab } from '../../services/TabService';
+import { Button, NavItem, NavLink } from 'reactstrap';
+import { ITab } from '../../model/Tab';
+import { deleteTab, updateTab } from '../../services/TabService';
 
 interface IProps {
-    tab: {
-        id: number;
-        label: string;
-        tabOrder: number;
-    }
+    tab: ITab,
     onTabClicked: () => void;
     onTabDeleted: (id: number) => void;
 }
@@ -35,7 +32,7 @@ export default function NavDash(props: IProps) {
                 {isToggled
                     ? <div className="flexRow">
                         <input onDoubleClick={() => saveTabName(label)} onChange={(event) => setLabel(event.target.value)} value={label} />
-                        <Button onClick={() => deleteTabFromDash(props.tab.id)}><i className="fa fa-trash"></i></Button>
+                        <Button onClick={() => deleteTabFromDash(props.tab.id)}><i className="fa fa-trash" /></Button>
                     </div>
                     : <span onDoubleClick={() => toggle(!isToggled)}>{label}</span>
                 }

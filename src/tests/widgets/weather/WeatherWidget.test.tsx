@@ -27,7 +27,7 @@ describe('Weather widget tests', () => {
 
   it('renders without crashing', () => {
     act(() => {
-      render(<WeatherWidget id={1} onDeleteButtonClicked={function () { return null }} />, container);
+      render(<WeatherWidget id={1} isOnActiveTab={true} onDeleteButtonClicked={function () { return null }} />, container);
     });
   });
 
@@ -41,7 +41,7 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<WeatherWidget id={2} city={"Montréal"} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />, container);
+      render(<WeatherWidget id={2} city={"Montréal"} isOnActiveTab={true} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />, container);
     });
 
     expect(container.querySelector('.header')?.textContent).toEqual('La météo aujourd\'hui à Montréal');
@@ -64,7 +64,7 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<WeatherWidget id={2} city={"Montréal"} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />, container);
+      render(<WeatherWidget id={2} city={"Montréal"} isOnActiveTab={true} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />, container);
     });
 
     const deleteButton = container.getElementsByClassName('deleteButton')[0] as HTMLElement;

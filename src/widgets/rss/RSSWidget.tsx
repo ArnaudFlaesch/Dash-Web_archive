@@ -14,6 +14,7 @@ import "./RSSWidget.scss";
 interface IProps {
 	id: number;
 	url?: string;
+	isOnActiveTab: boolean;
 	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
@@ -28,22 +29,33 @@ export default function RSSWidget(props: IProps) {
 	const [title, setTitle] = useState("");
 
 	useEffect(() => {
+		setInterval(fetchDataFromRssFeed, 60000);
+	}, []);
+
+	useEffect(() => {
 		fetchDataFromRssFeed();
-		setInterval(fetchDataFromRssFeed, 300000);
-	}, [])
+	}, [url])
+
+	useEffect(() => {
+		if (!feed) {
+			fetchDataFromRssFeed();
+		}
+	}, [props.isOnActiveTab])
 
 	const fetchDataFromRssFeed = () => {
-		parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-			.then((result: IRSSHeader) => {
-				setDecription(result.description);
-				setFeed(result.items);
-				setImage(result.image);
-				setLink(result.link);
-				setTitle(result.title);
-			})
-			.catch((error: Error) => {
-				logger.debug(error.message);
-			});
+		if (props.isOnActiveTab) {
+			parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
+				.then((result: IRSSHeader) => {
+					setDecription(result.description);
+					setFeed(result.items);
+					setImage(result.image);
+					setLink(result.link);
+					setTitle(result.title);
+				})
+				.catch((error: Error) => {
+					logger.debug(error.message);
+				});
+		}
 	}
 
 	const refreshWidget = () => {

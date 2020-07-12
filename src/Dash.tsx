@@ -1,29 +1,24 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Nav, TabContent, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
+import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Store from './pages/store/Store';
+import { addTab } from './services/TabService';
 import { addWidget } from './services/WidgetService';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
-import { addTab } from './services/TabService';
 
 export interface IMenu {
 	link: string;
 	icon: string;
 }
 
-interface Tab {
-	id: number;
-	label: string;
-	tabOrder: number;
-}
-
 export default function Dash() {
-	const [tabs, setTabs] = useState<Tab[]>([]);
+	const [tabs, setTabs] = useState<ITab[]>([]);
 	const [activeTab, setActiveTab] = useState('1');
 	const [newWidget, setNewWidget] = useState<IWidgetConfig>()
 	const [modal, setModal] = useState(false);
@@ -112,12 +107,12 @@ export default function Dash() {
 								)
 							})
 						}
-						<Button onClick={addNewTab} className="fa fa-plus-circle fa-lg"></Button>
+						<Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
 					</Nav>
 					<TabContent activeTab={activeTab}>
 						{tabs.map((tab: any, index: number) => {
 							return (
-								<TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} />
+								<TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} isActiveTab={activeTab === tab.id.toString()} />
 							)
 						})
 						}

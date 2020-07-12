@@ -1,4 +1,4 @@
-export default interface ITab {
+export default interface ITabFacebook {
     title : string;
     path : string;
     exact? : boolean;
