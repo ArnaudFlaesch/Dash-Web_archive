@@ -21,7 +21,7 @@ before_install:
   - npm install -g typescript coveralls codacy-coverage
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker pull arnaudf93/dashwebservices:latest
-  - docker run -p 8080:8080  arnaudf93/dashwebservices
+  - docker run -i -p 8080:8080  arnaudf93/dashwebservices
 
 script: npm test -- --coverage && cy:run
 
