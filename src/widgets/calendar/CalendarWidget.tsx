@@ -35,7 +35,7 @@ export default function CalendarWidget(props: IProps) {
             center: 'title',
             end: 'dayGridMonth,timeGridMonth,timeGridDay,listMonth'
         },
-        weekNumbers: true,
+        weekNumbers: false,
     }
 
     useEffect(() => {

@@ -37,12 +37,12 @@ export default function RSSWidget(props: IProps) {
 	}, [url])
 
 	useEffect(() => {
-		if (!feed) {
+		if (!feed.length) {
 			fetchDataFromRssFeed();
 		}
 	}, [props.isOnActiveTab])
 
-	const fetchDataFromRssFeed = () => {
+	function fetchDataFromRssFeed() {
 		if (props.isOnActiveTab) {
 			parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
 				.then((result: IRSSHeader) => {
@@ -58,16 +58,16 @@ export default function RSSWidget(props: IProps) {
 		}
 	}
 
-	const refreshWidget = () => {
+	function refreshWidget() {
 		setFeed([]);
 		fetchDataFromRssFeed();
 	}
 
-	const editWidget = () => {
+	function editWidget() {
 		setMode(ModeEnum.EDIT);
 	}
 
-	const onUrlSubmitted = (rssUrl: string) => {
+	function onUrlSubmitted(rssUrl: string) {
 		updateWidgetData(props.id, { url: rssUrl })
 			.then(response => {
 				setUrl(rssUrl);
@@ -79,11 +79,11 @@ export default function RSSWidget(props: IProps) {
 			})
 	}
 
-	const cancelDeletion = () => {
+	function cancelDeletion() {
 		setMode(ModeEnum.READ);
 	}
 
-	const deleteWidget = () => {
+	function deleteWidget() {
 		setMode(ModeEnum.DELETE);
 	}
 
