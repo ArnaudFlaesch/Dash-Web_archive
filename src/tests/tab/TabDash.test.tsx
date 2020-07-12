@@ -9,6 +9,14 @@ import * as widgetDataSample from './widgetDataSample.json';
 const globalAny: any = global;
 Enzyme.configure({ adapter: new Adapter() });
 
+jest.mock('@fullcalendar/react', () => jest.fn())
+jest.mock('@fullcalendar/bootstrap', () => jest.fn())
+jest.mock('@fullcalendar/daygrid', () => jest.fn())
+jest.mock('@fullcalendar/interaction', () => jest.fn())
+jest.mock('@fullcalendar/timegrid', () => jest.fn())
+jest.mock('@fullcalendar/list', () => jest.fn())
+jest.mock('@fullcalendar/core/locales/fr', () => jest.fn())
+
 describe("TabDash tests", () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
