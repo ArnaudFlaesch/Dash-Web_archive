@@ -86,7 +86,7 @@ export default function Dash() {
 			<div className='flexRow'>
 				<div className='dashNavbar'>
 					<Nav vertical={true} navbar={true}>
-						<Button className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></Button>
+						<Button id="openAddWidgetModal" className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></Button>
 						<Modal isOpen={modal} toggle={toggleModal}>
 							<ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
 							<ModalBody>

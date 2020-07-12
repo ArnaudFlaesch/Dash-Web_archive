@@ -6,6 +6,22 @@
         "node": "13.8.0",
         "npm": "6.13.6"
     },
+    "scripts": {
+        "start": "set HTTPS=true && node src/server.js",
+        "build": "react-scripts-ts build --prod",
+        "preinstall": "npm i -g typescript",
+        "dev": "set HTTPS=true && react-scripts-ts start",
+        "test": "react-scripts-ts test --env=jsdom",
+        "coverage": "react-scripts-ts test --env=jsdom --coverage",
+        "cy:open": "cypress open",
+        "cy:run": "cypress run",
+        "cy:run:record": "cypress run --record"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not ie <= 11",
+        "not op_mini all"
+    ],
     "dependencies": {
         "@fullcalendar/bootstrap": "^5.1.0",
         "@fullcalendar/core": "^5.1.0",
@@ -49,25 +65,12 @@
         "@types/react-router-dom": "^5.1.5",
         "@types/reactstrap": "^8.5.0",
         "@types/xml2js": "^0.4.3",
+        "cypress": "4.3.0",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "1.15.2",
         "node-sass": "^4.14.1",
         "ts-jest": "^22.4.6",
         "tslint-react-hooks": "^2.2.2",
         "typescript": "3.9.6"
-    },
-    "scripts": {
-        "start": "set HTTPS=true && node src/server.js",
-        "build": "react-scripts-ts build --prod",
-        "preinstall": "npm i -g typescript",
-        "dev": "set HTTPS=true && react-scripts-ts start",
-        "test": "react-scripts-ts test --env=jsdom",
-        "coverage": "react-scripts-ts test --env=jsdom --coverage",
-        "cypress": "cypress open"
-    },
-    "browserslist": [
-        ">0.2%",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+    }
 }
