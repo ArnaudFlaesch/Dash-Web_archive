@@ -13,6 +13,7 @@
         "server": "node src/server.js",
         "test": "react-scripts-ts test --env=jsdom",
         "coverage": "react-scripts-ts test --env=jsdom --coverage",
+        "ci": "npm test -- --coverage && concurrently \"npm start\" \"wait-on http://localhost:3000 && npm run cy:run \" ",
         "cy:open": "cypress open",
         "cy:run": "cypress run",
         "cy:run:record": "cypress run --record"
