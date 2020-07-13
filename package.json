@@ -7,10 +7,9 @@
         "npm": "6.13.6"
     },
     "scripts": {
-        "start": "set HTTPS=true && node src/server.js",
+        "start": "set HTTPS=true && node src/server.js && react-scripts-ts start",
         "build": "react-scripts-ts build --prod",
         "preinstall": "npm i -g typescript",
-        "dev": "set HTTPS=true && react-scripts-ts start",
         "test": "react-scripts-ts test --env=jsdom",
         "coverage": "react-scripts-ts test --env=jsdom --coverage",
         "cy:open": "cypress open",
