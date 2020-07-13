@@ -73,8 +73,11 @@ export default function Dash() {
 				return result.json();
 			})
 			.then(result => {
+				if (!result || result.length === 0) {
+					addNewTab();
+				}
 				setTabs(result);
-				setActiveTab(result[0].id.toString())
+				setActiveTab(result[0].id.toString());
 			})
 			.catch((error: Error) => {
 				logger.error(error.message);
