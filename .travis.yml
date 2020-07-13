@@ -19,7 +19,7 @@ env:
   - NODE_ENV=travis
 
 before_install:
-  - npm install -g typescript coveralls codacy-coverage concurrently  wait-on
+  - npm install -g typescript coveralls codacy-coverage concurrently wait-on
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker pull arnaudf93/dashwebservices:latest
   - docker run -d -p 8080:8080  arnaudf93/dashwebservices
