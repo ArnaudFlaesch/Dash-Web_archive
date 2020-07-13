@@ -24,7 +24,7 @@ before_install:
   - docker pull arnaudf93/dashwebservices:latest
   - docker run -d -p 8080:8080  arnaudf93/dashwebservices
 
-script: npm test -- --coverage && npm run dev && npm start & wait-on http://localhost:3000 && npm run cy:run
+script: npm test -- --coverage && npm start && npm run dev & wait-on http://localhost:3000 && npm run cy:run
 
 after_success:
   - cat ./coverage/lcov.info | coveralls
