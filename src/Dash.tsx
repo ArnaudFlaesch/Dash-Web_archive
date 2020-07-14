@@ -73,8 +73,11 @@ export default function Dash() {
 				return result.json();
 			})
 			.then(result => {
+				if (!result || result.length === 0) {
+					addNewTab();
+				}
 				setTabs(result);
-				setActiveTab(result[0].id.toString())
+				setActiveTab(result[0].id.toString());
 			})
 			.catch((error: Error) => {
 				logger.error(error.message);
@@ -86,7 +89,7 @@ export default function Dash() {
 			<div className='flexRow'>
 				<div className='dashNavbar'>
 					<Nav vertical={true} navbar={true}>
-						<Button className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></Button>
+						<Button id="openAddWidgetModal" className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></Button>
 						<Modal isOpen={modal} toggle={toggleModal}>
 							<ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
 							<ModalBody>

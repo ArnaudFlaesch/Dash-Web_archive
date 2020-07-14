@@ -5,19 +5,26 @@ node_js:
   - 12
   - 11
 
+services:
+  - docker
+
 install: npm ci
 
 cache:
   directories:
   - "$HOME/.npm"
+  - ~/.cache
 
 env:
   - NODE_ENV=travis
 
 before_install:
-  - npm install -g typescript coveralls codacy-coverage
+  - npm install -g typescript coveralls codacy-coverage npm-run-all wait-on
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker pull arnaudf93/dashwebservices:latest
+  - docker run -d -p 8080:8080  arnaudf93/dashwebservices
 
-script: npm test -- --coverage
+script: npm run ci
 
 after_success:
   - cat ./coverage/lcov.info | coveralls
