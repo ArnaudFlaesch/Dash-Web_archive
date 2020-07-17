@@ -12,8 +12,8 @@ const Forecast: React.FunctionComponent<IForecast> = props => {
                     <img src={`https://openweathermap.org/img/wn/${props.weather[0]?.icon}@2x.png`} className="smallImage" title={props.weather[0]?.description} alt={props.weather[0]?.description} />
                 </div>
                 <div>
-                    <div><i className="fa fa-thermometer-three-quarters fa-sm d-mr-10" style={{color: "orange"}} />{props.main.temp_min}°</div>
-                    <div><i className="fa fa-thermometer-quarter fa-sm d-mr-10" style={{color: "blue"}} />{props.main.temp_max}°</div>
+                    <div><i className="fa fa-thermometer-three-quarters fa-sm d-mr-10" style={{color: "lightred"}} />{props.main.temp_max}°</div>
+                    <div><i className="fa fa-thermometer-quarter fa-sm d-mr-10" style={{color: "blue"}} />{props.main.temp_min}°</div>
                     <div><i className="fa fa-tint fa-sm d-mr-10" style={{color: "lightblue"}} />{props.main.humidity}%</div>
                 </div>
             </div>
