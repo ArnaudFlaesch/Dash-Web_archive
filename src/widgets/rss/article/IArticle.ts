@@ -16,10 +16,10 @@ export interface IRSSHeader {
 export interface IArticle {
 	guid: string;
 	title?: string;
-	link: string;
+	link?: string;
 	content: string;
 	author?: string;
-	pubDate?: string;
+	pubDate: string;
 }
 
 export interface ImageContent {

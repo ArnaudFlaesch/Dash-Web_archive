@@ -125,12 +125,14 @@ export default function WeatherWidget(props: IProps) {
 						</div>
 					</div>
 					{city && weather && weather.weather &&
-						<div>
-							<div className="flexRow">
-								<div><img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} title={weather.weather[0].description} alt={weather.weather[0].description} /></div>
-								<div>
+						<div className="flexRow">
+							<div><img style={{ width: "80px" }} src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} title={weather.weather[0].description} alt={weather.weather[0].description} /></div>
+							<div className="flexRow" style={{ placeItems: "center" }}>
+								<div className="flexColumn mr-5">
 									<div>{weather.weather[0].description}</div>
 									<div><i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°</div>
+								</div>
+								<div className="flexColumn">
 									<div className="space-between">
 										<div><i className="fa fa-sun-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
 										<div><i className="fa fa-moon-o fa-md" /> {formatDateFromTimestamp(weather.sys.sunset, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}</div>
@@ -153,7 +155,7 @@ export default function WeatherWidget(props: IProps) {
 									)
 								})}
 							</div>
-							<div>
+							<div style={{ height: "25vh" }}>
 								<Line data={{
 									labels: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17)
 										.map(forecastDay => dayjs(forecastDay.dt * 1000).format('ddd DD')),

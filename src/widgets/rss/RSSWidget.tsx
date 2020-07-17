@@ -1,3 +1,4 @@
+import * as dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import * as RSSParser from 'rss-parser';
@@ -91,7 +92,7 @@ export default function RSSWidget(props: IProps) {
 		return (
 			data.map((article) => {
 				return (
-					<ComponentWithDetail key={article.guid} componentRoot={article.title || article.link} componentDetail={<RSSArticle {...article} />} link={article.link} />
+					<ComponentWithDetail key={article.guid} componentRoot={(dayjs(new Date(article.pubDate)).format("HH:mm") + " " + article.title) || article.link} componentDetail={<RSSArticle {...article} />} link={article.link} />
 				)
 			})
 		)
