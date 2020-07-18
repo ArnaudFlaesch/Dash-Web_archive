@@ -19,11 +19,11 @@ export interface IMenu {
 
 export default function Dash() {
 	const [tabs, setTabs] = useState<ITab[]>([]);
-	const [activeTab, setActiveTab] = useState('1');
+	const [activeTab, setActiveTab] = useState<string>();
 	const [newWidget, setNewWidget] = useState<IWidgetConfig>()
 	const [modal, setModal] = useState(false);
 
-	function toggleTab(tab: string) {
+	const toggleTab = (tab: string) => {
 		if (activeTab !== tab) {
 			setActiveTab(tab);
 		}
@@ -48,16 +48,18 @@ export default function Dash() {
 	}
 
 	function onWidgetAdded(type: any) {
-		addWidget(type.target.value, parseInt(activeTab, 0))
-			.then((response) => {
-				if (response) {
-					const widgetData: IWidgetConfig = response.data;
-					setNewWidget(widgetData);
-				}
-			})
-			.catch(error => {
-				logger.error(error.message);
-			})
+		if (activeTab) {
+			addWidget(type.target.value, parseInt(activeTab, 0))
+				.then((response) => {
+					if (response) {
+						const widgetData: IWidgetConfig = response.data;
+						setNewWidget(widgetData);
+					}
+				})
+				.catch(error => {
+					logger.error(error.message);
+				})
+		}
 	}
 
 	function onTabDeleted(id: number) {
@@ -104,18 +106,18 @@ export default function Dash() {
 				<div className='flexColumn tabsBar'>
 					<Nav tabs={true}>
 						{
-							tabs.map((tab: any) => {
+							tabs.map((tab: ITab) => {
 								return (
-									<NavDash key={tab.id} tab={tab} onTabClicked={() => toggleTab(tab.id.toString())} onTabDeleted={onTabDeleted} />
+									<NavDash key={tab.id.toString()} tab={tab} onTabClicked={() => toggleTab(tab.id.toString())} onTabDeleted={onTabDeleted} />
 								)
 							})
 						}
 						<Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
 					</Nav>
 					<TabContent activeTab={activeTab}>
-						{tabs.map((tab: any, index: number) => {
+						{tabs.map((tab: ITab) => {
 							return (
-								<TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} isActiveTab={activeTab === tab.id.toString()} />
+								<TabDash key={tab.id.toString()} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} isActiveTab={activeTab === tab.id.toString()} />
 							)
 						})
 						}

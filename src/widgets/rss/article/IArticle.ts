@@ -17,7 +17,8 @@ export interface IArticle {
 	guid: string;
 	title?: string;
 	link?: string;
-	content: string;
+	content?: string;
+	description?: string;
 	author?: string;
 	pubDate: string;
 }

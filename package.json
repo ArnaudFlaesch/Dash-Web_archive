@@ -40,6 +40,7 @@
         "dayjs": "^1.8.29",
         "express": "4.17.1",
         "font-awesome": "4.7.0",
+        "htmlparser2": "^4.1.0",
         "ical": "^0.8.0",
         "pg": "8.3.0",
         "react": "16.13.1",
@@ -48,7 +49,6 @@
         "react-router-dom": "5.2.0",
         "react-scripts-ts": "^4.0.8",
         "reactstrap": "^8.5.1",
-        "rss-parser": "^3.8.0",
         "winston": "^3.3.3"
     },
     "devDependencies": {
@@ -65,7 +65,6 @@
         "@types/react-dom": "16.9.7",
         "@types/react-router-dom": "^5.1.5",
         "@types/reactstrap": "^8.5.0",
-        "@types/xml2js": "^0.4.3",
         "cypress": "4.3.0",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "1.15.2",

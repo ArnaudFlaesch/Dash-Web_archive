@@ -1,13 +1,14 @@
+import axios from "axios";
 import * as dayjs from 'dayjs';
 import * as React from 'react';
+import * as htmlparser2 from "htmlparser2";
 import { useEffect, useState } from 'react';
-import * as RSSParser from 'rss-parser';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
-import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
+import { IArticle, ImageContent } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import "./RSSWidget.scss";
@@ -21,7 +22,6 @@ interface IProps {
 
 export default function RSSWidget(props: IProps) {
 	const [mode, setMode] = useState(ModeEnum.READ);
-	const parser = new RSSParser();
 	const [feed, setFeed] = useState<IArticle[]>([]);
 	const [url, setUrl] = useState(props.url);
 	const [description, setDecription] = useState("");
@@ -44,18 +44,20 @@ export default function RSSWidget(props: IProps) {
 	}, [props.isOnActiveTab])
 
 	function fetchDataFromRssFeed() {
+		logger.info("refresh " + props.isOnActiveTab)
 		if (props.isOnActiveTab) {
-			parser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-				.then((result: IRSSHeader) => {
-					setDecription(result.description);
-					setFeed(result.items);
-					setImage(result.image);
-					setLink(result.link);
-					setTitle(result.title);
-				})
-				.catch((error: Error) => {
-					logger.debug(error.message);
-				});
+			axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
+			.then((response: any) => {
+				const result: any = htmlparser2.parseFeed(response.data)
+				setDecription(result.description);
+				setFeed(result.items);
+				setImage(result.image);
+				setLink(result.link);
+				setTitle(result.title);
+			})
+			.catch((error: Error) => {
+				logger.debug(error.message);
+			});			
 		}
 	}
 
