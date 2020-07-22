@@ -3,6 +3,8 @@ import * as Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
+import store from '../../reducers/store';
 import TabDash from "../../tab/TabDash";
 import * as widgetDataSample from './widgetDataSample.json';
 
@@ -20,7 +22,7 @@ jest.mock('@fullcalendar/core/locales/fr', () => jest.fn())
 describe("TabDash tests", () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<TabDash isActiveTab={true} tabId={'1'} newWidget={null} />, div);
+        ReactDOM.render(<Provider store={store}><TabDash tabId={'1'} newWidget={null} /></Provider>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 
@@ -38,7 +40,7 @@ describe("TabDash tests", () => {
         const container = document.createElement("div");
         document.body.appendChild(container);
         await act(async () => {
-            ReactDOM.render(<TabDash isActiveTab={true} tabId={'1'} newWidget={null} />, container);
+            ReactDOM.render(<Provider store={store}><TabDash tabId={'1'} newWidget={null} /></Provider>, container);
         });
 
         expect(globalAny.fetch).toHaveBeenCalledTimes(1);

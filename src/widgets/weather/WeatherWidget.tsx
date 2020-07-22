@@ -12,12 +12,14 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
+import { useSelector } from 'react-redux';
+import { ITabState } from 'src/reducers/tabReducer';
 
 export interface IProps {
 	id: number;
 	weather_api_key?: string;
 	city?: string;
-	isOnActiveTab: boolean;
+	tabId: number;
 	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
@@ -33,48 +35,47 @@ export default function WeatherWidget(props: IProps) {
 	const [forecast, setForecast] = useState<IForecast[]>();
 	const [city, setCity] = useState<ICity>();
 	const [mode, setMode] = useState(ModeEnum.READ);
+	const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
+	const activeTab = useSelector((state: ITabState)  => state.activeTab);
 
-	const fetchDataFromWeatherApi = () => {
-		if (props.isOnActiveTab) {
-			axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-				params: {
-					url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
-				}
+
+	function fetchDataFromWeatherApi() {
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+			params: {
+				url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+			}
+		})
+			.then(result => {
+				setWeather(result.data);
 			})
-				.then(result => {
-					setWeather(result.data);
-				})
-				.catch((error: Error) => {
-					logger.debug(error);
-				});
-			axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-				params: {
-					url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
-				}
+			.catch((error: Error) => {
+				logger.debug(error);
+			});
+		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+			params: {
+				url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+			}
+		})
+			.then((result: any) => {
+				setForecast(result.data.list)
+				setCity(result.data.city);
 			})
-				.then((result: any) => {
-					setForecast(result.data.list)
-					setCity(result.data.city);
-				})
-				.catch((error: Error) => {
-					logger.debug(error.message);
-				});
-		}
+			.catch((error: Error) => {
+				logger.debug(error.message);
+			});
 	}
 
 	useEffect(() => {
-		setInterval(fetchDataFromWeatherApi, 60000);
-	}, []);
+		if (activeTab === props.tabId.toString()) {
+			setRefreshIntervalId(setInterval(fetchDataFromWeatherApi, 20000));
+		} else if (refreshIntervalId) {
+			clearInterval(refreshIntervalId);
+		}
+	}, [activeTab === props.tabId.toString()]);
 
 	useEffect(() => {
 		fetchDataFromWeatherApi();
 	}, [cityToQuery, apiKey])
-
-	useEffect(() => {
-		if (!weather || !forecast) {
-			fetchDataFromWeatherApi();
-		}
-	}, [props.isOnActiveTab])
 
 	const refreshWidget = () => {
 		setWeather(undefined);
@@ -115,7 +116,6 @@ export default function WeatherWidget(props: IProps) {
 				<div>
 					<div className="header">
 						<div className="leftGroup widgetHeader">
-							{props.isOnActiveTab}
 							La météo aujourd'hui à {city?.name}
 						</div>
 						<div className="rightGroup">

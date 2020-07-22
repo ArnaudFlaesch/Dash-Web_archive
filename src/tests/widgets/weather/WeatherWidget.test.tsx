@@ -6,6 +6,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from "react-dom/test-utils";
 import WeatherWidget from '../../../widgets/weather/WeatherWidget';
 import * as montrealWeatherSample from './montrealWeatherSample.json';
+import { Provider } from 'react-redux';
+import store from '../../../reducers/store';
 
 Enzyme.configure({ adapter: new Adapter() });
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -27,7 +29,7 @@ describe('Weather widget tests', () => {
 
   it('renders without crashing', () => {
     act(() => {
-      render(<WeatherWidget id={1} isOnActiveTab={true} onDeleteButtonClicked={function () { return null }} />, container);
+      render(<Provider store={store}><WeatherWidget id={1} tabId={2} onDeleteButtonClicked={function () { return null }} /></Provider>, container);
     });
   });
 
@@ -41,7 +43,7 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<WeatherWidget id={2} city={"Montréal"} isOnActiveTab={true} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />, container);
+      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={3} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} /></Provider>, container);
     });
 
     expect(container.querySelector('.header')?.textContent).toEqual('La météo aujourd\'hui à Montréal');
@@ -64,7 +66,7 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<WeatherWidget id={2} city={"Montréal"} isOnActiveTab={true} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} />, container);
+      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} /></Provider>, container);
     });
 
     const deleteButton = container.getElementsByClassName('deleteButton')[0] as HTMLElement;

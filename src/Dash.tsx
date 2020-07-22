@@ -11,6 +11,9 @@ import { addWidget } from './services/WidgetService';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
+import { useSelector, useDispatch } from 'react-redux';
+import { ITabState } from './reducers/tabReducer';
+import { toggleSelectedTab } from './reducers/actions';
 
 export interface IMenu {
 	link: string;
@@ -19,23 +22,45 @@ export interface IMenu {
 
 export default function Dash() {
 	const [tabs, setTabs] = useState<ITab[]>([]);
-	const [activeTab, setActiveTab] = useState<string>();
 	const [newWidget, setNewWidget] = useState<IWidgetConfig>()
 	const [modal, setModal] = useState(false);
 
+	const activeTab = useSelector((state: ITabState)  => state.activeTab);
+	const dispatch = useDispatch();
+
+	const initDashboard = () => {
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
+			.then((result) => {
+				return result.json();
+			})
+			.then(result => {
+				if (!result || result.length === 0) {
+					addNewTab();
+				}
+				setTabs(result);
+				dispatch(toggleSelectedTab(result[0].id.toString()))
+			})
+			.catch((error: Error) => {
+				logger.error(error.message);
+			});
+	}
+
 	const toggleTab = (tab: string) => {
 		if (activeTab !== tab) {
-			setActiveTab(tab);
+			dispatch(toggleSelectedTab(tab))
 		}
 	}
 
 	function addNewTab() {
 		const newTabLabel = "Nouvel onglet";
 		addTab(newTabLabel)
-			.then(response => setTabs(tabs.concat(response.data)))
+			.then((response) => {
+				setTabs(tabs.concat(response.data));
+				dispatch(toggleSelectedTab(response.data.id))
+			})
 	}
 
-	function getNewWidget(tabId: number) {
+	const getNewWidget = (tabId: number) => {
 		if (newWidget && tabId === newWidget.tab.id) {
 			return newWidget;
 		} else {
@@ -49,7 +74,7 @@ export default function Dash() {
 
 	function onWidgetAdded(type: any) {
 		if (activeTab) {
-			addWidget(type.target.value, parseInt(activeTab, 0))
+			addWidget(type.target.value, parseInt(activeTab))
 				.then((response) => {
 					if (response) {
 						const widgetData: IWidgetConfig = response.data;
@@ -65,26 +90,11 @@ export default function Dash() {
 	function onTabDeleted(id: number) {
 		setTabs(tabs.filter(tab => tab.id !== id))
 		if (activeTab === id.toString()) {
-			setActiveTab(tabs[0].id.toString())
+			dispatch(toggleSelectedTab(tabs[0].id.toString()))
 		}
 	}
 
-	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
-			.then((result) => {
-				return result.json();
-			})
-			.then(result => {
-				if (!result || result.length === 0) {
-					addNewTab();
-				}
-				setTabs(result);
-				setActiveTab(result[0].id.toString());
-			})
-			.catch((error: Error) => {
-				logger.error(error.message);
-			});
-	}, []);
+	useEffect(initDashboard, []);
 
 	return (
 		<div className="dash">
@@ -117,7 +127,7 @@ export default function Dash() {
 					<TabContent activeTab={activeTab}>
 						{tabs.map((tab: ITab) => {
 							return (
-								<TabDash key={tab.id.toString()} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} isActiveTab={activeTab === tab.id.toString()} />
+								<TabDash key={tab.id.toString()} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} />
 							)
 						})
 						}

@@ -2,13 +2,18 @@ import * as dayjs from 'dayjs';
 import 'dayjs/locale/fr';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from "react-redux";
 import Dash from './Dash';
 import './index.scss';
+import store from './reducers/store';
 import registerServiceWorker from './registerServiceWorker';
 
 dayjs.locale('fr')
 
-ReactDOM.render(<Dash />, document.getElementById('root') as HTMLElement);
+ReactDOM.render(
+    <Provider store={store}>
+        <Dash />
+    </Provider>, document.getElementById('root') as HTMLElement);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

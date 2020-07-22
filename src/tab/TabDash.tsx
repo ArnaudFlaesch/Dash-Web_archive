@@ -8,26 +8,28 @@ import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
+import { useSelector } from 'react-redux';
+import { ITabState } from 'src/reducers/tabReducer';
 
 interface IProps {
     tabId: string;
     newWidget: any;
-    isActiveTab: boolean;
 }
 
 export default function TabDash(props: IProps) {
     const [widgets, setWidgets] = useState([]);
+	const activeTab = useSelector((state: ITabState)  => state.activeTab);
 
     const createWidget = (widgetConfig: IWidgetConfig) => {
         switch (widgetConfig.type) {
             case WidgetTypes.WEATHER: {
-                return <WeatherWidget id={widgetConfig.id} {...widgetConfig.data} isOnActiveTab={props.isActiveTab} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                return <WeatherWidget id={widgetConfig.id} tabId={widgetConfig.tab.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             case WidgetTypes.RSS: {
-                return <RSSWidget id={widgetConfig.id} {...widgetConfig.data} isOnActiveTab={props.isActiveTab} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                return <RSSWidget id={widgetConfig.id} tabId={widgetConfig.tab.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             case WidgetTypes.CALENDAR: {
-                return <CalendarWidget id={widgetConfig.id} {...widgetConfig.data} isOnActiveTab={props.isActiveTab} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                return <CalendarWidget id={widgetConfig.id} tabId={widgetConfig.tab.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             default: {
                 return;
@@ -50,17 +52,19 @@ export default function TabDash(props: IProps) {
     }
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`)
-            .then((result) => {
-                return result.json();
-            })
-            .then(result => {
-                setWidgets(result);
-            })
-            .catch((error: Error) => {
-                logger.error(error.message);
-            });
-    }, [])
+        if (!widgets.length && activeTab === props.tabId) {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`)
+                .then((result) => {
+                    return result.json();
+                })
+                .then(result => {
+                    setWidgets(result);
+                })
+                .catch((error: Error) => {
+                    logger.error(error.message);
+                });
+        }
+    }, [activeTab])
 
     useEffect(() => {
         if (props.newWidget) {
@@ -70,7 +74,6 @@ export default function TabDash(props: IProps) {
 
     return (
         <TabPane tabId={props.tabId}>
-            {props.isActiveTab}
             <div className='widgetList'>
                 {
                     widgets &&
