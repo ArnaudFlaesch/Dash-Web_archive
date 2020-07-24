@@ -1,19 +1,18 @@
-import axios from "axios";
 import * as dayjs from 'dayjs';
-import * as htmlparser2 from "htmlparser2";
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import * as RSSParser from "rss-parser";
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
+import { ITabState } from '../../reducers/tabReducer';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
-import { IArticle, ImageContent } from "./article/IArticle";
+import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import "./RSSWidget.scss";
-import { useSelector } from 'react-redux';
-import { ITabState } from 'src/reducers/tabReducer';
 
 interface IProps {
 	id: number;
@@ -31,11 +30,12 @@ export default function RSSWidget(props: IProps) {
 	const [link, setLink] = useState("");
 	const [title, setTitle] = useState("");
 	const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
-	const activeTab = useSelector((state: ITabState)  => state.activeTab);
+	const activeTab = useSelector((state: ITabState) => state.activeTab);
+	const rssParser = new RSSParser();
 
 	useEffect(() => {
 		if (activeTab === props.tabId.toString()) {
-			setRefreshIntervalId(setInterval(fetchDataFromRssFeed, 20000));
+			setRefreshIntervalId(setInterval(fetchDataFromRssFeed, 60000));
 		} else if (refreshIntervalId) {
 			clearInterval(refreshIntervalId);
 		}
@@ -46,17 +46,13 @@ export default function RSSWidget(props: IProps) {
 	}, [url])
 
 	function fetchDataFromRssFeed() {
-		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-			.then((response: any) => {
-				const result: any = htmlparser2.parseFeed(response.data)
+		rssParser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
+			.then((result: IRSSHeader) => {
 				setDecription(result.description);
 				setFeed(result.items);
 				setImage(result.image);
 				setLink(result.link);
 				setTitle(result.title);
-			})
-			.catch((error: Error) => {
-				logger.debug(error.message);
 			});
 	}
 

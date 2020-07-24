@@ -3,6 +3,8 @@ import * as dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
+import { ITabState } from 'src/reducers/tabReducer';
 import { ModeEnum } from '../../enums/ModeEnum';
 import { updateWidgetData } from '../../services/WidgetService';
 import { adjustTimeWithOffset, formatDateFromTimestamp, getDayFromNow } from '../../utils/DateUtils';
@@ -12,8 +14,6 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather } from "./IWeather";
 import './WeatherWidget.scss';
-import { useSelector } from 'react-redux';
-import { ITabState } from 'src/reducers/tabReducer';
 
 export interface IProps {
 	id: number;
@@ -67,7 +67,7 @@ export default function WeatherWidget(props: IProps) {
 
 	useEffect(() => {
 		if (activeTab === props.tabId.toString()) {
-			setRefreshIntervalId(setInterval(fetchDataFromWeatherApi, 20000));
+			setRefreshIntervalId(setInterval(fetchDataFromWeatherApi, 60000));
 		} else if (refreshIntervalId) {
 			clearInterval(refreshIntervalId);
 		}
