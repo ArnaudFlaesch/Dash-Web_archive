@@ -4,14 +4,6 @@ import { Provider } from 'react-redux';
 import Dash from '../Dash';
 import store from '../reducers/store';
 
-jest.mock('@fullcalendar/react', () => jest.fn())
-jest.mock('@fullcalendar/bootstrap', () => jest.fn())
-jest.mock('@fullcalendar/daygrid', () => jest.fn())
-jest.mock('@fullcalendar/interaction', () => jest.fn())
-jest.mock('@fullcalendar/timegrid', () => jest.fn())
-jest.mock('@fullcalendar/list', () => jest.fn())
-jest.mock('@fullcalendar/core/locales/fr', () => jest.fn())
-
 describe("Dash tests", () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');

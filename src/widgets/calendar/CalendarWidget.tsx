@@ -1,20 +1,15 @@
-import FullCalendar, { CalendarOptions } from '@fullcalendar/react';
-import bootstrap from '@fullcalendar/bootstrap';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import listPlugin from '@fullcalendar/list';
-import timeGridPlugin from '@fullcalendar/timegrid';
+import Calendar from '@toast-ui/react-calendar';
 import axios from 'axios';
 import * as ical from 'ical';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { ICalendarInfo, ISchedule } from "tui-calendar";
 import { ModeEnum } from '../../enums/ModeEnum';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import DeleteWidget from '../utils/DeleteWidget';
 import './CalendarWidget.scss';
 import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
-import frLocale from '@fullcalendar/core/locales/fr';
 
 export interface IProps {
     id: number;
@@ -23,38 +18,46 @@ export interface IProps {
     onDeleteButtonClicked: (idWidget: number) => void;
 }
 
+
 export default function CalendarWidget(props: IProps) {
-    const [events, setEvents] = useState<any[]>([]);
     const [mode, setMode] = useState(ModeEnum.READ);
     const [calendarUrls, setCalendarUrls] = useState(props.calendars);
+    const [calendars, setCalendars] = useState<ICalendarInfo[]>([]);
+    const [schedules, setSchedules] = useState<ISchedule[]>([]);
+    const [selectedView, setSelectedView] = useState('week')
 
-    const calendarOptions: CalendarOptions = {
-        firstDay: 1,
-        headerToolbar: {
-            start: 'prev,next today',
-            center: 'title',
-            end: 'dayGridMonth,timeGridMonth,timeGridDay,listMonth'
-        },
-        weekNumbers: false,
-    }
+    const calendarRef = React.useRef<Calendar>(null);
 
     useEffect(() => {
         calendarUrls?.map((calendarUrl: string) => {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
                 .then((response) => {
+                    const calendarId = calendars.length.toString();
+                    const newCalendar = {
+                        id: calendarId,
+                        name: calendarUrl.substring(0, 10),
+                        color: 'blue',
+                        borderColor: 'blue'
+                    }
+                    setCalendars([...calendars, newCalendar])
                     const data = ical.parseICS(response.data);
-                    setEvents(events.concat(Object.keys(data).map((eventKey) => {
+
+                    setSchedules(schedules.concat(Object.keys(data).map((eventKey) => {
                         if (data.hasOwnProperty(eventKey) && data[eventKey].type === 'VEVENT') {
                             const event = data[eventKey];
-                            return {
-                                title: event.summary, start: event.start,
-                                end: event.end, location: event.location,
-                                eventBackgroundColor: 'green'
+                            const newSchedule: ISchedule = {
+                                calendarId: calendarId,
+                                title: event.summary,
+                                start: event.start?.toISOString(),
+                                end: event.end?.toISOString(),
+                                location: event.location,
+                                category: (event.end?.getHours() === 0 && event.start?.getHours() === 0) ? "allday" : "time"
                             }
+                            return newSchedule;
                         } else {
                             return {};
                         }
-                    })))
+                    })));
                 })
                 .catch(error => {
                     logger.error(error);
@@ -62,33 +65,65 @@ export default function CalendarWidget(props: IProps) {
         })
     }, [calendarUrls])
 
-    const onConfigSubmitted = (calendars: string[]) => {
-		updateWidgetData(props.id, { calendars })
-			.then(response => {
-				setCalendarUrls(calendars);
-				setMode(ModeEnum.READ);
-			})
-			.catch(error => {
-				logger.error(error.message);
-			})
-	}
+    function onConfigSubmitted(calendars: string[]) {
+        updateWidgetData(props.id, { calendars })
+            .then(response => {
+                setCalendarUrls(calendars);
+                setMode(ModeEnum.READ);
+            })
+            .catch(error => {
+                logger.error(error.message);
+            })
+    }
 
-    const editWidget = () => {
-        setEvents([]);
+    function setCalendarOnToday() {
+        if (calendarRef && calendarRef.current) {
+            const calendarInstance = calendarRef.current.getInstance();
+            calendarInstance.today();
+        }
+    }
+
+    function previousRange() {
+        if (calendarRef && calendarRef.current) {
+            const calendarInstance = calendarRef.current.getInstance();
+            calendarInstance.prev();
+        }
+    }
+
+    function nextRange() {
+        if (calendarRef && calendarRef.current) {
+            const calendarInstance = calendarRef.current.getInstance();
+            calendarInstance.next();
+        }
+    }
+
+    function toggleViewDay() {
+        setSelectedView('day');
+    }
+
+    function toggleViewWeek() {
+        setSelectedView('week');
+    }
+
+    function toggleViewMonth() {
+        setSelectedView('month');
+    }
+
+    function editWidget() {
         setMode(ModeEnum.EDIT);
     }
 
-    const cancelDeletion = () => {
+    function cancelDeletion() {
         setMode(ModeEnum.READ);
     }
 
-    const deleteWidget = () => {
+    function deleteWidget() {
         setMode(ModeEnum.DELETE);
     }
 
     return (
         <div>
-            {events && mode === ModeEnum.READ
+            {schedules && mode === ModeEnum.READ
                 ?
                 <div>
                     <div className="header">
@@ -101,8 +136,69 @@ export default function CalendarWidget(props: IProps) {
                             <button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
                         </div>
                     </div>
-                    <FullCalendar locale={ frLocale } {...calendarOptions} initialView="dayGridMonth" events={events}
-                        plugins={[bootstrap, dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin]} themeSystem={'bootstrap'} />
+
+                    <div id="calendarMenu">
+                        <span id="menu-navi">
+                            <button onClick={setCalendarOnToday} className="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
+                            <button onClick={previousRange} className="btn btn-default btn-sm move-day" data-action="move-prev">
+                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-left" data-action="move-prev"></i>
+                            </button>
+                            <button onClick={nextRange} className="btn btn-default btn-sm move-day" data-action="move-next">
+                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-right" data-action="move-next"></i>
+                            </button>
+                        </span>
+                        <span id="renderRange" className="render-range">
+                            {calendarRef.current?.getInstance().getDateRangeStart().toDate().toLocaleDateString('fr')}
+                         - {calendarRef.current?.getInstance().getDateRangeEnd().toDate().toLocaleDateString('fr')}
+                        </span>
+                        <button onClick={toggleViewDay} className={`btn btn-${(selectedView === 'day') ? 'primary' : 'default'}`}>Jour</button>
+                        <button onClick={toggleViewWeek} className={`btn btn-${(selectedView === 'week') ? 'primary' : 'default'}`}>Semaine</button>
+                        <button onClick={toggleViewMonth} className={`btn btn-${(selectedView === 'month') ? 'primary' : 'default'}`}>Mois</button>
+                    </div>
+
+                    <Calendar
+                        ref={calendarRef}
+                        height="inherit"
+                        calendars={calendars}
+                        disableDblClick={true}
+                        disableClick={false}
+                        isReadOnly={false}
+                        month={{
+                            startDayOfWeek: 1,
+                            daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+                        }}
+                        schedules={schedules}
+                        scheduleView
+                        taskView
+                        template={{
+                            milestone(schedule) {
+                                return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
+                                    schedule.title
+                                    }</span>`;
+                            },
+                            milestoneTitle() {
+                                return 'Milestone';
+                            },
+                            allday(schedule) {
+                                return `${schedule.title}<i class="fa fa-refresh"></i>`;
+                            },
+                            alldayTitle() {
+                                return 'All Day';
+                            }
+                        }}
+                        useDetailPopup
+                        useCreationPopup
+                        view = {selectedView}
+                        defaultView='week'
+                        week={{
+                            startDayOfWeek: 1,
+                            hourStart: 8,
+                            daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                            showTimezoneCollapseButton: true,
+                            timezonesCollapsed: true
+                        }}
+                    />
+
                 </div>
                 : (mode === ModeEnum.DELETE)
                     ? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
