@@ -15,7 +15,6 @@ const logger = winston.createLogger({
     ]
 });
 
-app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
