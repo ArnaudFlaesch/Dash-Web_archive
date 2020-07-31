@@ -3,6 +3,7 @@ import 'dayjs/locale/fr';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from "react-redux";
+import { BrowserRouter } from 'react-router-dom';
 import Dash from './Dash';
 import './index.scss';
 import store from './reducers/store';
@@ -12,7 +13,9 @@ dayjs.locale('fr')
 
 ReactDOM.render(
     <Provider store={store}>
-        <Dash />
+        <BrowserRouter >
+            <Dash />
+        </BrowserRouter >
     </Provider>, document.getElementById('root') as HTMLElement);
 
 // If you want your app to work offline and load faster, you can change

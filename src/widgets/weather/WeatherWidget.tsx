@@ -36,8 +36,7 @@ export default function WeatherWidget(props: IProps) {
 	const [city, setCity] = useState<ICity>();
 	const [mode, setMode] = useState(ModeEnum.READ);
 	const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
-	const activeTab = useSelector((state: ITabState)  => state.activeTab);
-
+	const activeTab = useSelector((state: ITabState) => state.activeTab);
 
 	function fetchDataFromWeatherApi() {
 		axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
@@ -77,14 +76,14 @@ export default function WeatherWidget(props: IProps) {
 		fetchDataFromWeatherApi();
 	}, [cityToQuery, apiKey])
 
-	const refreshWidget = () => {
+	function refreshWidget() {
 		setWeather(undefined);
 		setForecast(undefined);
 		setCity(undefined);
 		fetchDataFromWeatherApi();
 	}
 
-	const onConfigSubmitted = (weatherApiKey: string, updatedCity: string) => {
+	function onConfigSubmitted(weatherApiKey: string, updatedCity: string) {
 		updateWidgetData(props.id, { city: updatedCity, weather_api_key: weatherApiKey })
 			.then(response => {
 				setCityToQuery(updatedCity);
@@ -97,15 +96,15 @@ export default function WeatherWidget(props: IProps) {
 			})
 	}
 
-	const editWidget = () => {
+	function editWidget() {
 		setMode(ModeEnum.EDIT);
 	}
 
-	const cancelDeletion = () => {
+	function cancelDeletion() {
 		setMode(ModeEnum.READ);
 	}
 
-	const deleteWidget = () => {
+	function deleteWidget() {
 		setMode(ModeEnum.DELETE);
 	}
 

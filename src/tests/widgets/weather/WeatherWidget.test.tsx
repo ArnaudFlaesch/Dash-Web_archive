@@ -66,7 +66,7 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} /></Provider>, container);
+      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={() => null } /></Provider>, container);
     });
 
     const deleteButton = container.getElementsByClassName('deleteButton')[0] as HTMLElement;

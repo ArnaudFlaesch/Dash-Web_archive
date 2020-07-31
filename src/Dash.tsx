@@ -1,19 +1,19 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Store from './pages/store/Store';
+import { toggleSelectedTab } from './reducers/actions';
+import { ITabState } from './reducers/tabReducer';
 import { addTab } from './services/TabService';
 import { addWidget } from './services/WidgetService';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
-import { useSelector, useDispatch } from 'react-redux';
-import { ITabState } from './reducers/tabReducer';
-import { toggleSelectedTab } from './reducers/actions';
 
 export interface IMenu {
 	link: string;
@@ -25,10 +25,10 @@ export default function Dash() {
 	const [newWidget, setNewWidget] = useState<IWidgetConfig>()
 	const [modal, setModal] = useState(false);
 
-	const activeTab = useSelector((state: ITabState)  => state.activeTab);
+	const activeTab = useSelector((state: ITabState) => state.activeTab);
 	const dispatch = useDispatch();
 
-	const initDashboard = () => {
+	function initDashboard() {
 		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
 			.then((result) => {
 				return result.json();
@@ -45,7 +45,7 @@ export default function Dash() {
 			});
 	}
 
-	const toggleTab = (tab: string) => {
+	function toggleTab(tab: string) {
 		if (activeTab !== tab) {
 			dispatch(toggleSelectedTab(tab))
 		}
@@ -60,7 +60,7 @@ export default function Dash() {
 			})
 	}
 
-	const getNewWidget = (tabId: number) => {
+	function getNewWidget(tabId: number) {
 		if (newWidget && tabId === newWidget.tab.id) {
 			return newWidget;
 		} else {
@@ -74,7 +74,7 @@ export default function Dash() {
 
 	function onWidgetAdded(type: any) {
 		if (activeTab) {
-			addWidget(type.target.value, parseInt(activeTab))
+			addWidget(type.target.value, parseInt(activeTab, 0))
 				.then((response) => {
 					if (response) {
 						const widgetData: IWidgetConfig = response.data;

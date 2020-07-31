@@ -40,13 +40,16 @@ export default function CalendarWidget(props: IProps) {
                         borderColor: 'blue'
                     }
                     setCalendars([...calendars, newCalendar])
+                    if (calendarRef.current?.getInstance().getViewName() !== 'month') {
+                        calendarRef.current?.getInstance().scrollToNow();
+                    }
                     const data = ical.parseICS(response.data);
 
                     setSchedules(schedules.concat(Object.keys(data).map((eventKey) => {
                         if (data.hasOwnProperty(eventKey) && data[eventKey].type === 'VEVENT') {
                             const event = data[eventKey];
                             const newSchedule: ISchedule = {
-                                calendarId: calendarId,
+                                calendarId,
                                 title: event.summary,
                                 start: event.start?.toISOString(),
                                 end: event.end?.toISOString(),
@@ -65,10 +68,10 @@ export default function CalendarWidget(props: IProps) {
         })
     }, [calendarUrls])
 
-    function onConfigSubmitted(calendars: string[]) {
-        updateWidgetData(props.id, { calendars })
+    function onConfigSubmitted(updatedCalendars: string[]) {
+        updateWidgetData(props.id, { calendars: updatedCalendars })
             .then(response => {
-                setCalendarUrls(calendars);
+                setCalendarUrls(updatedCalendars);
                 setMode(ModeEnum.READ);
             })
             .catch(error => {
@@ -141,10 +144,10 @@ export default function CalendarWidget(props: IProps) {
                         <span id="menu-navi">
                             <button onClick={setCalendarOnToday} className="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
                             <button onClick={previousRange} className="btn btn-default btn-sm move-day" data-action="move-prev">
-                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-left" data-action="move-prev"></i>
+                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-left" data-action="move-prev" />
                             </button>
                             <button onClick={nextRange} className="btn btn-default btn-sm move-day" data-action="move-next">
-                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-right" data-action="move-next"></i>
+                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-right" data-action="move-next" />
                             </button>
                         </span>
                         <span id="renderRange" className="render-range">
@@ -168,8 +171,8 @@ export default function CalendarWidget(props: IProps) {
                             daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
                         }}
                         schedules={schedules}
-                        scheduleView
-                        taskView
+                        scheduleView={true}
+                        taskView={true}
                         template={{
                             milestone(schedule) {
                                 return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
@@ -186,8 +189,8 @@ export default function CalendarWidget(props: IProps) {
                                 return 'All Day';
                             }
                         }}
-                        useDetailPopup
-                        useCreationPopup
+                        useDetailPopup={true}
+                        useCreationPopup={true}
                         view = {selectedView}
                         defaultView='week'
                         week={{

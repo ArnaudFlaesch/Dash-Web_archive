@@ -8,6 +8,7 @@ import { toggleSelectedTab } from '../../reducers/actions';
 import store from '../../reducers/store';
 import TabDash from "../../tab/TabDash";
 import * as widgetDataSample from './widgetDataSample.json';
+import { BrowserRouter } from 'react-router-dom';
 
 const globalAny: any = global;
 Enzyme.configure({ adapter: new Adapter() });
@@ -15,7 +16,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("TabDash tests", () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<Provider store={store}><TabDash tabId={'1'} newWidget={null} /></Provider>, div);
+        ReactDOM.render(<Provider store={store}><BrowserRouter><TabDash tabId={'1'} newWidget={null} /></BrowserRouter></Provider>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 
