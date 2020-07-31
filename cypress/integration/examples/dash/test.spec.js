@@ -10,7 +10,7 @@ context('Dash tests', () => {
         cy.title().should('equals', 'Dash');
         cy.get('.widget').should('have.length', 0);
         cy.get('#openAddWidgetModal').click();
-        cy.get('.card-title').should('have.length', 3);
+        cy.get('.card-title').should('have.length', 4);
         cy.get('#RSS').click();
         cy.get('.widget').should('have.length', 1);
     });
