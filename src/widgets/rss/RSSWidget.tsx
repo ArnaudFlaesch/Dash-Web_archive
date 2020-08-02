@@ -1,49 +1,32 @@
-import * as dayjs from 'dayjs';
+import "./RSSWidget.scss";
+import { useState } from 'react';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import * as RSSParser from "rss-parser";
-import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
-import { ModeEnum } from '../../enums/ModeEnum';
-import { ITabState } from '../../reducers/tabReducer';
-import { updateWidgetData } from '../../services/WidgetService';
-import logger from '../../utils/LogUtils';
-import DeleteWidget from '../utils/DeleteWidget';
-import { IArticle, ImageContent, IRSSHeader } from "./article/IArticle";
+import { IArticle, IRSSHeader, ImageContent } from './article/IArticle';
+import { updateWidgetData } from 'src/services/WidgetService';
+import logger from 'src/utils/LogUtils';
+import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
+import * as dayjs from 'dayjs';
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
-import "./RSSWidget.scss";
+import * as RSSParser from "rss-parser";
+import Widget from '../Widget';
 
 interface IProps {
 	id: number;
+	config: {}
 	url?: string;
 	tabId: number;
 	onDeleteButtonClicked: (idWidget: number) => void;
 }
 
 export default function RSSWidget(props: IProps) {
-	const [mode, setMode] = useState(ModeEnum.READ);
 	const [feed, setFeed] = useState<IArticle[]>([]);
 	const [url, setUrl] = useState(props.url);
 	const [description, setDecription] = useState("");
 	const [image, setImage] = useState<ImageContent>();
 	const [link, setLink] = useState("");
 	const [title, setTitle] = useState("");
-	const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
-	const activeTab = useSelector((state: ITabState) => state.activeTab);
 	const rssParser = new RSSParser();
-
-	useEffect(() => {
-		if (activeTab === props.tabId.toString()) {
-			setRefreshIntervalId(setInterval(fetchDataFromRssFeed, 60000));
-		} else if (refreshIntervalId) {
-			clearInterval(refreshIntervalId);
-		}
-	}, [activeTab === props.tabId.toString()]);
-
-	useEffect(() => {
-		fetchDataFromRssFeed();
-	}, [url])
 
 	function fetchDataFromRssFeed() {
 		rssParser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
@@ -53,6 +36,10 @@ export default function RSSWidget(props: IProps) {
 				setImage(result.image);
 				setLink(result.link);
 				setTitle(result.title);
+				logger.info(result)
+			})
+			.catch(error => {
+				logger.error(error.message);
 			});
 	}
 
@@ -61,31 +48,20 @@ export default function RSSWidget(props: IProps) {
 		fetchDataFromRssFeed();
 	}
 
-	function editWidget() {
-		setMode(ModeEnum.EDIT);
-	}
-
 	function onUrlSubmitted(rssUrl: string) {
 		updateWidgetData(props.id, { url: rssUrl })
 			.then(response => {
 				setUrl(rssUrl);
+				logger.info(rssUrl)
 				refreshWidget();
-				setMode(ModeEnum.READ);
 			})
 			.catch(error => {
 				logger.error(error.message);
 			})
 	}
 
-	function cancelDeletion() {
-		setMode(ModeEnum.READ);
-	}
 
-	function deleteWidget() {
-		setMode(ModeEnum.DELETE);
-	}
-
-	const getFeedFromRSS = (data: IArticle[]) => {
+	function getFeedFromRSS(data: IArticle[]) {
 		return (
 			data.map((article) => {
 				return (
@@ -95,41 +71,40 @@ export default function RSSWidget(props: IProps) {
 		)
 	}
 
-	return (
-		<div>
-			{url && feed && mode === ModeEnum.READ
-				?
-				<div>
-					<div className="header">
-						<div className="leftGroup widgetHeader">
-							<div className="rssWidgetTitle">
-								<a href={link} className="flexRow">
-									{image &&
-										<div>
-											<img className="imgLogoRSS" src={image?.url} alt="logo" />
-										</div>
-									}
-									<div className="rssTitle">
-										{title}
-									</div>
-								</a>
-							</div>
-						</div>
-						<div className="rightGroup">
-							<button onClick={editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
-							<button onClick={refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
-							<button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
-						</div>
+	const widgetHeader =
+		<div className="rssWidgetTitle">
+			<a href={link} className="flexRow">
+				{image &&
+					<div>
+						<img className="imgLogoRSS" src={image?.url} alt="logo" />
 					</div>
+				}
+				<div className="rssTitle">
+					{title}
+				</div>
+			</a>
+		</div>
+
+	const widgetBody =
+		<div>
+			{url && feed &&
+				<div>
 					<div className="rssDescription">{description}</div>
 					<div className="feed">
 						{getFeedFromRSS(feed)}
 					</div>
 				</div>
-				: (mode === ModeEnum.DELETE)
-					? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
-					: <EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />
 			}
 		</div>
-	);
+
+	return (
+		<div>
+			<Widget id={props.id} tabId={props.tabId}
+				config={{ "url": url }}
+				header={widgetHeader}
+				body={widgetBody}
+				editModeComponent={<EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />}
+				onDeleteButtonClicked={props.onDeleteButtonClicked} />
+		</div>
+	)
 }
