@@ -1,15 +1,15 @@
-import "./RSSWidget.scss";
-import { useState } from 'react';
-import * as React from 'react';
-import { IArticle, IRSSHeader, ImageContent } from './article/IArticle';
-import { updateWidgetData } from 'src/services/WidgetService';
-import logger from 'src/utils/LogUtils';
-import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
 import * as dayjs from 'dayjs';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import * as RSSParser from "rss-parser";
+import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
+import { updateWidgetData } from '../../services/WidgetService';
+import logger from '../../utils/LogUtils';
+import Widget from '../Widget';
+import { IArticle, ImageContent, IRSSHeader } from './article/IArticle';
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
-import * as RSSParser from "rss-parser";
-import Widget from '../Widget';
+import "./RSSWidget.scss";
 
 interface IProps {
 	id: number;
@@ -29,19 +29,24 @@ export default function RSSWidget(props: IProps) {
 	const rssParser = new RSSParser();
 
 	function fetchDataFromRssFeed() {
-		rssParser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-			.then((result: IRSSHeader) => {
-				setDecription(result.description);
-				setFeed(result.items);
-				setImage(result.image);
-				setLink(result.link);
-				setTitle(result.title);
-				logger.info(result)
-			})
-			.catch(error => {
-				logger.error(error.message);
-			});
+		if (url) {
+			rssParser.parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
+				.then((result: IRSSHeader) => {
+					setDecription(result.description);
+					setFeed(result.items);
+					setImage(result.image);
+					setLink(result.link);
+					setTitle(result.title);
+				})
+				.catch(error => {
+					logger.error(error.message);
+				});
+		}
 	}
+
+	useEffect(() => {
+		fetchDataFromRssFeed();
+	}, [url]);
 
 	function refreshWidget() {
 		setFeed([]);
@@ -52,14 +57,12 @@ export default function RSSWidget(props: IProps) {
 		updateWidgetData(props.id, { url: rssUrl })
 			.then(response => {
 				setUrl(rssUrl);
-				logger.info(rssUrl)
 				refreshWidget();
 			})
 			.catch(error => {
 				logger.error(error.message);
 			})
 	}
-
 
 	function getFeedFromRSS(data: IArticle[]) {
 		return (
@@ -104,6 +107,7 @@ export default function RSSWidget(props: IProps) {
 				header={widgetHeader}
 				body={widgetBody}
 				editModeComponent={<EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />}
+				refreshFunction={refreshWidget}
 				onDeleteButtonClicked={props.onDeleteButtonClicked} />
 		</div>
 	)

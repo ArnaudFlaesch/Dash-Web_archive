@@ -4,11 +4,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { toggleSelectedTab } from '../../reducers/actions';
 import store from '../../reducers/store';
 import TabDash from "../../tab/TabDash";
 import * as widgetDataSample from './widgetDataSample.json';
-import { BrowserRouter } from 'react-router-dom';
 
 const globalAny: any = global;
 Enzyme.configure({ adapter: new Adapter() });
@@ -33,7 +33,7 @@ describe("TabDash tests", () => {
 
         const container = document.createElement("div");
         document.body.appendChild(container);
-        
+
         store.dispatch(toggleSelectedTab('1'));
         await act(async () => {
             ReactDOM.render(<Provider store={store}><TabDash tabId={'1'} newWidget={null} /></Provider>, container);

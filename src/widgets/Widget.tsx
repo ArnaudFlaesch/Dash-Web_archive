@@ -12,6 +12,7 @@ interface IProps {
     header: React.ReactElement;
     body: React.ReactElement;
     editModeComponent: React.ReactElement;
+    refreshFunction: () => void;
     onDeleteButtonClicked: (idWidget: number) => void;
 }
 
@@ -22,19 +23,15 @@ export default function Widget(props: IProps) {
 
     useEffect(() => {
         if (activeTab === props.tabId.toString()) {
-            setRefreshIntervalId(setInterval(refreshData, 60000));
+            setRefreshIntervalId(setInterval(props.refreshFunction, 60000));
         } else if (refreshIntervalId) {
             clearInterval(refreshIntervalId);
         }
     }, [activeTab === props.tabId.toString()]);
 
-    useEffect(()=> {
+    useEffect(() => {
         setMode(ModeEnum.READ);
     }, [props.config])
-
-    function refreshData() {
-
-    }
 
     function editWidget() {
         setMode(ModeEnum.EDIT);
@@ -59,7 +56,7 @@ export default function Widget(props: IProps) {
                         </div>
                         <div className="rightGroup">
                             <button onClick={editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
-                            <button onClick={refreshData} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
+                            <button onClick={props.refreshFunction} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
                             <button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
                         </div>
                     </div>
