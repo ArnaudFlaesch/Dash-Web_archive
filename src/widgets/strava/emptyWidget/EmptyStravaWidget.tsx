@@ -9,8 +9,8 @@ interface IProps {
 }
 
 export default function EmptyStravaWidget(props: IProps) {
-    const [clientId, setClientId] = useState(props.clientId);
-    const [clientSecret, setClientSecret] = useState(props.clientSecret);
+    const [clientId, setClientId] = useState(props.clientId || '');
+    const [clientSecret, setClientSecret] = useState(props.clientSecret || '');
     const onClientIdChangeHandler = (event: any) => setClientId(event.target.value);
     const onClientSecretChangeHandler = (event: any) => setClientSecret(event.target.value);
 

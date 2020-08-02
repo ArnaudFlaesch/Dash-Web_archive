@@ -9,8 +9,8 @@ interface IProps {
 }
 
 export default function EmptyWeatherWidget(props: IProps) {
-    const [city, setCity] = useState(props.city);
-    const [weatherApiKey, setWeatherApiKey] = useState(props.weather_api_key);
+    const [city, setCity] = useState(props.city || '');
+    const [weatherApiKey, setWeatherApiKey] = useState(props.weather_api_key || '');
     const onWeatherApiKeyChangeHandler = (event: any) => setWeatherApiKey(event.target.value);
     const onCityChangeHandler = (event: any) => setCity(event.target.value)
     const onValidation = () => {
