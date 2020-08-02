@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export default function EmptyCalendarWidget(props: IProps) {
-    const [calendarUrls, setCalendarUrls] = useState(props.calendarUrls);
+    const [calendarUrls, setCalendarUrls] = useState<string[]>(props.calendarUrls || []);
     const onValidation = () => {
         props.onConfigSubmitted(calendarUrls!!);
     }
@@ -20,7 +20,7 @@ export default function EmptyCalendarWidget(props: IProps) {
     }
 
     const onCalendarUrlAdded = (event: any) => {
-        setCalendarUrls(calendarUrls?.concat(""));
+        setCalendarUrls(calendarUrls.concat(""));
     }
 
     return (

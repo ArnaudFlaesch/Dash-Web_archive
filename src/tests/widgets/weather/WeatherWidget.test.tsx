@@ -4,10 +4,10 @@ import * as Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from "react-dom/test-utils";
-import WeatherWidget from '../../../widgets/weather/WeatherWidget';
-import * as montrealWeatherSample from './montrealWeatherSample.json';
 import { Provider } from 'react-redux';
 import store from '../../../reducers/store';
+import WeatherWidget from '../../../widgets/weather/WeatherWidget';
+import * as montrealWeatherSample from './montrealWeatherSample.json';
 
 Enzyme.configure({ adapter: new Adapter() });
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -58,15 +58,15 @@ describe('Weather widget tests', () => {
     };
 
     // const apiParisWeatherResponse = {
-   //   data: parisWeatherSample
-   // };
+    //   data: parisWeatherSample
+    // };
 
     jest.spyOn(mockedAxios, "get").mockImplementation(() => {
       return Promise.resolve(apiMontrealWeatherResponse)
     });
 
     await act(async () => {
-      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={() => null } /></Provider>, container);
+      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={() => null} /></Provider>, container);
     });
 
     const deleteButton = container.getElementsByClassName('deleteButton')[0] as HTMLElement;

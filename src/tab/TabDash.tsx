@@ -27,6 +27,7 @@ export default function TabDash(props: IProps) {
                 return <WeatherWidget id={widgetConfig.id} tabId={widgetConfig.tab.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             case WidgetTypes.RSS: {
+                // return <Widget id={widgetConfig.id} tabId={widgetConfig.tab.id} onDeleteButtonClicked={deleteWidgetFromDashboard} />
                 return <RSSWidget id={widgetConfig.id} tabId={widgetConfig.tab.id} {...widgetConfig.data} onDeleteButtonClicked={deleteWidgetFromDashboard} />
             }
             case WidgetTypes.CALENDAR: {
