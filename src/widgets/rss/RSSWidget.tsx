@@ -13,7 +13,6 @@ import "./RSSWidget.scss";
 
 interface IProps {
 	id: number;
-	config: {}
 	url?: string;
 	tabId: number;
 	onDeleteButtonClicked: (idWidget: number) => void;
