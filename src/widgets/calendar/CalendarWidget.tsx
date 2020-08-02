@@ -4,10 +4,9 @@ import * as ical from 'ical';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { ICalendarInfo, ISchedule } from "tui-calendar";
-import { ModeEnum } from '../../enums/ModeEnum';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
-import DeleteWidget from '../utils/DeleteWidget';
+import Widget from '../Widget';
 import './CalendarWidget.scss';
 import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
 
@@ -19,17 +18,18 @@ export interface IProps {
     onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-
 export default function CalendarWidget(props: IProps) {
-    const [mode, setMode] = useState(ModeEnum.READ);
     const [calendarUrls, setCalendarUrls] = useState(props.calendars);
     const [calendars, setCalendars] = useState<ICalendarInfo[]>([]);
     const [schedules, setSchedules] = useState<ISchedule[]>([]);
     const [selectedView, setSelectedView] = useState('week')
-
     const calendarRef = React.useRef<Calendar>(null);
 
     useEffect(() => {
+        refreshWidget();
+    }, [calendarUrls])
+
+    function refreshWidget() {
         calendarUrls?.map((calendarUrl: string) => {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
                 .then((response) => {
@@ -67,13 +67,12 @@ export default function CalendarWidget(props: IProps) {
                     logger.error(error);
                 });
         })
-    }, [calendarUrls])
+    }
 
     function onConfigSubmitted(updatedCalendars: string[]) {
         updateWidgetData(props.id, { calendars: updatedCalendars })
             .then(response => {
                 setCalendarUrls(updatedCalendars);
-                setMode(ModeEnum.READ);
             })
             .catch(error => {
                 logger.error(error.message);
@@ -113,101 +112,84 @@ export default function CalendarWidget(props: IProps) {
         setSelectedView('month');
     }
 
-    function editWidget() {
-        setMode(ModeEnum.EDIT);
-    }
+    const widgetHeader = <div>
+        Calendar
+    </div>
 
-    function cancelDeletion() {
-        setMode(ModeEnum.READ);
-    }
+    const widgetBody =
+        <div>
+            <div id="calendarMenu">
+                <span id="menu-navi">
+                    <button onClick={setCalendarOnToday} className="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
+                    <button onClick={previousRange} className="btn btn-default btn-sm move-day" data-action="move-prev">
+                        <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-left" data-action="move-prev" />
+                    </button>
+                    <button onClick={nextRange} className="btn btn-default btn-sm move-day" data-action="move-next">
+                        <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-right" data-action="move-next" />
+                    </button>
+                </span>
+                <span id="renderRange" className="render-range">
+                    {calendarRef.current?.getInstance().getDateRangeStart().toDate().toLocaleDateString('fr')}
+                         - {calendarRef.current?.getInstance().getDateRangeEnd().toDate().toLocaleDateString('fr')}
+                </span>
+                <button onClick={toggleViewDay} className={`btn btn-${(selectedView === 'day') ? 'primary' : 'default'}`}>Jour</button>
+                <button onClick={toggleViewWeek} className={`btn btn-${(selectedView === 'week') ? 'primary' : 'default'}`}>Semaine</button>
+                <button onClick={toggleViewMonth} className={`btn btn-${(selectedView === 'month') ? 'primary' : 'default'}`}>Mois</button>
+            </div>
 
-    function deleteWidget() {
-        setMode(ModeEnum.DELETE);
-    }
+            <Calendar
+                ref={calendarRef}
+                height="inherit"
+                calendars={calendars}
+                disableDblClick={true}
+                disableClick={false}
+                isReadOnly={false}
+                month={{
+                    startDayOfWeek: 1,
+                    daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+                }}
+                schedules={schedules}
+                scheduleView={true}
+                taskView={true}
+                template={{
+                    milestone(schedule) {
+                        return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
+                            schedule.title
+                            }</span>`;
+                    },
+                    milestoneTitle() {
+                        return 'Milestone';
+                    },
+                    allday(schedule) {
+                        return `${schedule.title}<i class="fa fa-refresh"></i>`;
+                    },
+                    alldayTitle() {
+                        return 'All Day';
+                    }
+                }}
+                useDetailPopup={true}
+                useCreationPopup={true}
+                view={selectedView}
+                defaultView='week'
+                week={{
+                    startDayOfWeek: 1,
+                    hourStart: 8,
+                    daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                    showTimezoneCollapseButton: true,
+                    timezonesCollapsed: true
+                }}
+            />
+        </div>
 
     return (
         <div>
-            {schedules && mode === ModeEnum.READ
-                ?
-                <div>
-                    <div className="header">
-                        <div className="leftGroup widgetHeader">
-                            Calendar
-							</div>
-                        <div className="rightGroup">
-                            <button onClick={editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
-                            <button className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
-                            <button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
-                        </div>
-                    </div>
-
-                    <div id="calendarMenu">
-                        <span id="menu-navi">
-                            <button onClick={setCalendarOnToday} className="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
-                            <button onClick={previousRange} className="btn btn-default btn-sm move-day" data-action="move-prev">
-                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-left" data-action="move-prev" />
-                            </button>
-                            <button onClick={nextRange} className="btn btn-default btn-sm move-day" data-action="move-next">
-                                <i className="tui-full-calendar-icon tui-full-calendar-ic-arrow-right" data-action="move-next" />
-                            </button>
-                        </span>
-                        <span id="renderRange" className="render-range">
-                            {calendarRef.current?.getInstance().getDateRangeStart().toDate().toLocaleDateString('fr')}
-                         - {calendarRef.current?.getInstance().getDateRangeEnd().toDate().toLocaleDateString('fr')}
-                        </span>
-                        <button onClick={toggleViewDay} className={`btn btn-${(selectedView === 'day') ? 'primary' : 'default'}`}>Jour</button>
-                        <button onClick={toggleViewWeek} className={`btn btn-${(selectedView === 'week') ? 'primary' : 'default'}`}>Semaine</button>
-                        <button onClick={toggleViewMonth} className={`btn btn-${(selectedView === 'month') ? 'primary' : 'default'}`}>Mois</button>
-                    </div>
-
-                    <Calendar
-                        ref={calendarRef}
-                        height="inherit"
-                        calendars={calendars}
-                        disableDblClick={true}
-                        disableClick={false}
-                        isReadOnly={false}
-                        month={{
-                            startDayOfWeek: 1,
-                            daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
-                        }}
-                        schedules={schedules}
-                        scheduleView={true}
-                        taskView={true}
-                        template={{
-                            milestone(schedule) {
-                                return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
-                                    schedule.title
-                                    }</span>`;
-                            },
-                            milestoneTitle() {
-                                return 'Milestone';
-                            },
-                            allday(schedule) {
-                                return `${schedule.title}<i class="fa fa-refresh"></i>`;
-                            },
-                            alldayTitle() {
-                                return 'All Day';
-                            }
-                        }}
-                        useDetailPopup={true}
-                        useCreationPopup={true}
-                        view = {selectedView}
-                        defaultView='week'
-                        week={{
-                            startDayOfWeek: 1,
-                            hourStart: 8,
-                            daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-                            showTimezoneCollapseButton: true,
-                            timezonesCollapsed: true
-                        }}
-                    />
-
-                </div>
-                : (mode === ModeEnum.DELETE)
-                    ? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
-                    : <EmptyCalendarWidget calendarUrls={calendarUrls} onConfigSubmitted={onConfigSubmitted} />
-            }
+            <Widget id={props.id} tabId={props.tabId}
+                config={{ "calendarUrls": calendarUrls }}
+                header={widgetHeader}
+                body={widgetBody}
+                editModeComponent={<EmptyCalendarWidget calendarUrls={calendarUrls} onConfigSubmitted={onConfigSubmitted} />}
+                refreshFunction={refreshWidget}
+                onDeleteButtonClicked={props.onDeleteButtonClicked} />
         </div>
     )
 }

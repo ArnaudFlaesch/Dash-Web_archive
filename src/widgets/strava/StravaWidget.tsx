@@ -4,15 +4,12 @@ import * as queryString from 'query-string';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
-import { ITabState } from 'src/reducers/tabReducer';
-import { ModeEnum } from '../../enums/ModeEnum';
+import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
-import DeleteWidget from '../utils/DeleteWidget';
+import Widget from '../Widget';
 import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
@@ -27,7 +24,6 @@ interface IProps {
 }
 
 export default function StravaWidget(props: IProps) {
-    const [mode, setMode] = useState(ModeEnum.READ);
     const [clientId, setClientId] = useState(props.clientId);
     const [clientSecret, setClientSecret] = useState(props.clientSecret);
     const [activities, setActivities] = useState([])
@@ -36,8 +32,6 @@ export default function StravaWidget(props: IProps) {
     const [refreshToken, setRefreshToken] = useState<string>();
     const [tokenExpirationDate, setTokenExpirationDate] = useState<string>();
     const { search } = useLocation();
-    const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
-    const activeTab = useSelector((state: ITabState) => state.activeTab);
 
     const paginationActivities = 20;
 
@@ -64,13 +58,6 @@ export default function StravaWidget(props: IProps) {
         }
     }, [token]);
 
-    useEffect(() => {
-        if (activeTab === props.tabId.toString()) {
-            setRefreshIntervalId(setInterval(getActivities, 1200000));
-        } else if (refreshIntervalId) {
-            clearInterval(refreshIntervalId);
-        }
-    }, [activeTab === props.tabId.toString()]);
 
     function onConfigSubmitted(updatedClientId: string, updatedClientSecret: string) {
         updateWidgetData(props.id, { clientId: updatedClientId, clientSecret: updatedClientSecret })
@@ -78,7 +65,6 @@ export default function StravaWidget(props: IProps) {
                 setClientId(clientId);
                 setClientSecret(clientSecret);
                 refreshWidget();
-                setMode(ModeEnum.READ);
             })
             .catch(error => {
                 logger.error(error.message);
@@ -161,74 +147,57 @@ export default function StravaWidget(props: IProps) {
         }
     }
 
-    function editWidget() {
-        setMode(ModeEnum.EDIT);
-    }
+    const widgetHeader =
+        <div>
+            <a href={`https://www.strava.com/athletes/${athlete?.id}`}>
+                <img src={athlete?.profile_medium} />
+                {athlete?.firstname} {athlete?.lastname}
+            </a>
+        </div>
 
-    function cancelDeletion() {
-        setMode(ModeEnum.READ);
-    }
+    const widgetBody =
+        <div className="flexColumn">
+            <div style={{ flex: "1 0 50%", overflowY: "scroll" }}>
+                {
+                    activities.map((activity: IActivity) => {
+                        return (
+                            <ComponentWithDetail key={activity.id} componentRoot={`${(dayjs(new Date(activity.start_date_local)).format("ddd DD MMM"))}  ${activity.name}  ${Math.round(activity.distance * 1000) / 1000000} kms`} componentDetail={<StravaActivity {...activity} />} link={`https://www.strava.com/activities/${activity.id}`} />
+                        )
+                    })
+                }
+            </div>
 
-    function deleteWidget() {
-        setMode(ModeEnum.DELETE);
+            <div style={{ minHeight: "25vh", flex: "1 0 50%" }}>
+                <Line data={{
+                    labels: activities.reverse().map((activity: IActivity) => dayjs(activity.start_date_local).format('DD MMM')),
+                    datasets: [
+                        {
+                            label: 'Course',
+                            borderColor: 'orange',
+                            data: activities.map((activity: IActivity) => Math.round(activity.distance * 1000) / 1000000)
+                        }
+                    ]
+                }}
+                    options={{ maintainAspectRatio: false }} />
+            </div>
+        </div>
+
+    {
+        !token && !refreshToken &&
+        <Button>
+            <a href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}>Se connecter</a>
+        </Button>
     }
 
     return (
-
         <div>
-            {clientId && clientSecret && mode === ModeEnum.READ
-                ?
-                <div>
-                    <div className="header">
-                        <div className="leftGroup widgetHeader">
-                            <a href={`https://www.strava.com/athletes/${athlete?.id}`}>
-                                <img src={athlete?.profile_medium} />
-                                {athlete?.firstname} {athlete?.lastname}
-                            </a>
-                        </div>
-                        <div className="rightGroup">
-                            <button onClick={editWidget} className="btn btn-default editButton"><i className="fa fa-cog" aria-hidden="true" /></button>
-                            <button onClick={refreshWidget} className="btn btn-default refreshButton"><i className="fa fa-refresh" aria-hidden="true" /></button>
-                            <button onClick={deleteWidget} className="btn btn-default deleteButton"><i className="fa fa-trash" aria-hidden="true" /></button>
-                        </div>
-                    </div>
-                    <div className="flexColumn">
-                        <div style={{ flex: "1 0 50%", overflowY: "scroll" }}>
-                            {
-                                activities.map((activity: IActivity) => {
-                                    return (
-                                        <ComponentWithDetail key={activity.id} componentRoot={`${(dayjs(new Date(activity.start_date_local)).format("ddd DD MMM"))}  ${activity.name}  ${Math.round(activity.distance * 1000) / 1000000} kms`} componentDetail={<StravaActivity {...activity} />} link={`https://www.strava.com/activities/${activity.id}`} />
-                                    )
-                                })
-                            }
-                        </div>
-
-                        <div style={{ minHeight: "25vh", flex: "1 0 50%" }}>
-                            <Line data={{
-                                labels: activities.reverse().map((activity: IActivity) => dayjs(activity.start_date_local).format('DD MMM')),
-                                datasets: [
-                                    {
-                                        label: 'Course',
-                                        borderColor: 'orange',
-                                        data: activities.map((activity: IActivity) => Math.round(activity.distance * 1000) / 1000000)
-                                    }
-                                ]
-                            }}
-                                options={{ maintainAspectRatio: false }} />
-                        </div>
-                    </div>
-
-                    {!token && !refreshToken &&
-                        <Button>
-                            <a href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}>Se connecter</a>
-                        </Button>
-                    }
-
-                </div>
-                : (mode === ModeEnum.DELETE)
-                    ? <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
-                    : <EmptyStravaWidget clientId={clientId} clientSecret={clientSecret} onConfigSubmitted={onConfigSubmitted} />
-            }
+            <Widget id={props.id} tabId={props.tabId}
+                config={{ "clientId": clientId }}
+                header={widgetHeader}
+                body={widgetBody}
+                editModeComponent={<EmptyStravaWidget clientId={clientId} clientSecret={clientSecret} onConfigSubmitted={onConfigSubmitted} />}
+                refreshFunction={refreshWidget}
+                onDeleteButtonClicked={props.onDeleteButtonClicked} />
         </div>
     )
 }
