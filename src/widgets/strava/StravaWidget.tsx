@@ -180,14 +180,14 @@ export default function StravaWidget(props: IProps) {
                 }}
                     options={{ maintainAspectRatio: false }} />
             </div>
-        </div>
 
-    {
-        !token && !refreshToken &&
-        <Button>
-            <a href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}>Se connecter</a>
-        </Button>
-    }
+            {
+                !token && !refreshToken &&
+                <Button>
+                    <a href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}>Se connecter</a>
+                </Button>
+            }
+        </div>
 
     return (
         <div>

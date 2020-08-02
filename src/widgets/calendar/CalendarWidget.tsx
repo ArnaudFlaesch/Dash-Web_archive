@@ -29,6 +29,10 @@ export default function CalendarWidget(props: IProps) {
         refreshWidget();
     }, [calendarUrls])
 
+    useEffect(() => {
+        calendarRef.current?.getInstance().scrollToNow();
+    }, [calendars])
+
     function refreshWidget() {
         calendarUrls?.map((calendarUrl: string) => {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
@@ -112,9 +116,10 @@ export default function CalendarWidget(props: IProps) {
         setSelectedView('month');
     }
 
-    const widgetHeader = <div>
-        Calendar
-    </div>
+    const widgetHeader =
+        <div>
+            Calendar
+        </div>
 
     const widgetBody =
         <div>
