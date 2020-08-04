@@ -7,6 +7,7 @@ import { Line } from 'react-chartjs-2';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
+import { useLocalStorage } from '../../hooks/localStorageHook';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
@@ -14,7 +15,6 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import "./StravaWidget.scss";
-import { useLocalStorage } from 'src/hooks/localStorageHook';
 
 interface IProps {
     id: number;
