@@ -14,6 +14,7 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import "./StravaWidget.scss";
+import { useLocalStorage } from 'src/hooks/localStorageHook';
 
 interface IProps {
     id: number;
@@ -28,36 +29,29 @@ export default function StravaWidget(props: IProps) {
     const [clientSecret, setClientSecret] = useState(props.clientSecret);
     const [activities, setActivities] = useState([])
     const [athlete, setAthlete] = useState<IAthlete>();
-    const [token, setToken] = useState<string>();
-    const [refreshToken, setRefreshToken] = useState<string>();
-    const [tokenExpirationDate, setTokenExpirationDate] = useState<string>();
+    const [token, setToken] = useLocalStorage('strava_token', null);
+    const [refreshToken, setRefreshToken] = useLocalStorage('strava_refresh_token', null);
+    const [tokenExpirationDate, setTokenExpirationDate] = useLocalStorage('strava_token_expires_at', null);
     const { search } = useLocation();
 
     const paginationActivities = 20;
 
     useEffect(() => {
-        if (localStorage.getItem("strava_token")) {
-            setToken(localStorage.getItem("strava_token")?.toString());
-            setRefreshToken(localStorage.getItem("strava_refresh_token")?.toString())
-            setTokenExpirationDate(localStorage.getItem("strava_token_expires_at")?.toString())
-        }
         const values = queryString.parse(search)
         if (values && values.code) {
             const apiCode = values.code.toString();
             getToken(apiCode);
         }
-        if (dayjs(tokenExpirationDate).isBefore(dayjs())) {
+        if (!token || !refreshToken || dayjs.unix(tokenExpirationDate).isBefore(dayjs())) {
             refreshTokenFromApi();
         }
     }, [])
 
     useEffect(() => {
         if (token) {
-            getAthleteData();
-            getActivities();
+            refreshWidget();
         }
     }, [token]);
-
 
     function onConfigSubmitted(updatedClientId: string, updatedClientSecret: string) {
         updateWidgetData(props.id, { clientId: updatedClientId, clientSecret: updatedClientSecret })
@@ -73,6 +67,7 @@ export default function StravaWidget(props: IProps) {
 
     function refreshWidget() {
         setActivities([]);
+        getAthleteData();
         getActivities();
     }
 
@@ -84,11 +79,10 @@ export default function StravaWidget(props: IProps) {
                 "code": apiCode,
                 "grant_type": "authorization_code"
             }).then(response => {
-                setToken(response.data.access_token)
+                setToken(response.data.access_token);
+                setRefreshToken(response.data.refresh_token);
+                setTokenExpirationDate(response.data.expires_at);
                 setAthlete(response.data.athlete);
-                localStorage.setItem("strava_token", response.data.access_token);
-                localStorage.setItem("strava_refresh_token", response.data.refresh_token);
-                localStorage.setItem("strava_token_expires_at", response.data.expires_at);
             })
             .catch((error: Error) => {
                 logger.error(error.message)
@@ -96,19 +90,18 @@ export default function StravaWidget(props: IProps) {
     }
 
     function refreshTokenFromApi() {
-        if (localStorage.getItem("strava_refresh_token")) {
+        if (refreshToken) {
             axios.post("https://www.strava.com/oauth/token",
                 {
                     "client_id": clientId,
                     "client_secret": clientSecret,
-                    "refresh_token": localStorage.getItem("strava_refresh_token"),
+                    "refresh_token": refreshToken,
                     "grant_type": "refresh_token"
                 }).then(response => {
-                    setToken(response.data.access_token)
+                    setToken(response.data.access_token);
+                    setRefreshToken(response.data.refresh_token);
+                    setTokenExpirationDate(response.data.expires_at);
                     setAthlete(response.data.athlete);
-                    localStorage.setItem("strava_token", response.data.access_token);
-                    localStorage.setItem("strava_refresh_token", response.data.refresh_token);
-                    localStorage.setItem("strava_token_expires_at", response.data.expires_at);
                 })
                 .catch((error: Error) => {
                     logger.error(error.message)
@@ -120,19 +113,23 @@ export default function StravaWidget(props: IProps) {
     }
 
     function getAthleteData() {
-        axios.get("https://www.strava.com/api/v3/athlete",
-            { headers: { "Authorization": `Bearer ${token}` } }
-        )
-            .then(response => {
-                setAthlete(response.data);
-            })
-            .catch((error: Error) => {
-                logger.error(error.message)
-            })
+        if (token) {
+            axios.get("https://www.strava.com/api/v3/athlete",
+                { headers: { "Authorization": `Bearer ${token}` } }
+            )
+                .then(response => {
+                    setAthlete(response.data);
+                })
+                .catch((error: Error) => {
+                    logger.error(error.message)
+                })
+        }
+
     }
 
     function getActivities() {
-        if (token && dayjs(tokenExpirationDate).isBefore(dayjs())) {
+        logger.info(tokenExpirationDate)
+        if (token && tokenExpirationDate && dayjs.unix(tokenExpirationDate).isAfter(dayjs())) {
             axios.get(`https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`,
                 { headers: { "Authorization": `Bearer ${token}` } }
             )
@@ -182,10 +179,12 @@ export default function StravaWidget(props: IProps) {
             </div>
 
             {
-                !token && !refreshToken &&
-                <Button>
-                    <a href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}>Se connecter</a>
-                </Button>
+                (!token || !refreshToken || tokenExpirationDate && dayjs.unix(tokenExpirationDate).isBefore(dayjs())) &&
+                <a href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}>
+                    <Button>
+                        Se connecter
+                    </Button>
+                </a>
             }
         </div>
 
