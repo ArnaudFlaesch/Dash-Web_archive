@@ -1,4 +1,3 @@
-import * as dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import * as RSSParser from "rss-parser";
@@ -63,12 +62,16 @@ export default function RSSWidget(props: IProps) {
 			})
 	}
 
+	function formatTitleForArticle(pubDate: string, articleTitle?: string) {
+		const date = (pubDate) ? new Date(pubDate).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' }) : ""
+		return `${date} ${articleTitle}`
+	}
+
 	function getFeedFromRSS(data: IArticle[]) {
 		return (
 			data.map((article) => {
 				return (
-					<ComponentWithDetail key={article.guid} componentRoot={(dayjs(new Date(article.pubDate)).format("HH:mm") + " " + article.title) || article.link} componentDetail={<RSSArticle {...article} />} link={article.link} />
-				)
+					<ComponentWithDetail key={article.guid} componentRoot={formatTitleForArticle(article.pubDate, article.title)} componentDetail={<RSSArticle {...article} />} link={article.link} />)
 			})
 		)
 	}
