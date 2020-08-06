@@ -3,7 +3,7 @@ import * as dayjs from 'dayjs';
 import * as queryString from 'query-string';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
@@ -128,7 +128,6 @@ export default function StravaWidget(props: IProps) {
     }
 
     function getActivities() {
-        logger.info(tokenExpirationDate)
         if (token && tokenExpirationDate && dayjs.unix(tokenExpirationDate).isAfter(dayjs())) {
             axios.get(`https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`,
                 { headers: { "Authorization": `Bearer ${token}` } }
@@ -142,6 +141,24 @@ export default function StravaWidget(props: IProps) {
         } else {
             refreshTokenFromApi();
         }
+    }
+
+    function getStatsFromActivities() {
+        const activitiesByMonthList = activities.reverse().reduce((activitiesByMonth: any[], activity: IActivity) => {
+            const month = dayjs(activity.start_date_local).format("YYYY-MM");
+            if (!activitiesByMonth[month]) {
+                activitiesByMonth[month] = Array()
+            }
+            activitiesByMonth[month].push(Math.round(activity.distance * 1000) / 1000000)
+            return activitiesByMonth;
+        }, [])
+        return Object.keys(activitiesByMonthList)
+            .map(month => {
+                return {
+                    x: dayjs(month).toDate(),
+                    y: Math.round(activitiesByMonthList[month].reduce((total: number, distance: number) => total + distance))
+                }
+            })
     }
 
     const widgetHeader =
@@ -165,17 +182,25 @@ export default function StravaWidget(props: IProps) {
             </div>
 
             <div style={{ minHeight: "25vh", flex: "1 0 50%" }}>
-                <Line data={{
-                    labels: activities.reverse().map((activity: IActivity) => dayjs(activity.start_date_local).format('DD MMM')),
+                <Bar data={{
                     datasets: [
                         {
                             label: 'Course',
-                            borderColor: 'orange',
-                            data: activities.map((activity: IActivity) => Math.round(activity.distance * 1000) / 1000000)
+                            backgroundColor: 'orange',
+                            data: getStatsFromActivities()
                         }
                     ]
                 }}
-                    options={{ maintainAspectRatio: false }} />
+                    options={{
+                        maintainAspectRatio: false, scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'month'
+                                }
+                            }]
+                        }
+                    }} />
             </div>
 
             {

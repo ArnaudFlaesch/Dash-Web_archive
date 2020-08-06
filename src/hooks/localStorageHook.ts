@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logger from '../utils/LogUtils';
 
 export function useLocalStorage(key: any, initialValue: any) {
     // State to store our value
@@ -11,7 +12,7 @@ export function useLocalStorage(key: any, initialValue: any) {
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
             // If error also return initialValue
-            console.log(error);
+            logger.error(error);
             return initialValue;
         }
     });
@@ -28,7 +29,7 @@ export function useLocalStorage(key: any, initialValue: any) {
             window.localStorage.setItem(key, JSON.stringify(valueToStore));
         } catch (error) {
             // A more advanced implementation would handle the error case
-            console.log(error);
+            logger.error(error);
         }
     };
     return [storedValue, setValue];
