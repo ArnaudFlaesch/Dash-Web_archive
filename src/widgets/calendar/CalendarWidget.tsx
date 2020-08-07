@@ -34,23 +34,26 @@ export default function CalendarWidget(props: IProps) {
     }, [calendars])
 
     function refreshWidget() {
-        calendarUrls?.map((calendarUrl: string) => {
+        setCalendars([]);
+        setSchedules([]);
+        calendarUrls?.map((calendarUrl: string, index: number) => {
             axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
                 .then((response) => {
-                    const calendarId = calendars.length.toString();
+                    const calendarId = index.toString();
                     const newCalendar = {
                         id: calendarId,
                         name: calendarUrl.substring(0, 10),
                         color: 'blue',
                         borderColor: 'blue'
                     }
-                    setCalendars([...calendars, newCalendar])
+                    const cals = (index > 0) ? calendars : []
+                    setCalendars([...cals, newCalendar])
                     if (calendarRef.current?.getInstance().getViewName() !== 'month') {
                         calendarRef.current?.getInstance().scrollToNow();
                     }
                     const data = ical.parseICS(response.data);
-
-                    setSchedules(schedules.concat(Object.keys(data).map((eventKey) => {
+                    const scheds = (index > 0) ? schedules : []
+                    setSchedules([...scheds, ...(Object.keys(data).map((eventKey) => {
                         if (data.hasOwnProperty(eventKey) && data[eventKey].type === 'VEVENT') {
                             const event = data[eventKey];
                             const newSchedule: ISchedule = {
@@ -65,7 +68,7 @@ export default function CalendarWidget(props: IProps) {
                         } else {
                             return {};
                         }
-                    })));
+                    }))]);
                 })
                 .catch(error => {
                     logger.error(error);

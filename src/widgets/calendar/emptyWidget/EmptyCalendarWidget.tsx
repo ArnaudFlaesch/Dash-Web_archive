@@ -14,9 +14,12 @@ export default function EmptyCalendarWidget(props: IProps) {
     }
 
     const onCalendarUrlUpdated = (event: any) => {
-        const newUrls = [...calendarUrls!!];
-        newUrls[event.target.id] = event.target.value;
-        setCalendarUrls(newUrls);
+        setCalendarUrls(
+            calendarUrls.map((url: string, index: number) => 
+                index.toString() === event.target.id 
+                ? event.target.value
+                : url 
+        ))
     }
 
     const onCalendarUrlAdded = (event: any) => {
@@ -26,8 +29,8 @@ export default function EmptyCalendarWidget(props: IProps) {
     return (
         <div>
             <div>
-                {calendarUrls?.map((url, index) => {
-                    return <input key={url} id={index.toString()} onChange={onCalendarUrlUpdated} value={url} placeholder="Saisissez une URL" />
+                {calendarUrls && calendarUrls.map((url, index) => {
+                    return <input key={index} id={index.toString()} onChange={onCalendarUrlUpdated} value={url} placeholder="Saisissez une URL" />
                 })
                 }
                 <button className="btn btn-success" onClick={onCalendarUrlAdded}>Ajouter</button>
