@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
-import { ITabState } from 'src/reducers/tabReducer';
 import { WidgetTypes } from '../enums/WidgetsEnum';
+import { ITabState } from '../reducers/tabReducer';
 import { deleteWidget } from '../services/WidgetService';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
@@ -11,6 +11,7 @@ import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from "../widgets/strava/StravaWidget";
 import WeatherWidget from '../widgets/weather/WeatherWidget';
+import TwitterWidget from 'src/widgets/twitter/TwitterWidget';
 
 interface IProps {
     tabId: string;
@@ -79,6 +80,11 @@ export default function TabDash(props: IProps) {
     return (
         <TabPane tabId={props.tabId}>
             <div className='widgetList'>
+            <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+
+                {props.tabId === '1' &&
+                    <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                }
                 {
                     widgets &&
                     widgets.map((widgetConfig: IWidgetConfig) => {
