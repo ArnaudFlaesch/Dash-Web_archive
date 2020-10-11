@@ -5,7 +5,8 @@ import Store from "../../../pages/store/Store";
 describe('Store tests', () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<Store onWidgetAdded={() => null} />, div);
+        const onWidgetAdded = () => null;
+        ReactDOM.render(<Store onWidgetAdded={ onWidgetAdded } />, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 });
