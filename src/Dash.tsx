@@ -1,6 +1,7 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
@@ -9,7 +10,7 @@ import NavDash from './navigation/navDash/NavDash';
 import Store from './pages/store/Store';
 import { toggleSelectedTab } from './reducers/actions';
 import { ITabState } from './reducers/tabReducer';
-import { addTab } from './services/TabService';
+import { addTab, updateTabs } from './services/TabService';
 import { addWidget } from './services/WidgetService';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
@@ -94,6 +95,31 @@ export default function Dash() {
 		}
 	}
 
+	function reorder(list: any, startIndex: number, endIndex: number): any {
+		const result = Array.from(list);
+		const [removed] = result.splice(startIndex, 1);
+		result.splice(endIndex, 0, removed);
+		return result;
+	};
+
+	function onDragEnd(result: any) {
+		if (!result.destination) {
+			return;
+		}
+
+		const items = reorder(
+			tabs,
+			result.source.index,
+			result.destination.index
+		).map((tab: ITab, index: number) => {
+			tab.tabOrder = index;
+			return tab;
+		})
+		updateTabs(items).then((response) => {
+			setTabs(response.data);
+		});
+	}
+
 	useEffect(initDashboard, []);
 
 	return (
@@ -115,13 +141,34 @@ export default function Dash() {
 
 				<div className='flexColumn tabsBar'>
 					<Nav tabs={true}>
-						{
-							tabs.map((tab: ITab) => {
-								return (
-									<NavDash key={tab.id.toString()} tab={tab} onTabClicked={() => toggleTab(tab.id.toString())} onTabDeleted={onTabDeleted} />
-								)
-							})
-						}
+						<DragDropContext onDragEnd={onDragEnd}>
+							<Droppable droppableId="droppable" direction="horizontal">
+								{(providedDroppable: any, snapshotDroppable: any) => (
+									<div className='flexRow'
+										{...providedDroppable.droppableProps}
+										ref={providedDroppable.innerRef}>
+										{
+											tabs.map((tab: ITab, index: number) => {
+												return (
+													<Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
+														{(providedDraggable, snapshotDraggable) => (
+															<div key={tab.id.toString()} ref={providedDraggable.innerRef}
+																{...providedDraggable.draggableProps}
+																{...providedDraggable.dragHandleProps}>
+																<NavDash tab={tab}
+																	onTabClicked={() => toggleTab(tab.id.toString())} onTabDeleted={onTabDeleted} />
+															</div>
+														)}
+													</Draggable>
+
+												)
+											})
+										}
+										{providedDroppable.placeholder}
+									</div>
+								)}
+							</Droppable>
+						</DragDropContext>
 						<Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
 					</Nav>
 					<TabContent activeTab={activeTab}>
@@ -133,7 +180,8 @@ export default function Dash() {
 						}
 					</TabContent>
 				</div>
+
 			</div>
-		</div >
+		</div>
 	);
 }

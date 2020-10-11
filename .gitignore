@@ -31,3 +31,4 @@ cypress/support/
 cypress/screenshots/examples/dash/test.spec.js/Dash tests -- cy.window() - get the global window object (failed).png
 cypress/videos/
 cypress/plugins/index.js
+*.code-workspace

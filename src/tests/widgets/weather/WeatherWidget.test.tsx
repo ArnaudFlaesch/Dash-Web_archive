@@ -29,7 +29,8 @@ describe('Weather widget tests', () => {
 
   it('renders without crashing', () => {
     act(() => {
-      render(<Provider store={store}><WeatherWidget id={1} tabId={2} onDeleteButtonClicked={function () { return null }} /></Provider>, container);
+      const onDeleteButtonClickedMethod = () => null;
+      render(<Provider store={store}><WeatherWidget id={1} tabId={2} onDeleteButtonClicked={ onDeleteButtonClickedMethod} /></Provider>, container);
     });
   });
 
@@ -43,7 +44,8 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={3} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={function () { return null }} /></Provider>, container);
+      const onDeleteButtonClicked = () => null;
+      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={3} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={ onDeleteButtonClicked} /></Provider>, container);
     });
 
     expect(container.querySelector('.header')?.textContent).toEqual('La météo aujourd\'hui à Montréal');
@@ -66,7 +68,8 @@ describe('Weather widget tests', () => {
     });
 
     await act(async () => {
-      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={() => null} /></Provider>, container);
+      const onDeleteButtonClicked = () => null;
+      render(<Provider store={store}><WeatherWidget id={2} city={"Montréal"} tabId={4} weather_api_key={"342535667748234148989"} onDeleteButtonClicked={ onDeleteButtonClicked } /></Provider>, container);
     });
 
     const deleteButton = container.getElementsByClassName('deleteButton')[0] as HTMLElement;
