@@ -1,11 +1,11 @@
 import { TOGGLE_TAB } from "./actionTypes";
 
 export interface ITabState {
-  activeTab: string
+  activeTab: number
 }
 
 const initialState: ITabState = {
-  activeTab: "-1"
+  activeTab: -1
 };
 
 export default function(state = initialState, action: any) {

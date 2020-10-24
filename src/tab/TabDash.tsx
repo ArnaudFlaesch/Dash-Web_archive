@@ -57,7 +57,7 @@ export default function TabDash(props: IProps) {
     }
 
     useEffect(() => {
-        if (!widgets.length && activeTab === props.tabId) {
+        if (!widgets.length && activeTab === parseInt(props.tabId, 0)) {
             fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`)
                 .then((result) => {
                     return result.json();

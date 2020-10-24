@@ -34,7 +34,7 @@ describe("TabDash tests", () => {
         const container = document.createElement("div");
         document.body.appendChild(container);
 
-        store.dispatch(toggleSelectedTab('1'));
+        store.dispatch(toggleSelectedTab(1));
         await act(async () => {
             ReactDOM.render(<Provider store={store}><TabDash tabId={'1'} newWidget={null} /></Provider>, container);
         });

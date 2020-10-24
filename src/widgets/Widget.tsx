@@ -23,12 +23,12 @@ export default function Widget(props: IProps) {
     
 
     useEffect(() => {
-        if (activeTab === props.tabId.toString()) {
+        if (activeTab === props.tabId) {
             setRefreshIntervalId(setInterval(props.refreshFunction, 300000));
         } else if (refreshIntervalId) {
             clearInterval(refreshIntervalId);
         }
-    }, [activeTab === props.tabId.toString()]);
+    }, [activeTab === props.tabId]);
 
     useEffect(() => {
         if (refreshIntervalId) {

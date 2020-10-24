@@ -39,14 +39,14 @@ export default function Dash() {
 					addNewTab();
 				}
 				setTabs(result);
-				dispatch(toggleSelectedTab(result[0].id.toString()))
+				dispatch(toggleSelectedTab(result[0].id))
 			})
 			.catch((error: Error) => {
 				logger.error(error.message);
 			});
 	}
 
-	function toggleTab(tab: string) {
+	function toggleTab(tab: number) {
 		if (activeTab !== tab) {
 			dispatch(toggleSelectedTab(tab))
 		}
@@ -75,7 +75,7 @@ export default function Dash() {
 
 	function onWidgetAdded(type: any) {
 		if (activeTab) {
-			addWidget(type.target.value, parseInt(activeTab, 0))
+			addWidget(type.target.value, activeTab)
 				.then((response) => {
 					if (response) {
 						const widgetData: IWidgetConfig = response.data;
@@ -90,8 +90,8 @@ export default function Dash() {
 
 	function onTabDeleted(id: number) {
 		setTabs(tabs.filter(tab => tab.id !== id))
-		if (activeTab === id.toString()) {
-			dispatch(toggleSelectedTab(tabs[0].id.toString()))
+		if (activeTab === id) {
+			dispatch(toggleSelectedTab(tabs[0].id))
 		}
 	}
 
@@ -154,9 +154,10 @@ export default function Dash() {
 														{(providedDraggable, snapshotDraggable) => (
 															<div key={tab.id.toString()} ref={providedDraggable.innerRef}
 																{...providedDraggable.draggableProps}
-																{...providedDraggable.dragHandleProps}>
+																{...providedDraggable.dragHandleProps}
+																className={`${tab.id === activeTab ? "selected-item" : ""}`}>
 																<NavDash tab={tab}
-																	onTabClicked={() => toggleTab(tab.id.toString())} onTabDeleted={onTabDeleted} />
+																	onTabClicked={() => toggleTab(tab.id)} onTabDeleted={onTabDeleted} />
 															</div>
 														)}
 													</Draggable>
