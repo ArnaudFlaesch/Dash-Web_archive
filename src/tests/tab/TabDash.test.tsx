@@ -16,7 +16,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("TabDash tests", () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
-        ReactDOM.render(<Provider store={store}><BrowserRouter><TabDash tabId={'1'} newWidget={null} /></BrowserRouter></Provider>, div);
+        ReactDOM.render(<Provider store={store}><BrowserRouter><TabDash tabId={1} newWidget={null} /></BrowserRouter></Provider>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 
@@ -36,7 +36,7 @@ describe("TabDash tests", () => {
 
         store.dispatch(toggleSelectedTab(1));
         await act(async () => {
-            ReactDOM.render(<Provider store={store}><TabDash tabId={'1'} newWidget={null} /></Provider>, container);
+            ReactDOM.render(<Provider store={store}><TabDash tabId={1} newWidget={null} /></Provider>, container);
         });
         expect(globalAny.fetch).toHaveBeenCalledTimes(1);
         expect(globalAny.fetch).toHaveBeenCalledWith(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`);

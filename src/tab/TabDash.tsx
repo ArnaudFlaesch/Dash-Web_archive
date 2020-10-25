@@ -14,7 +14,7 @@ import StravaWidget from "../widgets/strava/StravaWidget";
 import WeatherWidget from '../widgets/weather/WeatherWidget';
 
 interface IProps {
-    tabId: string;
+    tabId: number;
     newWidget: any;
 }
 
@@ -57,7 +57,7 @@ export default function TabDash(props: IProps) {
     }
 
     useEffect(() => {
-        if (!widgets.length && activeTab === parseInt(props.tabId, 0)) {
+        if (!widgets.length && activeTab === props.tabId) {
             fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`)
                 .then((result) => {
                     return result.json();

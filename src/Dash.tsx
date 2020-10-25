@@ -152,7 +152,7 @@ export default function Dash() {
 												return (
 													<Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
 														{(providedDraggable, snapshotDraggable) => (
-															<div key={tab.id.toString()} ref={providedDraggable.innerRef}
+															<div key={tab.id} ref={providedDraggable.innerRef}
 																{...providedDraggable.draggableProps}
 																{...providedDraggable.dragHandleProps}
 																className={`${tab.id === activeTab ? "selected-item" : ""}`}>
@@ -175,7 +175,7 @@ export default function Dash() {
 					<TabContent activeTab={activeTab}>
 						{tabs.map((tab: ITab) => {
 							return (
-								<TabDash key={tab.id.toString()} newWidget={getNewWidget(tab.id)} tabId={tab.id.toString()} />
+								<TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />
 							)
 						})
 						}
