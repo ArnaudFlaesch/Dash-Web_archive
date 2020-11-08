@@ -123,18 +123,18 @@ export default function WeatherWidget(props: IProps) {
 					</div>
 					<div style={{ height: "25vh" }}>
 						<Line data={{
-							labels: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17)
+							labels: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 16)
 								.map(forecastDay => dayjs(forecastDay.dt * 1000).format('ddd DD')),
 							datasets: [
 								{
 									label: 'Température',
 									borderColor: 'orange',
-									data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.temp_max)
+									data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 16).map(forecastDay => forecastDay.main.temp_max)
 								},
 								{
 									label: 'Ressenti',
 									borderColor: 'red',
-									data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 17).map(forecastDay => forecastDay.main.feels_like)
+									data: forecast.filter(forecastDay => dayjs(formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone))).hour() === 16).map(forecastDay => forecastDay.main.feels_like)
 								}
 							]
 						}}
