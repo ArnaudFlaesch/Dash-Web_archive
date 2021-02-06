@@ -3,7 +3,7 @@ checks:
 
 build:
   environment:
-    node: v12.16.2
+    node: v15.8.0
   nodes:
     analysis:
       project_setup:
@@ -11,10 +11,10 @@ build:
     coverage:
       tests:
         before:
-          - 'npm install -g typescript'
+          - 'yarn install -g typescript'
         override:
            - js-scrutinizer-run
-           - command : 'npm test -- --coverage'
+           - command : 'yarn test -- --coverage'
              coverage:
               file: ./coverage/clover.xml
               format: clover
