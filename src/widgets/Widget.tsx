@@ -11,7 +11,7 @@ interface IProps {
     config: {};
     header: React.ReactElement;
     body: React.ReactElement;
-    editModeComponent: React.ReactElement;
+    editModeComponent: React.ReactElement<IProps>;
     refreshFunction: () => void;
     onDeleteButtonClicked: (idWidget: number) => void;
 }
@@ -20,14 +20,22 @@ export default function Widget(props: IProps) {
     const [mode, setMode] = useState(ModeEnum.READ);
     const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
     const activeTab = useSelector((state: ITabState) => state.activeTab);
+    
 
     useEffect(() => {
-        if (activeTab === props.tabId.toString()) {
+        if (activeTab === props.tabId) {
             setRefreshIntervalId(setInterval(props.refreshFunction, 300000));
         } else if (refreshIntervalId) {
             clearInterval(refreshIntervalId);
         }
-    }, [activeTab === props.tabId.toString()]);
+    }, [activeTab === props.tabId]);
+
+    useEffect(() => {
+        if (refreshIntervalId) {
+            clearInterval(refreshIntervalId);
+        }
+        setRefreshIntervalId(setInterval(props.refreshFunction, 20000));
+    }, [props.refreshFunction]);
 
     useEffect(() => {
         setMode(ModeEnum.READ);

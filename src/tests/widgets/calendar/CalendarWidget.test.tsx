@@ -11,7 +11,8 @@ describe('Calendar widget tests', () => {
   it('renders without crashing', async () => {
 
     await act(async () => {
-      Enzyme.shallow(<CalendarWidget id={1} tabId={1} calendars={['fake_url']} isOnActiveTab={true} onDeleteButtonClicked={function () { return null }} />);
+      const onDeleteButtonClicked = () => null;
+      Enzyme.shallow(<CalendarWidget id={1} tabId={1} calendars={['fake_url']} isOnActiveTab={true} onDeleteButtonClicked={ onDeleteButtonClicked } />);
     });
 
   });

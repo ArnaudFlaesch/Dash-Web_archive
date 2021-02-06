@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { ITabState } from '../reducers/tabReducer';
-import { deleteWidget } from '../services/WidgetService';
+import { deleteWidget, updateWidgets } from '../services/WidgetService';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
@@ -14,7 +15,7 @@ import WeatherWidget from '../widgets/weather/WeatherWidget';
 import TwitterWidget from 'src/widgets/twitter/TwitterWidget';
 
 interface IProps {
-    tabId: string;
+    tabId: number;
     newWidget: any;
 }
 
@@ -77,25 +78,67 @@ export default function TabDash(props: IProps) {
         }
     }, [props.newWidget != null && props.newWidget.id])
 
+    function reorder(list: any, startIndex: number, endIndex: number): any {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    function onDragEnd(result: any) {
+        if (!result.destination) {
+            return;
+        }
+
+        const items = reorder(
+            widgets,
+            result.source.index,
+            result.destination.index
+        ).map((widget: IWidgetConfig, index: number) => {
+            widget.widgetOrder = index;
+            return widget;
+        });
+        updateWidgets(items).then(response =>
+            setWidgets(response.data)
+        )
+    }
+
     return (
         <TabPane tabId={props.tabId}>
-            <div className='widgetList'>
-            <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />
-
-                {props.tabId === '1' &&
-                    <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />
-                }
-                {
-                    widgets &&
-                    widgets.map((widgetConfig: IWidgetConfig) => {
-                        return (
-                            <div key={widgetConfig.id} className="widget">
-                                {createWidget(widgetConfig)}
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                    {(providedDroppable: any, snapshotDroppable: any) => (
+                        <div
+                            {...providedDroppable.droppableProps}
+                            ref={providedDroppable.innerRef}>
+                            <div className='widgetList'>
+                                <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                                {props.tabId === 1 &&
+                                    <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />
+                                }
+                                {
+                                    widgets &&
+                                    widgets.map((widgetConfig: IWidgetConfig, index) => {
+                                        return (
+                                            <Draggable key={widgetConfig.id} draggableId={widgetConfig.id.toString()} index={index}>
+                                                {(providedDraggable, snapshotDraggable) => (
+                                                    <div key={widgetConfig.id} className="widget"
+                                                        ref={providedDraggable.innerRef}
+                                                        {...providedDraggable.draggableProps}
+                                                        {...providedDraggable.dragHandleProps}>
+                                                        {createWidget(widgetConfig)}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })
+                                }
+                                {providedDroppable.placeholder}
                             </div>
-                        );
-                    })
-                }
-            </div>
-        </TabPane>
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        </TabPane >
     )
 }

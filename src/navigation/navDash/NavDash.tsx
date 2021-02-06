@@ -14,16 +14,20 @@ export default function NavDash(props: IProps) {
     const [label, setLabel] = useState(props.tab.label);
     const [isToggled, toggle] = useState(false);
 
-    function deleteTabFromDash(id: number) {
-        deleteTab(id)
-            .then(response => props.onTabDeleted(id))
+    function deleteTabFromDash() {
+        deleteTab(props.tab.id)
+            .then(response => props.onTabDeleted(props.tab.id))
     }
 
-    function saveTabName(newLabel: string) {
-        updateTab(props.tab.id, newLabel, props.tab.tabOrder)
+    function saveTabName() {
+        updateTab(props.tab.id, label, props.tab.tabOrder)
             .then(response => {
                 toggle(!isToggled);
             });
+    }
+
+    function clickToggle() {
+        toggle(!isToggled);
     }
 
     return (
@@ -31,10 +35,10 @@ export default function NavDash(props: IProps) {
             <NavLink onClick={props.onTabClicked}>
                 {isToggled
                     ? <div className="flexRow">
-                        <input onDoubleClick={() => saveTabName(label)} onChange={(event) => setLabel(event.target.value)} value={label} />
-                        <Button onClick={() => deleteTabFromDash(props.tab.id)}><i className="fa fa-trash" /></Button>
+                        <input onDoubleClick={saveTabName} onChange={(event) => setLabel(event.target.value)} value={label} />
+                        <Button onClick={deleteTabFromDash}><i className="fa fa-trash" /></Button>
                     </div>
-                    : <span onDoubleClick={() => toggle(!isToggled)}>{label}</span>
+                    : <span onDoubleClick={clickToggle}>{label}</span>
                 }
             </NavLink>
         </NavItem>
