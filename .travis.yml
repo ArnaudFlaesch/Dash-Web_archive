@@ -2,13 +2,12 @@ language: node_js
 
 node_js:
   - node
-  - 12
-  - 11
+  - 15
 
 services:
   - docker
 
-install: npm ci
+install: yarn install --frozen-lockfile
 
 cache:
   directories:
@@ -19,12 +18,12 @@ env:
   - NODE_ENV=travis
 
 before_install:
-  - npm install -g typescript coveralls codacy-coverage npm-run-all wait-on
+  - yarn global add typescript coveralls codacy-coverage npm-run-all wait-on
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker pull arnaudf93/dashwebservices:latest
   - docker run -d -p 8080:8080  arnaudf93/dashwebservices
 
-script: npm run ci
+script: yarn install --frozen-lockfile
 
 after_success:
   - cat ./coverage/lcov.info | coveralls

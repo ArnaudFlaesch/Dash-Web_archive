@@ -9,11 +9,11 @@
     "scripts": {
         "start": "set HTTPS=true && react-scripts-ts start",
         "build": "react-scripts-ts build --prod",
-        "preinstall": "npm i -g typescript",
+        "preinstall": "yarn global add typescript",
         "server": "node src/server.js",
         "test": "react-scripts-ts test --env=jsdom",
         "coverage": "react-scripts-ts test --env=jsdom --coverage",
-        "ci": "npm test -- --coverage && run-p -r start cy:run",
+        "ci": "yarn test -- --coverage && run-p -r start cy:run",
         "cy:open": "cypress open",
         "cy:run": "wait-on http://localhost:3000 && cypress run",
         "cy:run:record": "cypress run --record"
