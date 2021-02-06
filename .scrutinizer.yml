@@ -11,7 +11,7 @@ build:
     coverage:
       tests:
         before:
-          - 'yarn install -g typescript'
+          - 'yarn global add typescript'
         override:
            - js-scrutinizer-run
            - command : 'yarn test -- --coverage'

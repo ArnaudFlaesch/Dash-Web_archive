@@ -9,7 +9,7 @@
     "scripts": {
         "start": "set HTTPS=true && react-scripts-ts start",
         "build": "react-scripts-ts build --prod",
-        "preinstall": "yarn i -g typescript",
+        "preinstall": "yarn global add typescript",
         "server": "node src/server.js",
         "test": "react-scripts-ts test --env=jsdom",
         "coverage": "react-scripts-ts test --env=jsdom --coverage",
