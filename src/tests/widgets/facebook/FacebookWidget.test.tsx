@@ -9,4 +9,3 @@ describe('Facebook widget tests', () => {
     ReactDOM.unmountComponentAtNode(div);
   });
 });
-

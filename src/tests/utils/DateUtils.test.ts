@@ -1,7 +1,7 @@
-import { assert } from "console";
+import { assert } from 'console';
 
 describe('DateUtils tests', () => {
-    it('Should format date', () => {
-        assert(true, true);
-    })
-})
+  it('Should format date', () => {
+    assert(true, true);
+  });
+});

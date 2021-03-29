@@ -5,9 +5,8 @@ import ComponentWithDetail from '../../../components/detailComponent/ComponentWi
 describe('ComponentWithDetail tests', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    const props = { componentRoot: "Titre", componentDetail: "Detail" };
+    const props = { componentRoot: 'Titre', componentDetail: 'Detail' };
     ReactDOM.render(<ComponentWithDetail {...props} />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });
-
