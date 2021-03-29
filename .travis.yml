@@ -1,8 +1,7 @@
 language: node_js
 
 node_js:
-  - node
-  - 15
+  - 15.8.0
 
 services:
   - docker
