@@ -14,7 +14,7 @@ build:
           - 'yarn global add typescript'
         override:
           - js-scrutinizer-run
-          - command: 'yarn test -- --coverage'
+          - command: 'yarn run ci'
             coverage:
               file: ./coverage/clover.xml
               format: clover
