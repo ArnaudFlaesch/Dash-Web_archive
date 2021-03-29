@@ -32,3 +32,4 @@ cypress/screenshots/examples/dash/test.spec.js/Dash tests -- cy.window() - get t
 cypress/videos/
 cypress/plugins/index.js
 *.code-workspace
+.nyc_output/

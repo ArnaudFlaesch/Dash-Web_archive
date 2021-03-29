@@ -20,7 +20,7 @@ const Store: React.FunctionComponent<IProps> = props => {
                                 <CardTitle>{key}</CardTitle>
                                 <CardSubtitle>Widget {key}</CardSubtitle>
                                 <CardText>Cliquez ci-dessous pour ajouter un widget {key} au dashboard.</CardText>
-                                <Button id={key} onClick={props.onWidgetAdded} value={WidgetTypes[key]} className='btn btn-success'>Ajouter</Button>
+                                <Button id={key} onClick={props.onWidgetAdded} className='btn btn-success'>Ajouter</Button>
                             </CardBody>
                         </Card>
                     )

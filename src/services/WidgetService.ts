@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IWidgetConfig } from 'src/widgets/IWidgetConfig';
+import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 const headers = {
 	'Content-type': 'application/json'

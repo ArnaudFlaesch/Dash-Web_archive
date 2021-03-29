@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ITab } from 'src/model/Tab';
+import { ITab } from '../model/Tab';
 
 const headers = {
     'Content-type': 'application/json'

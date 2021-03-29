@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';

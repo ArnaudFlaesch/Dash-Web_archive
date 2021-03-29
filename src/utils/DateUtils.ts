@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export function getDayFromNow(numberOfDays: number) {
 	return dayjs().add(numberOfDays, 'day').startOf('day');

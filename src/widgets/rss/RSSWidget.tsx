@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import * as RSSParser from "rss-parser";
+import RSSParser from "rss-parser";
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
-import { IArticle, ImageContent, IRSSHeader } from './article/IArticle';
+import { IArticle, ImageContent } from './article/IArticle';
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import "./RSSWidget.scss";

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
-import { ITabState } from 'src/reducers/tabReducer';
+import { ITabState } from '../reducers/tabReducer';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { deleteWidget, updateWidgets } from '../services/WidgetService';
 import logger from '../utils/LogUtils';

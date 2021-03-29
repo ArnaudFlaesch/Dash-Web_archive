@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import * as React from "react";
 import { IActivity } from '../IStrava';
 import "./StravaActivity.scss";
