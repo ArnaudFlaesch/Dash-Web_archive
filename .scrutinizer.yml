@@ -11,7 +11,7 @@ build:
     coverage:
       tests:
         before:
-          - 'yarn global add typescript'
+          - 'yarn global add typescript coveralls codacy-coverage npm-run-all wait-on'
         override:
           - js-scrutinizer-run
           - command: 'yarn run ci'
