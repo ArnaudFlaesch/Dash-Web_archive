@@ -5,7 +5,7 @@ import ComponentWithDetail from '../../components/detailComponent/ComponentWithD
 import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
-import { IArticle, ImageContent } from './article/IArticle';
+import { IArticle, ImageContent, IRSSHeader } from './article/IArticle';
 import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import './RSSWidget.scss';
@@ -30,7 +30,8 @@ export default function RSSWidget(props: IProps): React.ReactElement {
     if (url) {
       rssParser
         .parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-        .then((result: any) => {
+        .then(result => result.json())
+        .then((result: IRSSHeader) => {
           setDecription(result.description);
           setFeed(result.items);
           setImage(result.image);
@@ -54,7 +55,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   function onUrlSubmitted(rssUrl: string) {
     updateWidgetData(props.id, { url: rssUrl })
-      .then((response) => {
+      .then(() => {
         setUrl(rssUrl);
         refreshWidget();
       })

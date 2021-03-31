@@ -18,7 +18,7 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
         setWeatherApiKey(event.target.nodeValue);
       }  
     }
-  const onCityChangeHandler = (event: any) => setCity(event.target.value);
+  const onCityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => setCity(event.target.value);
   const onValidation = () => {
     props.onConfigSubmitted(weatherApiKey, city);
   };

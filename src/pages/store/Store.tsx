@@ -12,7 +12,7 @@ import { WidgetTypes } from '../../enums/WidgetsEnum';
 import './Store.scss';
 
 interface IProps {
-  onWidgetAdded: (type: any) => void;
+  onWidgetAdded: (type: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Store: React.FunctionComponent<IProps> = (props) => {

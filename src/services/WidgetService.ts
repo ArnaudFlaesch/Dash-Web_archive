@@ -1,11 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
-import { WidgetTypes } from '../enums/WidgetsEnum';
 const headers = {
   'Content-type': 'application/json'
 };
 
-export function addWidget(type: WidgetTypes, tabId: number): Promise<AxiosResponse<unknown>> {
+export function addWidget(type: string, tabId: number): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/addWidget`,
     { type: type, tab: { id: tabId } },

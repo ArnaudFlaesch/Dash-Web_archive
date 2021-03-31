@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
 import { ITabState } from '../reducers/tabReducer';
@@ -114,7 +114,7 @@ export default function TabDash(props: IProps): React.ReactElement {
     return result;
   }
 
-  function onDragEnd(result: any) {
+  function onDragEnd(result: DropResult) {
     if (!result.destination) {
       return;
     }
@@ -134,7 +134,7 @@ export default function TabDash(props: IProps): React.ReactElement {
     <TabPane tabId={props.tabId}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
-          {(providedDroppable: any) => (
+          {(providedDroppable: DroppableProvided) => (
             <div
               {...providedDroppable.droppableProps}
               ref={providedDroppable.innerRef}

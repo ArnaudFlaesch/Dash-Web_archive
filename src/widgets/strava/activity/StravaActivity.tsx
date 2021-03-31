@@ -3,7 +3,7 @@ import * as React from 'react';
 import { IActivity } from '../IStrava';
 import './StravaActivity.scss';
 
-export default function StravaActivity(props: IActivity) {
+export default function StravaActivity(props: IActivity): React.ReactElement {
   return (
     <div>
       <div>

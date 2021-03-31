@@ -11,9 +11,9 @@ interface IProps {
 export default function EmptyStravaWidget(props: IProps): React.ReactElement {
   const [clientId, setClientId] = useState(props.clientId || '');
   const [clientSecret, setClientSecret] = useState(props.clientSecret || '');
-  const onClientIdChangeHandler = (event: any) =>
+  const onClientIdChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
     setClientId(event.target.value);
-  const onClientSecretChangeHandler = (event: any) =>
+  const onClientSecretChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
     setClientSecret(event.target.value);
 
   const onValidation = () => {

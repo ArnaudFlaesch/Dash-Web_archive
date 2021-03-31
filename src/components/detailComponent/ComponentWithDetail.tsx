@@ -9,7 +9,7 @@ interface IProps {
   link?: string;
 }
 
-export default function ComponentWithDetail(props: IProps) {
+export default function ComponentWithDetail(props: IProps): React.ReactElement {
   const [openCollapse, setOpenCollapse] = useState(false);
   const toggleCollapse = () => {
     setOpenCollapse(!openCollapse);

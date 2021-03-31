@@ -1,7 +1,7 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -81,9 +81,9 @@ export default function Dash(): React.ReactElement {
     setModal(!modal);
   }
 
-  function onWidgetAdded(type: any) {
+  function onWidgetAdded(type: React.MouseEvent<HTMLButtonElement>) {
     if (activeTab) {
-      addWidget(type.target.value, activeTab)
+      addWidget(type.currentTarget.value, activeTab)
         .then((response) => {
           if (response) {
             const widgetData = response.data as IWidgetConfig;
@@ -103,14 +103,14 @@ export default function Dash(): React.ReactElement {
     }
   }
 
-  function reorder(list: any, startIndex: number, endIndex: number): any {
+  function reorder(list: unknown[], startIndex: number, endIndex: number): unknown[] {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
   }
 
-  function onDragEnd(result: any) {
+  function onDragEnd(result: DropResult) {
     if (!result.destination) {
       return;
     }
@@ -119,11 +119,11 @@ export default function Dash(): React.ReactElement {
       tabs,
       result.source.index,
       result.destination.index
-    ).map((tab: ITab, index: number) => {
-      tab.tabOrder = index;
+    ).map((tab, index) => {
+      (tab as ITab).tabOrder = index;
       return tab;
     });
-    updateTabs(items).then((response) => {
+    updateTabs(items as ITab[]).then((response) => {
       setTabs(response.data as ITab[]);
     });
   }
@@ -160,7 +160,7 @@ export default function Dash(): React.ReactElement {
           <Nav tabs={true}>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="droppable" direction="horizontal">
-                {(providedDroppable: any) => (
+                {(providedDroppable: DroppableProvided) => (
                   <div
                     className="flexRow"
                     {...providedDroppable.droppableProps}
