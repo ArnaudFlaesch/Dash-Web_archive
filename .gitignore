@@ -20,16 +20,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-src/properties.json
-API URLS\.txt
-
 /.vscode
 data.sql
-cypress/fixtures/
 cypress/integration/examples/
-cypress/support/
-cypress/screenshots/examples/dash/test.spec.js/Dash tests -- cy.window() - get the global window object (failed).png
+cypress/screenshots/
 cypress/videos/
-cypress/plugins/index.js
 *.code-workspace
 .nyc_output/
