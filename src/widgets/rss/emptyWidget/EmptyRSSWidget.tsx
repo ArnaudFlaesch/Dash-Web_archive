@@ -7,7 +7,7 @@ interface IProps {
   onUrlSubmitted: (url: string) => void;
 }
 
-export default function EmptyRSSWidget(props: IProps) {
+export default function EmptyRSSWidget(props: IProps): React.ReactElement {
   const [url, setUrl] = useState(props.url);
   const onChangeHandler = (event: any) => setUrl(event.target.value);
   const onValidation = () => {

@@ -18,7 +18,7 @@ interface IProps {
   newWidget: any;
 }
 
-export default function TabDash(props: IProps) {
+export default function TabDash(props: IProps): React.ReactElement {
   const [widgets, setWidgets] = useState([]);
   const activeTab = useSelector((state: ITabState) => state.activeTab);
 
@@ -148,7 +148,7 @@ export default function TabDash(props: IProps) {
                         draggableId={widgetConfig.id.toString()}
                         index={index}
                       >
-                        {(providedDraggable, snapshotDraggable) => (
+                        {(providedDraggable) => (
                           <div
                             key={widgetConfig.id}
                             className="widget"

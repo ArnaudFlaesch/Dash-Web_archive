@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 import './EmptyWeatherWidget.scss';
 
 interface IProps {

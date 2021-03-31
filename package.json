@@ -14,7 +14,7 @@
         "coverage": "react-scripts test --env=jsdom --coverage",
         "ci": "yarn run coverage && run-p -r start cy:run",
         "cy:open": "cypress open",
-        "cy:run": "wait-on https://localhost:3000 cypress run --headless --browser chrome",
+        "cy:run": "wait-on https://localhost:3000 && cypress run --headless --browser chrome",
         "cy:verify": "cypress verify",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" --formatter json --output-file ./styleLintReport.json",
