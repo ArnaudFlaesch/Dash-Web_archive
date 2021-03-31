@@ -166,7 +166,7 @@ export default function Dash(): React.ReactElement {
                     {...providedDroppable.droppableProps}
                     ref={providedDroppable.innerRef}
                   >
-                    {tabs.map((tab: ITab, index: number) => {
+                    {tabs.length > 0 && tabs.map((tab: ITab, index: number) => {
                       return (
                         <Draggable
                           key={tab.id}
@@ -201,7 +201,7 @@ export default function Dash(): React.ReactElement {
             <Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
           </Nav>
           <TabContent activeTab={activeTab}>
-            {tabs.map((tab: ITab) => {
+            {tabs.length > 0 && tabs.map((tab: ITab) => {
               return (
                 <TabDash
                   key={tab.id}

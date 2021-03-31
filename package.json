@@ -16,7 +16,6 @@
         "cy:open": "cypress open",
         "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser chrome",
         "cy:verify": "cypress verify",
-        "build:test": "react-scripts build && yarn run server",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" --formatter json --output-file ./styleLintReport.json",
         "report:merge": "mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
