@@ -14,5 +14,6 @@
     "env": {
         "backend_url": "http://localhost:8080/",
         "coverage": true
-    }
+    },
+    "projectId": "nigs5v"
 }
