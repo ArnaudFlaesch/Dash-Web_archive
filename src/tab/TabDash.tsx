@@ -15,7 +15,7 @@ import WeatherWidget from '../widgets/weather/WeatherWidget';
 
 interface IProps {
   tabId: number;
-  newWidget: any;
+  newWidget?: IWidgetConfig;
 }
 
 export default function TabDash(props: IProps): React.ReactElement {
@@ -103,11 +103,11 @@ export default function TabDash(props: IProps): React.ReactElement {
 
   useEffect(() => {
     if (props.newWidget) {
-      setWidgets((widgets as any[]).concat([props.newWidget]) as []);
+      setWidgets((widgets as IWidgetConfig[]).concat([props.newWidget]) as []);
     }
   }, [props.newWidget != null && props.newWidget.id]);
 
-  function reorder(list: any, startIndex: number, endIndex: number): any {
+  function reorder(list: never[], startIndex: number, endIndex: number): unknown[] {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -123,11 +123,11 @@ export default function TabDash(props: IProps): React.ReactElement {
       widgets,
       result.source.index,
       result.destination.index
-    ).map((widget: IWidgetConfig, index: number) => {
-      widget.widgetOrder = index;
+    ).map((widget: unknown, index: number) => {
+      (widget as IWidgetConfig).widgetOrder = index;
       return widget;
     });
-    updateWidgets(items).then((response) => setWidgets(response.data as []));
+    updateWidgets(items as never[]).then((response) => setWidgets(response.data as []));
   }
 
   return (

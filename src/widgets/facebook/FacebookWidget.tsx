@@ -62,11 +62,11 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
     document.addEventListener('FBObjectReady', this.checkLoginStatus);
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount(): void {
     document.removeEventListener('FBObjectReady', this.checkLoginStatus);
   }
 
-  public checkLoginStatus = () => {
+  public checkLoginStatus = (): void => {
     FB.getLoginStatus(this.facebookLoginHandler);
   };
 

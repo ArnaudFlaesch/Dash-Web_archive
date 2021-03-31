@@ -73,7 +73,7 @@ export default function Dash(): React.ReactElement {
     if (newWidget && tabId === newWidget.tab.id) {
       return newWidget;
     } else {
-      return null;
+      return undefined;
     }
   }
 
@@ -160,7 +160,7 @@ export default function Dash(): React.ReactElement {
           <Nav tabs={true}>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="droppable" direction="horizontal">
-                {(providedDroppable: any, snapshotDroppable: any) => (
+                {(providedDroppable: any) => (
                   <div
                     className="flexRow"
                     {...providedDroppable.droppableProps}
@@ -173,7 +173,7 @@ export default function Dash(): React.ReactElement {
                           draggableId={tab.id.toString()}
                           index={index}
                         >
-                          {(providedDraggable, snapshotDraggable) => (
+                          {(providedDraggable) => (
                             <div
                               key={tab.id}
                               ref={providedDraggable.innerRef}

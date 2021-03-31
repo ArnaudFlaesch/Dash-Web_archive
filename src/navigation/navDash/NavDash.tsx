@@ -10,18 +10,18 @@ interface IProps {
   onTabDeleted: (id: number) => void;
 }
 
-export default function NavDash(props: IProps) {
+export default function NavDash(props: IProps): React.ReactElement {
   const [label, setLabel] = useState(props.tab.label);
   const [isToggled, toggle] = useState(false);
 
   function deleteTabFromDash() {
-    deleteTab(props.tab.id).then((response) =>
+    deleteTab(props.tab.id).then(() =>
       props.onTabDeleted(props.tab.id)
     );
   }
 
   function saveTabName() {
-    updateTab(props.tab.id, label, props.tab.tabOrder).then((response) => {
+    updateTab(props.tab.id, label, props.tab.tabOrder).then(() => {
       toggle(!isToggled);
     });
   }

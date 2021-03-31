@@ -12,18 +12,18 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
     props.calendarUrls || []
   );
   const onValidation = () => {
-    props.onConfigSubmitted(calendarUrls!);
+    props.onConfigSubmitted(calendarUrls);
   };
 
-  const onCalendarUrlUpdated = (event: any) => {
+  const onCalendarUrlUpdated = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCalendarUrls(
       calendarUrls.map((url: string, index: number) =>
-        index.toString() === event.target.id ? event.target.value : url
+        index.toString() === event.target?.id ? event.target.value : url
       )
     );
   };
 
-  const onCalendarUrlAdded = (event: any) => {
+  const onCalendarUrlAdded = () => {
     setCalendarUrls(calendarUrls.concat(''));
   };
 
