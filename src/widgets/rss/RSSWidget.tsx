@@ -17,7 +17,7 @@ interface IProps {
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function RSSWidget(props: IProps) {
+export default function RSSWidget(props: IProps): React.ReactElement {
   const [feed, setFeed] = useState<IArticle[]>([]);
   const [url, setUrl] = useState(props.url);
   const [description, setDecription] = useState('');

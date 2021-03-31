@@ -4,7 +4,7 @@ import logger from '../../../utils/LogUtils';
 import { getGroupsData } from '../FacebookAPI';
 import IGroup from './IGroup';
 
-export default function GroupsTab() {
+export default function GroupsTab(): React.ReactElement {
   useEffect(() => {
     getGroupsData()
       .then((result: IGroup[]) => {

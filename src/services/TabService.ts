@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { ITab } from '../model/Tab';
 
 const headers = {
   'Content-type': 'application/json'
 };
 
-export function addTab(label: string) {
+export function addTab(label: string): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/addTab`,
     { label: label },
@@ -15,7 +15,7 @@ export function addTab(label: string) {
   );
 }
 
-export function updateTab(id: number, label: any, tabOrder: number) {
+export function updateTab(id: number, label: string, tabOrder: number): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/updateTab`,
     { id: id, label: label, tabOrder: tabOrder },
@@ -25,7 +25,7 @@ export function updateTab(id: number, label: any, tabOrder: number) {
   );
 }
 
-export function updateTabs(tabs: ITab[]) {
+export function updateTabs(tabs: ITab[]): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/updateTabs`,
     tabs,
@@ -35,7 +35,7 @@ export function updateTabs(tabs: ITab[]) {
   );
 }
 
-export function deleteTab(id: number) {
+export function deleteTab(id: number): Promise<AxiosResponse<unknown>> {
   return axios.delete(
     `${process.env.REACT_APP_BACKEND_URL}/tab/deleteTab/?id=${id}`,
     {

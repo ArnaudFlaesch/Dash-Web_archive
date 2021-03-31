@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 const headers = {
   'Content-type': 'application/json'
 };
 
-export function addWidget(type: WidgetTypes, tabId: number) {
+export function addWidget(type: WidgetTypes, tabId: number): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/addWidget`,
     { type: type, tab: { id: tabId } },
@@ -15,7 +15,7 @@ export function addWidget(type: WidgetTypes, tabId: number) {
   );
 }
 
-export function updateWidgetData(id: number, data: any) {
+export function updateWidgetData(id: number, data: unknown): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData`,
     { id: id, data: data },
@@ -25,7 +25,7 @@ export function updateWidgetData(id: number, data: any) {
   );
 }
 
-export function updateWidgets(widgets: IWidgetConfig[]) {
+export function updateWidgets(widgets: IWidgetConfig[]): Promise<AxiosResponse<unknown>> {
   const widgetsData = widgets.map((widget) => {
     return { id: widget.id, widgetOrder: widget.widgetOrder };
   });
@@ -38,7 +38,7 @@ export function updateWidgets(widgets: IWidgetConfig[]) {
   );
 }
 
-export function deleteWidget(id: number) {
+export function deleteWidget(id: number): Promise<AxiosResponse<unknown>> {
   return axios.delete(
     `${process.env.REACT_APP_BACKEND_URL}/widget/deleteWidget/?id=${id}`,
     {

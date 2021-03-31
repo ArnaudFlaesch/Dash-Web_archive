@@ -15,8 +15,8 @@ export interface IAthlete {
   badge_type_id: number;
   profile_medium: string;
   profile: string;
-  friend: Object;
-  follower: Object;
+  friend: unknown;
+  follower: unknown;
 }
 
 export interface IActivity {

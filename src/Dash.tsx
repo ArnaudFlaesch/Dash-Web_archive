@@ -29,7 +29,7 @@ export interface IMenu {
   icon: string;
 }
 
-export default function Dash() {
+export default function Dash(): React.ReactElement {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [newWidget, setNewWidget] = useState<IWidgetConfig>();
   const [modal, setModal] = useState(false);

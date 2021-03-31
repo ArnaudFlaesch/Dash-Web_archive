@@ -7,7 +7,7 @@ interface IProps {
   onConfigSubmitted: (calendarUrls: string[]) => void;
 }
 
-export default function EmptyCalendarWidget(props: IProps) {
+export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
   const [calendarUrls, setCalendarUrls] = useState<string[]>(
     props.calendarUrls || []
   );
