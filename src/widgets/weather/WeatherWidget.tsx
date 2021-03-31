@@ -13,7 +13,7 @@ import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
-import { ICity, IForecast, IWeather } from './IWeather';
+import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
 
 export interface IProps {
@@ -57,8 +57,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           }
         })
         .then((result: AxiosResponse) => {
-          setForecast(result.data.list);
-          setCity(result.data.city);
+          setForecast((result.data as IWeatherAPIResponse).list);
+          setCity((result.data as IWeatherAPIResponse).city);
         })
         .catch((error: Error) => {
           logger.debug(error.message);

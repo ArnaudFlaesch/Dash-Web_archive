@@ -15,7 +15,6 @@ describe('Calendar widget tests', () => {
           id={1}
           tabId={1}
           calendars={['fake_url']}
-          isOnActiveTab={true}
           onDeleteButtonClicked={onDeleteButtonClicked}
         />
       );

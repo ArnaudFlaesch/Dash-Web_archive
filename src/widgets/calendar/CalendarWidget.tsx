@@ -13,7 +13,6 @@ import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
 export interface IProps {
   id: number;
   calendars?: string[];
-  isOnActiveTab: boolean;
   tabId: number;
   onDeleteButtonClicked: (idWidget: number) => void;
 }

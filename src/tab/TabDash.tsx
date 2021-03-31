@@ -127,7 +127,7 @@ export default function TabDash(props: IProps): React.ReactElement {
       widget.widgetOrder = index;
       return widget;
     });
-    updateWidgets(items).then((response) => setWidgets(response.data));
+    updateWidgets(items).then((response) => setWidgets(response.data as []));
   }
 
   return (

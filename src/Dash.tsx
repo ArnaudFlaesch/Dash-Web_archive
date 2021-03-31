@@ -86,7 +86,7 @@ export default function Dash(): React.ReactElement {
       addWidget(type.target.value, activeTab)
         .then((response) => {
           if (response) {
-            const widgetData: IWidgetConfig = response.data;
+            const widgetData = response.data as IWidgetConfig;
             setNewWidget(widgetData);
           }
         })
@@ -124,7 +124,7 @@ export default function Dash(): React.ReactElement {
       return tab;
     });
     updateTabs(items).then((response) => {
-      setTabs(response.data);
+      setTabs(response.data as ITab[]);
     });
   }
 

@@ -51,7 +51,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (
       !token ||
       !refreshToken ||
-      dayjs.unix(tokenExpirationDate).isBefore(dayjs())
+      dayjs.unix(tokenExpirationDate as number).isBefore(dayjs())
     ) {
       refreshTokenFromApi();
     }
@@ -96,7 +96,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         grant_type: 'authorization_code'
       })
       .then((response) => {
-        setToken(response.data.access_token);
+        setToken(response.data.access_token as string);
         setRefreshToken(response.data.refresh_token);
         setTokenExpirationDate(response.data.expires_at);
         setAthlete(response.data.athlete);
@@ -148,7 +148,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (
       token &&
       tokenExpirationDate &&
-      dayjs.unix(tokenExpirationDate).isAfter(dayjs())
+      dayjs.unix(tokenExpirationDate as number).isAfter(dayjs())
     ) {
       axios
         .get(
@@ -249,7 +249,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       {(!token ||
         !refreshToken ||
         (tokenExpirationDate &&
-          dayjs.unix(tokenExpirationDate).isBefore(dayjs()))) && (
+          dayjs.unix(tokenExpirationDate as number).isBefore(dayjs()))) && (
         <a
           href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
         >
