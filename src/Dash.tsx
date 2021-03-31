@@ -63,8 +63,9 @@ export default function Dash(): React.ReactElement {
   function addNewTab() {
     const newTabLabel = 'Nouvel onglet';
     addTab(newTabLabel).then((response) => {
-      setTabs(tabs.concat(response.data));
-      dispatch(toggleSelectedTab(response.data.id));
+      const insertedTab = response.data as ITab;
+      setTabs(tabs.concat(insertedTab));
+      dispatch(toggleSelectedTab(insertedTab.id));
     });
   }
 
