@@ -12,6 +12,7 @@ build:
       tests:
         before:
           - 'yarn global add typescript coveralls codacy-coverage npm-run-all wait-on'
+          - 'echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p'
         override:
           - js-scrutinizer-run
           - command: 'yarn run ci'
