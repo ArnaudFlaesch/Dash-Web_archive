@@ -7,6 +7,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/11fd289d78594b809ef1aaa1328c31c7)](https://www.codacy.com/app/arnaudflaesch/Dash-Web?utm_source=github.com&utm_medium=referral&utm_content=ArnaudFlaesch/Dash-Web&utm_campaign=Badge_Coverage)
 [![Build Status](https://scrutinizer-ci.com/g/ArnaudFlaesch/Dash-Web/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ArnaudFlaesch/Dash-Web/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/ArnaudFlaesch/Dash-Web/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ArnaudFlaesch/Dash-Web/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ArnaudFlaesch/Dash-Web/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ArnaudFlaesch/Dash-Web/?branch=master)
 [![dependencies Status](https://david-dm.org/ArnaudFlaesch/Dash-Web/status.svg)](https://david-dm.org/ArnaudFlaesch/Dash-Web)
 [![devDependencies Status](https://david-dm.org/ArnaudFlaesch/Dash-Web/dev-status.svg)](https://david-dm.org/ArnaudFlaesch/Dash-Web?type=dev)
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)

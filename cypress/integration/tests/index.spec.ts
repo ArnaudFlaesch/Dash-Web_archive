@@ -7,7 +7,6 @@ context('Dash tests', () => {
 
   it('cy.window() - get the global window object', () => {
     cy.title().should('equals', 'Dash');
-    cy.get('.widget').should('have.length', 0);
     cy.get('#openAddWidgetModal').click();
     cy.get('.card-title').should('have.length', 4);
     cy.get('#RSS').click();
