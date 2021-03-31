@@ -13,7 +13,10 @@ context('Dash tests', () => {
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#RSS').click();
     cy.wait('@addWidget').then((xhr) => {
-      cy.get('.widget').should('have.length', 1);
+      cy.get('#closeAddWidgetModal')
+        .click()
+        .get('.widget')
+        .should('have.length', 1);
     });
   });
 });
