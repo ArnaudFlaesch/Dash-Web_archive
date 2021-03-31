@@ -5,7 +5,7 @@ export default interface IFBUser {
   hometown: {
     id: string;
     name: string;
-  },
+  };
   birthday: string;
   gender: string;
   link: string;

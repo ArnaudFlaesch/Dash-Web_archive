@@ -3,7 +3,15 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Nav, TabContent } from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Nav,
+  TabContent
+} from 'reactstrap';
 import './Dash.scss';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
@@ -17,172 +25,193 @@ import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
 
 export interface IMenu {
-	link: string;
-	icon: string;
+  link: string;
+  icon: string;
 }
 
 export default function Dash() {
-	const [tabs, setTabs] = useState<ITab[]>([]);
-	const [newWidget, setNewWidget] = useState<IWidgetConfig>()
-	const [modal, setModal] = useState(false);
+  const [tabs, setTabs] = useState<ITab[]>([]);
+  const [newWidget, setNewWidget] = useState<IWidgetConfig>();
+  const [modal, setModal] = useState(false);
 
-	const activeTab = useSelector((state: ITabState) => state.activeTab);
-	const dispatch = useDispatch();
+  const activeTab = useSelector((state: ITabState) => state.activeTab);
+  const dispatch = useDispatch();
 
-	function initDashboard() {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
-			.then((result) => {
-				return result.json();
-			})
-			.then(result => {
-				if (!result || result.length === 0) {
-					addNewTab();
-				}
-				setTabs(result);
-				dispatch(toggleSelectedTab(result[0].id))
-			})
-			.catch((error: Error) => {
-				logger.error(error.message);
-			});
-	}
+  function initDashboard() {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
+      .then((result) => {
+        return result.json();
+      })
+      .then((result) => {
+        if (!result || result.length === 0) {
+          addNewTab();
+        }
+        setTabs(result);
+        dispatch(toggleSelectedTab(result[0].id));
+      })
+      .catch((error: Error) => {
+        logger.error(error.message);
+      });
+  }
 
-	function toggleTab(tab: number) {
-		if (activeTab !== tab) {
-			dispatch(toggleSelectedTab(tab))
-		}
-	}
+  function toggleTab(tab: number) {
+    if (activeTab !== tab) {
+      dispatch(toggleSelectedTab(tab));
+    }
+  }
 
-	function addNewTab() {
-		const newTabLabel = "Nouvel onglet";
-		addTab(newTabLabel)
-			.then((response) => {
-				setTabs(tabs.concat(response.data));
-				dispatch(toggleSelectedTab(response.data.id))
-			})
-	}
+  function addNewTab() {
+    const newTabLabel = 'Nouvel onglet';
+    addTab(newTabLabel).then((response) => {
+      setTabs(tabs.concat(response.data));
+      dispatch(toggleSelectedTab(response.data.id));
+    });
+  }
 
-	function getNewWidget(tabId: number) {
-		if (newWidget && tabId === newWidget.tab.id) {
-			return newWidget;
-		} else {
-			return null;
-		}
-	}
+  function getNewWidget(tabId: number) {
+    if (newWidget && tabId === newWidget.tab.id) {
+      return newWidget;
+    } else {
+      return null;
+    }
+  }
 
-	function toggleModal() {
-		setModal(!modal);
-	}
+  function toggleModal() {
+    setModal(!modal);
+  }
 
-	function onWidgetAdded(type: any) {
-		if (activeTab) {
-			addWidget(type.target.value, activeTab)
-				.then((response) => {
-					if (response) {
-						const widgetData: IWidgetConfig = response.data;
-						setNewWidget(widgetData);
-					}
-				})
-				.catch(error => {
-					logger.error(error.message);
-				})
-		}
-	}
+  function onWidgetAdded(type: any) {
+    if (activeTab) {
+      addWidget(type.target.value, activeTab)
+        .then((response) => {
+          if (response) {
+            const widgetData: IWidgetConfig = response.data;
+            setNewWidget(widgetData);
+          }
+        })
+        .catch((error) => {
+          logger.error(error.message);
+        });
+    }
+  }
 
-	function onTabDeleted(id: number) {
-		setTabs(tabs.filter(tab => tab.id !== id))
-		if (activeTab === id) {
-			dispatch(toggleSelectedTab(tabs[0].id))
-		}
-	}
+  function onTabDeleted(id: number) {
+    setTabs(tabs.filter((tab) => tab.id !== id));
+    if (activeTab === id) {
+      dispatch(toggleSelectedTab(tabs[0].id));
+    }
+  }
 
-	function reorder(list: any, startIndex: number, endIndex: number): any {
-		const result = Array.from(list);
-		const [removed] = result.splice(startIndex, 1);
-		result.splice(endIndex, 0, removed);
-		return result;
-	};
+  function reorder(list: any, startIndex: number, endIndex: number): any {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  }
 
-	function onDragEnd(result: any) {
-		if (!result.destination) {
-			return;
-		}
+  function onDragEnd(result: any) {
+    if (!result.destination) {
+      return;
+    }
 
-		const items = reorder(
-			tabs,
-			result.source.index,
-			result.destination.index
-		).map((tab: ITab, index: number) => {
-			tab.tabOrder = index;
-			return tab;
-		})
-		updateTabs(items).then((response) => {
-			setTabs(response.data);
-		});
-	}
+    const items = reorder(
+      tabs,
+      result.source.index,
+      result.destination.index
+    ).map((tab: ITab, index: number) => {
+      tab.tabOrder = index;
+      return tab;
+    });
+    updateTabs(items).then((response) => {
+      setTabs(response.data);
+    });
+  }
 
-	useEffect(initDashboard, []);
+  useEffect(initDashboard, []);
 
-	return (
-		<div className="dash">
-			<div className='flexRow'>
-				<div className='dashNavbar'>
-					<Nav vertical={true} navbar={true}>
-						<Button id="openAddWidgetModal" className="dashNavbarLink" onClick={toggleModal}><i className="fa fa-plus-circle fa-lg" aria-hidden="true" /></Button>
-						<Modal isOpen={modal} toggle={toggleModal}>
-							<ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
-							<ModalBody>
-								<Store onWidgetAdded={onWidgetAdded} /></ModalBody>
-							<ModalFooter>
-								<Button color="primary" onClick={toggleModal}>Fermer</Button>
-							</ModalFooter>
-						</Modal>
-					</Nav>
-				</div>
+  return (
+    <div className="dash">
+      <div className="flexRow">
+        <div className="dashNavbar">
+          <Nav vertical={true} navbar={true}>
+            <Button
+              id="openAddWidgetModal"
+              className="dashNavbarLink"
+              onClick={toggleModal}
+            >
+              <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
+            </Button>
+            <Modal isOpen={modal} toggle={toggleModal}>
+              <ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
+              <ModalBody>
+                <Store onWidgetAdded={onWidgetAdded} />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={toggleModal}>
+                  Fermer
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </Nav>
+        </div>
 
-				<div className='flexColumn tabsBar'>
-					<Nav tabs={true}>
-						<DragDropContext onDragEnd={onDragEnd}>
-							<Droppable droppableId="droppable" direction="horizontal">
-								{(providedDroppable: any, snapshotDroppable: any) => (
-									<div className='flexRow'
-										{...providedDroppable.droppableProps}
-										ref={providedDroppable.innerRef}>
-										{
-											tabs.map((tab: ITab, index: number) => {
-												return (
-													<Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
-														{(providedDraggable, snapshotDraggable) => (
-															<div key={tab.id} ref={providedDraggable.innerRef}
-																{...providedDraggable.draggableProps}
-																{...providedDraggable.dragHandleProps}
-																className={`${tab.id === activeTab ? "selected-item" : ""}`}>
-																<NavDash tab={tab}
-																	onTabClicked={() => toggleTab(tab.id)} onTabDeleted={onTabDeleted} />
-															</div>
-														)}
-													</Draggable>
-
-												)
-											})
-										}
-										{providedDroppable.placeholder}
-									</div>
-								)}
-							</Droppable>
-						</DragDropContext>
-						<Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
-					</Nav>
-					<TabContent activeTab={activeTab}>
-						{tabs.map((tab: ITab) => {
-							return (
-								<TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />
-							)
-						})
-						}
-					</TabContent>
-				</div>
-
-			</div>
-		</div>
-	);
+        <div className="flexColumn tabsBar">
+          <Nav tabs={true}>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable" direction="horizontal">
+                {(providedDroppable: any, snapshotDroppable: any) => (
+                  <div
+                    className="flexRow"
+                    {...providedDroppable.droppableProps}
+                    ref={providedDroppable.innerRef}
+                  >
+                    {tabs.map((tab: ITab, index: number) => {
+                      return (
+                        <Draggable
+                          key={tab.id}
+                          draggableId={tab.id.toString()}
+                          index={index}
+                        >
+                          {(providedDraggable, snapshotDraggable) => (
+                            <div
+                              key={tab.id}
+                              ref={providedDraggable.innerRef}
+                              {...providedDraggable.draggableProps}
+                              {...providedDraggable.dragHandleProps}
+                              className={`${
+                                tab.id === activeTab ? 'selected-item' : ''
+                              }`}
+                            >
+                              <NavDash
+                                tab={tab}
+                                onTabClicked={() => toggleTab(tab.id)}
+                                onTabDeleted={onTabDeleted}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {providedDroppable.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+            <Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
+          </Nav>
+          <TabContent activeTab={activeTab}>
+            {tabs.map((tab: ITab) => {
+              return (
+                <TabDash
+                  key={tab.id}
+                  newWidget={getNewWidget(tab.id)}
+                  tabId={tab.id}
+                />
+              );
+            })}
+          </TabContent>
+        </div>
+      </div>
+    </div>
+  );
 }

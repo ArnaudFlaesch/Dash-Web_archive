@@ -18,7 +18,7 @@ export interface IProps {
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function CalendarWidget(props: IProps) {
+export default function CalendarWidget(props: IProps): React.ReactElement {
   const [calendarUrls, setCalendarUrls] = useState(props.calendars);
   const [calendars, setCalendars] = useState<ICalendarInfo[]>([]);
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
@@ -88,7 +88,7 @@ export default function CalendarWidget(props: IProps) {
 
   function onConfigSubmitted(updatedCalendars: string[]) {
     updateWidgetData(props.id, { calendars: updatedCalendars })
-      .then((response) => {
+      .then(() => {
         setCalendarUrls(updatedCalendars);
       })
       .catch((error) => {

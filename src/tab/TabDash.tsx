@@ -134,7 +134,7 @@ export default function TabDash(props: IProps) {
     <TabPane tabId={props.tabId}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
-          {(providedDroppable: any, snapshotDroppable: any) => (
+          {(providedDroppable: any) => (
             <div
               {...providedDroppable.droppableProps}
               ref={providedDroppable.innerRef}

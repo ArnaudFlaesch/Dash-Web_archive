@@ -16,7 +16,7 @@ interface IProps {
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function Widget(props: IProps) {
+export default function Widget(props: IProps): React.ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
   const [refreshIntervalId, setRefreshIntervalId] = useState<NodeJS.Timeout>();
   const activeTab = useSelector((state: ITabState) => state.activeTab);
