@@ -9,7 +9,7 @@
     "viewportHeight": 1080,
     "supportFile": "cypress/support/index.ts",
     "screenshotOnRunFailure": true,
-    "video": false,
+    "video": true,
     "videoCompression": false,
     "env": {
         "backend_url": "http://localhost:8080/",
