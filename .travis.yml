@@ -11,7 +11,8 @@ install: yarn install --frozen-lockfile
 cache:
   directories:
   - "$HOME/.npm"
-  - ~/.cache
+  - ~/.cache/yarn
+  - ~/.cache/Cypress
 
 env:
   - NODE_ENV=travis

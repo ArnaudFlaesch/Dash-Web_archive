@@ -1,7 +1,13 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DroppableProvided,
+  DropResult
+} from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -103,7 +109,11 @@ export default function Dash(): React.ReactElement {
     }
   }
 
-  function reorder(list: unknown[], startIndex: number, endIndex: number): unknown[] {
+  function reorder(
+    list: unknown[],
+    startIndex: number,
+    endIndex: number
+  ): unknown[] {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -166,33 +176,34 @@ export default function Dash(): React.ReactElement {
                     {...providedDroppable.droppableProps}
                     ref={providedDroppable.innerRef}
                   >
-                    {tabs.length > 0 && tabs.map((tab: ITab, index: number) => {
-                      return (
-                        <Draggable
-                          key={tab.id}
-                          draggableId={tab.id.toString()}
-                          index={index}
-                        >
-                          {(providedDraggable) => (
-                            <div
-                              key={tab.id}
-                              ref={providedDraggable.innerRef}
-                              {...providedDraggable.draggableProps}
-                              {...providedDraggable.dragHandleProps}
-                              className={`${
-                                tab.id === activeTab ? 'selected-item' : ''
-                              }`}
-                            >
-                              <NavDash
-                                tab={tab}
-                                onTabClicked={() => toggleTab(tab.id)}
-                                onTabDeleted={onTabDeleted}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
+                    {tabs.length > 0 &&
+                      tabs.map((tab: ITab, index: number) => {
+                        return (
+                          <Draggable
+                            key={tab.id}
+                            draggableId={tab.id.toString()}
+                            index={index}
+                          >
+                            {(providedDraggable) => (
+                              <div
+                                key={tab.id}
+                                ref={providedDraggable.innerRef}
+                                {...providedDraggable.draggableProps}
+                                {...providedDraggable.dragHandleProps}
+                                className={`tab ${
+                                  tab.id === activeTab ? 'selected-item' : ''
+                                }`}
+                              >
+                                <NavDash
+                                  tab={tab}
+                                  onTabClicked={() => toggleTab(tab.id)}
+                                  onTabDeleted={onTabDeleted}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        );
+                      })}
                     {providedDroppable.placeholder}
                   </div>
                 )}
@@ -201,15 +212,16 @@ export default function Dash(): React.ReactElement {
             <Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
           </Nav>
           <TabContent activeTab={activeTab}>
-            {tabs.length > 0 && tabs.map((tab: ITab) => {
-              return (
-                <TabDash
-                  key={tab.id}
-                  newWidget={getNewWidget(tab.id)}
-                  tabId={tab.id}
-                />
-              );
-            })}
+            {tabs.length > 0 &&
+              tabs.map((tab: ITab) => {
+                return (
+                  <TabDash
+                    key={tab.id}
+                    newWidget={getNewWidget(tab.id)}
+                    tabId={tab.id}
+                  />
+                );
+              })}
           </TabContent>
         </div>
       </div>
