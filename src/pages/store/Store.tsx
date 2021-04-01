@@ -9,7 +9,6 @@ import {
   CardTitle
 } from 'reactstrap';
 import { WidgetTypes } from '../../enums/WidgetsEnum';
-import './Store.scss';
 
 interface IProps {
   onWidgetAdded: (type: React.MouseEvent<HTMLButtonElement>) => void;

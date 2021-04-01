@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Nav, NavItem } from 'reactstrap';
 import { IMenu } from '../../Dash';
-import './Navbar.scss';
-
 interface IProps {
   navItems: IMenu[];
 }
