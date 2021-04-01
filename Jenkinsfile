@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'cypress/browsers:node14.16.0-chrome89-ff77' }
+        docker { image 'cypress/browsers:node14.16.0-chrome89-ff86' }
     }
     stages {
         stage('Build') {
@@ -19,7 +19,7 @@ pipeline {
                 }
                 stage('Lint JS/TS files') {
                     steps {
-                        sh 'yarn run eslint'
+                        sh 'npm run eslint'
                     }
                 }
             }
@@ -29,39 +29,41 @@ pipeline {
             parallel {
                 stage('Jest') {
                     steps {
-                        sh 'yarn run test -- --coverage'
+                        sh 'npm run test -- --coverage'
                     }
                 }
                 stage('Cypress') {
                     steps {
-                        sh 'export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket'
                         sh 'mkdir cypress/screenshots'
-                        sh 'yarn run cy:verify'
-                        sh 'yarn run start &'
-                        sh 'yarn run cy:run'
-                        sh 'yarn run report:merge'
-                        sh 'yarn run report:generate'
-                        sh 'yarn run report:copyScreenshots'
-                        publishHTML target: [
-                        allowMissing         : false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll              : true,
-                        reportDir            : 'cypress/reports/html',
-                        reportFiles          : 'tests-report.html',
-                        reportName           : 'Cypress report'
-                ]
+                        sh 'npm run cy:verify'
+                        sh 'npm run start &'
+                        sh 'npm run cy:run'
                     }
                 }
             }
         }
-
-        stage ('Coverage report') {
-            steps {
+    }
+    post ('Coverage report') {
+        success {
+            script {
                 sh 'mkdir coverage-reports || true && mkdir .nyc_output || true'
                 sh 'cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json'
                 sh 'cp jest-coverage/coverage-final.json coverage-reports/from-jest.json'
                 sh 'npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json'
                 sh 'npx nyc report --reporter lcov --report-dir coverage'
+            }
+            always {
+                sh 'npm run report:merge'
+                sh 'npm run report:generate'
+                sh 'npm run report:copyScreenshots'
+                publishHTML target: [
+                    allowMissing         : false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll              : true,
+                    reportDir            : 'cypress/reports/html',
+                    reportFiles          : 'tests-report.html',
+                    reportName           : 'Cypress report'
+                ]
             }
         }
     }
