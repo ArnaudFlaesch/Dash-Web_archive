@@ -1,8 +1,7 @@
 language: node_js
 
 node_js:
-  - node
-  - 15
+  - 15.8.0
 
 services:
   - docker
@@ -11,8 +10,9 @@ install: yarn install --frozen-lockfile
 
 cache:
   directories:
-  - "$HOME/.npm"
-  - ~/.cache
+    - '$HOME/.npm'
+    - ~/.cache/yarn
+    - ~/.cache/Cypress
 
 env:
   - NODE_ENV=travis
@@ -22,10 +22,19 @@ before_install:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker pull arnaudf93/dashwebservices:latest
   - docker run -d -p 8080:8080  arnaudf93/dashwebservices
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-script: yarn install --frozen-lockfile
+before_script:
+  - yarn run lint:styles:report
+
+script: yarn run ci
 
 after_success:
+  - mkdir coverage-reports || true && mkdir .nyc_output || true
+  - cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
+  - cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
+  - npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
+  - npx nyc report --reporter lcov --report-dir coverage
   - cat ./coverage/lcov.info | coveralls
   - cat ./coverage/lcov.info | codacy-coverage
-  - bash <(curl -s https://codecov.io/bash) 
+  - bash <(curl -s https://codecov.io/bash)

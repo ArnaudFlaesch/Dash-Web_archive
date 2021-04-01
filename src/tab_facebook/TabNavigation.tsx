@@ -1,39 +1,43 @@
-import * as React from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-import ITab from "./ITab";
-import "./TabNavigation.scss"
+import * as React from 'react';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import ITab from './ITab';
+import './TabNavigation.scss';
 
 interface IProps {
-    tabList: ITab[];
+  tabList: ITab[];
 }
 
 const TabNavigation: React.FunctionComponent<IProps> = (props) => {
-    return (
+  return (
+    <div>
+      <Router>
         <div>
-            <Router>
-                <div>
-                    <div className="tabContainer">
-                        {props.tabList.map((tab: ITab) => {
-                            return (
-                                <div key={tab.title}>
-                                    <Link to={tab.path}>{tab.title}</Link>
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div>
-                        {props.tabList.map((tab: ITab) => {
-                            return (
-                                <div key={tab.title}>
-                                    <Route path={tab.path} exact={tab.exact} component={tab.component} />
-                                </div>
-                            );
-                        })}
-                    </div>
+          <div className="tabContainer">
+            {props.tabList.map((tab: ITab) => {
+              return (
+                <div key={tab.title}>
+                  <Link to={tab.path}>{tab.title}</Link>
                 </div>
-            </Router>
+              );
+            })}
+          </div>
+          <div>
+            {props.tabList.map((tab: ITab) => {
+              return (
+                <div key={tab.title}>
+                  <Route
+                    path={tab.path}
+                    exact={tab.exact}
+                    component={tab.component}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
-    )
-}
+      </Router>
+    </div>
+  );
+};
 
 export default TabNavigation;

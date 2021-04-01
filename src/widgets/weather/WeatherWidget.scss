@@ -1,21 +1,21 @@
 #header {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-.space-between {
-    display: flex;
-    justify-content: space-between;
+.spaceBetween {
+  display: flex;
+  justify-content: space-between;
 }
 
 .smallImage {
-    max-width: 60px;
-    max-height: 60px;
+  max-width: 60px;
+  max-height: 60px;
 }
 
 .forecastRow {
-    overflow-x: scroll;
+  overflow-x: scroll;
 }
 
 .forecastContainer {
-    min-width: calc(100% / 3);
+  min-width: calc(100% / 3);
 }

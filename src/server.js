@@ -26,7 +26,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     res.status(500).json({ "error": err.message });
 });
 
