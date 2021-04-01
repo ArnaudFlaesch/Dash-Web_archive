@@ -30,7 +30,7 @@ pipeline {
 
         stage('Jest and Cypress tests') {
 		agent {
-			docker { image 'cypress/base:10 }
+			docker { image 'cypress/base:10' }
 		}
             steps {
                 sh 'yarn run cy:verify'
