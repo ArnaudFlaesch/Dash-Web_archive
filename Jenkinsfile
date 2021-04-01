@@ -1,7 +1,7 @@
 pipeline {
     agent {
-                        docker { image 'node:15.12.0' }
-                    }
+        docker { image 'cypress/base:10' }
+    }
     stages {
         stage('Build') {
             steps {
@@ -25,9 +25,6 @@ pipeline {
         }
 
         stage('Jest and Cypress tests') {
-            agent {
-                docker { image 'cypress/base:10' }
-            }
             steps {
                 sh 'yarn run cy:verify'
                 sh 'mkdir cypress/screenshots'
