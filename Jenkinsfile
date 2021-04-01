@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'cypress/base:14.16.0' }
+        docker { image 'cypress/browsers:node14.16.0-chrome89-ff77' }
     }
     stages {
         stage('Build') {
@@ -34,6 +34,7 @@ pipeline {
                 }
                 stage('Cypress') {
                     steps {
+                        sh 'export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket'
                         sh 'mkdir cypress/screenshots'
                         sh 'yarn run cy:verify'
                         sh 'yarn run start &'
