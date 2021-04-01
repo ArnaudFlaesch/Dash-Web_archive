@@ -45,16 +45,13 @@ pipeline {
     }
     post {
         success {
-            script {
                 sh 'mkdir coverage-reports || true && mkdir .nyc_output || true'
                 sh 'cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json'
                 sh 'cp jest-coverage/coverage-final.json coverage-reports/from-jest.json'
                 sh 'npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json'
                 sh 'npx nyc report --reporter lcov --report-dir coverage'
-            }
         }
         always {
-            script {
                 sh 'npm run report:merge'
                 sh 'npm run report:generate'
                 sh 'npm run report:copyScreenshots'
@@ -67,6 +64,5 @@ pipeline {
                     reportName           : 'Cypress report'
                 ]
             }
-        }
     }
 }
