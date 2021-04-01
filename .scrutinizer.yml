@@ -1,5 +1,5 @@
 checks:
-    javascript: true
+  javascript: true
 
 build:
   environment:
@@ -11,19 +11,19 @@ build:
     coverage:
       tests:
         before:
-          - 'yarn global add typescript'
+          - 'yarn global add typescript coveralls codacy-coverage npm-run-all wait-on'
         override:
-           - js-scrutinizer-run
-           - command : 'yarn test -- --coverage'
-             coverage:
+          - js-scrutinizer-run
+          - command: 'yarn run ci'
+            coverage:
               file: ./coverage/clover.xml
               format: clover
-                  
+
 filter:
-    excluded_paths:
-        - "src/tests/"
-        # Everything in a root level "tests" directory will be excluded
-    dependency_paths:
-        - "lib/"
-        # Everything in a root level "lib" directory will be excluded from analysis
-        # but treated as a dependency
+  excluded_paths:
+    - 'src/tests/'
+    # Everything in a root level "tests" directory will be excluded
+  dependency_paths:
+    - 'lib/'
+    # Everything in a root level "lib" directory will be excluded from analysis
+    # but treated as a dependency

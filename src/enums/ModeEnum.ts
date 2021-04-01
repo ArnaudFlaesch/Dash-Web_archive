@@ -1,5 +1,5 @@
 export enum ModeEnum {
-    READ = 1,
-    EDIT = 2,
-    DELETE = 3
+  READ = 1,
+  EDIT = 2,
+  DELETE = 3
 }

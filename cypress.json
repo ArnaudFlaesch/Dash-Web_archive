@@ -1,4 +1,19 @@
 {
-    "baseUrl": "http://localhost:3000",
-    "testFiles": "**/dash/*.*"
+    "baseUrl": "http://localhost:3000/",
+    "testFiles": [
+        "**/**/*.spec.ts"
+    ],
+    "watchForFileChanges": false,
+    "defaultCommandTimeout": 6000,
+    "viewportWidth": 1920,
+    "viewportHeight": 1080,
+    "supportFile": "cypress/support/index.ts",
+    "screenshotOnRunFailure": true,
+    "video": true,
+    "videoCompression": false,
+    "env": {
+        "backend_url": "http://localhost:8080/",
+        "coverage": true
+    },
+    "projectId": "nigs5v"
 }
