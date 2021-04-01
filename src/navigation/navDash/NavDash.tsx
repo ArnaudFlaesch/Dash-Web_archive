@@ -15,9 +15,7 @@ export default function NavDash(props: IProps): React.ReactElement {
   const [isToggled, toggle] = useState(false);
 
   function deleteTabFromDash() {
-    deleteTab(props.tab.id).then(() =>
-      props.onTabDeleted(props.tab.id)
-    );
+    deleteTab(props.tab.id).then(() => props.onTabDeleted(props.tab.id));
   }
 
   function saveTabName() {

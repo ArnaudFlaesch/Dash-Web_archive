@@ -4,7 +4,10 @@ const headers = {
   'Content-type': 'application/json'
 };
 
-export function addWidget(type: string, tabId: number): Promise<AxiosResponse<unknown>> {
+export function addWidget(
+  type: string,
+  tabId: number
+): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/addWidget`,
     { type: type, tab: { id: tabId } },
@@ -14,7 +17,10 @@ export function addWidget(type: string, tabId: number): Promise<AxiosResponse<un
   );
 }
 
-export function updateWidgetData(id: number, data: unknown): Promise<AxiosResponse<unknown>> {
+export function updateWidgetData(
+  id: number,
+  data: unknown
+): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData`,
     { id: id, data: data },
@@ -24,7 +30,9 @@ export function updateWidgetData(id: number, data: unknown): Promise<AxiosRespon
   );
 }
 
-export function updateWidgets(widgets: IWidgetConfig[]): Promise<AxiosResponse<unknown>> {
+export function updateWidgets(
+  widgets: IWidgetConfig[]
+): Promise<AxiosResponse<unknown>> {
   const widgetsData = widgets.map((widget) => {
     return { id: widget.id, widgetOrder: widget.widgetOrder };
   });

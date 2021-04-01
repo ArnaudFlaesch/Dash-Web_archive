@@ -57,7 +57,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
             ...scheds,
             ...Object.keys(data).map((eventKey) => {
               if (
-                Object.prototype.hasOwnProperty.call(data, "eventKey") &&
+                Object.prototype.hasOwnProperty.call(data, 'eventKey') &&
                 data[eventKey].type === 'VEVENT'
               ) {
                 const event = data[eventKey];

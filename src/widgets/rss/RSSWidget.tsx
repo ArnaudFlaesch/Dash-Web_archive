@@ -30,7 +30,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
     if (url) {
       rssParser
         .parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-        .then(result => result.json())
+        .then((result) => result.json())
         .then((result: IRSSHeader) => {
           setDecription(result.description);
           setFeed(result.items);

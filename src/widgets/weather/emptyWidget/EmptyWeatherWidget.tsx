@@ -14,11 +14,12 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
     props.weather_api_key || ''
   );
   const onWeatherApiKeyChangeHandler = (event: React.ChangeEvent) => {
-      if (event.target.nodeValue) {
-        setWeatherApiKey(event.target.nodeValue);
-      }  
+    if (event.target.nodeValue) {
+      setWeatherApiKey(event.target.nodeValue);
     }
-  const onCityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => setCity(event.target.value);
+  };
+  const onCityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setCity(event.target.value);
   const onValidation = () => {
     props.onConfigSubmitted(weatherApiKey, city);
   };

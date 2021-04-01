@@ -55,7 +55,7 @@ describe('TabDash tests', () => {
       `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`
     );
     // @FIXME
-   // expect(container.getElementsByClassName('widget').length).toEqual(4);
-   expect(container.getElementsByClassName('widget').length).toEqual(0);
+    // expect(container.getElementsByClassName('widget').length).toEqual(4);
+    expect(container.getElementsByClassName('widget').length).toEqual(0);
   });
 });

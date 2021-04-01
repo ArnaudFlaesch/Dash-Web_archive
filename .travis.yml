@@ -10,9 +10,9 @@ install: yarn install --frozen-lockfile
 
 cache:
   directories:
-  - "$HOME/.npm"
-  - ~/.cache/yarn
-  - ~/.cache/Cypress
+    - '$HOME/.npm'
+    - ~/.cache/yarn
+    - ~/.cache/Cypress
 
 env:
   - NODE_ENV=travis
@@ -29,4 +29,4 @@ script: yarn run ci
 after_success:
   - cat ./coverage/lcov.info | coveralls
   - cat ./coverage/lcov.info | codacy-coverage
-  - bash <(curl -s https://codecov.io/bash) 
+  - bash <(curl -s https://codecov.io/bash)

@@ -158,7 +158,11 @@ export default function Dash(): React.ReactElement {
                 <Store onWidgetAdded={onWidgetAdded} />
               </ModalBody>
               <ModalFooter>
-                <Button id="closeAddWidgetModal" color="primary" onClick={toggleModal}>
+                <Button
+                  id="closeAddWidgetModal"
+                  color="primary"
+                  onClick={toggleModal}
+                >
                   Fermer
                 </Button>
               </ModalFooter>

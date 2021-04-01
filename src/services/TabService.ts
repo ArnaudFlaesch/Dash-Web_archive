@@ -15,7 +15,11 @@ export function addTab(label: string): Promise<AxiosResponse<unknown>> {
   );
 }
 
-export function updateTab(id: number, label: string, tabOrder: number): Promise<AxiosResponse<unknown>> {
+export function updateTab(
+  id: number,
+  label: string,
+  tabOrder: number
+): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/updateTab`,
     { id: id, label: label, tabOrder: tabOrder },

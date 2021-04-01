@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DroppableProvided,
+  DropResult
+} from 'react-beautiful-dnd';
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
 import { ITabState } from '../reducers/tabReducer';
@@ -107,7 +113,11 @@ export default function TabDash(props: IProps): React.ReactElement {
     }
   }, [props.newWidget != null && props.newWidget.id]);
 
-  function reorder(list: never[], startIndex: number, endIndex: number): unknown[] {
+  function reorder(
+    list: never[],
+    startIndex: number,
+    endIndex: number
+  ): unknown[] {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -127,7 +137,9 @@ export default function TabDash(props: IProps): React.ReactElement {
       (widget as IWidgetConfig).widgetOrder = index;
       return widget;
     });
-    updateWidgets(items as never[]).then((response) => setWidgets(response.data as []));
+    updateWidgets(items as never[]).then((response) =>
+      setWidgets(response.data as [])
+    );
   }
 
   return (
@@ -140,7 +152,8 @@ export default function TabDash(props: IProps): React.ReactElement {
               ref={providedDroppable.innerRef}
             >
               <div className="widgetList">
-                {widgets && widgets.length > 0 &&
+                {widgets &&
+                  widgets.length > 0 &&
                   widgets.map((widgetConfig: IWidgetConfig, index) => {
                     return (
                       <Draggable

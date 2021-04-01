@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import logger from '../utils/LogUtils';
 
-export function useLocalStorage(key: string, initialValue: unknown): [unknown , (value: unknown) => void] {
+export function useLocalStorage(
+  key: string,
+  initialValue: unknown
+): [unknown, (value: unknown) => void] {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState(() => {
