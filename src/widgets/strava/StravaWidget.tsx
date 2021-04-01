@@ -14,7 +14,6 @@ import Widget from '../Widget';
 import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
-import './StravaWidget.scss';
 
 interface IProps {
   id: number;
