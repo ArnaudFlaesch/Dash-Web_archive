@@ -27,3 +27,6 @@ cypress/screenshots/
 cypress/videos/
 *.code-workspace
 .nyc_output/
+cypress-coverage/
+coverage-reports/
+jest-coverage/
