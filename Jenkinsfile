@@ -6,6 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'yarn install --frozen-lockfile'
+                sh 'yarn add global wait-on'
             }
         }
 
@@ -25,15 +26,22 @@ pipeline {
         }
 
         stage('Jest and Cypress tests') {
-            steps {
-                sh 'yarn run cy:verify'
-                sh 'mkdir cypress/screenshots'
-                sh 'yarn run ci'
-
-                sh 'npm run report:merge'
-                sh 'npm run report:generate'
-                sh 'npm run report:copyScreenshots'
-                publishHTML target: [
+            parallel {
+                stage('Jest') {
+                    steps {
+                        sh 'yarn run test -- --coverage'
+                    }
+                }
+                stage('Cypress') {
+                    steps {
+                        sh 'mkdir cypress/screenshots'
+                        sh 'yarn run cy:verify'
+                        sh 'yarn run start &'
+                        sh 'yarn run cy:run'
+                        sh 'yarn run report:merge'
+                        sh 'yarn run report:generate'
+                        sh 'yarn run report:copyScreenshots'
+                        publishHTML target: [
                         allowMissing         : false,
                         alwaysLinkToLastBuild: false,
                         keepAll              : true,
@@ -41,6 +49,8 @@ pipeline {
                         reportFiles          : 'tests-report.html',
                         reportName           : 'Cypress report'
                 ]
+                    }
+                }
             }
         }
 
