@@ -28,7 +28,8 @@ script: yarn run ci
 
 after_success:
   - mkdir coverage-reports || true && mkdir .nyc_output || true
-  - cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json && cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
+  - cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
+  - cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
   - npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
   - npx nyc report --reporter lcov --report-dir coverage
   - cat ./coverage/lcov.info | coveralls
