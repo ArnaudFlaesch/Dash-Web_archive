@@ -1,16 +1,19 @@
 pipeline {
-    agent {
+    
+    stages {
+	agent {
         docker { image 'node:15.12.0' }
     }
-    stages {
         stage('Build') {
             steps {
                 sh 'yarn install --frozen-lockfile'
-				sh 'apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb'
             }
         }
 
         stage('Lint') {
+		agent {
+        docker { image 'node:15.12.0' }
+    }
             parallel {
                 stage('Lint SCSS files') {
                     steps {
@@ -26,6 +29,9 @@ pipeline {
         }
 
         stage('Jest and Cypress tests') {
+		agent {
+			docker { image 'cypress/base:10 }
+		}
             steps {
                 sh 'yarn run cy:verify'
                 sh 'mkdir cypress/screenshots'
