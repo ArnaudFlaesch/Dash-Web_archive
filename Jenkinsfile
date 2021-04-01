@@ -1,10 +1,9 @@
 pipeline {
-    agent any
+    agent {
+                        docker { image 'node:15.12.0' }
+                    }
     stages {
         stage('Build') {
-            agent {
-                docker { image 'node:15.12.0' }
-            }
             steps {
                 sh 'yarn install --frozen-lockfile'
             }
@@ -13,17 +12,11 @@ pipeline {
         stage('Lint') {
             parallel {
                 stage('Lint SCSS files') {
-                    agent {
-                        docker { image 'node:15.12.0' }
-                    }
                     steps {
                         sh 'npm run lint:styles:report'
                     }
                 }
                 stage('Lint JS/TS files') {
-                    agent {
-                        docker { image 'node:15.12.0' }
-                    }
                     steps {
                         sh 'yarn run eslint'
                     }
