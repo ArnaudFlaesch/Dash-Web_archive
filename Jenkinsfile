@@ -1,10 +1,10 @@
 pipeline {
     agent any
     stages {
-        agent {
-            docker { image 'node:15.12.0' }
-        }
         stage('Build') {
+            agent {
+                docker { image 'node:15.12.0' }
+            }
             steps {
                 sh 'yarn install --frozen-lockfile'
             }
