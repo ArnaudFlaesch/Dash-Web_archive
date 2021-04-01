@@ -11,16 +11,20 @@ pipeline {
         }
 
         stage('Lint') {
-		agent {
-        docker { image 'node:15.12.0' }
-    }
+		
             parallel {
                 stage('Lint SCSS files') {
+				agent {
+        docker { image 'node:15.12.0' }
+    }
                     steps {
                         sh 'npm run lint:styles:report'
                     }
                 }
                 stage('Lint JS/TS files') {
+				agent {
+        docker { image 'node:15.12.0' }
+    }
                     steps {
                         sh 'yarn run eslint'
                     }
