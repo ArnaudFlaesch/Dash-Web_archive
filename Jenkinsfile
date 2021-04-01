@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             agent {
-                docker { image 'node:15-alpine' }
+                docker { image 'node:15.12.0' }
             }
             steps {
                 sh 'yarn install --frozen-lockfile'
