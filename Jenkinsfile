@@ -1,9 +1,9 @@
 pipeline {
-    agent none
+    agent any
     stages {
-	agent {
-        docker { image 'node:15.12.0' }
-    }
+        agent {
+            docker { image 'node:15.12.0' }
+        }
         stage('Build') {
             steps {
                 sh 'yarn install --frozen-lockfile'
@@ -11,20 +11,19 @@ pipeline {
         }
 
         stage('Lint') {
-		
             parallel {
                 stage('Lint SCSS files') {
-				agent {
-        docker { image 'node:15.12.0' }
-    }
+                    agent {
+                        docker { image 'node:15.12.0' }
+                    }
                     steps {
                         sh 'npm run lint:styles:report'
                     }
                 }
                 stage('Lint JS/TS files') {
-				agent {
-        docker { image 'node:15.12.0' }
-    }
+                    agent {
+                        docker { image 'node:15.12.0' }
+                    }
                     steps {
                         sh 'yarn run eslint'
                     }
@@ -33,9 +32,9 @@ pipeline {
         }
 
         stage('Jest and Cypress tests') {
-		agent {
-			docker { image 'cypress/base:10' }
-		}
+            agent {
+                docker { image 'cypress/base:10' }
+            }
             steps {
                 sh 'yarn run cy:verify'
                 sh 'mkdir cypress/screenshots'
