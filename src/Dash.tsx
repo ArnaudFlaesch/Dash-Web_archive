@@ -195,7 +195,7 @@ export default function Dash(): React.ReactElement {
                                 {...providedDraggable.draggableProps}
                                 {...providedDraggable.dragHandleProps}
                                 className={`tab ${
-                                  tab.id === activeTab ? 'selected-item' : ''
+                                  tab.id === activeTab ? 'selectedItem' : ''
                                 }`}
                               >
                                 <NavDash

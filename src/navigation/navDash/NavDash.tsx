@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Button, NavItem, NavLink } from 'reactstrap';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/TabService';
-
 interface IProps {
   tab: ITab;
   onTabClicked: () => void;
@@ -29,7 +28,7 @@ export default function NavDash(props: IProps): React.ReactElement {
   }
 
   return (
-    <NavItem className="clickable-item" key={props.tab.id}>
+    <NavItem className="clickableItem" key={props.tab.id}>
       <NavLink onClick={props.onTabClicked}>
         {isToggled ? (
           <div className="flexRow">

@@ -115,7 +115,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               </div>
             </div>
             <div className="flexColumn">
-              <div className="space-between">
+              <div className="spaceBetween">
                 <div>
                   <i className="fa fa-sun-o fa-md" />{' '}
                   {formatDateFromTimestamp(

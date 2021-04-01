@@ -31,21 +31,21 @@ const Forecast: React.FunctionComponent<IForecast> = (props) => {
         <div>
           <div>
             <i
-              className="fa fa-thermometer-three-quarters fa-sm d-mr-10"
+              className="fa fa-thermometer-three-quarters fa-sm mr10"
               style={{ color: 'crimson' }}
             />
             {props.main.temp_max}°
           </div>
           <div>
             <i
-              className="fa fa-thermometer-quarter fa-sm d-mr-10"
+              className="fa fa-thermometer-quarter fa-sm mr10"
               style={{ color: 'blue' }}
             />
             {props.main.temp_min}°
           </div>
           <div>
             <i
-              className="fa fa-tint fa-sm d-mr-10"
+              className="fa fa-tint fa-sm mr10"
               style={{ color: 'lightblue' }}
             />
             {props.main.humidity}%

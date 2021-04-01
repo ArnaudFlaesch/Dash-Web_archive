@@ -18,7 +18,8 @@
         "cy:run:record": "yarn run cy:run -- --record",
         "cy:verify": "cypress verify",
         "eslint:fix": "eslint . --ext .js,.ts,.tsx --fix",
-        "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" --formatter json --output-file ./styleLintReport.json",
+        "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" ",
+        "lint:styles:report": "yarn run lint:styles -- --formatter json --output-file ./styleLintReport.json",
         "report:merge": "mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
         "report:generate": "marge tests-report.json -o cypress/reports/html",
         "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots"

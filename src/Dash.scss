@@ -1,20 +1,25 @@
 .dash {
   width: 100%;
+
   .dashNavbar {
     text-align: center;
     min-width: 5vw;
     background-color: black;
     min-height: 100vh;
+
     .dashNavbarLink {
       margin: 10px;
     }
   }
+
   .tabsBar {
     max-width: calc(100% - 70px);
+
     .widgetList {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+
       .widget {
         margin: 10px 10px 10px 5px;
         border: 2px solid black;
@@ -23,25 +28,30 @@
         overflow-y: scroll;
         display: flex;
         flex-direction: column;
+
         .header {
           background-color: black;
           color: white;
           display: flex;
           flex-direction: row;
           align-items: center;
+
           .leftGroup {
             text-align: start;
             width: calc(100% - 120px);
           }
+
           .rightGroup {
             display: flex;
             flex-direction: row;
             text-align: end;
+
             button {
               color: white;
             }
           }
         }
+
         .widgetBody {
           height: 100%;
         }
@@ -60,10 +70,10 @@
   flex-direction: column;
 }
 
-.clickable-item {
+.clickableItem {
   cursor: pointer;
 }
 
-.selected-item {
+.selectedItem {
   background-color: blue;
 }
