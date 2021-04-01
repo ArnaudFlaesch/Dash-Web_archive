@@ -34,6 +34,8 @@ pipeline {
                 }
                 stage('Cypress') {
                     steps {
+                        sh 'docker pull arnaudf93/dashwebservices:latest'
+                        sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
                         sh 'mkdir cypress/screenshots'
                         sh 'npm run cy:verify'
                         sh 'npm run start &'
@@ -63,6 +65,6 @@ pipeline {
                     reportFiles          : 'tests-report.html',
                     reportName           : 'Cypress report'
                 ]
-            }
+        }
     }
 }
