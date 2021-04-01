@@ -30,3 +30,4 @@ cypress/videos/
 cypress-coverage/
 coverage-reports/
 jest-coverage/
+styleLintReport.json
