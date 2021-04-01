@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import './EmptyStravaWidget.scss';
 
 interface IProps {
   clientId?: string;
