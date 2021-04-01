@@ -1,13 +1,11 @@
 pipeline {
-    agent none
+    agent {
+        docker { image 'node:15.12.0' }
+    }
     stages {
         stage('Build') {
-            agent {
-                docker { image 'node:15.12.0' }
-            }
             steps {
                 sh 'yarn install --frozen-lockfile'
-                sh 'npm run dev-high-memory'
             }
         }
 
