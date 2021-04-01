@@ -43,7 +43,7 @@ pipeline {
             }
         }
     }
-    post ('Coverage report') {
+    post {
         success {
             script {
                 sh 'mkdir coverage-reports || true && mkdir .nyc_output || true'
@@ -52,7 +52,9 @@ pipeline {
                 sh 'npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json'
                 sh 'npx nyc report --reporter lcov --report-dir coverage'
             }
-            always {
+        }
+        always {
+            script {
                 sh 'npm run report:merge'
                 sh 'npm run report:generate'
                 sh 'npm run report:copyScreenshots'
