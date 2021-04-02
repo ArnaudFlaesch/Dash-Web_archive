@@ -3,7 +3,7 @@
     "version": "0.2.0",
     "private": true,
     "engines": {
-        "node": "15.8.0",
+        "node": ">=14.0.0 <=15.12.0",
         "npm": "7.5.2"
     },
     "scripts": {
@@ -12,14 +12,15 @@
         "server": "node src/server.js",
         "test": "react-scripts test --env=jsdom",
         "coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
-        "ci": "yarn run coverage && run-p -r start cy:run:record",
+        "ci": "npm run coverage && run-p -r start cy:run:record",
         "cy:open": "cypress open",
         "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser chrome",
-        "cy:run:record": "yarn run cy:run -- --record",
-        "cy:verify": "cypress verify",
-        "eslint:fix": "eslint . --ext .js,.ts,.tsx --fix",
+        "cy:run:record": "npm run cy:run -- --record",
+        "cy:verify": "npx cypress verify",
+        "eslint": "eslint . --ext .js,.ts,.tsx",
+        "eslint:fix": "npm run eslint -- --fix",
         "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" ",
-        "lint:styles:report": "yarn run lint:styles -- --formatter json --output-file ./styleLintReport.json",
+        "lint:styles:report": "npm run lint:styles -- --formatter json --output-file ./styleLintReport.json",
         "report:merge": "mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
         "report:generate": "marge tests-report.json -o cypress/reports/html",
         "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots"
