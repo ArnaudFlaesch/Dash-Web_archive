@@ -24,7 +24,8 @@ build:
           - cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
           - npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
           - npx nyc report --reporter lcov --report-dir coverage
-          - coverage:
+          - command : echo coverage
+            coverage:
               file: ./coverage/lcov.info
               format: lcov
 filter:
