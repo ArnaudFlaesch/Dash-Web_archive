@@ -20,8 +20,8 @@ build:
           - js-scrutinizer-run
           - command: 'yarn run ci'
             coverage:
-              file: ./coverage/clover.xml
-              format: clover
+              file: ./coverage/lcov.info
+              format: lcov
 
 filter:
   excluded_paths:
