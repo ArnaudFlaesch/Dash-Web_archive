@@ -2,8 +2,10 @@ pipeline {
     agent any
     stages {
         stage('Pre test') {
-            sh 'docker pull arnaudf93/dashwebservices:latest'
-            sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
+            steps {
+                sh 'docker pull arnaudf93/dashwebservices:latest'
+                sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
+            }
         }
         stage('Test project') {
             agent {
