@@ -9,9 +9,13 @@ build:
       project_setup:
         override: true
     coverage:
+      environment:
+        docker: true
       tests:
         before:
           - 'yarn global add typescript coveralls codacy-coverage npm-run-all wait-on'
+          - 'docker pull arnaudf93/dashwebservices:latest'
+          - 'docker run -d -p 8080:8080 --name dash-webservices  arnaudf93/dashwebservices'
         override:
           - js-scrutinizer-run
           - command: 'yarn run ci'
