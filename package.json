@@ -16,7 +16,7 @@
         "cy:open": "cypress open",
         "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser chrome",
         "cy:run:record": "npm run cy:run -- --record",
-        "cy:verify": "cypress verify",
+        "cy:verify": "npx cypress verify",
         "eslint": "eslint . --ext .js,.ts,.tsx",
         "eslint:fix": "npm run eslint -- --fix",
         "lint:styles": "stylelint \"src/**/*.{css,scss,sass}\" ",
