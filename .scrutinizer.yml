@@ -22,6 +22,12 @@ build:
             coverage:
               file: ./coverage/lcov.info
               format: lcov
+        after_success:
+          - mkdir coverage-reports || true && mkdir .nyc_output || true
+          - cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
+          - cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
+          - npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
+          - npx nyc report --reporter lcov --report-dir coverage
 
 filter:
   excluded_paths:
