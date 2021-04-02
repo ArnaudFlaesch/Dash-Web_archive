@@ -20,7 +20,7 @@ build:
           - js-scrutinizer-run
           - command: 'yarn run ci'
             coverage:
-              file: ./coverage/lcov.info
+              file: coverage/lcov.info
               format: lcov
         after:
           - mkdir coverage-reports || true && mkdir .nyc_output || true
