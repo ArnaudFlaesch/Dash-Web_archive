@@ -22,7 +22,7 @@ build:
             coverage:
               file: ./coverage/lcov.info
               format: lcov
-        after_success:
+        after:
           - mkdir coverage-reports || true && mkdir .nyc_output || true
           - cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
           - cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
