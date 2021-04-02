@@ -1,45 +1,52 @@
 pipeline {
-    agent {
-        docker { image 'cypress/browsers:node14.16.0-chrome89-ff86' }
-    }
+    agent any
     stages {
-        stage('Build') {
-            steps {
-                sh 'yarn install --frozen-lockfile'
-                sh 'yarn add global wait-on'
-            }
+        stage('Pre test') {
+            sh 'docker pull arnaudf93/dashwebservices:latest'
+            sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
         }
-
-        stage('Lint') {
-            parallel {
-                stage('Lint SCSS files') {
-                    steps {
-                        sh 'npm run lint:styles:report'
-                    }
-                }
-                stage('Lint JS/TS files') {
-                    steps {
-                        sh 'npm run eslint'
-                    }
-                }
+        stage('Test project') {
+            agent {
+                docker { image 'cypress/browsers:node14.16.0-chrome89-ff86' }
             }
-        }
-
-        stage('Jest and Cypress tests') {
-            parallel {
-                stage('Jest') {
+            stages {
+                stage('Build') {
                     steps {
-                        sh 'npm run test -- --coverage'
+                        sh 'yarn install --frozen-lockfile'
+                        sh 'yarn add global wait-on'
                     }
                 }
-                stage('Cypress') {
-                    steps {
-                        sh 'docker pull arnaudf93/dashwebservices:latest'
-                        sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
-                        sh 'mkdir cypress/screenshots'
-                        sh 'npm run cy:verify'
-                        sh 'npm run start &'
-                        sh 'npm run cy:run'
+
+                stage('Lint') {
+                    parallel {
+                        stage('Lint SCSS files') {
+                            steps {
+                                sh 'npm run lint:styles:report'
+                            }
+                        }
+                        stage('Lint JS/TS files') {
+                            steps {
+                                sh 'npm run eslint'
+                            }
+                        }
+                    }
+                }
+
+                stage('Jest and Cypress tests') {
+                    parallel {
+                        stage('Jest') {
+                            steps {
+                                sh 'npm run test -- --coverage'
+                            }
+                        }
+                        stage('Cypress') {
+                            steps {
+                                sh 'mkdir cypress/screenshots'
+                                sh 'npm run cy:verify'
+                                sh 'npm run start &'
+                                sh 'npm run cy:run'
+                            }
+                        }
                     }
                 }
             }
