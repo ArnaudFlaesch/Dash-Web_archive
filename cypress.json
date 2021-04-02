@@ -11,6 +11,10 @@
     "screenshotOnRunFailure": true,
     "video": true,
     "videoCompression": false,
+    "reporter": "cypress-multi-reporters",
+    "reporterOptions": {
+        "configFile": "reporter-e2e-config.json"
+    },
     "env": {
         "backend_url": "http://localhost:8080/",
         "coverage": true

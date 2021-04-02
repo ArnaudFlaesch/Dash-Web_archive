@@ -31,3 +31,5 @@ cypress-coverage/
 coverage-reports/
 jest-coverage/
 styleLintReport.json
+xunit.xml
+cypress/results/
