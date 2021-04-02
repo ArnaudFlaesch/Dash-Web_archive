@@ -1,9 +1,9 @@
 import axios from 'axios';
+import { ReactChart } from 'chartjs-react';
 import dayjs from 'dayjs';
 import * as queryString from 'query-string';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
@@ -179,14 +179,11 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         return activitiesByMonth;
       }, []);
     return Object.keys(activitiesByMonthList).map((month) => {
-      return {
-        x: dayjs(month).toDate(),
-        y: Math.round(
-          activitiesByMonthList[month].reduce(
-            (total: number, distance: number) => total + distance
-          )
+      return Math.round(
+        activitiesByMonthList[month].reduce(
+          (total: number, distance: number) => total + distance
         )
-      };
+      );
     });
   }
 
@@ -219,7 +216,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       </div>
 
       <div style={{ minHeight: '25vh', flex: '1 0 50%' }}>
-        <Bar
+        <ReactChart
+          type="bar"
           data={{
             datasets: [
               {
@@ -232,14 +230,12 @@ export default function StravaWidget(props: IProps): React.ReactElement {
           options={{
             maintainAspectRatio: false,
             scales: {
-              xAxes: [
-                {
-                  type: 'time',
-                  time: {
-                    unit: 'month'
-                  }
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'month'
                 }
-              ]
+              }
             }
           }}
         />
