@@ -34,9 +34,7 @@ pipeline {
                 }
                 stage('Cypress') {
                     steps {
-                        script {
-                            docker.image('arnaudf93/dashwebservices:latest').pull()
-                        }
+                        sh 'docker pull arnaudf93/dashwebservices:latest'
                         sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
                         sh 'mkdir cypress/screenshots'
                         sh 'npm run cy:verify'
