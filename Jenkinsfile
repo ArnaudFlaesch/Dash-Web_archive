@@ -4,7 +4,7 @@ pipeline {
         stage('Pre test') {
             steps {
                 sh 'docker pull arnaudf93/dashwebservices:latest'
-                sh 'docker run -d -p 8080:8080  arnaudf93/dashwebservices'
+                sh 'docker run -d -p 8080:8080 --name dash-webservices  arnaudf93/dashwebservices'
             }
         }
         stage('Test project') {
@@ -63,6 +63,7 @@ pipeline {
                 sh 'npx nyc report --reporter lcov --report-dir coverage'
         }
         always {
+				sh 'docker kill dash-webservices'
                 sh 'npm run report:merge'
                 sh 'npm run report:generate'
                 sh 'npm run report:copyScreenshots'
