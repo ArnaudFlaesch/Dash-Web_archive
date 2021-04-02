@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ReactChart } from 'chartjs-react';
+import { BarController, BarElement, TimeScale } from 'chart.js';
 import dayjs from 'dayjs';
 import * as queryString from 'query-string';
 import * as React from 'react';
@@ -15,6 +16,7 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 
+ReactChart.register(BarController, BarElement, TimeScale);
 interface IProps {
   id: number;
   clientId?: string;

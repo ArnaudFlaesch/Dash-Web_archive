@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { ReactChart } from 'chartjs-react';
+import { CategoryScale, LinearScale, LineController, LineElement, PointElement } from 'chart.js';
+
 import dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -15,6 +17,8 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
+
+ReactChart.register(LineController, LineElement, CategoryScale, LinearScale, PointElement);
 
 export interface IProps {
   id: number;

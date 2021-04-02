@@ -37,6 +37,7 @@ const Store: React.FunctionComponent<IProps> = (props) => {
                   id={key}
                   onClick={props.onWidgetAdded}
                   className="btn btn-success"
+                  value={WidgetTypes[key]}
                 >
                   Ajouter
                 </Button>
