@@ -12,7 +12,7 @@
         "server": "node src/server.js",
         "test": "react-scripts test --env=jsdom",
         "coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
-        "ci": "npm run coverage && run-p -r start cy:run",
+        "ci": "npm run coverage && run-p -r start cy:run -- --config-file cypress-test.json",
         "cy:open": "cypress open",
         "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser chrome",
         "cy:verify": "npx cypress verify",

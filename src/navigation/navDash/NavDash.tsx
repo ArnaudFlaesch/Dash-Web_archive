@@ -37,7 +37,7 @@ export default function NavDash(props: IProps): React.ReactElement {
               onChange={(event) => setLabel(event.target.value)}
               value={label}
             />
-            <Button onClick={deleteTabFromDash}>
+            <Button className="deleteTabButton" onClick={deleteTabFromDash}>
               <i className="fa fa-trash" />
             </Button>
           </div>
