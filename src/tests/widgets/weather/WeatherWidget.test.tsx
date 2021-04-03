@@ -12,10 +12,6 @@ import * as montrealWeatherSample from './montrealWeatherSample.json';
 Enzyme.configure({ adapter: new Adapter() });
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-jest.mock('react-chartjs-2', () => ({
-  Line: () => null
-}));
-
 describe('Weather widget tests', () => {
   let container: HTMLElementTagNameMap['div'];
   beforeEach(() => {
