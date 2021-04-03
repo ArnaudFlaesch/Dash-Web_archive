@@ -1,8 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 import { ReactChart } from 'chartjs-react';
-import { CategoryScale, LinearScale, LineController, LineElement, PointElement } from 'chart.js';
+import {
+  CategoryScale,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement
+} from 'chart.js';
 
-import dayjs from 'dayjs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { updateWidgetData } from '../../services/WidgetService';
@@ -17,8 +22,15 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
+import { format } from 'date-fns';
 
-ReactChart.register(LineController, LineElement, CategoryScale, LinearScale, PointElement);
+ReactChart.register(
+  LineController,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement
+);
 
 export interface IProps {
   id: number;
@@ -156,7 +168,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               forecast
                 .filter(
                   (forecastDay) =>
-                    forecastDay.dt * 1000 < getDayFromNow(2).toDate().getTime()
+                    forecastDay.dt * 1000 < getDayFromNow(2).getTime()
                 )
                 .map((forecastDay) => {
                   return (
@@ -173,15 +185,13 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 labels: forecast
                   .filter(
                     (forecastDay) =>
-                      dayjs(
-                        formatDateFromTimestamp(
-                          forecastDay.dt,
-                          adjustTimeWithOffset(city.timezone)
-                        )
-                      ).hour() === 16
+                      formatDateFromTimestamp(
+                        forecastDay.dt,
+                        adjustTimeWithOffset(city.timezone)
+                      ).getHours() === 16
                   )
                   .map((forecastDay) =>
-                    dayjs(forecastDay.dt * 1000).format('ddd DD')
+                    format(new Date(forecastDay.dt * 1000), 'ddd DD')
                   ),
                 datasets: [
                   {
@@ -190,12 +200,10 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                     data: forecast
                       .filter(
                         (forecastDay) =>
-                          dayjs(
-                            formatDateFromTimestamp(
-                              forecastDay.dt,
-                              adjustTimeWithOffset(city.timezone)
-                            )
-                          ).hour() === 16
+                          formatDateFromTimestamp(
+                            forecastDay.dt,
+                            adjustTimeWithOffset(city.timezone)
+                          ).getHours() === 16
                       )
                       .map((forecastDay) => forecastDay.main.temp_max)
                   },
@@ -205,12 +213,10 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                     data: forecast
                       .filter(
                         (forecastDay) =>
-                          dayjs(
-                            formatDateFromTimestamp(
-                              forecastDay.dt,
-                              adjustTimeWithOffset(city.timezone)
-                            )
-                          ).hour() === 16
+                          formatDateFromTimestamp(
+                            forecastDay.dt,
+                            adjustTimeWithOffset(city.timezone)
+                          ).getHours() === 16
                       )
                       .map((forecastDay) => forecastDay.main.feels_like)
                   }
@@ -225,7 +231,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               forecast
                 .filter(
                   (forecastDay) =>
-                    forecastDay.dt * 1000 > getDayFromNow(2).toDate().getTime()
+                    forecastDay.dt * 1000 > getDayFromNow(2).getTime()
                 )
                 .map((forecastDay) => {
                   return (

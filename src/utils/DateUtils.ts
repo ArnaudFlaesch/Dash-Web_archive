@@ -1,7 +1,7 @@
-import dayjs, { Dayjs } from 'dayjs';
+import { addDays } from "date-fns";
 
-export function getDayFromNow(numberOfDays: number): Dayjs {
-  return dayjs().add(numberOfDays, 'day').startOf('day');
+export function getDayFromNow(numberOfDays: number): Date {
+  return addDays(new Date(), numberOfDays);
 }
 
 export function formatDateFromTimestamp(timestamp: number, offset = 0): Date {

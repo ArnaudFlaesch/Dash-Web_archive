@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { ReactChart } from 'chartjs-react';
 import { BarController, BarElement, TimeScale } from 'chart.js';
-import dayjs from 'dayjs';
 import * as queryString from 'query-string';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -15,6 +13,9 @@ import Widget from '../Widget';
 import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
+import { format, isAfter, isBefore } from 'date-fns';
+import fr from 'date-fns/esm/locale/fr/index.js';
+import { ReactChart } from 'chartjs-react';
 
 ReactChart.register(BarController, BarElement, TimeScale);
 interface IProps {
@@ -52,7 +53,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (
       !token ||
       !refreshToken ||
-      dayjs.unix(tokenExpirationDate as number).isBefore(dayjs())
+      isBefore(new Date(tokenExpirationDate as number), new Date())
     ) {
       refreshTokenFromApi();
     }
@@ -149,7 +150,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (
       token &&
       tokenExpirationDate &&
-      dayjs.unix(tokenExpirationDate as number).isAfter(dayjs())
+      isAfter(new Date(tokenExpirationDate as number), new Date())
     ) {
       axios
         .get(
@@ -171,7 +172,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     const activitiesByMonthList = activities
       .reverse()
       .reduce((activitiesByMonth: IActivity[], activity: IActivity) => {
-        const month = dayjs(activity.start_date_local).format('YYYY-MM');
+        const month = format(new Date(activity.start_date_local), 'YYYY-MM');
         if (!activitiesByMonth[month]) {
           activitiesByMonth[month] = [];
         }
@@ -205,9 +206,10 @@ export default function StravaWidget(props: IProps): React.ReactElement {
           return (
             <ComponentWithDetail
               key={activity.id}
-              componentRoot={`${dayjs(
-                new Date(activity.start_date_local)
-              ).format('ddd DD MMM')}  ${activity.name}  ${
+              componentRoot={`${format(
+                new Date(activity.start_date_local),
+                'ddd DD MMM'
+              )}  ${activity.name}  ${
                 Math.round(activity.distance * 1000) / 1000000
               } kms`}
               componentDetail={<StravaActivity {...activity} />}
@@ -236,6 +238,11 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                 type: 'time',
                 time: {
                   unit: 'month'
+                },
+                adapters: {
+                  date: {
+                    locale: fr
+                  }
                 }
               }
             }
@@ -246,7 +253,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       {(!token ||
         !refreshToken ||
         (tokenExpirationDate &&
-          dayjs.unix(tokenExpirationDate as number).isBefore(dayjs()))) && (
+          isBefore(new Date(tokenExpirationDate as number), new Date()))) && (
         <a
           href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
         >
