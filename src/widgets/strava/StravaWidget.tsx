@@ -13,7 +13,6 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { Bar } from 'react-chartjs-2';
 interface IProps {
   id: number;
@@ -180,7 +179,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       }, []);
     return Object.keys(activitiesByMonthList).map((month) => {
       return {
-        x: dayjs(month).toDate(),
+        x: new Date(month),
         y: Math.round(
           activitiesByMonthList[month].reduce(
             (total: number, distance: number) => total + distance
@@ -230,17 +229,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
               }
             ]
           }}
-          options={{
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  unit: 'month'
-                }
-              }
-            }
-          }}
+          
         />
       </div>
 
