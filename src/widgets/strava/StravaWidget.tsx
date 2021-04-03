@@ -14,8 +14,8 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
-import fr from 'date-fns/esm/locale/fr/index.js';
 import { ReactChart } from 'chartjs-react';
+import { fr } from 'date-fns/locale';
 
 ReactChart.register(BarController, BarElement, TimeScale);
 interface IProps {
