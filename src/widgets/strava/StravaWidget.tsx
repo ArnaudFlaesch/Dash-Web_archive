@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { BarController, BarElement, TimeScale } from 'chart.js';
 import * as queryString from 'query-string';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
@@ -14,10 +14,7 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
-import { ReactChart } from 'chartjs-react';
-import { fr } from 'date-fns/locale';
 
-ReactChart.register(BarController, BarElement, TimeScale);
 interface IProps {
   id: number;
   clientId?: string;
@@ -220,8 +217,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       </div>
 
       <div style={{ minHeight: '25vh', flex: '1 0 50%' }}>
-        <ReactChart
-          type="bar"
+        <Bar
           data={{
             datasets: [
               {
@@ -238,11 +234,6 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                 type: 'time',
                 time: {
                   unit: 'month'
-                },
-                adapters: {
-                  date: {
-                    locale: fr
-                  }
                 }
               }
             }

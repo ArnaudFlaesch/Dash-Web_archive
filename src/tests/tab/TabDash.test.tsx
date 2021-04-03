@@ -18,7 +18,7 @@ describe('TabDash tests', () => {
     ReactDOM.render(
       <Provider store={store}>
         <BrowserRouter>
-          <TabDash tabId={1} newWidget={null} />
+          <TabDash tabId={1} newWidget={undefined} />
         </BrowserRouter>
       </Provider>,
       div
@@ -44,7 +44,7 @@ describe('TabDash tests', () => {
     await act(async () => {
       ReactDOM.render(
         <Provider store={store}>
-          <TabDash tabId={1} newWidget={null} />
+          <TabDash tabId={1} newWidget={undefined} />
         </Provider>,
         container
       );

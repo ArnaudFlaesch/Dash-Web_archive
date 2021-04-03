@@ -1,15 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-import { ReactChart } from 'chartjs-react';
-import {
-  CategoryScale,
-  LinearScale,
-  LineController,
-  LineElement,
-  PointElement
-} from 'chart.js';
 
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
 import { updateWidgetData } from '../../services/WidgetService';
 import {
   adjustTimeWithOffset,
@@ -24,13 +17,6 @@ import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
 import { format } from 'date-fns';
 
-ReactChart.register(
-  LineController,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement
-);
 
 export interface IProps {
   id: number;
@@ -179,8 +165,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 })}
           </div>
           <div style={{ height: '25vh' }}>
-            <ReactChart
-              type="line"
+            <Line
               data={{
                 labels: forecast
                   .filter(
