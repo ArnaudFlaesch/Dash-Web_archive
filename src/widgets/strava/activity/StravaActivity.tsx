@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { IActivity } from '../IStrava';
 
@@ -7,7 +7,7 @@ export default function StravaActivity(props: IActivity): React.ReactElement {
     <div>
       <div>
         <a href={`https://www.strava.com/activities/${props.id}`}>
-          {dayjs(new Date(props.start_date_local)).format('ddd DD MMM')}{' '}
+          {format(new Date(props.start_date_local), 'ddd DD MMM')}{' '}
           {props.name}
         </a>
       </div>

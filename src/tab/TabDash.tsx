@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
 import { ITabState } from '../reducers/tabReducer';
 import { WidgetTypes } from '../enums/WidgetsEnum';
-import { deleteWidget, updateWidgets } from '../services/WidgetService';
+import { deleteWidget, updateWidgetsOrder } from '../services/WidgetService';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
@@ -137,7 +137,7 @@ export default function TabDash(props: IProps): React.ReactElement {
       (widget as IWidgetConfig).widgetOrder = index;
       return widget;
     });
-    updateWidgets(items as never[]).then((response) =>
+    updateWidgetsOrder(items as never[]).then((response) =>
       setWidgets(response.data as [])
     );
   }
