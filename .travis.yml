@@ -1,3 +1,6 @@
+os: linux
+dist: xenial
+
 language: node_js
 
 node_js:
@@ -14,20 +17,17 @@ cache:
     - ~/.cache/yarn
     - ~/.cache/Cypress
 
-env:
-  - NODE_ENV=travis
-
 before_install:
   - yarn global add typescript coveralls codacy-coverage npm-run-all wait-on
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - docker pull arnaudf93/dashwebservices:latest
-  - docker run -d -p 8080:8080  arnaudf93/dashwebservices
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker-compose up -d
   - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 before_script:
-  - yarn run lint:styles:report
+  - npm run lint:styles:report
+  - npm run eslint
 
-script: yarn run ci
+script: npm run ci
 
 after_success:
   - mkdir coverage-reports || true && mkdir .nyc_output || true

@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage('Pull and start backend application') {
             steps {
-                sh 'docker pull arnaudf93/dashwebservices:latest'
-                sh 'docker run -d -p 8080:8080 --name dash-webservices  arnaudf93/dashwebservices'
+                sh 'docker compose up -d'
             }
         }
         stage('Frontend tests') {
@@ -38,7 +37,7 @@ pipeline {
                     parallel {
                         stage('Jest components tests') {
                             steps {
-                                sh 'npm run test -- --coverage'
+                                sh 'npm run test:coverage'
                             }
                         }
                         stage('Cypress e2e tests') {
@@ -46,7 +45,7 @@ pipeline {
                                 sh 'mkdir cypress/screenshots'
                                 sh 'npm run cy:verify'
                                 sh 'npm run start &'
-                                sh 'npm run cy:run'
+                                sh 'npm run cy:run:ci'
                             }
                         }
                     }

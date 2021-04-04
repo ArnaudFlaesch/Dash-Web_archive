@@ -213,7 +213,7 @@ export default function Dash(): React.ReactElement {
                 )}
               </Droppable>
             </DragDropContext>
-            <Button onClick={addNewTab} className="fa fa-plus-circle fa-lg" />
+            <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
           </Nav>
           <TabContent activeTab={activeTab}>
             {tabs.length > 0 &&

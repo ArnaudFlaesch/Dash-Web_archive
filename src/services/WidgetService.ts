@@ -30,14 +30,14 @@ export function updateWidgetData(
   );
 }
 
-export function updateWidgets(
+export function updateWidgetsOrder(
   widgets: IWidgetConfig[]
 ): Promise<AxiosResponse<unknown>> {
   const widgetsData = widgets.map((widget) => {
     return { id: widget.id, widgetOrder: widget.widgetOrder };
   });
   return axios.post(
-    `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgets`,
+    `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetsOrder`,
     widgetsData,
     {
       headers
