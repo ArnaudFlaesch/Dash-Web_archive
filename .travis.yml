@@ -47,7 +47,7 @@ before_install:
 before_script:
   - npm run lint:styles:report
   - npm run eslint
-  - wait-on postgresql://localhost:5433 && docker run -d -p 8080:8080 arnaudf93/dashwebservices
+  - docker run -p 8080:8080 arnaudf93/dashwebservices
 
 script: npm run ci
 
