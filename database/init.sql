@@ -1,1 +1,1 @@
-CREATE DATABASE dash;
+CREATE DATABASE dash_test;
