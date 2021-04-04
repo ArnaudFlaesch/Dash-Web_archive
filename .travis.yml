@@ -24,7 +24,10 @@ addons:
       - postgresql-13
 
 env:
-  - NODE_ENV=test
+  global:
+    - PGPORT=5433
+  jobs:
+    - DB_PORT=5433 DB_USERNAME=postgres
 
 before_install:
   - >-
