@@ -54,7 +54,7 @@
         "winston": "3.3.3"
     },
     "devDependencies": {
-        "@cypress/code-coverage": "3.9.3",
+        "@cypress/code-coverage": "3.9.4",
         "@cypress/instrument-cra": "1.4.0",
         "@types/chart.js": "2.9.31",
         "@types/enzyme": "3.10.8",
