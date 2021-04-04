@@ -3,10 +3,10 @@
 describe('Tab tests', () => {
   before(() => {
     cy.visit('/');
+    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a new tab', () => {
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
     cy.get('#addNewTabButton').click().get('.tab').should('have.length', 2);
   });
 

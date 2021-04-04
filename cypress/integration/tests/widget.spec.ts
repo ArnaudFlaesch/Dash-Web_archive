@@ -1,13 +1,13 @@
 /// <reference types="cypress" />
 
-describe('Dash tests', () => {
+describe('Widget tests', () => {
   before(() => {
     cy.visit('/');
-  });
-
-  it('Create a Widget and add it to the dashboard', () => {
     cy.title().should('equals', 'Dash');
     cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+  });
+
+  it('Should create a Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
     cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
@@ -40,13 +40,15 @@ describe('Dash tests', () => {
   });
 
   it('Should delete previously added widget', () => {
+    cy.intercept('DELETE', '/widget/deleteWidget').as('deleteWidget');
     cy.get('.deleteButton')
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.btn-danger')
-      .click()
-      .get('.widget')
-      .should('have.length', 0);
+      .click();
+    cy.wait('@deleteWidget').then((xhr) => {
+      cy.get('.widget').should('have.length', 0);
+    });
   });
 });
