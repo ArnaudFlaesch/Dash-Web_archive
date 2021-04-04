@@ -37,6 +37,8 @@ before_install:
     /etc/postgresql/13/main/pg_hba.conf
   # Restart the PostgreSQL service:
   - sudo service postgresql@13-main restart
+  - psql -p 5433 -c 'create database dash_test;' -U postgres
+  - psql -p 5433 -c "ALTER USER postgres WITH PASSWORD 'postgres';" -U postgres
   - yarn global add typescript coveralls codacy-coverage npm-run-all wait-on
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker pull arnaudf93/dashwebservices:latest
@@ -44,8 +46,6 @@ before_install:
   - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 before_script:
-  - psql -p 5433 -c 'create database dash_test;' -U postgres
-  - psql -p 5433 -c "ALTER USER postgres WITH PASSWORD 'postgres';" -U postgres
   - npm run lint:styles:report
   - npm run eslint
   - psql -c 'create database dash;' -U postgres
