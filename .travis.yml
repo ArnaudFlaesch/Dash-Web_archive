@@ -1,6 +1,8 @@
-language: node_js
 os: linux
 dist: xenial
+
+language: node_js
+
 node_js:
   - 15.8.0
 
@@ -17,13 +19,13 @@ cache:
 
 before_install:
   - yarn global add typescript coveralls codacy-coverage npm-run-all wait-on
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker-compose up -d
   - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 before_script:
   - npm run lint:styles:report
   - npm run eslint
-  - docker-compose up -d
 
 script: npm run ci
 

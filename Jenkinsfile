@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage('Pull and start backend application') {
             steps {
-                sh 'docker pull arnaudf93/dashwebservices:latest'
-                sh 'docker run -d -p 8080:8080 --name dash-webservices  arnaudf93/dashwebservices'
+                sh 'docker compose up -d'
             }
         }
         stage('Frontend tests') {
