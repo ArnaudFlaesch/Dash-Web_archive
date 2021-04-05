@@ -34,7 +34,7 @@
         "@toast-ui/react-calendar": "1.0.5",
         "axios": "0.21.1",
         "bootstrap": "4.6.0",
-        "chart.js": "2.9.4",
+        "chart.js": "3.0.2",
         "chartjs-adapter-date-fns": "2.0.0",
         "date-fns": "2.19.0",
         "express": "4.17.1",
