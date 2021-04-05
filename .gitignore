@@ -33,3 +33,5 @@ jest-coverage/
 styleLintReport.json
 xunit.xml
 cypress/results/
+snyk-report.html
+snyk-report.json

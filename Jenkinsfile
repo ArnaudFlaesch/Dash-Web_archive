@@ -14,7 +14,7 @@ pipeline {
                 stage('Install dependencies') {
                     steps {
                         sh 'yarn install --frozen-lockfile'
-                        sh 'yarn add global wait-on'
+                        sh 'yarn add global wait-on snyk snyk-to-html'
                     }
                 }
 
@@ -28,6 +28,18 @@ pipeline {
                         stage('Lint JS/TS files') {
                             steps {
                                 sh 'npm run eslint'
+                            }
+                        }
+                    }
+                }
+
+                stage('Snyk dependencies report') {
+                    steps {
+                        script {
+                            if( "${env.BRANCH_NAME}" == "master" ) {
+                                // sh 'snyk auth env var SNYK_TOKEN'
+                                sh 'snyk test --json-file-output=snyk-report.json'
+                                sh 'snyk-to-html -i snyk-report.json -o snyk-report.html'
                             }
                         }
                     }
@@ -74,6 +86,18 @@ pipeline {
                 reportFiles          : 'tests-report.html',
                 reportName           : 'Cypress report'
             ]
+            script {
+                if( "${env.BRANCH_NAME}" == "master" ) {
+                    publishHTML target: [
+                        allowMissing         : false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll              : true,
+                        reportDir            : '.',
+                        reportFiles          : 'snyk-report.html',
+                        reportName           : 'Snyk report'
+                    ]
+                }
+            }
         }
     }
 }
