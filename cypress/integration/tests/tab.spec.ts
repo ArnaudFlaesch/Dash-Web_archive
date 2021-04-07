@@ -25,7 +25,7 @@ describe('Tab tests', () => {
   });
 
   it('Should delete the created tab', () => {
-    cy.intercept('DELETE', '/tab/deleteTab').as('deleteTab');
+    cy.intercept('DELETE', '/tab/deleteTab/*').as('deleteTab');
     cy.get('.tab').contains('Flux RSS').dblclick()
     .get('.deleteTabButton').click()
     cy.wait('@deleteTab').then(xhr => {

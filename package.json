@@ -74,7 +74,7 @@
         "@types/xml2js": "0.4.8",
         "@typescript-eslint/eslint-plugin": "4.21.0",
         "@typescript-eslint/parser": "4.21.0",
-        "cypress": "6.9.1",
+        "cypress": "7.0.0",
         "cypress-multi-reporters": "1.4.0",
         "cypress-wait-until": "1.7.1",
         "enzyme": "3.11.0",

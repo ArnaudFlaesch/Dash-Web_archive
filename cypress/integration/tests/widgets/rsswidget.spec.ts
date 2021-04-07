@@ -29,7 +29,7 @@ describe('RSS Widget tests', () => {
       .type('https://www.lefigaro.fr/rss/figaro_actualites.xml')
       .get('.btn-success')
       .click();
-    cy.intercept('GET', '/proxy').as('refreshWidget');
+    cy.intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml').as('refreshWidget');
     cy.get('.refreshButton').click();
     cy.wait('@refreshWidget').then((xhr) => {
       cy.get('.rssTitle').should(
@@ -40,7 +40,7 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget').as('deleteWidget');
+    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
     cy.get('.deleteButton')
       .click()
       .get('h4')
