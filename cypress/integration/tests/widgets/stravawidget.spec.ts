@@ -20,7 +20,7 @@ describe('Strava Widget tests', () => {
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget').as('deleteWidget');
+    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
     cy.get('.deleteButton')
       .click()
       .get('h4')
