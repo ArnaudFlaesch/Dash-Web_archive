@@ -10,7 +10,7 @@
     "start": "set HTTPS=true && react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build --prod",
     "server": "node src/server.js",
-    "test": "snyk test && react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom",
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",
     "cy:open": "cypress open",
@@ -23,7 +23,8 @@
     "lint:styles:report": "npm run lint:styles -- --formatter json --output-file ./styleLintReport.json",
     "report:merge": "mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
     "report:generate": "marge tests-report.json -o cypress/reports/html",
-    "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots"
+    "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots",
+    "snyk": "snyk test"
   },
   "browserslist": [
     ">0.2%",

@@ -48,14 +48,14 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
     };
     ((d, s, id) => {
       let js: any = d.getElementsByTagName(s)[0];
-      const fjs: any = d.getElementsByTagName(s)[0];
+      const fjs: Element = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {
         return;
       }
       js = d.createElement(s);
       js.id = id;
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
-      if (fjs) {
+      if (fjs && fjs.parentNode) {
         fjs.parentNode.insertBefore(js, fjs);
       }
     })(document, 'script', 'facebook-jssdk');
@@ -73,7 +73,7 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
   /**
    * Check login status and call login api is user is not logged in
    */
-  public facebookLogin = () => {
+  public facebookLogin = (): void => {
     logger.debug('facebookLogin');
     FB.getLoginStatus((response: any) => {
       logger.debug(response);
@@ -87,14 +87,14 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
     });
   };
 
-  public facebookLogout = () => {
+  public facebookLogout = (): void => {
     FB.logout((response: any) => {
       logger.debug(response);
       this.setState({ userData: undefined, loginStatusResponse: response });
     });
   };
 
-  public facebookLoginHandler = (response: any) => {
+  public facebookLoginHandler = (response: any): void => {
     logger.debug('facebookLoginHandler');
     this.setState({ loginStatusResponse: response });
     if (response.status === 'connected') {
@@ -111,7 +111,7 @@ export default class FacebookWidget extends React.Component<IProps, IState> {
     }
   };
 
-  public render() {
+  public render(): React.ReactElement {
     let element = null;
     if (
       this.state &&
