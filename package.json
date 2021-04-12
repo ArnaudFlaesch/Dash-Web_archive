@@ -38,6 +38,7 @@
     "chart.js": "2.9.4",
     "chartjs-adapter-date-fns": "2.0.0",
     "date-fns": "2.20.2",
+    "eslint-plugin-cypress": "2.11.2",
     "express": "4.17.1",
     "font-awesome": "4.7.0",
     "ical": "0.8.0",

@@ -19,6 +19,7 @@ import addContext = require('mochawesome/addContext');
 import './commands';
 
 import '@cypress/code-coverage/support';
+import { Suite, Test } from 'mocha';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -26,7 +27,7 @@ import '@cypress/code-coverage/support';
 // https://medium.com/egnyte-engineering/3-steps-to-awesome-test-reports-with-cypress-f4fe915bc246
 Cypress.on('test:after:run', (test, runnable) => {
   if (test.state === 'failed') {
-    let item: any = runnable
+    let item: Test | Suite = runnable
     const nameParts = [runnable.title]
 
     // Iterate through all parents and grab the titles

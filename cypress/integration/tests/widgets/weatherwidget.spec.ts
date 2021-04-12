@@ -12,7 +12,7 @@ describe('Weather Widget tests', () => {
     cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#WEATHER').click();
-    cy.wait('@addWidget').then((xhr) => {
+    cy.wait('@addWidget').then(() => {
       cy.get('#closeAddWidgetModal')
         .click()
         .get('.widget')
@@ -28,7 +28,7 @@ describe('Weather Widget tests', () => {
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.btn-danger')
       .click();
-    cy.wait('@deleteWidget').then((xhr) => {
+    cy.wait('@deleteWidget').then(() => {
       cy.get('.widget').should('have.length', 0);
     });
   });
