@@ -19,7 +19,7 @@ describe('Tab tests', () => {
       .get('input')
       .clear()
       .type('Flux RSS').dblclick();
-    cy.wait('@updateTab').then((xhr) => {
+    cy.wait('@updateTab').then(() => {
       cy.get('.tab.selectedItem').should('have.text', 'Flux RSS');
     });
   });
@@ -28,7 +28,7 @@ describe('Tab tests', () => {
     cy.intercept('DELETE', '/tab/deleteTab/*').as('deleteTab');
     cy.get('.tab').contains('Flux RSS').dblclick()
     .get('.deleteTabButton').click()
-    cy.wait('@deleteTab').then(xhr => {
+    cy.wait('@deleteTab').then(() => {
       cy.get('.tab').should('have.length', 1);
     });
   });

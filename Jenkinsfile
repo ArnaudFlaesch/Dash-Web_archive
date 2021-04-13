@@ -80,7 +80,7 @@ pipeline {
             sh 'npm run report:copyScreenshots'
             publishHTML target: [
                 allowMissing         : false,
-                alwaysLinkToLastBuild: false,
+                alwaysLinkToLastBuild: true,
                 keepAll              : true,
                 reportDir            : 'cypress/reports/html',
                 reportFiles          : 'tests-report.html',

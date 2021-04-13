@@ -9,7 +9,7 @@ import store from '../../reducers/store';
 import TabDash from '../../tab/TabDash';
 import * as widgetDataSample from './widgetDataSample.json';
 
-const globalAny: any = global;
+const globalAny: NodeJS.Global & typeof globalThis = global;
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('TabDash tests', () => {

@@ -8,6 +8,8 @@ coverage
 package-lock.json
 yarn.lock
 
-cypress
 server.js
 src/registerServiceWorker.ts
+
+# FIXME
+FacebookWidget.tsx
