@@ -7,14 +7,14 @@
     "npm": "7.9.0"
   },
   "scripts": {
-    "start": "set HTTPS=true && react-scripts -r @cypress/instrument-cra start",
+    "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build --prod",
     "server": "node src/server.js",
     "test": "react-scripts test --env=jsdom",
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",
     "cy:open": "cypress open",
-    "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser chrome",
+    "cy:run": "wait-on https://localhost:3000 && cypress run --headless --browser chrome",
     "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json",
     "cy:verify": "npx cypress verify",
     "eslint": "eslint . --ext .js,.ts,.tsx",

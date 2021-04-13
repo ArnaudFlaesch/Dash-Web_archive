@@ -153,6 +153,7 @@ export default function TabDash(props: IProps): React.ReactElement {
               ref={providedDroppable.innerRef}
             >
               <div className="widgetList">
+              <FacebookWidget />
                 {widgets &&
                   widgets.length > 0 &&
                   widgets.map((widgetConfig: IWidgetConfig, index) => {
@@ -176,7 +177,6 @@ export default function TabDash(props: IProps): React.ReactElement {
                       </Draggable>
                     );
                   })}
-                  <FacebookWidget />
                 {providedDroppable.placeholder}
               </div>
             </div>
