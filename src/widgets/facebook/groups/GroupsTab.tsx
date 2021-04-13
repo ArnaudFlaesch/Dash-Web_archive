@@ -7,8 +7,8 @@ import IGroup from './IGroup';
 export default function GroupsTab(): React.ReactElement {
   useEffect(() => {
     getGroupsData()
-      .then((result: IGroup[]) => {
-        logger.debug(result);
+      .then((result: unknown) => {
+        logger.debug(result as IGroup[]);
       })
       .catch((error: Error) => {
         logger.debug(error);

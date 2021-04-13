@@ -1,8 +1,13 @@
 import logger from '../../utils/LogUtils';
-import IGroup from './groups/IGroup';
-declare const FB: any;
+import IFBUser from './IFBUser';
 
-export function getProfileInfo(): any {
+interface IFB {
+  api: (url: string, data: unknown, response: (data:unknown) => unknown) => Promise<unknown>;
+}
+
+declare const FB: IFB;
+
+export function getProfileInfo(): Promise<IFBUser> {
   return new Promise((resolve, reject) => {
     logger.debug('getProfile');
     FB.api(
@@ -10,9 +15,9 @@ export function getProfileInfo(): any {
       {
         fields: 'id,first_name,last_name,hometown,location,birthday,gender,link'
       },
-      (userData: any) => {
+      (userData: unknown) => {
         if (userData) {
-          resolve(userData);
+          resolve(userData as IFBUser);
         } else {
           reject(Error('Promise rejected'));
         }
@@ -21,7 +26,7 @@ export function getProfileInfo(): any {
   });
 }
 
-export function getGroupsData(): any {
+export function getGroupsData(): Promise<unknown> {
   return new Promise((resolve, reject) => {
     logger.debug('getGroupsData');
     FB.api(
@@ -30,7 +35,7 @@ export function getGroupsData(): any {
         fields:
           'administrator,bookmark_order,id,unread,cover,created_time,description,icon,email,link,name,purpose,venue,picture'
       },
-      (groupsData: IGroup[]) => {
+      (groupsData) => {
         if (groupsData) {
           resolve(groupsData);
         } else {

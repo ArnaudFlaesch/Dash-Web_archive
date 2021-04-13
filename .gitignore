@@ -35,3 +35,4 @@ xunit.xml
 cypress/results/
 snyk-report.html
 snyk-report.json
+.snyk
