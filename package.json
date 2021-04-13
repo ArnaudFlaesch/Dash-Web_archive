@@ -15,7 +15,7 @@
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",
     "cy:open": "cypress open",
     "cy:run": "wait-on https://localhost:3000 && cypress run --headless --browser chrome",
-    "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json --record",
+    "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json",
     "cy:verify": "npx cypress verify",
     "eslint": "eslint . --ext .js,.ts,.tsx",
     "eslint:fix": "npm run eslint -- --fix",
