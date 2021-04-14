@@ -89,7 +89,7 @@
     "mochawesome-report-generator": "5.2.0",
     "node-sass": "5.0.0",
     "nyc": "15.1.0",
-    "snyk": "1.538.0",
+    "snyk": "1.540.0",
     "stylelint": "13.12.0",
     "stylelint-config-standard": "21.0.0",
     "ts-jest": "26.5.4",
