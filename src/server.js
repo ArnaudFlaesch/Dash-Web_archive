@@ -3,6 +3,7 @@ const path = require('path');
 const winston = require('winston');
 const app = express();
 const server = require("http").Server(app);
+const host = '0.0.0.0';
 
 const logger = winston.createLogger({
     format: winston.format.combine(
@@ -30,6 +31,6 @@ app.use(function (err, req, res, next) {
     res.status(500).json({ "error": err.message });
 });
 
-server.listen(process.env.PORT || 80, () => {
+server.listen(process.env.PORT || 80, host, () => {
     logger.info(`Server running on port ${process.env.PORT || 80}`);
 });
