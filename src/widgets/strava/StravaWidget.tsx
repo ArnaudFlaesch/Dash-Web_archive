@@ -40,70 +40,6 @@ export default function StravaWidget(props: IProps): React.ReactElement {
 
   const paginationActivities = 20;
 
-  useEffect(() => {
-    const values = queryString.parse(search);
-    if (values && values.code) {
-      const apiCode = values.code.toString();
-      getToken(apiCode);
-    }
-    if (
-      !token ||
-      !refreshToken ||
-      isBefore(new Date(tokenExpirationDate as number), new Date())
-    ) {
-      refreshTokenFromApi();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      refreshWidget();
-    }
-  }, [token]);
-
-  function onConfigSubmitted(
-    updatedClientId: string,
-    updatedClientSecret: string
-  ) {
-    updateWidgetData(props.id, {
-      clientId: updatedClientId,
-      clientSecret: updatedClientSecret
-    })
-      .then(() => {
-        setClientId(clientId);
-        setClientSecret(clientSecret);
-        refreshWidget();
-      })
-      .catch((error) => {
-        logger.error(error.message);
-      });
-  }
-
-  function refreshWidget() {
-    setActivities([]);
-    getAthleteData();
-    getActivities();
-  }
-
-  function getToken(apiCode: string) {
-    axios
-      .post('https://www.strava.com/oauth/token', {
-        client_id: clientId,
-        client_secret: clientSecret,
-        code: apiCode,
-        grant_type: 'authorization_code'
-      })
-      .then((response) => {
-        setToken(response.data.access_token as string);
-        setRefreshToken(response.data.refresh_token);
-        setTokenExpirationDate(response.data.expires_at);
-        setAthlete(response.data.athlete);
-      })
-      .catch((error: Error) => {
-        logger.error(error.message);
-      });
-  }
-
   function refreshTokenFromApi() {
     if (refreshToken) {
       axios
@@ -127,41 +63,105 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     }
   }
 
-  function getAthleteData() {
-    if (token) {
-      axios
-        .get('https://www.strava.com/api/v3/athlete', {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        .then((response) => {
-          setAthlete(response.data);
-        })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
+  useEffect(() => {
+    const values = queryString.parse(search);
+    if (values && values.code) {
+      const apiCode = values.code.toString();
+      getToken(apiCode);
     }
-  }
-
-  function getActivities() {
     if (
-      token &&
-      tokenExpirationDate &&
-      isAfter(new Date(tokenExpirationDate as number), new Date())
+      !token ||
+      !refreshToken ||
+      isBefore(new Date(tokenExpirationDate as number), new Date())
     ) {
-      axios
-        .get(
-          `https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-        .then((response) => {
-          setActivities(response.data);
-        })
-        .catch((error) => {
-          logger.error(error.message);
-        });
-    } else {
       refreshTokenFromApi();
     }
+  });
+
+  useEffect(() => {
+    function getAthleteData() {
+      if (token) {
+        axios
+          .get('https://www.strava.com/api/v3/athlete', {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          .then((response) => {
+            setAthlete(response.data);
+          })
+          .catch((error: Error) => {
+            logger.error(error.message);
+          });
+      }
+    }
+  
+    function getActivities() {
+      if (
+        token &&
+        tokenExpirationDate &&
+        isAfter(new Date(tokenExpirationDate as number), new Date())
+      ) {
+        axios
+          .get(
+            `https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+          .then((response) => {
+            setActivities(response.data);
+          })
+          .catch((error) => {
+            logger.error(error.message);
+          });
+      } else {
+        refreshTokenFromApi();
+      }
+    }
+
+    function refreshWidget() {
+      setActivities([]);
+      getAthleteData();
+      getActivities();
+    }
+
+    if (token) {
+      refreshWidget();
+    }
+  }, [token]);
+
+  function onConfigSubmitted(
+    updatedClientId: string,
+    updatedClientSecret: string
+  ) {
+    updateWidgetData(props.id, {
+      clientId: updatedClientId,
+      clientSecret: updatedClientSecret
+    })
+      .then(() => {
+        setClientId(clientId);
+        setClientSecret(clientSecret);
+        setToken(undefined);
+      })
+      .catch((error) => {
+        logger.error(error.message);
+      });
+  }
+
+  function getToken(apiCode: string) {
+    axios
+      .post('https://www.strava.com/oauth/token', {
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: apiCode,
+        grant_type: 'authorization_code'
+      })
+      .then((response) => {
+        setToken(response.data.access_token as string);
+        setRefreshToken(response.data.refresh_token);
+        setTokenExpirationDate(response.data.expires_at);
+        setAthlete(response.data.athlete);
+      })
+      .catch((error: Error) => {
+        logger.error(error.message);
+      });
   }
 
   function getStatsFromActivities() {
@@ -261,7 +261,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
             onConfigSubmitted={onConfigSubmitted}
           />
         }
-        refreshFunction={refreshWidget}
+        refreshFunction={() => setToken(undefined)}
         onDeleteButtonClicked={props.onDeleteButtonClicked}
       />
     </div>
