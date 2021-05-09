@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "./Dash-Web/static/css/main.b6d79b52.chunk.css",
-    "main.js": "./Dash-Web/static/js/main.b1d21991.chunk.js",
-    "main.js.map": "./Dash-Web/static/js/main.b1d21991.chunk.js.map",
-    "runtime-main.js": "./Dash-Web/static/js/runtime-main.3ad1ab55.js",
-    "runtime-main.js.map": "./Dash-Web/static/js/runtime-main.3ad1ab55.js.map",
-    "static/css/2.0cc1e603.chunk.css": "./Dash-Web/static/css/2.0cc1e603.chunk.css",
-    "static/js/2.a88df5c2.chunk.js": "./Dash-Web/static/js/2.a88df5c2.chunk.js",
-    "static/js/2.a88df5c2.chunk.js.map": "./Dash-Web/static/js/2.a88df5c2.chunk.js.map",
-    "index.html": "./Dash-Web/index.html",
-    "static/css/2.0cc1e603.chunk.css.map": "./Dash-Web/static/css/2.0cc1e603.chunk.css.map",
-    "static/css/main.b6d79b52.chunk.css.map": "./Dash-Web/static/css/main.b6d79b52.chunk.css.map",
-    "static/js/2.a88df5c2.chunk.js.LICENSE.txt": "./Dash-Web/static/js/2.a88df5c2.chunk.js.LICENSE.txt",
-    "static/media/index.scss": "./Dash-Web/static/media/fontawesome-webfont.f691f37e.woff"
+    "main.css": "./static/css/main.b6d79b52.chunk.css",
+    "main.js": "./static/js/main.82bb5fe7.chunk.js",
+    "main.js.map": "./static/js/main.82bb5fe7.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.62ecc7dc.js",
+    "runtime-main.js.map": "./static/js/runtime-main.62ecc7dc.js.map",
+    "static/css/2.0cc1e603.chunk.css": "./static/css/2.0cc1e603.chunk.css",
+    "static/js/2.d3b0346c.chunk.js": "./static/js/2.d3b0346c.chunk.js",
+    "static/js/2.d3b0346c.chunk.js.map": "./static/js/2.d3b0346c.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/2.0cc1e603.chunk.css.map": "./static/css/2.0cc1e603.chunk.css.map",
+    "static/css/main.b6d79b52.chunk.css.map": "./static/css/main.b6d79b52.chunk.css.map",
+    "static/js/2.d3b0346c.chunk.js.LICENSE.txt": "./static/js/2.d3b0346c.chunk.js.LICENSE.txt",
+    "static/media/index.scss": "./static/media/fontawesome-webfont.f691f37e.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.3ad1ab55.js",
+    "static/js/runtime-main.62ecc7dc.js",
     "static/css/2.0cc1e603.chunk.css",
-    "static/js/2.a88df5c2.chunk.js",
+    "static/js/2.d3b0346c.chunk.js",
     "static/css/main.b6d79b52.chunk.css",
-    "static/js/main.b1d21991.chunk.js"
+    "static/js/main.82bb5fe7.chunk.js"
   ]
 }
