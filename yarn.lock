@@ -8212,9 +8212,9 @@ hoopy@^0.1.4:
   integrity sha512-HRcs+2mr52W0K+x8RzcLzuPPmVIKMSv97RGHy0Ea9y/mpcaK+xTrjICA04KAHi4GRzxliNqNJEFYWHghy3rSfQ==
 
 hosted-git-info@^2.1.4:
-  version "2.8.8"
-  resolved "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.8.tgz"
-  integrity sha512-f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==
+  version "2.8.9"
+  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
+  integrity sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
 
 hosted-git-info@^3.0.4, hosted-git-info@^3.0.7:
   version "3.0.8"
@@ -14999,10 +14999,10 @@ snyk-try-require@^2.0.0:
     lodash.clonedeep "^4.3.0"
     lru-cache "^5.1.1"
 
-snyk@1.587.0:
-  version "1.587.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.587.0.tgz#cc6188e445edfac5af12cea88bd97fc6766dccc8"
-  integrity sha512-l83xTpO5oZAoGamOk95SntgBwo3jAk+ufJh4dtKecf7zPyNgD80p9F1VYOFVOhEafFuwozN/oGU/JpFNlvY3Mw==
+snyk@1.589.0:
+  version "1.589.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.589.0.tgz#bf53dc4dae91217f59f468d1b3f18e91741eedb3"
+  integrity sha512-kx+vmt777rCuT5yf4dIuyrJn+geyQ+qgQUlDrYj7UFJvKU4t1vMwYnTK5ZJVJn+Z6f6DM2OPWytvnAWjROjP0w==
   dependencies:
     "@open-policy-agent/opa-wasm" "^1.2.0"
     "@snyk/cli-interface" "2.11.0"
