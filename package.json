@@ -4,7 +4,7 @@
   "private": true,
   "engines": {
     "node": ">=14.0.0 <=15.12.0",
-    "npm": "7.12.0"
+    "npm": "7.12.1"
   },
   "homepage": "./",
   "scripts": {
@@ -72,7 +72,7 @@
     "@types/pg": "7.14.11",
     "@types/react": "17.0.5",
     "@types/react-beautiful-dnd": "13.0.0",
-    "@types/react-dom": "17.0.3",
+    "@types/react-dom": "17.0.4",
     "@types/react-redux": "7.1.16",
     "@types/react-router-dom": "5.1.7",
     "@types/reactstrap": "8.7.2",
