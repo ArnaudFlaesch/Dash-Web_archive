@@ -50,7 +50,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           setWeather(result.data);
         })
         .catch((error: Error) => {
-          logger.debug(error);
+          logger.error(error);
         });
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
@@ -63,7 +63,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           setCity((result.data as IWeatherAPIResponse).city);
         })
         .catch((error: Error) => {
-          logger.debug(error.message);
+          logger.error(error.message);
         });
     }
   }
