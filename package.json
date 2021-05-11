@@ -10,7 +10,6 @@
   "scripts": {
     "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build --prod",
-    "server": "node src/server.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -b website -d build",
     "test": "react-scripts test --env=jsdom",

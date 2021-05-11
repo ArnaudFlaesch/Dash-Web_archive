@@ -24,6 +24,7 @@ before_install:
 before_script:
   - npm run lint:styles
   - npm run eslint
+  - npm run build
 
 script: npm run ci
 
