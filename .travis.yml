@@ -13,8 +13,6 @@ install: yarn install --frozen-lockfile
 
 cache:
   directories:
-    - '$HOME/.npm'
-    - ~/.cache/yarn
     - ~/.cache/Cypress
 
 before_install:
@@ -24,7 +22,7 @@ before_install:
   - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 before_script:
-  - npm run lint:styles:report
+  - npm run lint:styles
   - npm run eslint
 
 script: npm run ci
