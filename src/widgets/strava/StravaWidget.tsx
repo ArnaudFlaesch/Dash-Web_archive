@@ -146,7 +146,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (
       token &&
       tokenExpirationDate &&
-      isAfter(new Date(tokenExpirationDate as number), new Date())
+      isAfter(new Date((tokenExpirationDate as number) * 1000), new Date())
     ) {
       axios
         .get(
@@ -154,7 +154,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((response) => {
-          setActivities(response.data);
+          setActivities(response.data.reverse());
         })
         .catch((error) => {
           logger.error(error.message);
@@ -166,9 +166,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
 
   function getStatsFromActivities() {
     const activitiesByMonthList = activities
-      .reverse()
       .reduce((activitiesByMonth: IActivity[], activity: IActivity) => {
-        const month = format(new Date(activity.start_date_local), 'YYYY-MM');
+        const month = format(new Date(activity.start_date_local), 'yyyy-MM');
         if (!activitiesByMonth[month]) {
           activitiesByMonth[month] = [];
         }
@@ -207,7 +206,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
               key={activity.id}
               componentRoot={`${format(
                 new Date(activity.start_date_local),
-                'ddd DD MMM'
+                'dd MMM'
               )}  ${activity.name}  ${
                 Math.round(activity.distance * 1000) / 1000000
               } kms`}
@@ -221,6 +220,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       <div style={{ minHeight: '25vh', flex: '1 0 50%' }}>
         <Bar
           data={{
+            labels: getStatsFromActivities().map(data => format(data.x, 'MMM yyyy')),
             datasets: [
               {
                 label: 'Course',

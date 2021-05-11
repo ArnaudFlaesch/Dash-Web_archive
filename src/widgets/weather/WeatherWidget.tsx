@@ -201,7 +201,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                           formatDateFromTimestamp(
                             forecastDay.dt,
                             adjustTimeWithOffset(city.timezone)
-                          ).getHours() === 16
+                          ).getHours() === 17
                       )
                       .map((forecastDay) => forecastDay.main.feels_like)
                   }
