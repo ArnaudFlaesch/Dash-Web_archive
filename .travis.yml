@@ -36,3 +36,4 @@ after_success:
   - cat ./coverage/lcov.info | coveralls
   - cat ./coverage/lcov.info | codacy-coverage
   - bash <(curl -s https://codecov.io/bash)
+  - test $TRAVIS_BRANCH = "develop" && yarn run deploy
