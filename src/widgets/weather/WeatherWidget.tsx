@@ -173,10 +173,10 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                       formatDateFromTimestamp(
                         forecastDay.dt,
                         adjustTimeWithOffset(city.timezone)
-                      ).getHours() === 16
+                      ).getHours() === 17
                   )
                   .map((forecastDay) =>
-                    format(new Date(forecastDay.dt * 1000), 'ddd DD')
+                    format(new Date(forecastDay.dt * 1000), 'dd MMM')
                   ),
                 datasets: [
                   {
@@ -188,7 +188,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                           formatDateFromTimestamp(
                             forecastDay.dt,
                             adjustTimeWithOffset(city.timezone)
-                          ).getHours() === 16
+                          ).getHours() === 17
                       )
                       .map((forecastDay) => forecastDay.main.temp_max)
                   },

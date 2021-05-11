@@ -2,7 +2,8 @@ module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
     plugins: [
-        '@typescript-eslint'
+        '@typescript-eslint',
+        'react-hooks'
     ],
     extends: [
         'eslint:recommended',
@@ -11,4 +12,8 @@ module.exports = {
         'prettier',
         'plugin:cypress/recommended'
     ],
+    "rules": {
+        "react-hooks/rules-of-hooks": 'error',
+        "react-hooks/exhaustive-deps": 'warn'
+    }
 };
