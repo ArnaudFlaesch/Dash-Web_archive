@@ -38,37 +38,37 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
 
-  useEffect(() => {
-    function fetchDataFromWeatherApi() {
-      if (apiKey && cityToQuery) {
-        axios
-          .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-            params: {
-              url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
-            }
-          })
-          .then((result) => {
-            setWeather(result.data);
-          })
-          .catch((error: Error) => {
-            logger.debug(error);
-          });
-        axios
-          .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-            params: {
-              url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
-            }
-          })
-          .then((result: AxiosResponse) => {
-            setForecast((result.data as IWeatherAPIResponse).list);
-            setCity((result.data as IWeatherAPIResponse).city);
-          })
-          .catch((error: Error) => {
-            logger.debug(error.message);
-          });
-      }
+  function fetchDataFromWeatherApi() {
+    if (apiKey && cityToQuery) {
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+          params: {
+            url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+          }
+        })
+        .then((result) => {
+          setWeather(result.data);
+        })
+        .catch((error: Error) => {
+          logger.debug(error);
+        });
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+          params: {
+            url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+          }
+        })
+        .then((result: AxiosResponse) => {
+          setForecast((result.data as IWeatherAPIResponse).list);
+          setCity((result.data as IWeatherAPIResponse).city);
+        })
+        .catch((error: Error) => {
+          logger.debug(error.message);
+        });
     }
+  }
 
+  useEffect(() => {
     fetchDataFromWeatherApi();
   }, [cityToQuery, apiKey]);
 
@@ -76,8 +76,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     setWeather(undefined);
     setForecast(undefined);
     setCity(undefined);
-    setCityToQuery(undefined);
-    setApiKey(undefined)
+    fetchDataFromWeatherApi();
   }
 
   function onConfigSubmitted(weatherApiKey: string, updatedCity: string) {

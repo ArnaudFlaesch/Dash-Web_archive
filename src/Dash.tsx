@@ -43,7 +43,22 @@ export default function Dash(): React.ReactElement {
   const activeTab = useSelector((state: ITabState) => state.activeTab);
   const dispatch = useDispatch();
 
-  
+  function initDashboard() {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
+      .then((result) => {
+        return result.json();
+      })
+      .then((result) => {
+        if (!result || result.length === 0) {
+          addNewTab();
+        }
+        setTabs(result);
+        dispatch(toggleSelectedTab(result[0].id));
+      })
+      .catch((error: Error) => {
+        logger.error(error.message);
+      });
+  }
 
   function toggleTab(tab: number) {
     if (activeTab !== tab) {
@@ -51,7 +66,14 @@ export default function Dash(): React.ReactElement {
     }
   }
 
-  
+  function addNewTab() {
+    const newTabLabel = 'Nouvel onglet';
+    addTab(newTabLabel).then((response) => {
+      const insertedTab = response.data as ITab;
+      setTabs(tabs.concat(insertedTab));
+      dispatch(toggleSelectedTab(insertedTab.id));
+    });
+  }
 
   function getNewWidget(tabId: number) {
     if (newWidget && tabId === newWidget.tab.id) {
@@ -116,35 +138,7 @@ export default function Dash(): React.ReactElement {
     });
   }
 
-  function addNewTab() {
-      const newTabLabel = 'Nouvel onglet';
-      addTab(newTabLabel).then((response) => {
-        const insertedTab = response.data as ITab;
-        setTabs(tabs.concat(insertedTab));
-        dispatch(toggleSelectedTab(insertedTab.id));
-      });
-    }
-
-  useEffect(() =>  {
-    function initDashboard() {
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
-        .then((result) => {
-          return result.json();
-        })
-        .then((result) => {
-          if (!result || result.length === 0) {
-            addNewTab();
-          }
-          setTabs(result);
-          dispatch(toggleSelectedTab(result[0].id));
-        })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
-    }
-
-    initDashboard();
-  }, []);
+  useEffect(initDashboard, []);
 
   return (
     <div className="dash">

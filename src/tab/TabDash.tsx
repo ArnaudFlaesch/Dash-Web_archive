@@ -106,13 +106,13 @@ export default function TabDash(props: IProps): React.ReactElement {
           logger.error(error.message);
         });
     }
-  }, [activeTab, props.tabId, widgets.length]);
+  }, [activeTab]);
 
   useEffect(() => {
     if (props.newWidget) {
       setWidgets((widgets as IWidgetConfig[]).concat([props.newWidget]) as []);
     }
-  }, [props.newWidget, widgets]);
+  }, [props.newWidget != null && props.newWidget.id]);
 
   function reorder(
     list: never[],
