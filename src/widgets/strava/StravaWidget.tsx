@@ -204,7 +204,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   const widgetBody = (
     <div className="flexColumn">
       <div style={{ flex: '1 0 50%', overflowY: 'scroll' }}>
-        {activities.map((activity: IActivity) => {
+        {activities.slice().reverse().map((activity: IActivity) => {
           return (
             <ComponentWithDetail
               key={activity.id}
