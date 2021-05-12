@@ -14,6 +14,7 @@ import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
 import { Bar } from 'react-chartjs-2';
+
 interface IProps {
   id: number;
   clientId?: string;
@@ -207,9 +208,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
               componentRoot={`${format(
                 new Date(activity.start_date_local),
                 'dd MMM'
-              )}  ${activity.name}  ${
-                Math.round(activity.distance * 1000) / 1000000
-              } kms`}
+              )}  ${activity.name}  ${Math.round(activity.distance * 1000) / 1000000
+                } kms`}
               componentDetail={<StravaActivity {...activity} />}
               link={`https://www.strava.com/activities/${activity.id}`}
             />
@@ -219,6 +219,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
 
       <div style={{ minHeight: '25vh', flex: '1 0 50%' }}>
         <Bar
+          type="bar"
           data={{
             labels: getStatsFromActivities().map(data => format(data.x, 'MMM yyyy')),
             datasets: [
@@ -229,7 +230,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
               }
             ]
           }}
-          
+
         />
       </div>
 
@@ -237,12 +238,12 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         !refreshToken ||
         (tokenExpirationDate &&
           isBefore(new Date(tokenExpirationDate as number), new Date()))) && (
-        <a
-          href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
-        >
-          <Button>Se connecter</Button>
-        </a>
-      )}
+          <a
+            href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
+          >
+            <Button>Se connecter</Button>
+          </a>
+        )}
     </div>
   );
 

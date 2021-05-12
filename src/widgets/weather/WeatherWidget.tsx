@@ -17,7 +17,6 @@ import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
 import { format } from 'date-fns';
 
-
 export interface IProps {
   id: number;
   weather_api_key?: string;
@@ -166,6 +165,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           </div>
           <div style={{ height: '25vh' }}>
             <Line
+              type="line"
               data={{
                 labels: forecast
                   .filter(

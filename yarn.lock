@@ -2303,7 +2303,7 @@
 
 "@types/chart.js@2.9.32":
   version "2.9.32"
-  resolved "https://registry.npmjs.org/@types/chart.js/-/chart.js-2.9.32.tgz"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.32.tgz#b17d9a8c41ad348183a2ce041ebdeef892998251"
   integrity sha512-d45JiRQwEOlZiKwukjqmqpbqbYzUX2yrXdH9qVn6kXpPDsTYCo6YbfFOlnUaJ8S/DhJwbBJiLsMjKpW5oP8B2A==
   dependencies:
     moment "^2.10.2"
@@ -4795,33 +4795,15 @@ chardet@^0.7.0:
   resolved "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chart.js@2.9.4:
-  version "2.9.4"
-  resolved "https://registry.npmjs.org/chart.js/-/chart.js-2.9.4.tgz"
-  integrity sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==
-  dependencies:
-    chartjs-color "^2.1.0"
-    moment "^2.10.2"
+chart.js@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.2.1.tgz#1a17d6a88cef324ef711949e227eb51d6c4c26d3"
+  integrity sha512-XsNDf3854RGZkLCt+5vWAXGAtUdKP2nhfikLGZqud6G4CvRE2ts64TIxTTfspOin2kEZvPgomE29E6oU02dYjQ==
 
 chartjs-adapter-date-fns@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/chartjs-adapter-date-fns/-/chartjs-adapter-date-fns-2.0.0.tgz"
   integrity sha512-rmZINGLe+9IiiEB0kb57vH3UugAtYw33anRiw5kS2Tu87agpetDDoouquycWc9pRsKtQo5j+vLsYHyr8etAvFw==
-
-chartjs-color-string@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.npmjs.org/chartjs-color-string/-/chartjs-color-string-0.6.0.tgz"
-  integrity sha512-TIB5OKn1hPJvO7JcteW4WY/63v6KwEdt6udfnDE9iCAZgy+V4SrbSxoIbTw/xkUIapjEI4ExGtD0+6D3KyFd7A==
-  dependencies:
-    color-name "^1.0.0"
-
-chartjs-color@^2.1.0:
-  version "2.4.1"
-  resolved "https://registry.npmjs.org/chartjs-color/-/chartjs-color-2.4.1.tgz"
-  integrity sha512-haqOg1+Yebys/Ts/9bLo/BqUcONQOdr/hoEr2LLTRl6C5LXctUdHxsCYfvQVg5JIxITrfCNUDr4ntqmQk9+/0w==
-  dependencies:
-    chartjs-color-string "^0.6.0"
-    color-convert "^1.9.3"
 
 check-more-types@^2.24.0:
   version "2.24.0"
@@ -5109,7 +5091,7 @@ collection-visit@^1.0.0:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
 
-color-convert@^1.9.0, color-convert@^1.9.1, color-convert@^1.9.3:
+color-convert@^1.9.0, color-convert@^1.9.1:
   version "1.9.3"
   resolved "https://registry.npmjs.org/color-convert/-/color-convert-1.9.3.tgz"
   integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
@@ -13407,13 +13389,12 @@ react-beautiful-dnd@13.1.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
-react-chartjs-2@2.11.2:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.11.2.tgz#156c0d2618600561efc23bef278bd48a335cadb6"
-  integrity sha512-hcPS9vmRJeAALPPf0uo02BiD8BDm0HNmneJYTZVR74UKprXOpql+Jy1rVuj93rKw0Jfx77mkcRfXPxTe5K83uw==
+react-chartjs-2@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-3.0.3.tgz#9cb1981396f9574afebd29aff4e6df71ed615596"
+  integrity sha512-jOFZKwZ8sMLkddewZ/tToxuu4pYimAvvY5I6uK+hCpSFT16Pvo2bdHhUoZ0X87zu9I+dx2I+JCqaLN6XhmrbDg==
   dependencies:
     lodash "^4.17.19"
-    prop-types "^15.7.2"
 
 react-dev-utils@^11.0.3:
   version "11.0.4"
