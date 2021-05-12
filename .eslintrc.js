@@ -13,7 +13,7 @@ module.exports = {
         'plugin:cypress/recommended'
     ],
     "rules": {
-        "react-hooks/rules-of-hooks": 'warn',
-        "react-hooks/exhaustive-deps": 'warn'
+        "react-hooks/rules-of-hooks": 'off',
+        "react-hooks/exhaustive-deps": 'off'
     }
 };
