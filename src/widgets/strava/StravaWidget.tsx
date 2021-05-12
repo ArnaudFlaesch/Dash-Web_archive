@@ -13,7 +13,8 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
-import ChartComponent from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
+
 interface IProps {
   id: number;
   clientId?: string;
@@ -217,8 +218,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       </div>
 
       <div style={{ minHeight: '25vh', flex: '1 0 50%' }}>
-        <ChartComponent
-          type='bar'
+        <Bar
+          type="bar"
           data={{
             labels: getStatsFromActivities().map(data => format(data.x, 'MMM yyyy')),
             datasets: [
