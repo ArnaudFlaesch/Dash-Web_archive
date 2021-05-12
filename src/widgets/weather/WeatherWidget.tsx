@@ -50,7 +50,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           setWeather(result.data);
         })
         .catch((error: Error) => {
-          logger.debug(error);
+          logger.error(error);
         });
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
@@ -63,7 +63,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           setCity((result.data as IWeatherAPIResponse).city);
         })
         .catch((error: Error) => {
-          logger.debug(error.message);
+          logger.error(error.message);
         });
     }
   }
@@ -173,10 +173,10 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                       formatDateFromTimestamp(
                         forecastDay.dt,
                         adjustTimeWithOffset(city.timezone)
-                      ).getHours() === 16
+                      ).getHours() === 17
                   )
                   .map((forecastDay) =>
-                    format(new Date(forecastDay.dt * 1000), 'ddd DD')
+                    format(new Date(forecastDay.dt * 1000), 'dd MMM')
                   ),
                 datasets: [
                   {
@@ -188,7 +188,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                           formatDateFromTimestamp(
                             forecastDay.dt,
                             adjustTimeWithOffset(city.timezone)
-                          ).getHours() === 16
+                          ).getHours() === 17
                       )
                       .map((forecastDay) => forecastDay.main.temp_max)
                   },
@@ -201,7 +201,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                           formatDateFromTimestamp(
                             forecastDay.dt,
                             adjustTimeWithOffset(city.timezone)
-                          ).getHours() === 16
+                          ).getHours() === 17
                       )
                       .map((forecastDay) => forecastDay.main.feels_like)
                   }
