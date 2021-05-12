@@ -37,4 +37,13 @@ after_success:
   - cat ./coverage/lcov.info | coveralls
   - cat ./coverage/lcov.info | codacy-coverage
   - bash <(curl -s https://codecov.io/bash)
-  - test $TRAVIS_BRANCH = "develop" && yarn run deploy
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  local_dir: build
+  target_branch: website
+  on:
+    branch: develop
