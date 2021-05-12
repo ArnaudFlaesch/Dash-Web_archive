@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import ChartComponent from 'react-chartjs-2';
 import { updateWidgetData } from '../../services/WidgetService';
 import {
   adjustTimeWithOffset,
@@ -165,7 +165,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 })}
           </div>
           <div style={{ height: '25vh' }}>
-            <Line
+            <ChartComponent
+              type='line'
               data={{
                 labels: forecast
                   .filter(
