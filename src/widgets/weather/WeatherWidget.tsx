@@ -7,7 +7,6 @@ import { updateWidgetData } from '../../services/WidgetService';
 import {
   adjustTimeWithOffset,
   formatDateFromTimestamp,
-  getDayFromNow
 } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
@@ -17,12 +16,18 @@ import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
 import { format } from 'date-fns';
 
-export interface IProps {
+interface IProps {
   id: number;
   weather_api_key?: string;
   city?: string;
   tabId: number;
   onDeleteButtonClicked: (idWidget: number) => void;
+}
+
+enum ForecastMode {
+  TODAY,
+  TOMORROW,
+  WEEK
 }
 
 export default function WeatherWidget(props: IProps): React.ReactElement {
@@ -36,6 +41,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const [weather, setWeather] = useState<IWeather>();
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
+  const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
 
   function fetchDataFromWeatherApi() {
     if (apiKey && cityToQuery) {
@@ -93,6 +99,45 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       });
   }
 
+  function filterForecastByMode(): IForecast[] {
+    if (city && forecast) {
+      switch (forecastMode) {
+        case ForecastMode.WEEK: {
+          return forecast.filter(
+            (forecastDay) => {
+              const forecastElement = formatDateFromTimestamp(
+                forecastDay.dt,
+                adjustTimeWithOffset(city.timezone)
+              )
+              return forecastElement.getHours() === 17
+            }
+          )
+        }
+        case ForecastMode.TOMORROW: {
+          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() + 1);
+        }
+        case ForecastMode.TODAY:
+        default: {
+          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay());
+        }
+      }
+    } else {
+      return [];
+    }
+  }
+
+  function selectTodayForecast(): void {
+    setForecastMode(ForecastMode.TODAY);
+  }
+
+  function selectTomorrowForecast(): void {
+    setForecastMode(ForecastMode.TOMORROW);
+  }
+
+  function selectWeekForecast(): void {
+    setForecastMode(ForecastMode.WEEK);
+  }
+
   const widgetHeader = <div>La météo aujourd'hui à {city?.name}</div>;
 
   const widgetBody = (
@@ -145,64 +190,40 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       )}
       {city && forecast && (
         <div>
-          <span className="bold">Prévisions</span>
-          <br />
-          <div className="flexRow forecastRow">
-            {city &&
-              forecast &&
-              forecast
-                .filter(
-                  (forecastDay) =>
-                    forecastDay.dt * 1000 < getDayFromNow(2).getTime()
-                )
-                .map((forecastDay) => {
-                  return (
-                    <div className="forecastContainer" key={forecastDay.dt}>
-                      <Forecast {...forecastDay} city={city} />
-                    </div>
-                  );
-                })}
+          <div className="flexRow">
+            <span className="bold">Prévisions</span>
+            <span style={{ alignContent: "space-between", display: "flex" }}>
+              <button onClick={selectTodayForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}>Aujourd'hui</button>
+              <button onClick={selectTomorrowForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}>Demain</button>
+              <button onClick={selectWeekForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}>Semaine</button>
+            </span>
           </div>
-          <div style={{ height: '25vh' }}>
+          <br />
+          <div style={{ height: '20vh', maxWidth: "100%" }}>
             <Line
               type="line"
               data={{
-                labels: forecast
-                  .filter(
-                    (forecastDay) =>
-                      formatDateFromTimestamp(
-                        forecastDay.dt,
-                        adjustTimeWithOffset(city.timezone)
-                      ).getHours() === 17
-                  )
-                  .map((forecastDay) =>
-                    format(new Date(forecastDay.dt * 1000), 'dd MMM')
+                labels:
+                  filterForecastByMode().map((forecastDay) => {
+                    if (forecastMode === ForecastMode.TODAY || forecastMode === ForecastMode.TOMORROW) {
+                      return format(new Date(forecastDay.dt * 1000), 'HH');
+                    } else {
+                      return format(new Date(forecastDay.dt * 1000), 'dd MMM');
+                    }
+                  }
+
                   ),
                 datasets: [
                   {
                     label: 'Température',
                     borderColor: 'orange',
-                    data: forecast
-                      .filter(
-                        (forecastDay) =>
-                          formatDateFromTimestamp(
-                            forecastDay.dt,
-                            adjustTimeWithOffset(city.timezone)
-                          ).getHours() === 17
-                      )
+                    data: filterForecastByMode()
                       .map((forecastDay) => forecastDay.main.temp_max)
                   },
                   {
                     label: 'Ressenti',
                     borderColor: 'red',
-                    data: forecast
-                      .filter(
-                        (forecastDay) =>
-                          formatDateFromTimestamp(
-                            forecastDay.dt,
-                            adjustTimeWithOffset(city.timezone)
-                          ).getHours() === 17
-                      )
+                    data: filterForecastByMode()
                       .map((forecastDay) => forecastDay.main.feels_like)
                   }
                 ]
@@ -213,11 +234,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           <div className="flexRow forecastRow">
             {city &&
               forecast &&
-              forecast
-                .filter(
-                  (forecastDay) =>
-                    forecastDay.dt * 1000 > getDayFromNow(2).getTime()
-                )
+              filterForecastByMode()
                 .map((forecastDay) => {
                   return (
                     <div className="forecastContainer" key={forecastDay.dt}>
