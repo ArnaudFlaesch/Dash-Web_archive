@@ -1,6 +1,7 @@
 # Dash-Web
 
 [![Build Status](https://travis-ci.com/ArnaudFlaesch/Dash-Web.svg?branch=master)](https://travis-ci.com/ArnaudFlaesch/Dash-Web)
+[![CI](https://github.com/ArnaudFlaesch/Dash-Web/actions/workflows/ci.yml/badge.svg)](https://github.com/ArnaudFlaesch/Dash-Web/actions)
 [![Coverage Status](https://coveralls.io/repos/github/ArnaudFlaesch/Dash-Web/badge.svg?branch=master)](https://coveralls.io/github/ArnaudFlaesch/Dash-Web?branch=master)
 [![codecov](https://codecov.io/gh/ArnaudFlaesch/Dash-Web/branch/master/graph/badge.svg)](https://codecov.io/gh/ArnaudFlaesch/Dash-Web)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cf27de8b276d4064a56509c7cbde4c7e)](https://www.codacy.com/gh/ArnaudFlaesch/Dash-Web/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ArnaudFlaesch/Dash-Web&amp;utm_campaign=Badge_Grade)
