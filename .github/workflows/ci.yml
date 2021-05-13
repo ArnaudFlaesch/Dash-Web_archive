@@ -33,5 +33,28 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - run: yarn install --frozen-lockfile
-    - run: npm run build --if-present
+    - run: yarn global add npm-run-all wait-on
+
+    - run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin 
+    - run: docker-compose up -d
+
+    - run: npm run lint:styles
+    - run: npm run eslint
+    - run: npm run build
+
     - run: npm run ci
+
+    - run :  mkdir coverage-reports || true && mkdir .nyc_output || true
+    - run :  cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
+    - run :  cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
+    - run :  npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
+    - run :  npx nyc report --reporter lcov --report-dir coverage
+    - run :  cat ./coverage/lcov.info | codacy-coverage
+    - run :  bash <(curl -s https://codecov.io/bash)
+
+    - name: Deploy with gh-pages
+      run: |
+        git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        npx gh-pages -b website -d build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
