@@ -50,7 +50,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (
       !token ||
       !refreshToken ||
-      isBefore(new Date(tokenExpirationDate as number), new Date())
+      isBefore(new Date((tokenExpirationDate as number) * 1000), new Date())
     ) {
       refreshTokenFromApi();
     }
@@ -165,18 +165,21 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     }
   }
 
+  function getActivitiesByMonth() {
+    return activities.reduce((activitiesByMonth: IActivity[], activity: IActivity) => {
+      const month = format(new Date(activity.start_date_local), 'yyyy-MM');
+      if (!activitiesByMonth[month]) {
+        activitiesByMonth[month] = [];
+      }
+      activitiesByMonth[month].push(
+        Math.round(activity.distance * 1000) / 1000000
+      );
+      return activitiesByMonth;
+    }, []);
+  }
+
   function getStatsFromActivities() {
-    const activitiesByMonthList = activities
-      .reduce((activitiesByMonth: IActivity[], activity: IActivity) => {
-        const month = format(new Date(activity.start_date_local), 'yyyy-MM');
-        if (!activitiesByMonth[month]) {
-          activitiesByMonth[month] = [];
-        }
-        activitiesByMonth[month].push(
-          Math.round(activity.distance * 1000) / 1000000
-        );
-        return activitiesByMonth;
-      }, []);
+    const activitiesByMonthList = getActivitiesByMonth();
     return Object.keys(activitiesByMonthList).map((month) => {
       return {
         x: new Date(month),
@@ -201,7 +204,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   const widgetBody = (
     <div className="flexColumn">
       <div style={{ flex: '1 0 50%', overflowY: 'scroll' }}>
-        {activities.map((activity: IActivity) => {
+        {activities.slice().reverse().map((activity: IActivity) => {
           return (
             <ComponentWithDetail
               key={activity.id}
@@ -223,6 +226,16 @@ export default function StravaWidget(props: IProps): React.ReactElement {
           data={{
             labels: getStatsFromActivities().map(data => format(data.x, 'MMM yyyy')),
             datasets: [
+              {
+                label: 'Activités',
+                backgroundColor: 'darkgreen',
+                data: Object.keys(getActivitiesByMonth()).map((month) => {
+                  return {
+                    x: new Date(month),
+                    y: getActivitiesByMonth()[month].length
+                  };
+                })
+              },
               {
                 label: 'Course',
                 backgroundColor: 'orange',
