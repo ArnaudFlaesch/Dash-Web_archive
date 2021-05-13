@@ -33,7 +33,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - run: yarn install --frozen-lockfile
-    - run: yarn global add npm-run-all wait-on
+    - run: npm i -g codacy-coverage npm-run-all wait-on
 
     -
       name: Login to Docker Hub
