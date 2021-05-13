@@ -153,7 +153,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             />
           </div>
           <div className="flexRow" style={{ placeItems: 'center' }}>
-            <div className="flexColumn mr-5">
+            <div className="flexColumn mr5">
               <div>{weather.weather[0].description}</div>
               <div>
                 <i className="fa fa-thermometer-three-quarters fa-md" />{' '}
