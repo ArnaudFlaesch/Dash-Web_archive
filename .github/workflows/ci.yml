@@ -55,7 +55,7 @@ jobs:
     - run :  cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
     - run :  npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
     - run :  npx nyc report --reporter lcov --report-dir coverage
-    - run :  cat ./coverage/lcov.info | codacy-coverage
+    - run :  cat ./coverage/lcov.info | codacy-coverage --token ${{ secrets.CODACY_PROJECT_TOKEN }}
     - run :  bash <(curl -s https://codecov.io/bash)
 
     - name: Deploy with gh-pages
