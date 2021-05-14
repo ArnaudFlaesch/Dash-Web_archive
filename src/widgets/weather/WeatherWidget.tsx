@@ -114,11 +114,11 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           )
         }
         case ForecastMode.TOMORROW: {
-          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() + 1);
+          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() + 1 && new Date(forecastDay.dt * 1000).getHours() >= 7);
         }
         case ForecastMode.TODAY:
         default: {
-          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay());
+          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7);
         }
       }
     } else {
@@ -208,7 +208,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                     if (forecastMode === ForecastMode.TODAY || forecastMode === ForecastMode.TOMORROW) {
                       return format(new Date(forecastDay.dt * 1000), 'HH');
                     } else {
-                      return format(new Date(forecastDay.dt * 1000), 'dd MMM');
+                      return format(new Date(forecastDay.dt * 1000), 'EEEE dd MMM');
                     }
                   }
 

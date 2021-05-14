@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from '../../../reducers/store';
 import WeatherWidget from '../../../widgets/weather/WeatherWidget';
 import * as montrealWeatherSample from './montrealWeatherSample.json';
+import MockDate from 'mockdate';
 
 Enzyme.configure({ adapter: new Adapter() });
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -14,6 +15,8 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('react-chartjs-2', () => ({
   Line: () => null
 }));
+
+MockDate.set(1588269600000);
 
 describe('Weather widget tests', () => {
   let container: HTMLElementTagNameMap['div'];
@@ -73,7 +76,7 @@ describe('Weather widget tests', () => {
     expect(container.querySelector('.header')?.textContent).toEqual(
       "La météo aujourd'hui à Montréal"
     );
-    expect(container.querySelectorAll('.forecastContainer').length).toEqual(7);
+    expect(container.querySelectorAll('.forecastContainer').length).toEqual(4);
 
     mockedAxios.get.mockRestore();
   });
