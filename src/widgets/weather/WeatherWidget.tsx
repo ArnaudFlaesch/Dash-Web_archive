@@ -208,7 +208,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                     if (forecastMode === ForecastMode.TODAY || forecastMode === ForecastMode.TOMORROW) {
                       return format(new Date(forecastDay.dt * 1000), 'HH');
                     } else {
-                      return format(new Date(forecastDay.dt * 1000), 'dd MMM');
+                      return format(new Date(forecastDay.dt * 1000), 'EEEE dd MMM');
                     }
                   }
 
