@@ -76,7 +76,7 @@ describe('Weather widget tests', () => {
     expect(container.querySelector('.header')?.textContent).toEqual(
       "La météo aujourd'hui à Montréal"
     );
-    expect(container.querySelectorAll('.forecastContainer').length).toEqual(5);
+    expect(container.querySelectorAll('.forecastContainer').length).toEqual(4);
 
     mockedAxios.get.mockRestore();
   });
