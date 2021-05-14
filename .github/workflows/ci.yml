@@ -40,28 +40,32 @@ jobs:
 
       - run: docker-compose up -d
 
-      - run: npm run lint:styles
-      - run: npm run eslint
-      - run: npm run build
+      - name: Lint
+        run: |
+          npm run lint:styles
+          npm run eslint
 
-      - run: npm run ci
+      - name: Build
+        run: npm run build
 
-      - run: mkdir coverage-reports || true && mkdir .nyc_output || true
-      - run: cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
-      - run: cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
-      - run: npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
-      - run: npx nyc report --reporter lcov --report-dir coverage
+      - name: Test
+        run: npm run ci
 
-      - run: cat ./coverage/lcov.info | codacy-coverage --token ${{ secrets.CODACY_PROJECT_TOKEN }}
-      - run: bash <(curl -s https://codecov.io/bash)
+      - name: Generate coverage
+        run: |
+          mkdir coverage-reports || true && mkdir .nyc_output || true
+          cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
+          cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
+          npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
+          npx nyc report --reporter lcov --report-dir coverage
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Send coverage report
+        run: |
+          cat ./coverage/lcov.info | codacy-coverage --token ${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -s https://codecov.io/bash)
 
       - name: Deploy with gh-pages
-        if: github.ref == 'refs/heads/develop'
+        if: success() && github.ref == 'refs/heads/develop'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages -b website -d build -u "github-actions-bot <support+actions@github.com>"
