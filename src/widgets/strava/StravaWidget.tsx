@@ -203,7 +203,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
 
   const widgetBody = (
     <div className="flexColumn">
-      <div style={{ flex: '1 0 50%', overflowY: 'scroll' }}>
+      <div style={{ height: "20vh", overflowY: 'scroll' }}>
         {activities.slice().reverse().map((activity: IActivity) => {
           return (
             <ComponentWithDetail
@@ -220,7 +220,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         })}
       </div>
 
-      <div style={{ minHeight: '25vh', flex: '1 0 50%' }}>
+      <div style={{ minHeight: '25vh', maxHeight: "80vh", flex: '1 0 50%' }}>
         <Bar
           type="bar"
           data={{
