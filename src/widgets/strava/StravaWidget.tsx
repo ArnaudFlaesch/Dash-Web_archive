@@ -13,7 +13,7 @@ import StravaActivity from './activity/StravaActivity';
 import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
-import { Bar } from 'react-chartjs-2';
+import ChartComponent from 'react-chartjs-2';
 
 interface IProps {
   id: number;
@@ -221,29 +221,46 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       </div>
 
       <div style={{ minHeight: '25vh', maxHeight: "80vh", flex: '1 0 50%' }}>
-        <Bar
+        <ChartComponent
           type="bar"
           data={{
             labels: getStatsFromActivities().map(data => format(data.x, 'MMM yyyy')),
             datasets: [
               {
+                label: 'Distance (kms)',
+                backgroundColor: 'orange',
+                data: getStatsFromActivities(),
+                yAxisID: 'kms',
+                order: 2
+              },
+              {
                 label: 'Activités',
+                type: "line",
                 backgroundColor: 'darkgreen',
                 data: Object.keys(getActivitiesByMonth()).map((month) => {
                   return {
                     x: new Date(month),
                     y: getActivitiesByMonth()[month].length
                   };
-                })
-              },
-              {
-                label: 'Course',
-                backgroundColor: 'orange',
-                data: getStatsFromActivities()
+                }),
+                yAxisID: 'activities',
+                order: 1
               }
             ]
           }}
-
+          options={{
+            scales: {
+              y: [{
+                id: 'kms',
+                type: 'linear',
+                position: 'left'
+              }, {
+                id: 'activities',
+                type: 'linear',
+                position: 'right'
+              }]
+            }
+          }}
         />
       </div>
 
