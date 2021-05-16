@@ -8,7 +8,7 @@
   },
   "homepage": "./",
   "scripts": {
-    "start": "react-scripts -r @cypress/instrument-cra start",
+    "start": "export HTTPS=true && react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build --prod",
     "predeploy": "npm run build",
     "deploy": "gh-pages -b website -d build",
