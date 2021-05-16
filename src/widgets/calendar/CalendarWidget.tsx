@@ -42,6 +42,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
   function onConfigSubmitted(updatedCalendars: string[]) {
     updateWidgetData(props.id, { calendars: updatedCalendars })
       .then(() => {
+        setCalendarUrls([]);
         setCalendarUrls(updatedCalendars);
       })
       .catch((error) => {
@@ -99,7 +100,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
       <Widget
         id={props.id}
         tabId={props.tabId}
-        config={{ calendarUrls: calendarUrls }}
+        config={{ calendars: calendarUrls }}
         header={widgetHeader}
         body={widgetBody}
         editModeComponent={
