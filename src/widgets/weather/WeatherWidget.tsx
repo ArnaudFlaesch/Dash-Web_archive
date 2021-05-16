@@ -18,7 +18,6 @@ import { format } from 'date-fns';
 
 interface IProps {
   id: number;
-  weather_api_key?: string;
   city?: string;
   tabId: number;
   onDeleteButtonClicked: (idWidget: number) => void;
