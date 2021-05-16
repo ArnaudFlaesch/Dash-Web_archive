@@ -42,6 +42,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   const paginationActivities = 20;
 
   useEffect(() => {
+    logger.info(process.env.REACT_APP_STRAVA_CLIENT_ID)
     const values = queryString.parse(search);
     if (values && values.code) {
       const apiCode = values.code.toString();
