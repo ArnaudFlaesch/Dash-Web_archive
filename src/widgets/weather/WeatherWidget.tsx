@@ -114,7 +114,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           )
         }
         case ForecastMode.TOMORROW: {
-          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() + 1 && new Date(forecastDay.dt * 1000).getHours() >= 7);
+          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date(+new Date() + 86400000).getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7);
         }
         case ForecastMode.TODAY:
         default: {

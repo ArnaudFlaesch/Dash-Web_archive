@@ -267,7 +267,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       {(!token ||
         !refreshToken ||
         (tokenExpirationDate &&
-          isBefore(new Date(tokenExpirationDate as number), new Date()))) && (
+          isBefore(new Date(tokenExpirationDate as number * 1000), new Date()))) && (
           <a
             href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
           >
