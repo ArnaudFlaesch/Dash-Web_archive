@@ -24,8 +24,8 @@ interface IProps {
 }
 
 export default function StravaWidget(props: IProps): React.ReactElement {
-  const [clientId, setClientId] = useState(props.clientId);
-  const [clientSecret, setClientSecret] = useState(props.clientSecret);
+  const [clientId, setClientId] = useState(process.env.REACT_APP_STRAVA_CLIENT_ID);
+  const [clientSecret, setClientSecret] = useState(process.env.REACT_APP_STRAVA_CLIENT_SECRET);
   const [activities, setActivities] = useState([]);
   const [athlete, setAthlete] = useState<IAthlete>();
   const [token, setToken] = useLocalStorage('strava_token', null);
@@ -42,7 +42,6 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   const paginationActivities = 20;
 
   useEffect(() => {
-    logger.info(process.env.REACT_APP_STRAVA_CLIENT_ID)
     const values = queryString.parse(search);
     if (values && values.code) {
       const apiCode = values.code.toString();

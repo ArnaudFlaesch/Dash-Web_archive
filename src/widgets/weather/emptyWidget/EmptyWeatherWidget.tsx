@@ -3,35 +3,20 @@ import { useState } from 'react';
 import './EmptyWeatherWidget.scss';
 
 interface IProps {
-  weather_api_key?: string;
   city?: string;
-  onConfigSubmitted: (weatherApiKey: string, city: string) => void;
+  onConfigSubmitted: (city: string) => void;
 }
 
 export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
   const [city, setCity] = useState(props.city || '');
-  const [weatherApiKey, setWeatherApiKey] = useState(
-    props.weather_api_key || ''
-  );
-  const onWeatherApiKeyChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value) {
-      setWeatherApiKey(event.target.value);
-    }
-  };
   const onCityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
     setCity(event.target.value);
   const onValidation = () => {
-    props.onConfigSubmitted(weatherApiKey, city);
+    props.onConfigSubmitted(city);
   };
 
   return (
     <div>
-      <input
-        name="weatherApiKey"
-        onChange={onWeatherApiKeyChangeHandler}
-        value={weatherApiKey}
-        placeholder="Saisissez la clé d'API"
-      />
       <input
         name="city"
         onChange={onCityChangeHandler}
@@ -43,9 +28,7 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
         onClick={onValidation}
         disabled={
           !city ||
-          !weatherApiKey ||
-          city?.length < 1 ||
-          weatherApiKey?.length < 1
+          city?.length < 1
         }
       >
         Valider

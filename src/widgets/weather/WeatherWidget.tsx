@@ -37,18 +37,17 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const API_OPTIONS = '?units=metric&lang=fr&appid=';
 
   const [cityToQuery, setCityToQuery] = useState(props.city);
-  const [apiKey, setApiKey] = useState(props.weather_api_key);
   const [weather, setWeather] = useState<IWeather>();
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
   const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
 
   function fetchDataFromWeatherApi() {
-    if (apiKey && cityToQuery) {
+    if (process.env.REACT_APP_OPENWEATHERMAP_KEY && cityToQuery) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           params: {
-            url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+            url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
         })
         .then((result) => {
@@ -60,7 +59,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           params: {
-            url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+            url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
         })
         .then((result: AxiosResponse) => {
@@ -75,7 +74,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
 
   useEffect(() => {
     fetchDataFromWeatherApi();
-  }, [cityToQuery, apiKey]);
+  }, [cityToQuery]);
 
   function refreshWidget() {
     setWeather(undefined);
@@ -84,14 +83,12 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     fetchDataFromWeatherApi();
   }
 
-  function onConfigSubmitted(weatherApiKey: string, updatedCity: string) {
+  function onConfigSubmitted(updatedCity: string) {
     updateWidgetData(props.id, {
-      city: updatedCity,
-      weather_api_key: weatherApiKey
+      city: updatedCity
     })
       .then(() => {
         setCityToQuery(updatedCity);
-        setApiKey(weatherApiKey);
         refreshWidget();
       })
       .catch((error) => {
@@ -253,13 +250,12 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       <Widget
         id={props.id}
         tabId={props.tabId}
-        config={{ city: city, apiKey: apiKey }}
+        config={{ city: city }}
         header={widgetHeader}
         body={widgetBody}
         editModeComponent={
           <EmptyWeatherWidget
             city={cityToQuery}
-            weather_api_key={apiKey}
             onConfigSubmitted={onConfigSubmitted}
           />
         }
