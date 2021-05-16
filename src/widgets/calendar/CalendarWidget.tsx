@@ -42,6 +42,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
   function onConfigSubmitted(updatedCalendars: string[]) {
     updateWidgetData(props.id, { calendars: updatedCalendars })
       .then(() => {
+        // Reset des URL pour pouvoir re-trigger le mode READ du widget via le changement de config.
         setCalendarUrls([]);
         setCalendarUrls(updatedCalendars);
       })
