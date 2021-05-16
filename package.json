@@ -8,7 +8,7 @@
   },
   "homepage": "./",
   "scripts": {
-    "start": "react-scripts -r @cypress/instrument-cra start",
+    "start": "export HTTPS=true && react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build --prod",
     "predeploy": "npm run build",
     "deploy": "gh-pages -b website -d build",
@@ -16,7 +16,7 @@
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",
     "cy:open": "cypress open",
-    "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser firefox",
+    "cy:run": "wait-on https://localhost:3000 && cypress run --headless --browser firefox",
     "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json",
     "cy:verify": "npx cypress verify",
     "eslint": "eslint . --ext .js,.ts,.tsx",
