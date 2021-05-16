@@ -42,7 +42,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
 
   function fetchDataFromWeatherApi() {
-    if (process.env.REACT_APP_OPENWEATHERMAP_KEY && cityToQuery) {
+    if (cityToQuery) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           params: {
