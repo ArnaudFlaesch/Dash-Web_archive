@@ -37,6 +37,4 @@ snyk-report.html
 snyk-report.json
 .snyk
 
-.env
-
 .env.development
