@@ -11,6 +11,8 @@ import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
+import { fr } from "date-fns/locale";
+
 import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
 
 export interface IProps {
@@ -25,7 +27,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
   const [schedules, setSchedules] = useState<Event[]>([]);
 
   const locales = {
-    'fr': require('date-fns/locale/fr'),
+    'fr': fr,
   }
   const localizer = dateFnsLocalizer({
     format,
@@ -85,6 +87,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
     <div>
       <Calendar
         localizer={localizer}
+        culture={"fr"}
         events={schedules}
         startAccessor="start"
         endAccessor="end"
