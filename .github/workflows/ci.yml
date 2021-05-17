@@ -50,8 +50,6 @@ jobs:
 
       - name: Test
         run: npm run ci
-        env:
-          NODE_ENV: test
 
       - name: Generate coverage
         run: |
