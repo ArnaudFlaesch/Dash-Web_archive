@@ -93,7 +93,7 @@
     "mockdate": "3.0.5",
     "node-sass": "5.0.0",
     "nyc": "15.1.0",
-    "snyk": "1.595.0",
+    "snyk": "1.596.0",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "22.0.0",
     "ts-jest": "26.5.6",
