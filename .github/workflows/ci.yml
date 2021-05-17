@@ -64,6 +64,12 @@ jobs:
           cat ./coverage/lcov.info | codacy-coverage --token ${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -s https://codecov.io/bash)
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Deploy with gh-pages
         if: success() && github.ref == 'refs/heads/develop'
         run: |
