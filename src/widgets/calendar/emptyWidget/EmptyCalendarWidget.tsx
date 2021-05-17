@@ -49,11 +49,12 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
               </div>
             );
           })}
-        <button className="btn btn-success" onClick={onCalendarUrlAdded}>
+        <button id="addCalendarUrl" className="btn btn-primary" onClick={onCalendarUrlAdded}>
           Ajouter
         </button>
       </div>
       <button
+        id="validateCalendarUrls"
         onClick={onValidation}
         disabled={!calendarUrls || calendarUrls?.length < 1}
         className="btn btn-success"

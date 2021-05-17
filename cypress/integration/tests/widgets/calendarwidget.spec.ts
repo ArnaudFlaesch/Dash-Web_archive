@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+
 describe('Calendar Widget tests', () => {
   before(() => {
     cy.visit('/');
@@ -16,6 +19,30 @@ describe('Calendar Widget tests', () => {
         .click()
         .get('.widget')
         .should('have.length', 1);
+    });
+  });
+
+  it('Should edit Calendar widget and add a Ical feed', () => {
+    cy.get('.editButton')
+      .click()
+      .get('#addCalendarUrl')
+      .click()
+      .get('input')
+      .type(
+        'https://calendar.google.com/calendar/ical/arnaud.flaesch93%40gmail.com/private-1ab986857a788b7ead6db2a67f6f48b9/basic.ics'
+      )
+      .get('#validateCalendarUrls')
+      .click();
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/arnaud.flaesch93%40gmail.com/private-1ab986857a788b7ead6db2a67f6f48b9/basic.ics'
+    ).as('refreshWidget');
+    cy.get('.refreshButton').click();
+    cy.wait('@refreshWidget').then(() => {
+      cy.get('.rbc-toolbar-label').should(
+        'have.text',
+        format(new Date(), 'MMM yyyy', { locale: fr })
+      );
     });
   });
 
