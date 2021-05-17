@@ -36,5 +36,3 @@ cypress/results/
 snyk-report.html
 snyk-report.json
 .snyk
-
-.env.test
