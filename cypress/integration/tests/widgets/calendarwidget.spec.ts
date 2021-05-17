@@ -29,13 +29,13 @@ describe('Calendar Widget tests', () => {
       .click()
       .get('input')
       .type(
-        'https://calendar.google.com/calendar/ical/arnaud.flaesch93%40gmail.com/private-1ab986857a788b7ead6db2a67f6f48b9/basic.ics'
+        'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
       )
       .get('#validateCalendarUrls')
       .click();
     cy.intercept(
       'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/arnaud.flaesch93%40gmail.com/private-1ab986857a788b7ead6db2a67f6f48b9/basic.ics'
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
     ).as('refreshWidget');
     cy.get('.refreshButton').click();
     cy.wait('@refreshWidget').then(() => {
