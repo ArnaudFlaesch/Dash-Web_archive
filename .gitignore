@@ -38,5 +38,3 @@ snyk-report.json
 .snyk
 
 .env.test
-
-.env
