@@ -80,6 +80,7 @@ jobs:
         if: success() && github.ref == 'refs/heads/develop'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages-clean
           npx gh-pages -b website -d build -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
