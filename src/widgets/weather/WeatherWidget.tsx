@@ -18,7 +18,6 @@ import { format } from 'date-fns';
 
 interface IProps {
   id: number;
-  weather_api_key?: string;
   city?: string;
   tabId: number;
   onDeleteButtonClicked: (idWidget: number) => void;
@@ -37,18 +36,17 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const API_OPTIONS = '?units=metric&lang=fr&appid=';
 
   const [cityToQuery, setCityToQuery] = useState(props.city);
-  const [apiKey, setApiKey] = useState(props.weather_api_key);
   const [weather, setWeather] = useState<IWeather>();
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
   const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
 
   function fetchDataFromWeatherApi() {
-    if (apiKey && cityToQuery) {
+    if (cityToQuery) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           params: {
-            url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+            url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
         })
         .then((result) => {
@@ -60,7 +58,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           params: {
-            url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${apiKey}&q=${cityToQuery}`
+            url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
         })
         .then((result: AxiosResponse) => {
@@ -75,7 +73,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
 
   useEffect(() => {
     fetchDataFromWeatherApi();
-  }, [cityToQuery, apiKey]);
+  }, [cityToQuery]);
 
   function refreshWidget() {
     setWeather(undefined);
@@ -84,14 +82,12 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     fetchDataFromWeatherApi();
   }
 
-  function onConfigSubmitted(weatherApiKey: string, updatedCity: string) {
+  function onConfigSubmitted(updatedCity: string) {
     updateWidgetData(props.id, {
-      city: updatedCity,
-      weather_api_key: weatherApiKey
+      city: updatedCity
     })
       .then(() => {
         setCityToQuery(updatedCity);
-        setApiKey(weatherApiKey);
         refreshWidget();
       })
       .catch((error) => {
@@ -114,7 +110,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           )
         }
         case ForecastMode.TOMORROW: {
-          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() + 1 && new Date(forecastDay.dt * 1000).getHours() >= 7);
+          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date(+new Date() + 86400000).getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7);
         }
         case ForecastMode.TODAY:
         default: {
@@ -193,9 +189,9 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           <div className="flexRow">
             <span className="bold">Prévisions</span>
             <span style={{ alignContent: "space-between", display: "flex" }}>
-              <button onClick={selectTodayForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}>Aujourd'hui</button>
-              <button onClick={selectTomorrowForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}>Demain</button>
-              <button onClick={selectWeekForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}>Semaine</button>
+              <button id="toggleTodayForecast" onClick={selectTodayForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}>Aujourd'hui</button>
+              <button id="toggleTomorrowForecast" onClick={selectTomorrowForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}>Demain</button>
+              <button id="toggleWeekForecast" onClick={selectWeekForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}>Semaine</button>
             </span>
           </div>
           <br />
@@ -253,13 +249,12 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       <Widget
         id={props.id}
         tabId={props.tabId}
-        config={{ city: city, apiKey: apiKey }}
+        config={{ city: city }}
         header={widgetHeader}
         body={widgetBody}
         editModeComponent={
           <EmptyWeatherWidget
             city={cityToQuery}
-            weather_api_key={apiKey}
             onConfigSubmitted={onConfigSubmitted}
           />
         }

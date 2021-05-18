@@ -3,8 +3,8 @@
   "version": "0.2.0",
   "private": true,
   "engines": {
-    "node": ">=14.0.0 <=15.12.0",
-    "npm": "7.13.0"
+    "node": "16.x",
+    "npm": "7.x"
   },
   "homepage": "./",
   "scripts": {
@@ -16,7 +16,7 @@
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",
     "cy:open": "cypress open",
-    "cy:run": "wait-on https://localhost:3000 && cypress run --headless --browser chrome",
+    "cy:run": "wait-on https://localhost:3000 && cypress run --headless",
     "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json",
     "cy:verify": "npx cypress verify",
     "eslint": "eslint . --ext .js,.ts,.tsx",
@@ -34,7 +34,6 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@toast-ui/react-calendar": "1.0.5",
     "axios": "0.21.1",
     "bootstrap": "5.0.1",
     "chart.js": "3.2.1",
@@ -48,6 +47,7 @@
     "query-string": "7.0.0",
     "react": "17.0.2",
     "react-beautiful-dnd": "13.1.0",
+    "react-big-calendar": "0.33.2",
     "react-chartjs-2": "3.0.3",
     "react-dom": "17.0.2",
     "react-redux": "7.2.4",
@@ -71,6 +71,7 @@
     "@types/pg": "7.14.11",
     "@types/react": "17.0.5",
     "@types/react-beautiful-dnd": "13.0.0",
+    "@types/react-big-calendar": "0.31.0",
     "@types/react-dom": "17.0.5",
     "@types/react-redux": "7.1.16",
     "@types/react-router-dom": "5.1.7",
@@ -91,9 +92,9 @@
     "mochawesome-merge": "4.2.0",
     "mochawesome-report-generator": "5.2.0",
     "mockdate": "3.0.5",
-    "node-sass": "5.0.0",
     "nyc": "15.1.0",
     "snyk": "1.598.0",
+    "sass": "1.32.13",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "22.0.0",
     "ts-jest": "26.5.6",

@@ -20,6 +20,7 @@ export default function EmptyRSSWidget(props: IProps): React.ReactElement {
   return (
     <div>
       <input
+        id="rssFeedUrl"
         name="url"
         onChange={onChangeHandler}
         value={url}
