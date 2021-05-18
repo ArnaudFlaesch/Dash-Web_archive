@@ -46,13 +46,11 @@ jobs:
           npm run eslint
 
       - name: Build
-        run: npm run build
-        env:
-          REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
-          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
-          REACT_APP_OPENWEATHERMAP_KEY: ${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }}
-          REACT_APP_STRAVA_CLIENT_ID: ${{ secrets.REACT_APP_STRAVA_CLIENT_ID }}
-          REACT_APP_STRAVA_CLIENT_SECRET: ${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }}
+        run: |
+          echo API_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
+          echo API_KEY=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
+          echo API_KEY=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
+          npm run build
 
       - name: Test
         run: npm run ci
@@ -77,7 +75,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Deploy with gh-pages
-        if: success() && github.ref == 'refs/heads/develop'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages-clean
