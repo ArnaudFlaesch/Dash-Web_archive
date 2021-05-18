@@ -18,13 +18,15 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
   return (
     <div>
       <input
+        id="cityNameInput"
         name="city"
         onChange={onCityChangeHandler}
         value={city}
         placeholder="Saisissez de nom de la ville"
       />
       <button
-        className="validateButton btn btn-success"
+        id="validateButton"
+        className="btn btn-success"
         onClick={onValidation}
         disabled={
           !city ||

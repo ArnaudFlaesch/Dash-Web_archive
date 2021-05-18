@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import MockDate from 'mockdate';
+
 describe('Weather Widget tests', () => {
   before(() => {
     cy.visit('/');
@@ -20,7 +22,42 @@ describe('Weather Widget tests', () => {
     });
   });
 
-  it('Should delete previously added widget', () => {
+  it('Should edit RSS widget and add a feed', () => {
+    MockDate.set(1588269600000);
+
+    // @TODO Changer le path de l'URL pas quelque chose de plus parlant que `/proxy/?*`
+    cy.intercept('GET', `/proxy/?*`, { fixture: 'parisWeatherSample.json' }).as(
+      'refreshWidget'
+    );
+
+    cy.get('.editButton')
+      .click()
+      .get('#cityNameInput')
+      .type('Paris')
+      .get('#validateButton')
+      .click();
+    cy.get('.refreshButton').click();
+    cy.wait('@refreshWidget').then(() => {
+      cy.get('.forecast').should('have.length', 6);
+    });
+  });
+
+  it("Should toggle between today's, tomorrow's and the week's forecasts", () => {
+    cy.get('#toggleTodayForecast')
+      .click()
+      .get('.forecast')
+      .should('have.length', 6)
+      .get('#toggleTomorrowForecast')
+      .click()
+      .get('.forecast')
+      .should('have.length', 6)
+      .get('#toggleWeekForecast')
+      .click()
+      .get('.forecast')
+      .should('have.length', 5);
+  });
+
+  xit('Should delete previously added widget', () => {
     cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
     cy.get('.deleteButton')
       .click()

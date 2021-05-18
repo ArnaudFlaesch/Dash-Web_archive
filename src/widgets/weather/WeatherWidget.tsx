@@ -189,9 +189,9 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           <div className="flexRow">
             <span className="bold">Prévisions</span>
             <span style={{ alignContent: "space-between", display: "flex" }}>
-              <button onClick={selectTodayForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}>Aujourd'hui</button>
-              <button onClick={selectTomorrowForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}>Demain</button>
-              <button onClick={selectWeekForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}>Semaine</button>
+              <button id="toggleTodayForecast" onClick={selectTodayForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}>Aujourd'hui</button>
+              <button id="toggleTomorrowForecast" onClick={selectTomorrowForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}>Demain</button>
+              <button id="toggleWeekForecast" onClick={selectWeekForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}>Semaine</button>
             </span>
           </div>
           <br />

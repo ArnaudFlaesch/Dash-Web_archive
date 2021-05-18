@@ -22,7 +22,7 @@ describe('Calendar Widget tests', () => {
     });
   });
 
-  it('Should edit Calendar widget and add a Ical feed', () => {
+  it('Should edit Calendar widget and add an Ical feed', () => {
     cy.get('.editButton')
       .click()
       .get('#addCalendarUrl')
