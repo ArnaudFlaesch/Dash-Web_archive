@@ -48,9 +48,12 @@ jobs:
       - name: Build
         run: |
           echo API_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
-          echo API_KEY=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
-          echo API_KEY=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
+          echo API_KEY=${{ secrets.API_KEY }} >> .env.production
+          echo API_KEY=${{ secrets.API_KEY }} >> .env.production
           npm run build
+        env:
+          REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
+          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
 
       - name: Test
         run: npm run ci
@@ -75,6 +78,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Deploy with gh-pages
+        if: success() && github.ref == 'refs/heads/develop'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages-clean
