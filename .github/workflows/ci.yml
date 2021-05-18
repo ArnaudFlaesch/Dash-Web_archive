@@ -12,10 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 15.8.0 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+          node-version: 16.1.0 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -64,10 +64,16 @@ jobs:
           cat ./coverage/lcov.info | codacy-coverage --token ${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -s https://codecov.io/bash)
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Deploy with gh-pages
         if: success() && github.ref == 'refs/heads/develop'
         run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin https://git:${secrets.GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages -b website -d build -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

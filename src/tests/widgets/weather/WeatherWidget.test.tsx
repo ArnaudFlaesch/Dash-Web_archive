@@ -65,7 +65,6 @@ describe('Weather widget tests', () => {
             id={2}
             city={'Montréal'}
             tabId={3}
-            weather_api_key={'342535667748234148989'}
             onDeleteButtonClicked={onDeleteButtonClicked}
           />
         </Provider>,
@@ -102,7 +101,6 @@ describe('Weather widget tests', () => {
             id={2}
             city={'Montréal'}
             tabId={4}
-            weather_api_key={'342535667748234148989'}
             onDeleteButtonClicked={onDeleteButtonClicked}
           />
         </Provider>,
@@ -137,7 +135,6 @@ describe('Weather widget tests', () => {
     await act(async () => {
       editButton.click();
     });
-    expect(container.innerHTML).toContain('342535667748234148989');
     expect(container.innerHTML).toContain('Montréal');
   });
 });

@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+
 describe('Calendar Widget tests', () => {
   before(() => {
     cy.visit('/');
@@ -16,6 +19,30 @@ describe('Calendar Widget tests', () => {
         .click()
         .get('.widget')
         .should('have.length', 1);
+    });
+  });
+
+  it('Should edit Calendar widget and add an Ical feed', () => {
+    cy.get('.editButton')
+      .click()
+      .get('#addCalendarUrl')
+      .click()
+      .get('input')
+      .type(
+        'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
+      )
+      .get('#validateCalendarUrls')
+      .click();
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
+    ).as('refreshWidget');
+    cy.get('.refreshButton').click();
+    cy.wait('@refreshWidget').then(() => {
+      cy.get('.rbc-toolbar-label').should(
+        'have.text',
+        format(new Date(), 'MMM yyyy', { locale: fr })
+      );
     });
   });
 
