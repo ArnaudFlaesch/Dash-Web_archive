@@ -48,8 +48,8 @@ jobs:
       - name: Build
         run: |
           echo API_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
-          echo API_KEY=${{ secrets.API_KEY }} >> .env.production
-          echo API_KEY=${{ secrets.API_KEY }} >> .env.production
+          echo API_KEY=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
+          echo API_KEY=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
           npm run build
         env:
           REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
