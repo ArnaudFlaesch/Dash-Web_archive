@@ -27,26 +27,34 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
     setCalendarUrls(calendarUrls.concat(''));
   };
 
+  function removeCalendarUrl(calendarUrl: string) {
+    setCalendarUrls(calendarUrls.filter(url => url !== calendarUrl));
+  }
+
   return (
     <div>
       <div>
         {calendarUrls &&
           calendarUrls.map((url, index) => {
             return (
-              <input
-                key={index}
-                id={index.toString()}
-                onChange={onCalendarUrlUpdated}
-                value={url}
-                placeholder="Saisissez une URL"
-              />
+              <div>
+                <input
+                  key={index}
+                  id={index.toString()}
+                  onChange={onCalendarUrlUpdated}
+                  value={url}
+                  placeholder="Saisissez une URL"
+                />
+                <button className="btn btn-danger" onClick={() => removeCalendarUrl(url)}>Supprimer</button>
+              </div>
             );
           })}
-        <button className="btn btn-success" onClick={onCalendarUrlAdded}>
+        <button id="addCalendarUrl" className="btn btn-primary" onClick={onCalendarUrlAdded}>
           Ajouter
         </button>
       </div>
       <button
+        id="validateCalendarUrls"
         onClick={onValidation}
         disabled={!calendarUrls || calendarUrls?.length < 1}
         className="btn btn-success"

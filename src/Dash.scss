@@ -13,7 +13,7 @@
   }
 
   .tabsBar {
-    max-width: calc(100% - 70px);
+    width: 95vw;
 
     .widgetList {
       display: flex;
@@ -24,7 +24,7 @@
         margin: 10px 10px 10px 5px;
         border: 2px solid black;
         height: 500px;
-        flex-basis: calc(100% / 3.12);
+        flex: 0 0 calc((100% - 60px) / 3);
         overflow-y: scroll;
         display: flex;
         flex-direction: column;
