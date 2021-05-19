@@ -10,7 +10,6 @@ import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import StravaActivity from './activity/StravaActivity';
-import EmptyStravaWidget from './emptyWidget/EmptyStravaWidget';
 import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
 import ChartComponent from 'react-chartjs-2';
@@ -61,24 +60,6 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       refreshWidget();
     }
   }, [token]);
-
-  function onConfigSubmitted(
-    updatedClientId: string,
-    updatedClientSecret: string
-  ) {
-    updateWidgetData(props.id, {
-      clientId: updatedClientId,
-      clientSecret: updatedClientSecret
-    })
-      .then(() => {
-        setClientId(clientId);
-        setClientSecret(clientSecret);
-        refreshWidget();
-      })
-      .catch((error) => {
-        logger.error(error.message);
-      });
-  }
 
   function refreshWidget() {
     setActivities([]);

@@ -21,6 +21,11 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should edit RSS widget and add a feed URL', () => {
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml',
+      { fixture: 'figaro_rss.json' }
+    ).as('refreshWidget');
     cy.get('.editButton')
       .click()
       .get('.btn-success')
@@ -29,13 +34,15 @@ describe('RSS Widget tests', () => {
       .type('https://www.lefigaro.fr/rss/figaro_actualites.xml')
       .get('.btn-success')
       .click();
-    cy.intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml').as('refreshWidget');
     cy.get('.refreshButton').click();
     cy.wait('@refreshWidget').then(() => {
-      cy.get('.rssTitle').should(
-        'have.text',
-        'Le Figaro - Actualité en direct et informations en continu'
-      );
+      cy.get('.rssTitle')
+        .should(
+          'have.text',
+          'Le Figaro - Actualité en direct et informations en continu'
+        )
+        .get('.rssArticle')
+        .should('have.length', 20);
     });
   });
 
