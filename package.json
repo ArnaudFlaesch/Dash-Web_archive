@@ -91,7 +91,7 @@
     "mochawesome-report-generator": "5.2.0",
     "mockdate": "3.0.5",
     "nyc": "15.1.0",
-    "snyk": "1.602.0",
+    "snyk": "1.604.0",
     "sass": "1.32.13",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "22.0.0",
