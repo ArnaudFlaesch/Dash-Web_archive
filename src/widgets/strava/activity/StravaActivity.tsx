@@ -7,7 +7,7 @@ export default function StravaActivity(props: IActivity): React.ReactElement {
     <div>
       <div>
         <a href={`https://www.strava.com/activities/${props.id}`}>
-          {format(new Date(props.start_date_local), 'ddd DD MMM')}{' '}
+          {format(new Date(props.start_date_local), 'dd MMM')}{' '}
           {props.name}
         </a>
       </div>

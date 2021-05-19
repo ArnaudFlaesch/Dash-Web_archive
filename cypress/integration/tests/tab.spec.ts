@@ -18,16 +18,30 @@ describe('Tab tests', () => {
       .dblclick()
       .get('input')
       .clear()
-      .type('Flux RSS').dblclick();
+      .type('Flux RSS')
+      .dblclick();
     cy.wait('@updateTab').then(() => {
-      cy.get('.tab.selectedItem').should('have.text', 'Flux RSS');
+      cy.get('.tab.selectedItem')
+        .should('have.text', 'Flux RSS')
+
+        .get('.tab')
+        .first()
+        .click()
+        .get('.tab.selectedItem')
+        .should('have.text', 'Nouvel onglet')
+        .get('.tab')
+        .contains('Flux RSS')
+        .click();
     });
   });
 
   it('Should delete the created tab', () => {
     cy.intercept('DELETE', '/tab/deleteTab/*').as('deleteTab');
-    cy.get('.tab').contains('Flux RSS').dblclick()
-    .get('.deleteTabButton').click()
+    cy.get('.tab')
+      .contains('Flux RSS')
+      .dblclick()
+      .get('.deleteTabButton')
+      .click();
     cy.wait('@deleteTab').then(() => {
       cy.get('.tab').should('have.length', 1);
     });

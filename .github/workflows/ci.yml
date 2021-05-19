@@ -1,0 +1,86 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on: ["push"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.1.0 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - run: yarn install --frozen-lockfile
+      - run: npm i -g npm-run-all wait-on gh-pages
+      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - run: docker-compose up -d
+
+      - name: Lint
+        run: |
+          npm run lint:styles
+          npm run eslint
+
+      - name: Build
+        run: |
+          echo REACT_APP_FRONTEND_URL=${{ secrets.REACT_APP_FRONTEND_URL }} >> .env.production
+          echo REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }} >> .env.production
+          echo REACT_APP_OPENWEATHERMAP_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
+          echo REACT_APP_STRAVA_CLIENT_ID=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
+          echo REACT_APP_STRAVA_CLIENT_SECRET=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
+          npm run build
+
+      - name: Test
+        run: npm run ci
+
+      - name: Generate coverage
+        run: |
+          mkdir coverage-reports || true && mkdir .nyc_output || true
+          cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
+          cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
+          npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
+          npx nyc report --reporter lcov --report-dir coverage
+
+      - name: Send coverage report
+        run: |
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -s https://codecov.io/bash)
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Deploy with gh-pages
+        if: success() && github.ref == 'refs/heads/develop'
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages-clean
+          npx gh-pages -b website -d build -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
