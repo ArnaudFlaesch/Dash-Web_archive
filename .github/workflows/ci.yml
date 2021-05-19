@@ -28,11 +28,6 @@ jobs:
             ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Setup timezone
-        uses: zcong1993/setup-timezone@master
-        with:
-          timezone: Europe/France
-
       - run: yarn install --frozen-lockfile
       - run: npm i -g npm-run-all wait-on gh-pages
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p

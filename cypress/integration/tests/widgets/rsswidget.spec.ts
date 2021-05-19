@@ -66,11 +66,6 @@ describe('RSS Widget tests', () => {
             'have.text',
             "La deuxième étape de l'allègement des restrictions sanitaires contre le Covid-19 commence ce mercredi. Le couvre-feu est repoussé de 19h à 21h."
           )
-          .get('.articlePubDate:visible')
-          .should(
-            'have.text',
-            'Publié le 19/05/2021, 20:08:10 par Paul Sugy, Stanislas Poyet, Steve Tenré'
-          )
           .click();
       });
   });
