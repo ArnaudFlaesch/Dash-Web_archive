@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { useLocalStorage } from '../../hooks/localStorageHook';
-import { updateWidgetData } from '../../services/WidgetService';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import StravaActivity from './activity/StravaActivity';
@@ -16,15 +15,11 @@ import ChartComponent from 'react-chartjs-2';
 
 interface IProps {
   id: number;
-  clientId?: string;
-  clientSecret?: string;
   tabId: number;
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
 export default function StravaWidget(props: IProps): React.ReactElement {
-  const [clientId, setClientId] = useState(process.env.REACT_APP_STRAVA_CLIENT_ID);
-  const [clientSecret, setClientSecret] = useState(process.env.REACT_APP_STRAVA_CLIENT_SECRET);
   const [activities, setActivities] = useState([]);
   const [athlete, setAthlete] = useState<IAthlete>();
   const [token, setToken] = useLocalStorage('strava_token', null);
@@ -70,8 +65,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   function getToken(apiCode: string) {
     axios
       .post('https://www.strava.com/oauth/token', {
-        client_id: clientId,
-        client_secret: clientSecret,
+        client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
+        client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
         code: apiCode,
         grant_type: 'authorization_code'
       })
@@ -90,8 +85,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
     if (refreshToken) {
       axios
         .post('https://www.strava.com/oauth/token', {
-          client_id: clientId,
-          client_secret: clientSecret,
+          client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
+          client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
           refresh_token: refreshToken,
           grant_type: 'refresh_token'
         })
@@ -258,7 +253,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         (tokenExpirationDate &&
           isBefore(new Date(tokenExpirationDate as number * 1000), new Date()))) && (
           <a
-            href={`https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
+            href={`https://www.strava.com/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
           >
             <Button>Se connecter</Button>
           </a>
@@ -271,7 +266,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
       <Widget
         id={props.id}
         tabId={props.tabId}
-        config={{ clientId: clientId }}
+        config={{}}
         header={widgetHeader}
         body={widgetBody}
         editModeComponent={
