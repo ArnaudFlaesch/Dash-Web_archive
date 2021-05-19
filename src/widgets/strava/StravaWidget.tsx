@@ -294,11 +294,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         header={widgetHeader}
         body={widgetBody}
         editModeComponent={
-          <EmptyStravaWidget
-            clientId={clientId}
-            clientSecret={clientSecret}
-            onConfigSubmitted={onConfigSubmitted}
-          />
+          <div />
         }
         refreshFunction={refreshWidget}
         onDeleteButtonClicked={props.onDeleteButtonClicked}
