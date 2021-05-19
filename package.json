@@ -10,8 +10,6 @@
   "scripts": {
     "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build --prod",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -b website -d build",
     "test": "react-scripts test --env=jsdom",
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",

@@ -46,13 +46,13 @@ jobs:
           npm run eslint
 
       - name: Build
-        run: npm run build
-        env:
-          REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
-          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
-          REACT_APP_OPENWEATHERMAP_KEY: ${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }}
-          REACT_APP_STRAVA_CLIENT_ID: ${{ secrets.REACT_APP_STRAVA_CLIENT_ID }}
-          REACT_APP_STRAVA_CLIENT_SECRET: ${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }}
+        run: |
+          echo REACT_APP_FRONTEND_URL=${{ secrets.REACT_APP_FRONTEND_URL }} >> .env.production
+          echo REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }} >> .env.production
+          echo REACT_APP_OPENWEATHERMAP_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
+          echo REACT_APP_STRAVA_CLIENT_ID=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
+          echo REACT_APP_STRAVA_CLIENT_SECRET=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
+          npm run build
 
       - name: Test
         run: npm run ci
