@@ -28,6 +28,12 @@ jobs:
             ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - uses: actions/set-timezone-action@v1.1
+        with:
+          timezoneLinux: "Europe/France"
+          timezoneMacos: "Europe/France"
+          timezoneWindows: "France Standard Time"
+
       - run: yarn install --frozen-lockfile
       - run: npm i -g npm-run-all wait-on gh-pages
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -56,11 +62,6 @@ jobs:
 
       - name: Test
         run: npm run ci
-        uses: actions/set-timezone-action@v1.1
-        with:
-          timezoneLinux: "Europe/France"
-          timezoneMacos: "Europe/France"
-          timezoneWindows: "France Standard Time"
 
       - name: Generate coverage
         run: |
