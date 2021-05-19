@@ -29,7 +29,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - run: yarn install --frozen-lockfile
-      - run: npm i -g codacy-coverage npm-run-all wait-on gh-pages
+      - run: npm i -g npm-run-all wait-on gh-pages
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
       - name: Login to Docker Hub

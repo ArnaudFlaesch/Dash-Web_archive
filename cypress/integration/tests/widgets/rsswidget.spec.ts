@@ -52,9 +52,8 @@ describe('RSS Widget tests', () => {
         cy.get('.rssArticle')
           .should('have.length', 20)
           .first()
-          .should(
-            'have.text',
-            '20:08 EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
+          .contains(
+            'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
           )
           .click()
           .get('.articleTitle:visible')
