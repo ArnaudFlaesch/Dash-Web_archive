@@ -21,29 +21,59 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should edit RSS widget and add a feed URL', () => {
+    cy.intercept(
+      'GET',
+      '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
+      { fixture: 'figaro_rss.xml' }
+    ).as('refreshWidget');
+
     cy.get('.editButton')
       .click()
       .get('.btn-success')
       .should('be.disabled')
       .get('input')
-      .type('https://www.lefigaro.fr/rss/figaro_actualites.xml')
+      .type('http://www.lefigaro.fr/rss/figaro_actualites.xml')
       .get('.btn-success')
-      .click();
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml',
-      { fixture: 'figaro_rss.xml' }
-    ).as('refreshWidget');
-    cy.get('.refreshButton').click();
-    cy.wait('@refreshWidget').then(() => {
-      cy.get('.rssTitle')
-        .should(
-          'have.text',
-          'Le Figaro - Actualité en direct et informations en continu'
-        )
-        .get('.rssArticle')
-        .should('have.length', 20);
-    });
+      .click()
+      .wait('@refreshWidget')
+      .then(() => {
+        cy.get('.rssTitle')
+          .should(
+            'have.text',
+            'Le Figaro - Actualité en direct et informations en continu'
+          )
+          .get('.rssArticle')
+          .should('have.length', 20);
+      })
+      .get('.refreshButton')
+      .click()
+      .wait('@refreshWidget')
+      .then(() => {
+        cy.get('.rssArticle')
+          .should('have.length', 20)
+          .first()
+          .should(
+            'have.text',
+            '20:08 EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
+          )
+          .click()
+          .get('.articleTitle:visible')
+          .should(
+            'have.text',
+            'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
+          )
+          .get('.articleContent:visible')
+          .should(
+            'have.text',
+            "La deuxième étape de l'allègement des restrictions sanitaires contre le Covid-19 commence ce mercredi. Le couvre-feu est repoussé de 19h à 21h."
+          )
+          .get('.articlePubDate:visible')
+          .should(
+            'have.text',
+            'Publié le 19/05/2021, 20:08:10 par Paul Sugy, Stanislas Poyet, Steve Tenré'
+          )
+          .click();
+      });
   });
 
   it('Should delete previously added widget', () => {

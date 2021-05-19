@@ -12,14 +12,14 @@ function stripHtmlFromContent(content?: string) {
 const RSSArticle: React.FunctionComponent<IArticle> = (props) => {
   return (
     <div className="article">
-      <div>
+      <div className="articleTitle">
         <a href={props.link}>{props.title}</a>
       </div>
-      <div>
+      <div className="articleContent">
         {stripHtmlFromContent(props.content) ||
           stripHtmlFromContent(props.description)}
       </div>
-      <div>
+      <div className="articlePubDate">
         Publié le {formatDateFromUTC(props.pubDate || '')}{' '}
         {props.author && 'par ' + props.author}
       </div>

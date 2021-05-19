@@ -14,7 +14,7 @@
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
     "ci": "npm run test:coverage && run-p -r start cy:run:ci",
     "cy:open": "cypress open",
-    "cy:run": "wait-on https://localhost:3000 && cypress run --headless",
+    "cy:run": "wait-on http://localhost:3000 && cypress run --headless",
     "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json",
     "cy:verify": "npx cypress verify",
     "eslint": "eslint . --ext .js,.ts,.tsx",

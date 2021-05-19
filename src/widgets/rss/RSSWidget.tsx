@@ -71,7 +71,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
         minute: '2-digit'
       })
       : '';
-    return <div className="rssArticle">`${date} ${articleTitle}`</div>;
+    return <div className="rssArticle">{date} {articleTitle}</div>;
   }
 
   function getFeedFromRSS(data: IArticle[]) {
