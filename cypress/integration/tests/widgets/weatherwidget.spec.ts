@@ -23,8 +23,6 @@ describe('Weather Widget tests', () => {
   });
 
   it('Should edit Weather widget and add a feed', () => {
-    MockDate.set(1588269600000);
-
     // @TODO Changer le path de l'URL pas quelque chose de plus parlant que `/proxy/?*`
     cy.intercept('GET', `/proxy/?*`, { fixture: 'parisWeatherSample.json' }).as(
       'refreshWidget'
@@ -32,32 +30,40 @@ describe('Weather Widget tests', () => {
 
     cy.get('.editButton')
       .click()
+      .clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
       .get('#cityNameInput')
       .type('Paris')
       .get('#validateButton')
       .click();
     cy.get('.refreshButton').click();
-    cy.wait('@refreshWidget').then(() => {
-      cy.get('.forecast').its('length').should('be.gte', 5);
-    });
+    cy.wait('@refreshWidget')
+      .then(() => {
+        cy.get('.forecast').should('have.length', 6);
+      })
+      .clock()
+      .then((clock) => {
+        clock.restore();
+      });
   });
 
   it("Should toggle between today's, tomorrow's and the week's forecasts", () => {
-    cy.get('#toggleTodayForecast')
+    cy.clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
+      .get('#toggleTodayForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 5)
+      .should('have.length', 6)
       .get('#toggleTomorrowForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 5)
+      .should('have.length', 6)
       .get('#toggleWeekForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 4);
+      .should('have.length', 5)
+      .clock()
+      .then((clock) => {
+        clock.restore();
+      });
   });
 
   it('Should delete previously added widget', () => {
