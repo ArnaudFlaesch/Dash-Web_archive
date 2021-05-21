@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/set-timezone-action@v1.1
+      - uses: actions/set-timezone-action@v1.0
         with:
           timezoneLinux: "Europe/France"
           timezoneMacos: "Europe/France"
