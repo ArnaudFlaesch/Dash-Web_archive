@@ -9,6 +9,10 @@ describe('Weather Widget tests', () => {
     cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
+  beforeEach(() => {
+    cy.clock(new Date(2020, 6, 15, 0, 0, 0).getTime());
+  });
+
   it('Should create a Weather Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
     cy.get('.card-title').should('have.length', 4);
@@ -23,7 +27,6 @@ describe('Weather Widget tests', () => {
   });
 
   it('Should edit Weather widget and add a feed', () => {
-    MockDate.set(1588269600);
 
     // @TODO Changer le path de l'URL pas quelque chose de plus parlant que `/proxy/?*`
     cy.intercept('GET', `/proxy/?*`, { fixture: 'parisWeatherSample.json' }).as(
