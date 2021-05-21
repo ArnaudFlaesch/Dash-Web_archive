@@ -46,18 +46,15 @@ describe('Weather Widget tests', () => {
     cy.get('#toggleTodayForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 5)
+      .should('have.length', 6)
       .get('#toggleTomorrowForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 5)
+      .should('have.length', 6)
       .get('#toggleWeekForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 4);
+      .should('have.length', 5);
   });
 
   it('Should delete previously added widget', () => {
