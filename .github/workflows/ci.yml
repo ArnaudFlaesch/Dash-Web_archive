@@ -12,6 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/set-timezone-action@v1.1
+        with:
+          timezoneLinux: "Europe/France"
+          timezoneMacos: "Europe/France"
+          timezoneWindows: "Central European Summer Time"
+
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
