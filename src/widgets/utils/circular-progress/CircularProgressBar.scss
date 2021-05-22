@@ -26,11 +26,11 @@
   z-index: 1;
 }
 
-.progress .progress-left {
+.progress .progressLeft {
   left: 0;
 }
 
-.progress .progress-bar {
+.progress .progressBar {
   width: 100%;
   height: 100%;
   background: none;
@@ -40,7 +40,7 @@
   top: 0;
 }
 
-.progress .progress-left .progress-bar {
+.progress .progressLeft .progressBar {
   left: 100%;
   border-top-right-radius: 80px;
   border-bottom-right-radius: 80px;
@@ -49,11 +49,11 @@
   transform-origin: center left;
 }
 
-.progress .progress-right {
+.progress .progressRight {
   right: 0;
 }
 
-.progress .progress-right .progress-bar {
+.progress .progressRight .progressBar {
   left: -100%;
   border-top-left-radius: 80px;
   border-bottom-left-radius: 80px;
@@ -62,7 +62,7 @@
   transform-origin: center right;
 }
 
-.progress .progress-value {
+.progress .progressValue {
   position: absolute;
   top: 0;
   left: 0;
