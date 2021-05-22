@@ -9,7 +9,6 @@ describe('RSS Widget tests', () => {
 
   it('Should create a RSS Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
-    cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#RSS').click();
     cy.wait('@addWidget').then(() => {

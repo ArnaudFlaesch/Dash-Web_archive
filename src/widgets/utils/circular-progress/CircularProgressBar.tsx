@@ -18,7 +18,7 @@ const CircularProgressBar: React.FunctionComponent<IProps> = (props) => {
             <span className="progressRight">
                 <span style={{ transform: (props.value > 50) ? `rotate(180deg)` : `rotate(${percentageToDegrees(props.value)}deg)` }} className="progressBar border-primary"></span>
             </span>
-            <div className="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            <div className="progressValue w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
                 <div className="h2 font-weight-bold">{Math.round(props.value)}%</div>
             </div>
         </div>

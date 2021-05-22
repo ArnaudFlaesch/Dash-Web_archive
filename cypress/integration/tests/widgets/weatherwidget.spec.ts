@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-import MockDate from 'mockdate';
-
 describe('Weather Widget tests', () => {
   before(() => {
     cy.visit('/');
@@ -11,7 +9,6 @@ describe('Weather Widget tests', () => {
 
   it('Should create a Weather Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
-    cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#WEATHER').click();
     cy.wait('@addWidget').then(() => {
