@@ -19,6 +19,7 @@ import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
 import FacebookWidget from 'src/widgets/facebook/FacebookWidget';
+import SteamWidget from 'src/widgets/steam/SteamWidget';
 
 interface IProps {
   tabId: number;
@@ -64,6 +65,16 @@ export default function TabDash(props: IProps): React.ReactElement {
       case WidgetTypes.STRAVA: {
         return (
           <StravaWidget
+            id={widgetConfig.id}
+            tabId={widgetConfig.tab.id}
+            {...widgetConfig.data}
+            onDeleteButtonClicked={deleteWidgetFromDashboard}
+          />
+        );
+      }
+      case WidgetTypes.STEAM: {
+        return (
+          <SteamWidget
             id={widgetConfig.id}
             tabId={widgetConfig.tab.id}
             {...widgetConfig.data}
@@ -153,7 +164,7 @@ export default function TabDash(props: IProps): React.ReactElement {
               ref={providedDroppable.innerRef}
             >
               <div className="widgetList">
-              <FacebookWidget />
+                <FacebookWidget />
                 {widgets &&
                   widgets.length > 0 &&
                   widgets.map((widgetConfig: IWidgetConfig, index) => {

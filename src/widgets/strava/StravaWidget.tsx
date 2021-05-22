@@ -269,9 +269,6 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         config={{}}
         header={widgetHeader}
         body={widgetBody}
-        editModeComponent={
-          <div />
-        }
         refreshFunction={refreshWidget}
         onDeleteButtonClicked={props.onDeleteButtonClicked}
       />

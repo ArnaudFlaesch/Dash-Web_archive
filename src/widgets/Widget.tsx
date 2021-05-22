@@ -9,7 +9,7 @@ interface IProps {
   config: Record<string, unknown>;
   header: React.ReactElement;
   body: React.ReactElement;
-  editModeComponent: React.ReactElement<IProps>;
+  editModeComponent?: React.ReactElement<IProps>;
   refreshFunction: () => void;
   onDeleteButtonClicked: (idWidget: number) => void;
 }
@@ -22,7 +22,9 @@ export default function Widget(props: IProps): React.ReactElement {
   }, [props.config]);
 
   function editWidget() {
-    setMode(ModeEnum.EDIT);
+    if (props.editModeComponent) {
+      setMode(ModeEnum.EDIT);
+    }
   }
 
   function cancelDeletion() {
@@ -40,12 +42,14 @@ export default function Widget(props: IProps): React.ReactElement {
           <div className="header">
             <div className="leftGroup widgetHeader">{props.header}</div>
             <div className="rightGroup">
-              <button
-                onClick={editWidget}
-                className="btn btn-default editButton"
-              >
-                <i className="fa fa-cog" aria-hidden="true" />
-              </button>
+              {props.editModeComponent &&
+                <button
+                  onClick={editWidget}
+                  className="btn btn-default editButton"
+                >
+                  <i className="fa fa-cog" aria-hidden="true" />
+                </button>
+              }
               <button
                 onClick={props.refreshFunction}
                 className="btn btn-default refreshButton"
@@ -68,9 +72,7 @@ export default function Widget(props: IProps): React.ReactElement {
           onDeleteButtonClicked={props.onDeleteButtonClicked}
           onCancelButtonClicked={cancelDeletion}
         />
-      ) : (
-        props.editModeComponent
-      )}
+      ) : (props.editModeComponent) ? props.editModeComponent : () => setMode(ModeEnum.READ)}
     </div>
   );
 }
