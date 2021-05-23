@@ -55,15 +55,13 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
 
   function refreshWidget() {
     setSchedules([]);
-    calendarUrls?.map((calendarUrl: string, index: number) => {
+    calendarUrls?.map((calendarUrl: string) => {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
         .then((response) => {
           const data = ical.parseICS(response.data);
-          const scheds = index > 0 ? schedules : [];
-          setSchedules([
-            ...scheds,
-            ...Object.keys(data).map((eventKey) => {
+          setSchedules(schedules =>
+            schedules.concat(...Object.keys(data).map((eventKey) => {
               const event = data[eventKey];
               const newSchedule: Event = {
                 title: event.summary,
@@ -72,8 +70,8 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
                 allDay: event.end?.getHours() === 0 && event.start?.getHours() === 0
               };
               return newSchedule;
-            })
-          ]);
+            }))
+          );
         })
         .catch((error) => {
           logger.error(error);
