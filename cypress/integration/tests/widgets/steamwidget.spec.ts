@@ -41,7 +41,7 @@ describe('Steam Widget tests', () => {
       });
   });
 
-  it('Should display Half-Life 2 details', () => {
+  it('Should display Half-Life 2: Episode Two details', () => {
     cy.intercept(
       'GET',
       `/proxy/?url=http:%2F%2Fapi.steampowered.com%2FISteamUserStats%2FGetPlayerAchievements%2F*`,
