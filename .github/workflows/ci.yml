@@ -74,8 +74,13 @@ jobs:
 
       - name: Send coverage report
         run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -s https://codecov.io/bash)
+
+      - name: Run Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          upload: true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
