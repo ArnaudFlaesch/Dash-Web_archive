@@ -46,8 +46,8 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
                 achievements && completedAchievements && achievements.length > 0 &&
                 <div className="flexRow">
                     <div className="flexColumn">
-                        <div>Succès : {achievements.length}</div>
-                        <div>Succès complétés : {completedAchievements.length}</div>
+                        <div className="totalachievements">Succès : {achievements.length}</div>
+                        <div className="completedAchievements">Succès complétés : {completedAchievements.length}</div>
                     </div>
                     <CircularProgressBar value={completedAchievements.length / achievements.length * 100} />
                 </div>

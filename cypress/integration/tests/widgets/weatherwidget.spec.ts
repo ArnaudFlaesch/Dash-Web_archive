@@ -19,7 +19,7 @@ describe('Weather Widget tests', () => {
     });
   });
 
-  it('Should edit Weather widget and add a feed', () => {
+  it('Should refresh Weather widget', () => {
     // @TODO Changer le path de l'URL pas quelque chose de plus parlant que `/proxy/?*`
     cy.intercept('GET', `/proxy/?*`, { fixture: 'parisWeatherSample.json' }).as(
       'refreshWidget'

@@ -84,7 +84,7 @@ export default function SteamWidget(props: IProps): React.ReactElement {
             key={game.appid}
             componentRoot=
             {
-              <div className="flexRow">
+              <div className="gameInfo flexRow">
                 <div>
                   <img src={
                     `${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `
