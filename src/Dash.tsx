@@ -104,8 +104,12 @@ export default function Dash(): React.ReactElement {
 
   function onTabDeleted(id: number) {
     setTabs(tabs.filter((tab) => tab.id !== id));
-    if (activeTab === id) {
+    if (tabs[0].id === id) {
+      dispatch(toggleSelectedTab(tabs[1].id));
+    } else if (activeTab === id) {
       dispatch(toggleSelectedTab(tabs[0].id));
+    } else {
+      dispatch(toggleSelectedTab(activeTab));
     }
   }
 
@@ -144,30 +148,32 @@ export default function Dash(): React.ReactElement {
     <div className="dash">
       <div className="flexRow">
         <div className="dashNavbar">
-          <Nav vertical={true} navbar={true}>
-            <Button
-              id="openAddWidgetModal"
-              className="dashNavbarLink"
-              onClick={toggleModal}
-            >
-              <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
-            </Button>
-            <Modal isOpen={modal} toggle={toggleModal}>
-              <ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
-              <ModalBody>
-                <Store onWidgetAdded={onWidgetAdded} />
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  id="closeAddWidgetModal"
-                  color="primary"
-                  onClick={toggleModal}
-                >
-                  Fermer
+          {activeTab && tabs.length > 0 &&
+            <Nav vertical={true} navbar={true}>
+              <Button
+                id="openAddWidgetModal"
+                className="dashNavbarLink"
+                onClick={toggleModal}
+              >
+                <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
+              </Button>
+              <Modal isOpen={modal} toggle={toggleModal}>
+                <ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
+                <ModalBody>
+                  <Store onWidgetAdded={onWidgetAdded} />
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    id="closeAddWidgetModal"
+                    color="primary"
+                    onClick={toggleModal}
+                  >
+                    Fermer
                 </Button>
-              </ModalFooter>
-            </Modal>
-          </Nav>
+                </ModalFooter>
+              </Modal>
+            </Nav>
+          }
         </div>
 
         <div className="flexColumn tabsBar">
@@ -194,9 +200,8 @@ export default function Dash(): React.ReactElement {
                                 ref={providedDraggable.innerRef}
                                 {...providedDraggable.draggableProps}
                                 {...providedDraggable.dragHandleProps}
-                                className={`tab ${
-                                  tab.id === activeTab ? 'selectedItem' : ''
-                                }`}
+                                className={`tab ${tab.id === activeTab ? 'selectedItem' : ''
+                                  }`}
                               >
                                 <NavDash
                                   tab={tab}
