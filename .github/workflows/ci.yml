@@ -70,18 +70,12 @@ jobs:
           cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
           cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
           npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
-          npx nyc report --reporter lcov --report-dir coverage
+          npx nyc report --reporter=lcov --reporter=clover --report-dir coverage
 
       - name: Send coverage report
         run: |
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report  -r report.xml --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -s https://codecov.io/bash)
-
-      - name: Run Codacy Analysis CLI
-        uses: codacy/codacy-analysis-cli-action@master
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          upload: true
-          max-allowed-issues: 2147483647
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
