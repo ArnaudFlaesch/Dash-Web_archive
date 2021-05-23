@@ -150,8 +150,6 @@ export default function Dash(): React.ReactElement {
         <div className="dashNavbar">
           {activeTab && tabs.length > 0 &&
             <Nav vertical={true} navbar={true}>
-
-
               <Button
                 id="openAddWidgetModal"
                 className="dashNavbarLink"
