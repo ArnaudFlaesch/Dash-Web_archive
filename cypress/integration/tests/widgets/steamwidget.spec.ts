@@ -22,13 +22,13 @@ describe('Steam Widget tests', () => {
   it('Should refresh Steam widget and validate data', () => {
     cy.intercept(
       'GET',
-      `/proxy/?url=http:%2F%2Fapi.steampowered.com%2FISteamUser%2FGetPlayerSummaries%2F*`,
+      `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUser%2FGetPlayerSummaries%2F*`,
       { fixture: 'playerData.json' }
     ).as('getPlayerData');
 
     cy.intercept(
       'GET',
-      `/proxy/?url=http:%2F%2Fapi.steampowered.com%2FIPlayerService%2FGetOwnedGames%2F*`,
+      `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FIPlayerService%2FGetOwnedGames%2F*`,
       { fixture: 'gameData.json' }
     ).as('getGameData');
 
@@ -44,7 +44,7 @@ describe('Steam Widget tests', () => {
   it('Should display Half-Life 2: Episode Two details', () => {
     cy.intercept(
       'GET',
-      `/proxy/?url=http:%2F%2Fapi.steampowered.com%2FISteamUserStats%2FGetPlayerAchievements%2F*`,
+      `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUserStats%2FGetPlayerAchievements%2F*`,
       { fixture: 'halfLife2Ep2Achievements.json' }
     ).as('getAchievementData');
 

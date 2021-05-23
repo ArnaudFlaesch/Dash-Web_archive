@@ -23,11 +23,11 @@ export default function SteamWidget(props: IProps): React.ReactElement {
   const [playerData, setPlayerData] = useState<IPlayerData>();
   const [ownedGames, setOwnedGames] = useState<IGameInfo[]>();
 
-  const STEAM_API_URL = "http://api.steampowered.com";
+  const STEAM_API_URL = "https://api.steampowered.com";
   const GET_PLAYER_SUMMARIES_URL = `/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamids=${process.env.REACT_APP_STEAM_USER_ID}`
   const GET_OWNED_GAMES_URL = `/IPlayerService/GetOwnedGames/v0001/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}&format=json&include_appinfo=true`
-  const STEAM_IMAGE_URL = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/";
-  const STEAM_COMMUNITY_URL = "https://steamcommunity.com/app/";
+  const STEAM_IMAGE_URL = "httpss://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/";
+  const STEAM_COMMUNITY_URL = "httpss://steamcommunity.com/app/";
 
   useEffect(() => {
     refreshWidget();

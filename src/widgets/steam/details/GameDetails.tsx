@@ -12,9 +12,9 @@ interface IAchievement {
 export default function GameDetails(props: IGameInfo): React.ReactElement {
     const [achievements, setAchievements] = useState([]);
     const [completedAchievements, setCompletedAchievements] = useState([]);
-    const STEAM_API_URL = "http://api.steampowered.com";
-    const STEAM_IMAGE_URL = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/";
-    const STEAM_COMMUNITY_URL = "https://steamcommunity.com/app/";
+    const STEAM_API_URL = "https://api.steampowered.com";
+    const STEAM_IMAGE_URL = "httpss://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/";
+    const STEAM_COMMUNITY_URL = "httpss://steamcommunity.com/app/";
     const GET_ACHIVEMENTS_URL = `${STEAM_API_URL}/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${props.appid}&key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}`
 
     useEffect(() => {
