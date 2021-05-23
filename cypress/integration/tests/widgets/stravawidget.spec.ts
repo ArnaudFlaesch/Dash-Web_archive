@@ -8,7 +8,6 @@ describe('Strava Widget tests', () => {
 
   it('Should create a Strava Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
-    cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#STRAVA').click();
     cy.wait('@addWidget').then(() => {
