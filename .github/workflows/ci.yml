@@ -57,6 +57,8 @@ jobs:
           echo REACT_APP_OPENWEATHERMAP_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
           echo REACT_APP_STRAVA_CLIENT_ID=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
           echo REACT_APP_STRAVA_CLIENT_SECRET=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
+          echo REACT_APP_STEAM_USER_ID=${{ secrets.REACT_APP_STEAM_USER_ID }} >> .env.production
+          echo REACT_APP_STEAM_API_KEY=${{ secrets.REACT_APP_STEAM_API_KEY }} >> .env.production
           npm run build
 
       - name: Test

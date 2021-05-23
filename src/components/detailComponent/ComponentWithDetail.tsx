@@ -23,7 +23,10 @@ export default function ComponentWithDetail(props: IProps): React.ReactElement {
       <div>
         <Collapse isOpen={openCollapse}>
           <Card>
-            <CardBody>{props.componentDetail}</CardBody>
+            <CardBody>{openCollapse && props.componentDetail &&
+              props.componentDetail
+            }
+            </CardBody>
           </Card>
         </Collapse>
       </div>

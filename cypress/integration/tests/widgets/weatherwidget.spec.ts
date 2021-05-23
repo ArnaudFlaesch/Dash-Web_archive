@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-import MockDate from 'mockdate';
-
 describe('Weather Widget tests', () => {
   before(() => {
     cy.visit('/');
@@ -11,7 +9,6 @@ describe('Weather Widget tests', () => {
 
   it('Should create a Weather Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
-    cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#WEATHER').click();
     cy.wait('@addWidget').then(() => {
@@ -22,11 +19,12 @@ describe('Weather Widget tests', () => {
     });
   });
 
-  it('Should edit Weather widget and add a feed', () => {
-    // @TODO Changer le path de l'URL pas quelque chose de plus parlant que `/proxy/?*`
-    cy.intercept('GET', `/proxy/?*`, { fixture: 'parisWeatherSample.json' }).as(
-      'refreshWidget'
-    );
+  it('Should refresh Weather widget', () => {
+    cy.intercept(
+      'GET',
+      `/proxy/?url=http:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`,
+      { fixture: 'parisWeatherSample.json' }
+    ).as('refreshWidget');
 
     cy.get('.editButton')
       .click()
