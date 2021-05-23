@@ -74,7 +74,7 @@ jobs:
 
       - name: Send coverage report
         run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report  -r report.xml --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/clover.xml --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -s https://codecov.io/bash)
 
       - name: SonarCloud Scan
