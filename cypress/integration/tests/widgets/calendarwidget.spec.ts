@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+
 describe('Calendar Widget tests', () => {
   before(() => {
     cy.visit('/');
@@ -14,7 +17,9 @@ describe('Calendar Widget tests', () => {
       cy.get('#closeAddWidgetModal')
         .click()
         .get('.widget')
-        .should('have.length', 1);
+        .should('have.length', 1)
+        .get('.rbc-toolbar-label')
+        .should('have.text', format(new Date(), 'MMM yyyy', { locale: fr }));
     });
   });
 
