@@ -61,7 +61,7 @@
     "@types/chart.js": "2.9.32",
     "@types/enzyme": "3.10.8",
     "@types/enzyme-adapter-react-16": "1.0.6",
-    "@types/express": "4.17.11",
+    "@types/express": "4.17.12",
     "@types/fb": "0.0.28",
     "@types/ical": "0.6.2",
     "@types/jest": "26.0.23",
