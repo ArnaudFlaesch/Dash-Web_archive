@@ -2,11 +2,12 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
+import authHeader from 'src/services/auth.header';
 import FacebookWidget from 'src/widgets/facebook/FacebookWidget';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { ITabState } from '../reducers/tabReducer';
-import { deleteWidget } from '../services/WidgetService';
+import { deleteWidget } from '../services/widget.service';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
@@ -99,7 +100,7 @@ export default function TabDash(props: IProps): React.ReactElement {
 
   useEffect(() => {
     if (!widgets.length && activeTab === props.tabId) {
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`)
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`, authHeader())
         .then((result) => {
           return result.json();
         })

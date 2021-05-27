@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as ical from 'ical';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { updateWidgetData } from '../../services/WidgetService';
+import { updateWidgetData } from '../../services/widget.service';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import './CalendarWidget.scss';
@@ -14,6 +14,7 @@ import getDay from 'date-fns/getDay'
 import { fr } from "date-fns/locale";
 
 import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
+import authHeader from 'src/services/auth.header';
 
 export interface IProps {
   id: number;
@@ -57,7 +58,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
     setSchedules([]);
     calendarUrls?.map((calendarUrl: string) => {
       axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
+        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`, authHeader())
         .then((response) => {
           const data = ical.parseICS(response.data);
           setSchedules(schedules =>

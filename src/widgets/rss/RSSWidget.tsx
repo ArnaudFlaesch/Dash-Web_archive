@@ -1,8 +1,10 @@
+import axios from 'axios';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import RSSParser from 'rss-parser';
+import authHeader from 'src/services/auth.header';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
-import { updateWidgetData } from '../../services/WidgetService';
+import { updateWidgetData } from '../../services/widget.service';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import { IArticle, ImageContent, IRSSHeader } from './article/IArticle';
@@ -29,14 +31,18 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   function fetchDataFromRssFeed() {
     if (url) {
       rssParser
-        .parseURL(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`)
-        .then((apiResult: unknown) => {
-          const result = apiResult as IRSSHeader;
-          setDecription(result.description);
-          setFeed(result.items);
-          setImage(result.image);
-          setLink(result.link);
-          setTitle(result.title);
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`, authHeader())
+        .then((apiResult) => {
+          rssParser.parseString((apiResult.data as string))
+            .then(response => {
+              const result = response as IRSSHeader;
+              setDecription(result.description);
+              setFeed(result.items);
+              setImage(result.image);
+              setLink(result.link);
+              setTitle(result.title);
+            })
+
         })
         .catch((error) => {
           logger.error(error.message);

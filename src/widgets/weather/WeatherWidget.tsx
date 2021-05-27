@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { updateWidgetData } from '../../services/WidgetService';
+import { updateWidgetData } from '../../services/widget.service';
 import {
   adjustTimeWithOffset,
   formatDateFromTimestamp,
@@ -15,6 +15,7 @@ import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
 import { format } from 'date-fns';
+import authHeader from 'src/services/auth.header';
 
 interface IProps {
   id: number;
@@ -45,6 +46,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     if (cityToQuery) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+          ...authHeader(),
           params: {
             url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
@@ -57,6 +59,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         });
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+          ...authHeader(),
           params: {
             url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
@@ -204,7 +207,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                     if (forecastMode === ForecastMode.TODAY || forecastMode === ForecastMode.TOMORROW) {
                       return format(new Date(forecastDay.dt * 1000), 'HH');
                     } else {
-                      return format(new Date(forecastDay.dt * 1000), 'EEEE dd MMM');
+                      return format(new Date(forecastDay.dt * 1000), 'EEE dd MMM');
                     }
                   }
 
