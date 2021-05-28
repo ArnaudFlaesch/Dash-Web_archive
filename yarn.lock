@@ -1870,28 +1870,26 @@
     js-yaml "^3.13.1"
     tslib "^1.10.0"
 
-"@snyk/code-client@3.5.1":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@snyk/code-client/-/code-client-3.5.1.tgz#d61684ced448de53c4c15b3d9f4b7ab83d7a0483"
-  integrity sha512-hiDIs1tAuObQr8GwebUT1OH1S27odf23HArOHlcz/ddVHaZrRxreF64sflS4urdIxKVK39AYgMpc5M/QD0cgOg==
+"@snyk/code-client@3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@snyk/code-client/-/code-client-3.7.0.tgz#c79684fbb710ca2f2595704eca67560dc9f6d779"
+  integrity sha512-a1uGkSpO4Pr9UucZUVfUR5PVcl1fEA4sXbdZPyzs1AABE7JhMY6FnBYKgQFz2qIkPAPy4M0m18bnGpHq5ZdWNg==
   dependencies:
     "@deepcode/dcignore" "^1.0.2"
     "@snyk/fast-glob" "^3.2.6-patch"
     "@types/flat-cache" "^2.0.0"
     "@types/lodash.chunk" "^4.2.6"
-    "@types/lodash.difference" "^4.5.6"
     "@types/lodash.omit" "^4.5.6"
     "@types/lodash.union" "^4.6.6"
-    "@types/micromatch" "^4.0.1"
+    "@types/multimatch" "^4.0.0"
     "@types/sarif" "^2.1.3"
     "@types/uuid" "^8.3.0"
     axios "^0.21.1"
     ignore "^5.1.8"
     lodash.chunk "^4.2.0"
-    lodash.difference "^4.5.0"
     lodash.omit "^4.5.0"
     lodash.union "^4.6.0"
-    micromatch "^4.0.2"
+    multimatch "^5.0.0"
     queue "^6.0.1"
     uuid "^8.3.2"
 
@@ -2321,11 +2319,6 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/braces@*":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@types/braces/-/braces-3.0.0.tgz"
-  integrity sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
-
 "@types/cacheable-request@^6.0.1":
   version "6.0.1"
   resolved "https://registry.npmjs.org/@types/cacheable-request/-/cacheable-request-6.0.1.tgz"
@@ -2543,13 +2536,6 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lodash.difference@^4.5.6":
-  version "4.5.6"
-  resolved "https://registry.yarnpkg.com/@types/lodash.difference/-/lodash.difference-4.5.6.tgz#41ec5c4e684eeacf543848a9a1b2a4856ccf9853"
-  integrity sha512-wXH53r+uoUCrKhmh7S5Gf6zo3vpsx/zH2R4pvkmDlmopmMTCROAUXDpPMXATGCWkCjE6ik3VZzZUxBgMjZho9Q==
-  dependencies:
-    "@types/lodash" "*"
-
 "@types/lodash.omit@^4.5.6":
   version "4.5.6"
   resolved "https://registry.npmjs.org/@types/lodash.omit/-/lodash.omit-4.5.6.tgz"
@@ -2576,19 +2562,12 @@
   dependencies:
     "@types/unist" "*"
 
-"@types/micromatch@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/@types/micromatch/-/micromatch-4.0.1.tgz"
-  integrity sha512-my6fLBvpY70KattTNzYOK6KU1oR1+UCz9ug/JbcF5UrEmeCt9P7DV2t7L8+t18mMPINqGQCE4O8PLOPbI84gxw==
-  dependencies:
-    "@types/braces" "*"
-
 "@types/mime@^1":
   version "1.3.2"
   resolved "https://registry.npmjs.org/@types/mime/-/mime-1.3.2.tgz"
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
-"@types/minimatch@*":
+"@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.4"
   resolved "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.4.tgz"
   integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
@@ -2597,6 +2576,13 @@
   version "1.2.1"
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.1.tgz"
   integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
+
+"@types/multimatch@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/multimatch/-/multimatch-4.0.0.tgz#e14237ade6cba7b79fe3a1a5d4e9579613cee6b6"
+  integrity sha512-xS26gtqY5QASmfU/6jb5vj7F0D0SctgRGtwXsKSNng1knk/OewjISlkMwGonkMCbZCqSoW3s6nL0sAtTlzbL/g==
+  dependencies:
+    multimatch "*"
 
 "@types/node@*", "@types/node@^14.14.31":
   version "14.14.37"
@@ -3631,6 +3617,11 @@ arr-union@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/arr-union/-/arr-union-3.1.0.tgz"
   integrity sha1-45sJrqne+Gao8gbiiK9jkZuuOcQ=
+
+array-differ@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/array-differ/-/array-differ-3.0.0.tgz#3cbb3d0f316810eafcc47624734237d6aee4ae6b"
+  integrity sha512-THtfYS6KtME/yIAhKjZ2ul7XI96lQGHRputJQHO80LAWQnuGP4iCIN8vdMRboGbIEYBwU33q8Tch1os2+X0kMg==
 
 array-filter@^1.0.0:
   version "1.0.0"
@@ -10151,11 +10142,6 @@ lodash.defaults@^4.2.0:
   resolved "https://registry.npmjs.org/lodash.defaults/-/lodash.defaults-4.2.0.tgz"
   integrity sha1-0JF4cW/+pN3p5ft7N/bwgCJ0WAw=
 
-lodash.difference@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.difference/-/lodash.difference-4.5.0.tgz#9ccb4e505d486b91651345772885a2df27fd017c"
-  integrity sha1-nMtOUF1Ia5FlE0V3KIWi3yf9AXw=
-
 lodash.escape@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/lodash.escape/-/lodash.escape-4.0.1.tgz"
@@ -11024,6 +11010,17 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
+
+multimatch@*, multimatch@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/multimatch/-/multimatch-5.0.0.tgz#932b800963cea7a31a033328fa1e0c3a1874dbe6"
+  integrity sha512-ypMKuglUrZUD99Tk2bUQ+xNQj43lPEfAeX2o9cTteAmShXy2VHDJpuwu1o0xqoKCt9jLVAvwyFKdLTPXKAfJyA==
+  dependencies:
+    "@types/minimatch" "^3.0.3"
+    array-differ "^3.0.0"
+    array-union "^2.1.0"
+    arrify "^2.0.1"
+    minimatch "^3.0.4"
 
 mute-stream@0.0.8:
   version "0.0.8"
@@ -14823,15 +14820,15 @@ snyk-try-require@^2.0.0:
     lodash.clonedeep "^4.3.0"
     lru-cache "^5.1.1"
 
-snyk@1.616.0:
-  version "1.616.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.616.0.tgz#963c8470744df71df4bb79cd93cebf9cc6f627cb"
-  integrity sha512-W72FuQNt9YGEKbqxwpk4Xst4aYZ6h5Zmg1glV49qNEtP2FIngoQd4DNX5eyPU7ZhqOFEMlVUZicJgOfdfvNcxQ==
+snyk@1.618.0:
+  version "1.618.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.618.0.tgz#111c0a249dd27a3c3ee08b5f5844a75bd51864c8"
+  integrity sha512-N4pTbZQgoZYsammFO65c8SPdmH0bxd3iP0cV6xWsbNeueLqjAJ9pKkT3+tYcIi97HmkXo6Zf1RAliH/Kge/akA==
   dependencies:
     "@open-policy-agent/opa-wasm" "^1.2.0"
     "@snyk/cli-interface" "2.11.0"
     "@snyk/cloud-config-parser" "^1.9.2"
-    "@snyk/code-client" "3.5.1"
+    "@snyk/code-client" "3.7.0"
     "@snyk/dep-graph" "^1.27.1"
     "@snyk/fix" "1.601.0"
     "@snyk/gemfile" "1.2.0"
