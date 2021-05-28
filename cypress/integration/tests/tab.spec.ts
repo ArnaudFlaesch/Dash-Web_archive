@@ -2,6 +2,7 @@
 
 describe('Tab tests', () => {
   before(() => {
+    cy.loginAsAdmin();
     cy.visit('/');
     cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });

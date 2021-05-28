@@ -2,6 +2,7 @@
 
 describe('Steam Widget tests', () => {
   before(() => {
+    cy.loginAsAdmin();
     cy.visit('/');
     cy.title().should('equals', 'Dash');
     cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
