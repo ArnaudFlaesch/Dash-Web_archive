@@ -2,10 +2,11 @@
 
 describe('RSS Widget tests', () => {
   before(() => {
-    cy.loginAsAdmin();
-    cy.visit('/');
-    cy.title().should('equals', 'Dash');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .title()
+      .should('equals', 'Dash')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a RSS Widget and add it to the dashboard', () => {

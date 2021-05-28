@@ -5,9 +5,9 @@ import { fr } from 'date-fns/locale';
 
 describe('Calendar Widget tests', () => {
   before(() => {
-    cy.loginAsAdmin();
-    cy.visit('/');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a Calendar Widget and add it to the dashboard', () => {
