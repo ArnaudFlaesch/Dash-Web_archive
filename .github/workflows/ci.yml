@@ -53,7 +53,7 @@ jobs:
       - name: Pull backend image
         run: |
           docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
-          docker run -p 8080:8080 -d arnaudf93/dashwebservices -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test
+          docker run -p 8080:8080 -d -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices
 
       - name: Lint
         run: |
