@@ -43,6 +43,7 @@ jobs:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - run: echo ${GITHUB_REF#refs/*/}
       - run: docker-compose up -d
 
       - name: Lint
