@@ -13,7 +13,7 @@ describe('RSS Article component tests', () => {
     const div = document.createElement('div');
     const article: IArticle = {
       guid: '1',
-      link: 'http://google.com',
+      link: 'https://google.com',
       pubDate: new Date().toLocaleString('fr'),
       content: ''
     };
@@ -27,7 +27,7 @@ describe('RSS Article component tests', () => {
       content: 'Test contenu',
       pubDate: new Date().toLocaleString('fr'),
       title: 'Test titre article',
-      link: 'http://google.com'
+      link: 'https://google.com'
     };
     const component = shallow(<RSSArticle {...article} />);
     expect(component.find('a').text()).toEqual('Test titre article');

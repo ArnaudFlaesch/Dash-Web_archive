@@ -31,7 +31,7 @@ enum ForecastMode {
 }
 
 export default function WeatherWidget(props: IProps): React.ReactElement {
-  const WEATHER_API = 'http://api.openweathermap.org/data/2.5/';
+  const WEATHER_API = 'https://api.openweathermap.org/data/2.5/';
   const WEATHER_ENDPOINT = 'weather';
   const FORECAST_ENDPOINT = 'forecast';
   const API_OPTIONS = '?units=metric&lang=fr&appid=';
