@@ -1,6 +1,5 @@
 import * as Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { IArticle } from '../../../widgets/rss/article/IArticle';
 import RSSArticle from '../../../widgets/rss/article/RSSArticle';
