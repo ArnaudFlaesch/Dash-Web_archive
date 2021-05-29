@@ -30,7 +30,6 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   function fetchDataFromRssFeed() {
     if (url) {
-      rssParser
       axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`, authHeader())
         .then((apiResult) => {
           rssParser.parseString((apiResult.data as string))

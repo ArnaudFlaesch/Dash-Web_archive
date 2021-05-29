@@ -45,8 +45,10 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
   function onConfigSubmitted(updatedCalendars: string[]) {
     updateWidgetData(props.id, { calendars: updatedCalendars })
       .then(() => {
+        if (updatedCalendars === calendarUrls) {
+          refreshWidget();
+        }
         setCalendarUrls(updatedCalendars);
-        refreshWidget();
       })
       .catch((error) => {
         logger.error(error.message);
@@ -79,7 +81,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
     });
   }
 
-  const widgetHeader = <div>Agenda</div>;
+  const widgetHeader = <div>Calendar</div>;
 
   const widgetBody = (
     <div>

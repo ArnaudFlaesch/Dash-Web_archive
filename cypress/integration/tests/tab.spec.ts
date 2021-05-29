@@ -24,7 +24,6 @@ describe('Tab tests', () => {
     cy.wait('@updateTab').then(() => {
       cy.get('.tab.selectedItem')
         .should('have.text', 'Flux RSS')
-
         .get('.tab')
         .first()
         .click()
