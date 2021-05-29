@@ -44,8 +44,6 @@ Cypress.on('test:after:run', (test, runnable) => {
   }
 });
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 Cypress.LocalStorage.clear = function () {
   return;
 };
