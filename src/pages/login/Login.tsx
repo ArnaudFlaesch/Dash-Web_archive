@@ -51,6 +51,7 @@ export default function Login(): React.ReactElement {
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input
+                        id="inputUsername"
                         type="text"
                         className="form-control"
                         name="username"
@@ -62,6 +63,7 @@ export default function Login(): React.ReactElement {
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
                     <input
+                        id="inputPassword"
                         type="password"
                         className="form-control"
                         name="password"
@@ -71,7 +73,7 @@ export default function Login(): React.ReactElement {
                 </div>
 
                 <div className="form-group">
-                    <button onClick={handleLogin} className="btn btn-success btn-block" disabled={loading}>
+                    <button id="loginButton" disabled={!username || !password || loading} onClick={handleLogin} className="btn btn-success btn-block">
                         {loading && (
                             <span className="spinner-border spinner-border-sm"></span>
                         )}
