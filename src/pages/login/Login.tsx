@@ -41,7 +41,7 @@ export default function Login(): React.ReactElement {
         } else {
             setLoading(false);
         }
-    };
+    }
 
     return (
         <div className="col-md-12">
@@ -88,5 +88,5 @@ export default function Login(): React.ReactElement {
                 )}
             </div>
         </div>
-    )
+    );
 }
