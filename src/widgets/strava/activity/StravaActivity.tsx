@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
-import * as React from 'react';
+import { ReactElement } from 'react';
 import { IActivity } from '../IStrava';
 
-export default function StravaActivity(props: IActivity): React.ReactElement {
+export default function StravaActivity(props: IActivity): ReactElement {
   return (
     <div>
       <div>

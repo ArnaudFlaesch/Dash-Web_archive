@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FunctionComponent } from 'react';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import ITab from './ITab';
 import './TabNavigation.scss';
@@ -7,7 +7,7 @@ interface IProps {
   tabList: ITab[];
 }
 
-const TabNavigation: React.FunctionComponent<IProps> = (props) => {
+const TabNavigation: FunctionComponent<IProps> = (props) => {
   return (
     <div>
       <Router>

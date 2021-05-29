@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ReactElement } from "react";
 
 interface IProps {
   idWidget: number;
@@ -6,7 +6,7 @@ interface IProps {
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function DeleteWidget(props: IProps): React.ReactElement {
+export default function DeleteWidget(props: IProps): ReactElement {
   const confirmDeleteWidget = () => {
     props.onDeleteButtonClicked(props.idWidget);
   };

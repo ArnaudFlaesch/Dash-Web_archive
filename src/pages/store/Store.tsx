@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FunctionComponent, MouseEvent } from 'react';
 import {
   Button,
   Card,
@@ -11,10 +11,10 @@ import {
 import { WidgetTypes } from '../../enums/WidgetsEnum';
 
 interface IProps {
-  onWidgetAdded: (type: React.MouseEvent<HTMLButtonElement>) => void;
+  onWidgetAdded: (type: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Store: React.FunctionComponent<IProps> = (props) => {
+const Store: FunctionComponent<IProps> = (props) => {
   return (
     <div className="flexRow">
       {Object.keys(WidgetTypes).map((key) => {
