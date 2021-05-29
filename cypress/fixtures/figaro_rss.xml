@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
-    xmlns:atom="http://www.w3.org/2005/Atom">
+    xmlns:atom="https://www.w3.org/2005/Atom">
     <channel>
         <atom:link href="https://www.lefigaro.fr/rss/figaro_actualites.xml" rel="self" type="application/rss+xml"/>
         <category>HP www</category>
         <title>Le Figaro - Actualité en direct et informations en continu</title>
         <description>A la Une : Retrouvez toute l&#039;actualité en France, à l&#039;international, l&#039;actualité économique et politique avec Le Figaro</description>
-        <link>http: //www.lefigaro.fr</link>
+        <link>https: //www.lefigaro.fr</link>
         <language>fr</language>
         <copyright>Droits de reproduction et de diffusion réservés LeFigaro.fr</copyright>
         <lastBuildDate>Wed,
@@ -15,8 +15,8 @@
         <ttl>1</ttl>
         <image>
             <title>Le Figaro - Actualité en direct et informations en continu</title>
-            <url>http: //a.f1g.fr/assets-img/i/f/m150.png</url>
-            <link>http: //www.lefigaro.fr</link>
+            <url>https: //a.f1g.fr/assets-img/i/f/m150.png</url>
+            <link>https: //www.lefigaro.fr</link>
             <description>A la Une : Retrouvez toute l&#039;actualité en France, à l&#039;international, l&#039;actualité économique et politique avec Le Figaro</description>
         </image>
 
