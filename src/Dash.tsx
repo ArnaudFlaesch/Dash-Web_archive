@@ -45,6 +45,13 @@ export default function Dash(): React.ReactElement {
 
   const activeTab = useSelector((state: ITabState) => state.activeTab);
   const dispatch = useDispatch();
+  const isMounted = React.useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current && tabs && tabs.length === 0) {
+      addNewTab();
+    }
+  }, [tabs])
 
   function initDashboard() {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`, authHeader())
@@ -52,11 +59,11 @@ export default function Dash(): React.ReactElement {
         return result.json();
       })
       .then((result) => {
-        if (!result || result.length === 0) {
-          addNewTab();
-        }
         setTabs(result);
-        dispatch(toggleSelectedTab(result[0].id));
+        if (result && result.length > 0) {
+          dispatch(toggleSelectedTab(result[0].id));
+        }
+        isMounted.current = true;
       })
       .catch((error: Error) => {
         logger.error(error.message);
@@ -106,14 +113,16 @@ export default function Dash(): React.ReactElement {
   }
 
   function onTabDeleted(id: number) {
-    setTabs(tabs.filter((tab) => tab.id !== id));
-    if (tabs[0].id === id) {
-      dispatch(toggleSelectedTab(tabs[1].id));
-    } else if (activeTab === id) {
-      dispatch(toggleSelectedTab(tabs[0].id));
-    } else {
-      dispatch(toggleSelectedTab(activeTab));
+    if (tabs.length > 1) {
+      if (tabs[0].id === id) {
+        dispatch(toggleSelectedTab(tabs[1].id));
+      } else if (activeTab === id) {
+        dispatch(toggleSelectedTab(tabs[0].id));
+      } else {
+        dispatch(toggleSelectedTab(activeTab));
+      }
     }
+    setTabs(tabs.filter((tab) => tab.id !== id));
   }
 
   function reorder(
@@ -149,7 +158,6 @@ export default function Dash(): React.ReactElement {
 
   return (
     <div className="dash">
-
       {!authService.getCurrentUser() &&
         <Login />
       }
@@ -228,9 +236,11 @@ export default function Dash(): React.ReactElement {
                   </Droppable>
                 </DragDropContext>
                 <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
-                <Button onClick={authService.logout} className="btn btn-primary">Se déconnecter</Button></div>
+                <Button onClick={authService.logout} className="btn btn-primary">Se déconnecter</Button>
+              </div>
             </Nav>
             <TabContent activeTab={activeTab}>
+
               {tabs.length > 0 &&
                 tabs.map((tab: ITab) => {
                   return (
