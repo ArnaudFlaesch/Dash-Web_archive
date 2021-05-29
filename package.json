@@ -36,7 +36,7 @@
     "bootstrap": "5.0.1",
     "chart.js": "3.3.0",
     "chartjs-adapter-date-fns": "2.0.0",
-    "date-fns": "2.22.0",
+    "date-fns": "2.22.1",
     "font-awesome": "4.7.0",
     "ical": "0.8.0",
     "pg": "8.6.0",
@@ -54,7 +54,7 @@
     "winston": "3.3.3"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.9.5",
+    "@cypress/code-coverage": "3.9.6",
     "@cypress/instrument-cra": "1.4.0",
     "@types/chart.js": "2.9.32",
     "@types/enzyme": "3.10.8",
