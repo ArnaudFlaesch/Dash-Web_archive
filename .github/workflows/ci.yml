@@ -51,9 +51,13 @@ jobs:
       - name: Pull backend image TEST
         if: github.ref != 'refs/heads/develop'
         run: |
-          docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
-          docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
-
+          if [[ "$(docker images -q arnaudf93/dashwebservices:${GITHUB_REF#refs/*/} 2> /dev/null)" != "" ]]; then
+            docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+            docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+          else 
+            docker pull arnaudf93/dashwebservices:latest
+            docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:latest
+          fi
       - name: Pull backend image DEV
         if: github.ref == 'refs/heads/develop'
         run: |
