@@ -24,7 +24,7 @@ describe('Weather Widget tests', () => {
   it('Should refresh Weather widget', () => {
     cy.intercept(
       'GET',
-      `/proxy/?url=http:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`,
+      `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`,
       { fixture: 'parisWeatherSample.json' }
     ).as('refreshWidget');
 
