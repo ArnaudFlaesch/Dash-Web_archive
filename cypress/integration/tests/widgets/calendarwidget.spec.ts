@@ -25,6 +25,16 @@ describe('Calendar Widget tests', () => {
   });
 
   it('Should edit Calendar widget and add an Ical feed', () => {
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
+    ).as('getFrenchCalendarData');
+
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
+    ).as('getUSCalendarData');
+
     cy.clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
       .get('.editButton')
       .click()
@@ -36,16 +46,6 @@ describe('Calendar Widget tests', () => {
       )
       .get('#validateCalendarUrls')
       .click();
-
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
-    ).as('getFrenchCalendarData');
-
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
-    ).as('getUSCalendarData');
 
     cy.wait('@getFrenchCalendarData').then(() => {
       cy.get('.rbc-toolbar-label')
@@ -67,7 +67,7 @@ describe('Calendar Widget tests', () => {
             )
             .get('#validateCalendarUrls')
             .click();
-          cy.wait('@getUSCalendarData').then(() => {
+          cy.wait(['@getFrenchCalendarData', '@getUSCalendarData']).then(() => {
             cy.get('.rbc-event')
               .contains('Independence Day')
               .get('.editButton')
