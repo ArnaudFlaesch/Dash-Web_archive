@@ -5,8 +5,7 @@ export default function authHeader(): Record<string, unknown> {
       return {
         headers: {
           Authorization: 'Bearer ' + user.accessToken,
-          'Content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Content-type': 'application/json'
         }
       };
     } else {

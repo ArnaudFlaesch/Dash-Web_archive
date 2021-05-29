@@ -8,13 +8,11 @@ export default function Login(): React.ReactElement {
     const [message, setMessage] = useState("");
 
     const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const username = e.target.value;
-        setUsername(username);
+        setUsername(e.target.value);
     };
 
     const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const password = e.target.value;
-        setPassword(password);
+        setPassword(e.target.value);
     };
 
     function handleLogin() {
@@ -39,7 +37,7 @@ export default function Login(): React.ReactElement {
                     setLoading(false);
                     setMessage(resMessage);
                 }
-            );
+            )
         } else {
             setLoading(false);
         }
@@ -90,5 +88,5 @@ export default function Login(): React.ReactElement {
                 )}
             </div>
         </div>
-    );
-};
+    )
+}
