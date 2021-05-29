@@ -24,7 +24,7 @@ describe('RSS Widget tests', () => {
   it('Should edit RSS widget and add a feed URL', () => {
     cy.intercept(
       'GET',
-      '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml',
+      '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
       { fixture: 'figaro_rss.xml' }
     ).as('refreshWidget');
 
@@ -33,7 +33,7 @@ describe('RSS Widget tests', () => {
       .get('.btn-success')
       .should('be.disabled')
       .get('input')
-      .type('https://www.lefigaro.fr/rss/figaro_actualites.xml')
+      .type('http://www.lefigaro.fr/rss/figaro_actualites.xml')
       .get('.btn-success')
       .click()
       .wait('@refreshWidget')
