@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as ical from 'ical';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { updateWidgetData } from '../../services/widget.service';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
@@ -23,7 +22,7 @@ export interface IProps {
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function CalendarWidget(props: IProps): React.ReactElement {
+export default function CalendarWidget(props: IProps): ReactElement {
   const [calendarUrls, setCalendarUrls] = useState(props.calendars);
   const [schedules, setSchedules] = useState<Event[]>([]);
 

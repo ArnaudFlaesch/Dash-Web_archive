@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
 
@@ -7,14 +6,14 @@ interface IProps {
   id: number;
   tabId: number;
   config: Record<string, unknown>;
-  header: React.ReactElement;
-  body: React.ReactElement;
-  editModeComponent?: React.ReactElement<IProps>;
+  header: ReactElement;
+  body: ReactElement;
+  editModeComponent?: ReactElement<IProps>;
   refreshFunction: () => void;
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function Widget(props: IProps): React.ReactElement {
+export default function Widget(props: IProps): ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
 
   useEffect(() => {
@@ -37,7 +36,7 @@ export default function Widget(props: IProps): React.ReactElement {
 
   return (
     <div>
-      {mode === ModeEnum.READ ? (
+      { mode === ModeEnum.READ &&
         <div>
           <div className="header">
             <div className="leftGroup widgetHeader">{props.header}</div>
@@ -66,13 +65,17 @@ export default function Widget(props: IProps): React.ReactElement {
           </div>
           {props.body}
         </div>
-      ) : mode === ModeEnum.DELETE ? (
+      }
+      { mode === ModeEnum.DELETE &&
         <DeleteWidget
           idWidget={props.id}
           onDeleteButtonClicked={props.onDeleteButtonClicked}
           onCancelButtonClicked={cancelDeletion}
         />
-      ) : (props.editModeComponent) ? props.editModeComponent : () => setMode(ModeEnum.READ)}
+      }
+      {mode === ModeEnum.EDIT &&
+        (props.editModeComponent) ? props.editModeComponent : () => setMode(ModeEnum.READ)
+      }
     </div>
   );
 }

@@ -1,6 +1,4 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import store from '../../../reducers/store';
@@ -25,6 +23,6 @@ describe('RSS Widget tests', () => {
         div
       );
     });
-    ReactDOM.unmountComponentAtNode(div);
+    unmountComponentAtNode(div);
   });
 });

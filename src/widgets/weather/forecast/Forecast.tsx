@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FunctionComponent } from 'react';
 import {
   adjustTimeWithOffset,
   formatDateFromTimestamp
@@ -6,7 +6,7 @@ import {
 import { IForecast } from '../IWeather';
 import './Forecast.scss';
 
-const Forecast: React.FunctionComponent<IForecast> = (props) => {
+const Forecast: FunctionComponent<IForecast> = (props) => {
   return (
     <div className="forecast">
       <div>
