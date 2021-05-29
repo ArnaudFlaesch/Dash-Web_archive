@@ -1,6 +1,5 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -45,7 +44,7 @@ export default function Dash(): React.ReactElement {
 
   const activeTab = useSelector((state: ITabState) => state.activeTab);
   const dispatch = useDispatch();
-  const isMounted = React.useRef(false);
+  const isMounted = useRef(false);
 
   useEffect(() => {
     if (isMounted.current && tabs && tabs.length === 0) {

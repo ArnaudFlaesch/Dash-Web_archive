@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as queryString from 'query-string';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';

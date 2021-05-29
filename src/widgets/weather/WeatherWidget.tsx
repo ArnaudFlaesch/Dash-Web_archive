@@ -1,6 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { updateWidgetData } from '../../services/widget.service';
