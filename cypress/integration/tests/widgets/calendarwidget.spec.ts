@@ -5,8 +5,9 @@ import { fr } from 'date-fns/locale';
 
 describe('Calendar Widget tests', () => {
   before(() => {
-    cy.visit('/');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a Calendar Widget and add it to the dashboard', () => {
@@ -24,6 +25,16 @@ describe('Calendar Widget tests', () => {
   });
 
   it('Should edit Calendar widget and add an Ical feed', () => {
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
+    ).as('getFrenchCalendarData');
+
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
+    ).as('getUSCalendarData');
+
     cy.clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
       .get('.editButton')
       .click()
@@ -36,55 +47,49 @@ describe('Calendar Widget tests', () => {
       .get('#validateCalendarUrls')
       .click();
 
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
-    ).as('getFrenchCalendarData');
-
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
-    ).as('getUSCalendarData');
-
-    cy.get('.refreshButton').click();
     cy.wait('@getFrenchCalendarData').then(() => {
       cy.get('.rbc-toolbar-label')
         .should('have.text', 'juillet 2021')
-        .get('.rbc-event')
-        .contains('La fête nationale')
-        .get('.editButton')
+        .get('.refreshButton')
         .click()
-        .get('#addCalendarUrl')
-        .click()
-        .get('input')
-        .eq(1)
-        .type(
-          'https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
-        )
-        .get('#validateCalendarUrls')
-        .click();
-      cy.wait('@getUSCalendarData').then(() => {
-        cy.get('.rbc-event')
-          .contains('Independence Day')
-          .get('.editButton')
-          .click()
-          .get('.removeCalendarUrl')
-          .eq(1)
-          .click()
-          .get('#validateCalendarUrls')
-          .click()
-          .wait('@getFrenchCalendarData')
-          .then(() =>
-            cy
-              .get('.rbc-event')
+        .wait('@getFrenchCalendarData')
+        .then(() => {
+          cy.get('.rbc-event')
+            .contains('La fête nationale')
+            .get('.editButton')
+            .click()
+            .get('#addCalendarUrl')
+            .click()
+            .get('input')
+            .eq(1)
+            .type(
+              'https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
+            )
+            .get('#validateCalendarUrls')
+            .click();
+          cy.wait(['@getFrenchCalendarData', '@getUSCalendarData']).then(() => {
+            cy.get('.rbc-event')
               .contains('Independence Day')
-              .should('not.exist')
-              .clock()
-              .then((clock) => {
-                clock.restore();
-              })
-          );
-      });
+              .get('.editButton')
+              .click()
+              .get('.removeCalendarUrl')
+              .eq(1)
+              .click()
+              .get('#validateCalendarUrls')
+              .click()
+              .wait('@getFrenchCalendarData')
+              .then(() =>
+                cy
+                  .get('.rbc-event')
+                  .contains('Independence Day')
+                  .should('not.exist')
+                  .clock()
+                  .then((clock) => {
+                    clock.restore();
+                  })
+              );
+          });
+        });
     });
   });
 

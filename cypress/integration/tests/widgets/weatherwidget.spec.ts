@@ -2,9 +2,11 @@
 
 describe('Weather Widget tests', () => {
   before(() => {
-    cy.visit('/');
-    cy.title().should('equals', 'Dash');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .title()
+      .should('equals', 'Dash')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a Weather Widget and add it to the dashboard', () => {

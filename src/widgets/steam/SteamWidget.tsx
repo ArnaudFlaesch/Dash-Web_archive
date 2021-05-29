@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
+import authHeader from 'src/services/auth.header';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import GameDetails from './details/GameDetails';
@@ -41,6 +42,7 @@ export default function SteamWidget(props: IProps): React.ReactElement {
   function getPlayerData(): void {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+        ...authHeader(),
         params: {
           url: `${STEAM_API_URL}${GET_PLAYER_SUMMARIES_URL}`
         }
@@ -55,6 +57,7 @@ export default function SteamWidget(props: IProps): React.ReactElement {
 
   function getOwnedGames(): void {
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      ...authHeader(),
       params: {
         url: `${STEAM_API_URL}${GET_OWNED_GAMES_URL}`
       }

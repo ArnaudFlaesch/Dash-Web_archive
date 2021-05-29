@@ -1,7 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-const headers = {
-  'Content-type': 'application/json'
-};
+import authHeader from './auth.header';
 
 export function addWidget(
   type: string,
@@ -10,9 +8,7 @@ export function addWidget(
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/addWidget`,
     { type: type, tab: { id: tabId } },
-    {
-      headers
-    }
+    authHeader()
   );
 }
 
@@ -23,17 +19,13 @@ export function updateWidgetData(
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData`,
     { id: id, data: data },
-    {
-      headers
-    }
+    authHeader()
   );
 }
 
 export function deleteWidget(id: number): Promise<AxiosResponse<unknown>> {
   return axios.delete(
     `${process.env.REACT_APP_BACKEND_URL}/widget/deleteWidget/?id=${id}`,
-    {
-      headers
-    }
+    authHeader()
   );
 }
