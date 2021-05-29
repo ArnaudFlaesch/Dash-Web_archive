@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import ITab from '../../tab_facebook/ITab';
 import TabNavigation from '../../tab_facebook/TabNavigation';
 import logger from '../../utils/LogUtils';
@@ -32,7 +32,7 @@ const tabs: ITab[] = [
   }
 ];
 
-export default class FacebookWidget extends React.Component<IProps, IState> {
+export default class FacebookWidget extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     window.fbAsyncInit = () => {

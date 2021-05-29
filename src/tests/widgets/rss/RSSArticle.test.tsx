@@ -1,7 +1,5 @@
 import * as Enzyme from 'enzyme';
-import { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { IArticle } from '../../../widgets/rss/article/IArticle';
 import RSSArticle from '../../../widgets/rss/article/RSSArticle';
@@ -13,7 +11,7 @@ describe('RSS Article component tests', () => {
     const div = document.createElement('div');
     const article: IArticle = {
       guid: '1',
-      link: 'http://google.com',
+      link: 'https://google.com',
       pubDate: new Date().toLocaleString('fr'),
       content: ''
     };
@@ -27,9 +25,9 @@ describe('RSS Article component tests', () => {
       content: 'Test contenu',
       pubDate: new Date().toLocaleString('fr'),
       title: 'Test titre article',
-      link: 'http://google.com'
+      link: 'https://google.com'
     };
-    const component = shallow(<RSSArticle {...article} />);
+    const component = Enzyme.shallow(<RSSArticle {...article} />);
     expect(component.find('a').text()).toEqual('Test titre article');
   });
 });

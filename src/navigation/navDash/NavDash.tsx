@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { Button, NavItem, NavLink } from 'reactstrap';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
@@ -9,7 +8,7 @@ interface IProps {
   onTabDeleted: (id: number) => void;
 }
 
-export default function NavDash(props: IProps): React.ReactElement {
+export default function NavDash(props: IProps): ReactElement {
   const [label, setLabel] = useState(props.tab.label);
   const [isToggled, toggle] = useState(false);
 

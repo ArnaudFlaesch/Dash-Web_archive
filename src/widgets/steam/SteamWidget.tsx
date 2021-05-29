@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
 import authHeader from 'src/services/auth.header';
