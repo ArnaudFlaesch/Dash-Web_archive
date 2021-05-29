@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import authHeader from "src/services/auth.header";
 import CircularProgressBar from "src/widgets/utils/circular-progress/CircularProgressBar";
 import { IGameInfo } from "../IGameInfo";
 
@@ -19,6 +20,7 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+            ...authHeader(),
             params: {
                 url: GET_ACHIVEMENTS_URL
             }

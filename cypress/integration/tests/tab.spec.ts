@@ -2,8 +2,9 @@
 
 describe('Tab tests', () => {
   before(() => {
-    cy.visit('/');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a new tab', () => {
@@ -23,7 +24,6 @@ describe('Tab tests', () => {
     cy.wait('@updateTab').then(() => {
       cy.get('.tab.selectedItem')
         .should('have.text', 'Flux RSS')
-
         .get('.tab')
         .first()
         .click()

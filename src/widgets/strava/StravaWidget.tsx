@@ -148,7 +148,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
         activitiesByMonth[month] = [];
       }
       activitiesByMonth[month].push(
-        Math.round(activity.distance * 1000) / 1000000
+        Math.round(activity.distance * 1000) / 10000
       );
       return activitiesByMonth;
     }, []);

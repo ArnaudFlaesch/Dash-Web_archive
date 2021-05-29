@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Button, NavItem, NavLink } from 'reactstrap';
 import { ITab } from '../../model/Tab';
-import { deleteTab, updateTab } from '../../services/TabService';
+import { deleteTab, updateTab } from '../../services/tab.service';
 interface IProps {
   tab: ITab;
   onTabClicked: () => void;

@@ -21,11 +21,14 @@ import {
 import './Dash.scss';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
+import Login from './pages/login/Login';
 import Store from './pages/store/Store';
 import { toggleSelectedTab } from './reducers/actions';
 import { ITabState } from './reducers/tabReducer';
-import { addTab, updateTabs } from './services/TabService';
-import { addWidget } from './services/WidgetService';
+import authHeader from './services/auth.header';
+import authService from './services/auth.service';
+import { addTab, updateTabs } from './services/tab.service';
+import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
@@ -42,18 +45,25 @@ export default function Dash(): React.ReactElement {
 
   const activeTab = useSelector((state: ITabState) => state.activeTab);
   const dispatch = useDispatch();
+  const isMounted = React.useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current && tabs && tabs.length === 0) {
+      addNewTab();
+    }
+  }, [tabs])
 
   function initDashboard() {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`, authHeader())
       .then((result) => {
         return result.json();
       })
       .then((result) => {
-        if (!result || result.length === 0) {
-          addNewTab();
-        }
         setTabs(result);
-        dispatch(toggleSelectedTab(result[0].id));
+        if (result && result.length > 0) {
+          dispatch(toggleSelectedTab(result[0].id));
+        }
+        isMounted.current = true;
       })
       .catch((error: Error) => {
         logger.error(error.message);
@@ -103,10 +113,16 @@ export default function Dash(): React.ReactElement {
   }
 
   function onTabDeleted(id: number) {
-    setTabs(tabs.filter((tab) => tab.id !== id));
-    if (activeTab === id) {
-      dispatch(toggleSelectedTab(tabs[0].id));
+    if (tabs.length > 1) {
+      if (tabs[0].id === id) {
+        dispatch(toggleSelectedTab(tabs[1].id));
+      } else if (activeTab === id) {
+        dispatch(toggleSelectedTab(tabs[0].id));
+      } else {
+        dispatch(toggleSelectedTab(activeTab));
+      }
     }
+    setTabs(tabs.filter((tab) => tab.id !== id));
   }
 
   function reorder(
@@ -142,93 +158,103 @@ export default function Dash(): React.ReactElement {
 
   return (
     <div className="dash">
-      <div className="flexRow">
-        <div className="dashNavbar">
-          <Nav vertical={true} navbar={true}>
-            <Button
-              id="openAddWidgetModal"
-              className="dashNavbarLink"
-              onClick={toggleModal}
-            >
-              <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
-            </Button>
-            <Modal isOpen={modal} toggle={toggleModal}>
-              <ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
-              <ModalBody>
-                <Store onWidgetAdded={onWidgetAdded} />
-              </ModalBody>
-              <ModalFooter>
+      {!authService.getCurrentUser() &&
+        <Login />
+      }
+      { authService.getCurrentUser() &&
+        <div className="flexRow">
+          <div className="dashNavbar">
+            {activeTab && tabs.length > 0 &&
+              <Nav vertical={true} navbar={true}>
                 <Button
-                  id="closeAddWidgetModal"
-                  color="primary"
+                  id="openAddWidgetModal"
+                  className="dashNavbarLink"
                   onClick={toggleModal}
                 >
-                  Fermer
+                  <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
                 </Button>
-              </ModalFooter>
-            </Modal>
-          </Nav>
-        </div>
+                <Modal isOpen={modal} toggle={toggleModal}>
+                  <ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
+                  <ModalBody>
+                    <Store onWidgetAdded={onWidgetAdded} />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      id="closeAddWidgetModal"
+                      color="primary"
+                      onClick={toggleModal}
+                    >
+                      Fermer
+              </Button>
+                  </ModalFooter>
+                </Modal>
+              </Nav>
+            }
+          </div>
 
-        <div className="flexColumn tabsBar">
-          <Nav tabs={true}>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable" direction="horizontal">
-                {(providedDroppable: DroppableProvided) => (
-                  <div
-                    className="flexRow"
-                    {...providedDroppable.droppableProps}
-                    ref={providedDroppable.innerRef}
-                  >
-                    {tabs.length > 0 &&
-                      tabs.map((tab: ITab, index: number) => {
-                        return (
-                          <Draggable
-                            key={tab.id}
-                            draggableId={tab.id.toString()}
-                            index={index}
-                          >
-                            {(providedDraggable) => (
-                              <div
+          <div className="flexColumn tabsBar">
+            <Nav tabs={true}>
+              <div className="flexRow">
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <Droppable droppableId="droppable" direction="horizontal">
+                    {(providedDroppable: DroppableProvided) => (
+                      <div
+                        className="flexRow"
+                        {...providedDroppable.droppableProps}
+                        ref={providedDroppable.innerRef}
+                      >
+                        {tabs.length > 0 &&
+                          tabs.map((tab: ITab, index: number) => {
+                            return (
+                              <Draggable
                                 key={tab.id}
-                                ref={providedDraggable.innerRef}
-                                {...providedDraggable.draggableProps}
-                                {...providedDraggable.dragHandleProps}
-                                className={`tab ${
-                                  tab.id === activeTab ? 'selectedItem' : ''
-                                }`}
+                                draggableId={tab.id.toString()}
+                                index={index}
                               >
-                                <NavDash
-                                  tab={tab}
-                                  onTabClicked={() => toggleTab(tab.id)}
-                                  onTabDeleted={onTabDeleted}
-                                />
-                              </div>
-                            )}
-                          </Draggable>
-                        );
-                      })}
-                    {providedDroppable.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-            <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
-          </Nav>
-          <TabContent activeTab={activeTab}>
-            {tabs.length > 0 &&
-              tabs.map((tab: ITab) => {
-                return (
-                  <TabDash
-                    key={tab.id}
-                    newWidget={getNewWidget(tab.id)}
-                    tabId={tab.id}
-                  />
-                );
-              })}
-          </TabContent>
+                                {(providedDraggable) => (
+                                  <div
+                                    key={tab.id}
+                                    ref={providedDraggable.innerRef}
+                                    {...providedDraggable.draggableProps}
+                                    {...providedDraggable.dragHandleProps}
+                                    className={`tab ${tab.id === activeTab ? 'selectedItem' : ''
+                                      }`}
+                                  >
+                                    <NavDash
+                                      tab={tab}
+                                      onTabClicked={() => toggleTab(tab.id)}
+                                      onTabDeleted={onTabDeleted}
+                                    />
+                                  </div>
+                                )}
+                              </Draggable>
+                            );
+                          })}
+                        {providedDroppable.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+                <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
+                <Button onClick={authService.logout} className="btn btn-primary">Se déconnecter</Button>
+              </div>
+            </Nav>
+            <TabContent activeTab={activeTab}>
+
+              {tabs.length > 0 &&
+                tabs.map((tab: ITab) => {
+                  return (
+                    <TabDash
+                      key={tab.id}
+                      newWidget={getNewWidget(tab.id)}
+                      tabId={tab.id}
+                    />
+                  );
+                })}
+            </TabContent>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 }

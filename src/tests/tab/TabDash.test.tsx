@@ -51,7 +51,7 @@ describe('TabDash tests', () => {
     });
     expect(globalAny.fetch).toHaveBeenCalledTimes(1);
     expect(globalAny.fetch).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`
+      `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`, {}
     );
     // @FIXME
     // expect(container.getElementsByClassName('widget').length).toEqual(4);
