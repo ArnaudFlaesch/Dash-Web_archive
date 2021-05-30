@@ -8,24 +8,17 @@ import {
   DropResult
 } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Nav,
-  TabContent
-} from 'reactstrap';
+import { Button, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
+import CreateWidgetModal from './modals/CreateWidgetModal';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Login from './pages/login/Login';
-import Store from './pages/store/Store';
 import { toggleSelectedTab } from './reducers/actions';
 import { ITabState } from './reducers/tabReducer';
 import authHeader from './services/auth.header';
 import authService from './services/auth.service';
+import { exportConfig } from './services/config.service';
 import { addTab, updateTabs } from './services/tab.service';
 import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
@@ -40,7 +33,6 @@ export interface IMenu {
 export default function Dash(): React.ReactElement {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [newWidget, setNewWidget] = useState<IWidgetConfig>();
-  const [modal, setModal] = useState(false);
 
   const activeTab = useSelector((state: ITabState) => state.activeTab);
   const dispatch = useDispatch();
@@ -50,7 +42,7 @@ export default function Dash(): React.ReactElement {
     if (isMounted.current && tabs && tabs.length === 0) {
       addNewTab();
     }
-  }, [tabs])
+  }, [tabs]);
 
   function initDashboard() {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`, authHeader())
@@ -90,10 +82,6 @@ export default function Dash(): React.ReactElement {
     } else {
       return undefined;
     }
-  }
-
-  function toggleModal() {
-    setModal(!modal);
   }
 
   function onWidgetAdded(type: React.MouseEvent<HTMLButtonElement>) {
@@ -153,42 +141,42 @@ export default function Dash(): React.ReactElement {
     });
   }
 
+  function downloadConfig(): Promise<void> {
+    return exportConfig()
+      .then((response) => {
+        logger.info('Configuration exportée');
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'dashboardConfig.json');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch(() => {
+        logger.error("Erreur lors de l'export de la configuration");
+      });
+  }
+
   useEffect(initDashboard, []);
 
   return (
     <div className="dash">
-      {!authService.getCurrentUser() &&
-        <Login />
-      }
-      { authService.getCurrentUser() &&
+      {!authService.getCurrentUser() && <Login />}
+      {authService.getCurrentUser() && (
         <div className="flexRow">
           <div className="dashNavbar">
-            {activeTab && tabs.length > 0 &&
+            {activeTab && tabs.length > 0 && (
               <Nav vertical={true} navbar={true}>
+                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
                 <Button
-                  id="openAddWidgetModal"
+                  id="downloadConfigButton"
                   className="dashNavbarLink"
-                  onClick={toggleModal}
+                  onClick={downloadConfig}
                 >
-                  <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
+                  <i className="fa fa-download fa-lg" aria-hidden="true" />
                 </Button>
-                <Modal isOpen={modal} toggle={toggleModal}>
-                  <ModalHeader toggle={toggleModal}>Ajouter un widget</ModalHeader>
-                  <ModalBody>
-                    <Store onWidgetAdded={onWidgetAdded} />
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button
-                      id="closeAddWidgetModal"
-                      color="primary"
-                      onClick={toggleModal}
-                    >
-                      Fermer
-              </Button>
-                  </ModalFooter>
-                </Modal>
               </Nav>
-            }
+            )}
           </div>
 
           <div className="flexColumn tabsBar">
@@ -216,8 +204,9 @@ export default function Dash(): React.ReactElement {
                                     ref={providedDraggable.innerRef}
                                     {...providedDraggable.draggableProps}
                                     {...providedDraggable.dragHandleProps}
-                                    className={`tab ${tab.id === activeTab ? 'selectedItem' : ''
-                                      }`}
+                                    className={`tab ${
+                                      tab.id === activeTab ? 'selectedItem' : ''
+                                    }`}
                                   >
                                     <NavDash
                                       tab={tab}
@@ -234,12 +223,20 @@ export default function Dash(): React.ReactElement {
                     )}
                   </Droppable>
                 </DragDropContext>
-                <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
-                <Button onClick={authService.logout} className="btn btn-primary">Se déconnecter</Button>
+                <Button
+                  onClick={addNewTab}
+                  id="addNewTabButton"
+                  className="fa fa-plus-circle fa-lg"
+                />
+                <Button
+                  onClick={authService.logout}
+                  className="btn btn-primary"
+                >
+                  Se déconnecter
+                </Button>
               </div>
             </Nav>
             <TabContent activeTab={activeTab}>
-
               {tabs.length > 0 &&
                 tabs.map((tab: ITab) => {
                   return (
@@ -253,7 +250,7 @@ export default function Dash(): React.ReactElement {
             </TabContent>
           </div>
         </div>
-      }
+      )}
     </div>
   );
 }
