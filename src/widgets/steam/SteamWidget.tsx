@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
-import authHeader from 'src/services/auth.header';
+import authorizationBearer from 'src/services/auth.header';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import GameDetails from './details/GameDetails';
@@ -23,11 +23,12 @@ export default function SteamWidget(props: IProps): React.ReactElement {
   const [playerData, setPlayerData] = useState<IPlayerData>();
   const [ownedGames, setOwnedGames] = useState<IGameInfo[]>();
 
-  const STEAM_API_URL = "https://api.steampowered.com";
-  const GET_PLAYER_SUMMARIES_URL = `/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamids=${process.env.REACT_APP_STEAM_USER_ID}`
-  const GET_OWNED_GAMES_URL = `/IPlayerService/GetOwnedGames/v0001/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}&format=json&include_appinfo=true`
-  const STEAM_IMAGE_URL = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/";
-  const STEAM_COMMUNITY_URL = "https://steamcommunity.com/app/";
+  const STEAM_API_URL = 'https://api.steampowered.com';
+  const GET_PLAYER_SUMMARIES_URL = `/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamids=${process.env.REACT_APP_STEAM_USER_ID}`;
+  const GET_OWNED_GAMES_URL = `/IPlayerService/GetOwnedGames/v0001/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}&format=json&include_appinfo=true`;
+  const STEAM_IMAGE_URL =
+    'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/';
+  const STEAM_COMMUNITY_URL = 'https://steamcommunity.com/app/';
 
   useEffect(() => {
     refreshWidget();
@@ -41,7 +42,10 @@ export default function SteamWidget(props: IProps): React.ReactElement {
   function getPlayerData(): void {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-        ...authHeader(),
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
+        },
         params: {
           url: `${STEAM_API_URL}${GET_PLAYER_SUMMARIES_URL}`
         }
@@ -55,14 +59,22 @@ export default function SteamWidget(props: IProps): React.ReactElement {
   }
 
   function getOwnedGames(): void {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
-      ...authHeader(),
-      params: {
-        url: `${STEAM_API_URL}${GET_OWNED_GAMES_URL}`
-      }
-    })
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
+        },
+        params: {
+          url: `${STEAM_API_URL}${GET_OWNED_GAMES_URL}`
+        }
+      })
       .then((response) => {
-        setOwnedGames((response.data.response.games as IGameInfo[]).sort((gameA, gameB) => gameA.name.localeCompare(gameB.name)));
+        setOwnedGames(
+          (response.data.response.games as IGameInfo[]).sort((gameA, gameB) =>
+            gameA.name.localeCompare(gameB.name)
+          )
+        );
       })
       .catch((error) => {
         logger.error(error.message);
@@ -80,27 +92,26 @@ export default function SteamWidget(props: IProps): React.ReactElement {
 
   const widgetBody = (
     <div className="flexColumn">
-      {ownedGames && ownedGames.map((game: IGameInfo) => {
-        return (
-          <ComponentWithDetail
-            key={game.appid}
-            componentRoot=
-            {
-              <div className="gameInfo flexRow">
-                <div>
-                  <img src={
-                    `${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `
-                  } />
+      {ownedGames &&
+        ownedGames.map((game: IGameInfo) => {
+          return (
+            <ComponentWithDetail
+              key={game.appid}
+              componentRoot={
+                <div className="gameInfo flexRow">
+                  <div>
+                    <img
+                      src={`${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `}
+                    />
+                  </div>
+                  <div>{game.name}</div>
                 </div>
-                <div>{game.name}</div>
-              </div>
-            }
-            componentDetail={<GameDetails {...game} />}
-            link={`${STEAM_COMMUNITY_URL}${game.appid}`}
-          />
-        );
-      })}
-
+              }
+              componentDetail={<GameDetails {...game} />}
+              link={`${STEAM_COMMUNITY_URL}${game.appid}`}
+            />
+          );
+        })}
     </div>
   );
 

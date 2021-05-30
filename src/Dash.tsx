@@ -11,12 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
 import CreateWidgetModal from './modals/CreateWidgetModal';
+import ImportConfigModal from './modals/ImportConfigModal';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Login from './pages/login/Login';
 import { toggleSelectedTab } from './reducers/actions';
 import { ITabState } from './reducers/tabReducer';
-import authHeader from './services/auth.header';
+import authorizationBearer from './services/auth.header';
 import authService from './services/auth.service';
 import { exportConfig } from './services/config.service';
 import { addTab, updateTabs } from './services/tab.service';
@@ -45,7 +46,12 @@ export default function Dash(): React.ReactElement {
   }, [tabs]);
 
   function initDashboard() {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`, authHeader())
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`, {
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
+      }
+    })
       .then((result) => {
         return result.json();
       })
@@ -175,6 +181,7 @@ export default function Dash(): React.ReactElement {
                 >
                   <i className="fa fa-download fa-lg" aria-hidden="true" />
                 </Button>
+                <ImportConfigModal />
               </Nav>
             )}
           </div>
