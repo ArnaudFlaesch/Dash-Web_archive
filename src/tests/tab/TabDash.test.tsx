@@ -26,7 +26,7 @@ describe('TabDash tests', () => {
     ReactDOM.unmountComponentAtNode(div);
   });
 
-  it('Should render a tab with', async () => {
+  it('Should render a tab', async () => {
     const widgetServiceResponse = {
       data: widgetDataSample
     };
