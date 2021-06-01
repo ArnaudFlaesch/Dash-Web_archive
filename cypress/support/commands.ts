@@ -26,6 +26,8 @@
 
 import 'cypress-wait-until';
 
+import 'cypress-file-upload';
+
 Cypress.Commands.add('loginAsAdmin', (): Cypress.Chainable<Response> => {
   return loginAs('admintest', 'adminpassword');
 });

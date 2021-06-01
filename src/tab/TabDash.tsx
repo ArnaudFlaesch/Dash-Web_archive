@@ -98,7 +98,7 @@ export default function TabDash(props: IProps): React.ReactElement {
   }
 
   useEffect(() => {
-    if (!widgets.length && activeTab === props.tabId) {
+    if (activeTab === props.tabId) {
       fetch(
         `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`,
         {

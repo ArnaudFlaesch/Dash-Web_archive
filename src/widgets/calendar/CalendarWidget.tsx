@@ -65,18 +65,17 @@ export default function CalendarWidget(props: IProps): ReactElement {
         })
         .then((response) => {
           const data = ical.parseICS(response.data);
-          setSchedules((schedules) =>
-            schedules.concat(
+          setSchedules((oldSchedules) =>
+            oldSchedules.concat(
               ...Object.keys(data).map((eventKey) => {
                 const event = data[eventKey];
-                const newSchedule: Event = {
+                return {
                   title: event.summary,
                   start: event.start,
                   end: event.end,
                   allDay:
                     event.end?.getHours() === 0 && event.start?.getHours() === 0
                 };
-                return newSchedule;
               })
             )
           );

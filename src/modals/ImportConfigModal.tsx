@@ -48,6 +48,7 @@ export default function ImportConfigModal(): ReactElement {
           <input type="file" id="file" name="file" onChange={selectFile} />
 
           <button
+            id="uploadFileButton"
             className="btn btn-success"
             disabled={!selectedFile}
             onClick={upload}
