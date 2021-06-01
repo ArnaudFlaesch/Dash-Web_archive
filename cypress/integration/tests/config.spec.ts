@@ -9,13 +9,6 @@ describe('Tab tests', () => {
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
-  after(() => {
-    cy.get('.tab')
-      .dblclick({ force: true, multiple: true })
-      .get('.deleteTabButton')
-      .click({ force: true, multiple: true });
-  });
-
   it('Should export config', () => {
     cy.intercept('GET', '/config/export')
       .as('downloadConfig')
@@ -40,12 +33,23 @@ describe('Tab tests', () => {
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
         cy.reload()
+          .intercept('DELETE', '/tab/deleteTab/*')
+          .as('deleteTab')
           .get('.tab')
           .should('have.length', 2)
           .contains('Perso')
           .click()
           .get('.widget')
-          .should('have.length', 5);
+          .should('have.length', 5)
+          .get('.tab')
+          .contains('Perso')
+          .dblclick()
+          .get('.deleteTabButton')
+          .click()
+          .wait('@deleteTab')
+          .then(() => {
+            cy.get('.tab').should('have.length', 1);
+          });
       });
   });
 });
