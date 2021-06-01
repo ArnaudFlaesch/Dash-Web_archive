@@ -51,7 +51,8 @@ jobs:
       - name: Pull backend image TEST
         if: github.ref != 'refs/heads/develop'
         run: |
-          if [[ "$(docker images -q arnaudf93/dashwebservices:${GITHUB_REF#refs/*/} 2> /dev/null)" != "" ]]; then
+        docker manifest inspect arnaudf93/dashwebservices:${GITHUB_REF#refs/*/} > /dev/null ; echo $? 
+          if [[ docker manifest inspect arnaudf93/dashwebservices:${GITHUB_REF#refs/*/} > /dev/null ; echo $? ]]; then
             docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
             docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
           else 
