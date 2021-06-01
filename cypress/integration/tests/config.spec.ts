@@ -9,6 +9,13 @@ describe('Tab tests', () => {
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
+  after(() => {
+    cy.get('.tab')
+      .dblclick({ force: true, multiple: true })
+      .get('.deleteTabButton')
+      .click({ force: true, multiple: true });
+  });
+
   it('Should export config', () => {
     cy.intercept('GET', '/config/export')
       .as('downloadConfig')
