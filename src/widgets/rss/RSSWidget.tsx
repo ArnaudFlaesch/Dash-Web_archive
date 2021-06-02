@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import RSSParser from 'rss-parser';
-import authHeader from 'src/services/auth.header';
+import authorizationBearer from 'src/services/auth.header';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { updateWidgetData } from '../../services/widget.service';
 import logger from '../../utils/LogUtils';
@@ -29,18 +29,22 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   function fetchDataFromRssFeed() {
     if (url) {
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`, authHeader())
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${url}`, {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          }
+        })
         .then((apiResult) => {
-          rssParser.parseString((apiResult.data as string))
-            .then(response => {
-              const result = response as IRSSHeader;
-              setDecription(result.description);
-              setFeed(result.items);
-              setImage(result.image);
-              setLink(result.link);
-              setTitle(result.title);
-            })
-
+          rssParser.parseString(apiResult.data as string).then((response) => {
+            const result = response as IRSSHeader;
+            setDecription(result.description);
+            setFeed(result.items);
+            setImage(result.image);
+            setLink(result.link);
+            setTitle(result.title);
+          });
         })
         .catch((error) => {
           logger.error(error.message);
@@ -71,11 +75,15 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   function formatTitleForArticle(pubDate: string, articleTitle?: string) {
     const date = pubDate
       ? new Date(pubDate).toLocaleTimeString('fr', {
-        hour: '2-digit',
-        minute: '2-digit'
-      })
+          hour: '2-digit',
+          minute: '2-digit'
+        })
       : '';
-    return <div className="rssArticle">{date} {articleTitle}</div>;
+    return (
+      <div className="rssArticle">
+        {date} {articleTitle}
+      </div>
+    );
   }
 
   function getFeedFromRSS(data: IArticle[]) {

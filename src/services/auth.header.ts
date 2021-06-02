@@ -1,17 +1,12 @@
-export default function authHeader(): Record<string, unknown> {
+export default function authorizationBearer(): string {
   if (localStorage.getItem('user')) {
     const user = JSON.parse(localStorage.getItem('user') || '');
     if (user && user.accessToken) {
-      return {
-        headers: {
-          Authorization: 'Bearer ' + user.accessToken,
-          'Content-type': 'application/json'
-        }
-      };
+      return 'Bearer ' + user.accessToken;
     } else {
-      return {};
+      return '';
     }
   } else {
-    return {};
+    return '';
   }
 }
