@@ -1,8 +1,10 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
   ],
-  "assignees":[
+  "assignees": [
     "ArnaudFlaesch"
-  ]
+  ],
+  "branchTopic": "{{{depNameSanitized}}}-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}{{#if isLockfileUpdate}}-lockfile{{/if}}"
 }
