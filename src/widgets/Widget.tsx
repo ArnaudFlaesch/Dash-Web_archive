@@ -36,19 +36,19 @@ export default function Widget(props: IProps): ReactElement {
 
   return (
     <div>
-      { mode === ModeEnum.READ &&
+      {mode === ModeEnum.READ && (
         <div>
           <div className="header">
             <div className="leftGroup widgetHeader">{props.header}</div>
             <div className="rightGroup">
-              {props.editModeComponent &&
+              {props.editModeComponent && (
                 <button
                   onClick={editWidget}
                   className="btn btn-default editButton"
                 >
                   <i className="fa fa-cog" aria-hidden="true" />
                 </button>
-              }
+              )}
               <button
                 onClick={props.refreshFunction}
                 className="btn btn-default refreshButton"
@@ -65,17 +65,17 @@ export default function Widget(props: IProps): ReactElement {
           </div>
           {props.body}
         </div>
-      }
-      { mode === ModeEnum.DELETE &&
+      )}
+      {mode === ModeEnum.DELETE && (
         <DeleteWidget
           idWidget={props.id}
           onDeleteButtonClicked={props.onDeleteButtonClicked}
           onCancelButtonClicked={cancelDeletion}
         />
-      }
+      )}
       {mode === ModeEnum.EDIT &&
-        (props.editModeComponent) ? props.editModeComponent : () => setMode(ModeEnum.READ)
-      }
+        props.editModeComponent !== null &&
+        props.editModeComponent}
     </div>
   );
 }
