@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
+import { useCustomEventListener } from 'react-custom-events';
 
 interface IProps {
   id: number;
@@ -15,6 +16,10 @@ interface IProps {
 
 export default function Widget(props: IProps): ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
+
+  useCustomEventListener('refreshAllWidgets', () => {
+    props.refreshFunction();
+  });
 
   useEffect(() => {
     setMode(ModeEnum.READ);

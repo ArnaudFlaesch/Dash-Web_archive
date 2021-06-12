@@ -13117,6 +13117,11 @@ react-chartjs-2@3.0.3:
   dependencies:
     lodash "^4.17.19"
 
+react-custom-events@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-custom-events/-/react-custom-events-1.0.3.tgz#b262c5c2bec34d8f6a922e11d1d733bd2dc8bf95"
+  integrity sha512-RUonZC7BNtwc7p603J+chZovHEKhxIi/teCDh0dokX3DGi1UbrRtuvabmhF6JmrJZfDjRuqx8qB/05wr/F4FBQ==
+
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.npmjs.org/react-dev-utils/-/react-dev-utils-11.0.4.tgz"

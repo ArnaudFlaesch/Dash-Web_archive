@@ -25,6 +25,7 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
+import { emitCustomEvent } from 'react-custom-events';
 
 export interface IMenu {
   link: string;
@@ -71,6 +72,10 @@ export default function Dash(): React.ReactElement {
     if (activeTab !== tab) {
       dispatch(toggleSelectedTab(tab));
     }
+  }
+
+  function refreshAllWidgets() {
+    emitCustomEvent('refreshAllWidgets');
   }
 
   function addNewTab() {
@@ -174,6 +179,13 @@ export default function Dash(): React.ReactElement {
             {activeTab && tabs.length > 0 && (
               <Nav vertical={true} navbar={true}>
                 <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
+                <Button
+                  id="reloadAllWidgetsButton"
+                  className="dashNavbarLink"
+                  onClick={refreshAllWidgets}
+                >
+                  <i className="fa fa-refresh fa-lg" aria-hidden="true" />
+                </Button>
                 <Button
                   id="downloadConfigButton"
                   className="dashNavbarLink"
