@@ -71,6 +71,21 @@ describe('RSS Widget tests', () => {
       });
   });
 
+  it('Should refresh all widgets', () => {
+    cy.intercept(
+      'GET',
+      '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
+      { fixture: 'figaro_rss.xml' }
+    ).as('refreshWidget');
+
+    cy.get('#reloadAllWidgetsButton')
+      .click()
+      .wait('@refreshWidget')
+      .then(() => {
+        cy.get('.rssArticle').should('have.length', 20);
+      });
+  });
+
   it('Should delete previously added widget', () => {
     cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
     cy.get('.deleteButton')
