@@ -7,6 +7,7 @@ import {
   DroppableProvided,
   DropResult
 } from 'react-beautiful-dnd';
+import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
@@ -71,6 +72,10 @@ export default function Dash(): React.ReactElement {
     if (activeTab !== tab) {
       dispatch(toggleSelectedTab(tab));
     }
+  }
+
+  function refreshAllWidgets() {
+    emitCustomEvent('refreshAllWidgets');
   }
 
   function addNewTab() {
@@ -174,6 +179,13 @@ export default function Dash(): React.ReactElement {
             {activeTab && tabs.length > 0 && (
               <Nav vertical={true} navbar={true}>
                 <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
+                <Button
+                  id="reloadAllWidgetsButton"
+                  className="dashNavbarLink"
+                  onClick={refreshAllWidgets}
+                >
+                  <i className="fa fa-refresh fa-lg" aria-hidden="true" />
+                </Button>
                 <Button
                   id="downloadConfigButton"
                   className="dashNavbarLink"
