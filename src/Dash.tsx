@@ -7,6 +7,7 @@ import {
   DroppableProvided,
   DropResult
 } from 'react-beautiful-dnd';
+import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
@@ -25,7 +26,6 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
-import { emitCustomEvent } from 'react-custom-events';
 
 export interface IMenu {
   link: string;

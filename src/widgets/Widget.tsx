@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from 'react';
+import { useCustomEventListener } from 'react-custom-events';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
-import { useCustomEventListener } from 'react-custom-events';
 
 interface IProps {
   id: number;
