@@ -13,6 +13,13 @@ import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import './CalendarWidget.scss';
 import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
+import format from 'date-fns/format'
+import parse from 'date-fns/parse'
+import startOfWeek from 'date-fns/startOfWeek'
+import getDay from 'date-fns/getDay'
+import { fr } from "date-fns/locale";
+
+import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
 
 export interface IProps {
   id: number;
@@ -100,6 +107,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
         popup={true}
         style={{ height: 500 }}
       />
+
     </div>
   );
 

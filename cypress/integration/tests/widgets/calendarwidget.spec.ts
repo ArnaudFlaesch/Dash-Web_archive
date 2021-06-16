@@ -93,6 +93,30 @@ describe('Calendar Widget tests', () => {
     });
   });
 
+  it('Should edit Calendar widget and add an Ical feed', () => {
+    cy.get('.editButton')
+      .click()
+      .get('#addCalendarUrl')
+      .click()
+      .get('input')
+      .type(
+        'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
+      )
+      .get('#validateCalendarUrls')
+      .click();
+    cy.intercept(
+      'GET',
+      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
+    ).as('refreshWidget');
+    cy.get('.refreshButton').click();
+    cy.wait('@refreshWidget').then(() => {
+      cy.get('.rbc-toolbar-label').should(
+        'have.text',
+        format(new Date(), 'MMM yyyy', { locale: fr })
+      );
+    });
+  });
+
   it('Should delete previously added widget', () => {
     cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
     cy.get('.deleteButton')

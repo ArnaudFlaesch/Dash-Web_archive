@@ -75,9 +75,9 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   function formatTitleForArticle(pubDate: string, articleTitle?: string) {
     const date = pubDate
       ? new Date(pubDate).toLocaleTimeString('fr', {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
+        hour: '2-digit',
+        minute: '2-digit'
+      })
       : '';
     return (
       <div className="rssArticle">

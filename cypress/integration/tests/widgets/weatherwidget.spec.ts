@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import MockDate from 'mockdate';
+
 describe('Weather Widget tests', () => {
   before(() => {
     cy.loginAsAdmin()
