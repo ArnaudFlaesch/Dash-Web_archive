@@ -20,7 +20,7 @@ describe('Calendar Widget tests', () => {
         .get('.widget')
         .should('have.length', 1)
         .get('.rbc-toolbar-label')
-        .should('have.text', format(new Date(), 'MMM yyyy', { locale: fr }));
+        .should('have.text', format(new Date(), 'MMMM yyyy', { locale: fr }));
     });
   });
 
