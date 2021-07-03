@@ -40,6 +40,13 @@ export default function Dash(): React.ReactElement {
   const dispatch = useDispatch();
   const isMounted = useRef(false);
 
+  const refreshTimeout = 900000; // 15 minutes
+
+  useEffect(() => {
+    const interval = setInterval(refreshAllWidgets, refreshTimeout);
+    return () => clearInterval(interval); // Clear interval on unmount
+  }, []);
+
   useEffect(() => {
     if (isMounted.current && tabs && tabs.length === 0) {
       addNewTab();
@@ -179,20 +186,25 @@ export default function Dash(): React.ReactElement {
             {activeTab && tabs.length > 0 && (
               <Nav vertical={true} navbar={true}>
                 <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-                <Button
-                  id="reloadAllWidgetsButton"
-                  className="dashNavbarLink"
-                  onClick={refreshAllWidgets}
-                >
-                  <i className="fa fa-refresh fa-lg" aria-hidden="true" />
-                </Button>
-                <Button
-                  id="downloadConfigButton"
-                  className="dashNavbarLink"
-                  onClick={downloadConfig}
-                >
-                  <i className="fa fa-download fa-lg" aria-hidden="true" />
-                </Button>
+                <div>
+                  <Button
+                    id="reloadAllWidgetsButton"
+                    className="dashNavbarLink"
+                    onClick={refreshAllWidgets}
+                  >
+                    <i className="fa fa-refresh fa-lg" aria-hidden="true" />
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    id="downloadConfigButton"
+                    className="dashNavbarLink"
+                    onClick={downloadConfig}
+                  >
+                    <i className="fa fa-download fa-lg" aria-hidden="true" />
+                  </Button>
+                </div>
+
                 <ImportConfigModal />
               </Nav>
             )}
