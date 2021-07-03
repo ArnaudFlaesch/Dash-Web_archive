@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export default function ComponentWithDetail(props: IProps): React.ReactElement {
-  const [openCollapse, setOpenCollapse] = useState(!props.isClosed || false);
+  const [openCollapse, setOpenCollapse] = useState(false);
 
   useEffect(() => {
     if (props.isClosed) {

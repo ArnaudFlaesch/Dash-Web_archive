@@ -124,7 +124,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   );
 
   const additionalActionButtons = (
-    <button onClick={closeFeeds} className="btn btn-default editButton">
+    <button onClick={closeFeeds} className="btn btn-default">
       <i className="fa fa-window-minimize" aria-hidden="true" />
     </button>
   );
