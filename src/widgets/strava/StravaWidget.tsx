@@ -244,18 +244,8 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                 }}
                 options={{
                   scales: {
-                    y: [
-                      {
-                        id: 'kms',
-                        type: 'linear',
-                        position: 'left'
-                      },
-                      {
-                        id: 'activities',
-                        type: 'linear',
-                        position: 'right'
-                      }
-                    ]
+                    type: 'linear',
+                    position: 'left'
                   }
                 }}
               />
