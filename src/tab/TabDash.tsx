@@ -24,6 +24,35 @@ export default function TabDash(props: IProps): React.ReactElement {
   const [widgets, setWidgets] = useState([]);
   const activeTab = useSelector((state: ITabState) => state.activeTab);
 
+  useEffect(() => {
+    if (activeTab === props.tabId) {
+      fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`,
+        {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          }
+        }
+      )
+        .then((result) => {
+          return result.json();
+        })
+        .then((result) => {
+          setWidgets(result);
+        })
+        .catch((error: Error) => {
+          logger.error(error.message);
+        });
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (props.newWidget) {
+      setWidgets((widgets as IWidgetConfig[]).concat([props.newWidget]) as []);
+    }
+  }, [props.newWidget != null && props.newWidget.id]);
+
   function createWidget(widgetConfig: IWidgetConfig) {
     switch (widgetConfig.type) {
       case WidgetTypes.WEATHER: {
@@ -97,35 +126,6 @@ export default function TabDash(props: IProps): React.ReactElement {
         logger.error(error.message);
       });
   }
-
-  useEffect(() => {
-    if (activeTab === props.tabId) {
-      fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`,
-        {
-          headers: {
-            Authorization: authorizationBearer(),
-            'Content-type': 'application/json'
-          }
-        }
-      )
-        .then((result) => {
-          return result.json();
-        })
-        .then((result) => {
-          setWidgets(result);
-        })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
-    }
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (props.newWidget) {
-      setWidgets((widgets as IWidgetConfig[]).concat([props.newWidget]) as []);
-    }
-  }, [props.newWidget != null && props.newWidget.id]);
 
   return (
     <TabPane tabId={props.tabId}>

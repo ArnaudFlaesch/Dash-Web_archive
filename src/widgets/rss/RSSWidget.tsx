@@ -25,6 +25,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   const [image, setImage] = useState<ImageContent>();
   const [link, setLink] = useState('');
   const [title, setTitle] = useState('');
+  const [isFeedClosed, setFeedClosed] = useState(true);
   const rssParser = new RSSParser();
 
   function fetchDataFromRssFeed() {
@@ -86,6 +87,14 @@ export default function RSSWidget(props: IProps): React.ReactElement {
     );
   }
 
+  function onOpenDetail() {
+    setFeedClosed(false);
+  }
+
+  function closeFeeds(): void {
+    setFeedClosed(true);
+  }
+
   function getFeedFromRSS(data: IArticle[]) {
     return data.map((article) => {
       return (
@@ -94,6 +103,8 @@ export default function RSSWidget(props: IProps): React.ReactElement {
           componentRoot={formatTitleForArticle(article.pubDate, article.title)}
           componentDetail={<RSSArticle {...article} />}
           link={article.link}
+          isClosed={isFeedClosed}
+          onOpenDetail={onOpenDetail}
         />
       );
     });
@@ -110,6 +121,12 @@ export default function RSSWidget(props: IProps): React.ReactElement {
         <div className="rssTitle">{title}</div>
       </a>
     </div>
+  );
+
+  const additionalActionButtons = (
+    <button onClick={closeFeeds} className="btn btn-default">
+      <i className="fa fa-window-minimize" aria-hidden="true" />
+    </button>
   );
 
   const widgetBody = (
@@ -130,6 +147,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
         tabId={props.tabId}
         config={{ url: url }}
         header={widgetHeader}
+        additionalActionButtons={additionalActionButtons}
         body={widgetBody}
         editModeComponent={
           <EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />

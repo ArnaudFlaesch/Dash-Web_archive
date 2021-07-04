@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
+import { useCustomEventListener } from 'react-custom-events';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
 
@@ -8,6 +9,7 @@ interface IProps {
   config: Record<string, unknown>;
   header: ReactElement;
   body: ReactElement;
+  additionalActionButtons?: ReactElement;
   editModeComponent?: ReactElement<IProps>;
   refreshFunction: () => void;
   onDeleteButtonClicked: (idWidget: number) => void;
@@ -15,6 +17,10 @@ interface IProps {
 
 export default function Widget(props: IProps): ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
+
+  useCustomEventListener('refreshAllWidgets', () => {
+    props.refreshFunction();
+  });
 
   useEffect(() => {
     setMode(ModeEnum.READ);
@@ -41,6 +47,7 @@ export default function Widget(props: IProps): ReactElement {
           <div className="header">
             <div className="leftGroup widgetHeader">{props.header}</div>
             <div className="rightGroup">
+              {props.additionalActionButtons}
               {props.editModeComponent && (
                 <button
                   onClick={editWidget}
