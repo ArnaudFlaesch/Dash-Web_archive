@@ -9,6 +9,7 @@ interface IProps {
   config: Record<string, unknown>;
   header: ReactElement;
   body: ReactElement;
+  additionalActionButtons?: ReactElement;
   editModeComponent?: ReactElement<IProps>;
   refreshFunction: () => void;
   onDeleteButtonClicked: (idWidget: number) => void;
@@ -46,6 +47,7 @@ export default function Widget(props: IProps): ReactElement {
           <div className="header">
             <div className="leftGroup widgetHeader">{props.header}</div>
             <div className="rightGroup">
+              {props.additionalActionButtons}
               {props.editModeComponent && (
                 <button
                   onClick={editWidget}
