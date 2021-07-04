@@ -100,9 +100,10 @@ describe('Calendar Widget tests', () => {
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.btn-danger')
-      .click();
-    cy.wait('@deleteWidget').then(() => {
-      cy.get('.widget').should('have.length', 0);
-    });
+      .click()
+      .wait('@deleteWidget')
+      .then(() => {
+        cy.get('.widget').should('have.length', 0);
+      });
   });
 });

@@ -293,22 +293,20 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{ city: city }}
-        header={widgetHeader}
-        body={widgetBody}
-        editModeComponent={
-          <EmptyWeatherWidget
-            city={cityToQuery}
-            onConfigSubmitted={onConfigSubmitted}
-          />
-        }
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{ city: city }}
+      header={widgetHeader}
+      body={widgetBody}
+      editModeComponent={
+        <EmptyWeatherWidget
+          city={cityToQuery}
+          onConfigSubmitted={onConfigSubmitted}
+        />
+      }
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }

@@ -104,22 +104,20 @@ export default function CalendarWidget(props: IProps): ReactElement {
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{ calendars: calendarUrls }}
-        header={widgetHeader}
-        body={widgetBody}
-        editModeComponent={
-          <EmptyCalendarWidget
-            calendarUrls={calendarUrls}
-            onConfigSubmitted={onConfigSubmitted}
-          />
-        }
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{ calendars: calendarUrls }}
+      header={widgetHeader}
+      body={widgetBody}
+      editModeComponent={
+        <EmptyCalendarWidget
+          calendarUrls={calendarUrls}
+          onConfigSubmitted={onConfigSubmitted}
+        />
+      }
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }

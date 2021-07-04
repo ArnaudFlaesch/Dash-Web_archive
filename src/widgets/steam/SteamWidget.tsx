@@ -116,16 +116,14 @@ export default function SteamWidget(props: IProps): React.ReactElement {
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{}}
-        header={widgetHeader}
-        body={widgetBody}
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{}}
+      header={widgetHeader}
+      body={widgetBody}
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }
