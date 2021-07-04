@@ -21,9 +21,9 @@ export function updateWidgetData(
   id: number,
   data: unknown
 ): Promise<AxiosResponse<unknown>> {
-  return axios.post(
-    `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData`,
-    { id: id, data: data },
+  return axios.patch(
+    `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData/${id}`,
+    { data: data },
     {
       headers: {
         Authorization: authorizationBearer(),
