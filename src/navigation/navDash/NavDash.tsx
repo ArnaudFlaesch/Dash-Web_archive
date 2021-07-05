@@ -26,6 +26,12 @@ export default function NavDash(props: IProps): ReactElement {
     toggle(!isToggled);
   }
 
+  function enterSaveTabName(event: React.KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      saveTabName();
+    }
+  }
+
   return (
     <NavItem className="clickableItem" key={props.tab.id}>
       <NavLink onClick={props.onTabClicked}>
@@ -33,6 +39,7 @@ export default function NavDash(props: IProps): ReactElement {
           <div className="flexRow">
             <input
               onDoubleClick={saveTabName}
+              onKeyPress={enterSaveTabName}
               onChange={(event) => setLabel(event.target.value)}
               value={label}
             />

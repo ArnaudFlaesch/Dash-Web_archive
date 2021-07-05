@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { IWidgetConfig } from 'src/widgets/IWidgetConfig';
 import authorizationBearer from './auth.header';
 
 export function addWidget(
@@ -20,7 +21,7 @@ export function addWidget(
 export function updateWidgetData(
   id: number,
   data: unknown
-): Promise<AxiosResponse<unknown>> {
+): Promise<AxiosResponse<IWidgetConfig>> {
   return axios.patch(
     `${process.env.REACT_APP_BACKEND_URL}/widget/updateWidgetData/${id}`,
     { data: data },

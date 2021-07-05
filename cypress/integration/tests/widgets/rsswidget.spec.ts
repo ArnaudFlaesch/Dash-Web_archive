@@ -26,9 +26,9 @@ describe('RSS Widget tests', () => {
       'GET',
       '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
       { fixture: 'figaro_rss.xml' }
-    ).as('refreshWidget');
-
-    cy.get('.editButton')
+    )
+      .as('refreshWidget')
+      .get('.editButton')
       .click()
       .get('.btn-success')
       .should('be.disabled')
@@ -67,7 +67,24 @@ describe('RSS Widget tests', () => {
             'have.text',
             "La deuxième étape de l'allègement des restrictions sanitaires contre le Covid-19 commence ce mercredi. Le couvre-feu est repoussé de 19h à 21h."
           )
-          .click();
+          .get('.rssArticle')
+          .contains(
+            'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
+          )
+          .should('have.class', 'read');
+      });
+  });
+
+  it('Should read all articles', () => {
+    cy.intercept('PATCH', '/widget/updateWidgetData/*')
+      .as('markAllFeedAsRead')
+      .get('.rssArticle.read')
+      .should('have.length', 1)
+      .get('.markAllArticlesAsRead')
+      .click()
+      .wait('@markAllFeedAsRead')
+      .then(() => {
+        cy.get('.rssArticle.read').should('have.length', 20);
       });
   });
 
@@ -76,9 +93,9 @@ describe('RSS Widget tests', () => {
       'GET',
       '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
       { fixture: 'figaro_rss.xml' }
-    ).as('refreshWidget');
-
-    cy.get('#reloadAllWidgetsButton')
+    )
+      .as('refreshWidget')
+      .get('#reloadAllWidgetsButton')
       .click()
       .wait('@refreshWidget')
       .then(() => {
@@ -87,15 +104,17 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
-    cy.get('.deleteButton')
+    cy.intercept('DELETE', '/widget/deleteWidget/*')
+      .as('deleteWidget')
+      .get('.deleteButton')
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.btn-danger')
-      .click();
-    cy.wait('@deleteWidget').then(() => {
-      cy.get('.widget').should('have.length', 0);
-    });
+      .click()
+      .wait('@deleteWidget')
+      .then(() => {
+        cy.get('.widget').should('have.length', 0);
+      });
   });
 });

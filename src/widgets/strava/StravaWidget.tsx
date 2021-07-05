@@ -242,12 +242,6 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                     }
                   ]
                 }}
-                options={{
-                  scales: {
-                    type: 'linear',
-                    position: 'left'
-                  }
-                }}
               />
             </div>
           </div>
@@ -269,16 +263,14 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{}}
-        header={widgetHeader}
-        body={widgetBody}
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{}}
+      header={widgetHeader}
+      body={widgetBody}
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }
