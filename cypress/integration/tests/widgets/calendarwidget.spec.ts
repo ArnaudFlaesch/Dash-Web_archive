@@ -81,8 +81,7 @@ describe('Calendar Widget tests', () => {
               .then(() =>
                 cy
                   .get('.rbc-event')
-                  .contains('Independence Day')
-                  .should('not.exist')
+                  .should('have.length', 1)
                   .clock()
                   .then((clock) => {
                     clock.restore();
