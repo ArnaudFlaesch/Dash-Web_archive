@@ -4,6 +4,11 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 describe('Calendar Widget tests', () => {
+  const icalFrenchHolidays =
+    'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics';
+  const icalUsaHolidays =
+    'https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics';
+
   before(() => {
     cy.loginAsAdmin()
       .visit('/')
@@ -25,15 +30,13 @@ describe('Calendar Widget tests', () => {
   });
 
   it('Should edit Calendar widget and add an Ical feed', () => {
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
-    ).as('getFrenchCalendarData');
+    cy.intercept('GET', `/proxy/?url=${icalFrenchHolidays}`).as(
+      'getFrenchCalendarData'
+    );
 
-    cy.intercept(
-      'GET',
-      '/proxy/?url=https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
-    ).as('getUSCalendarData');
+    cy.intercept('GET', `/proxy/?url=${icalUsaHolidays}`).as(
+      'getUSCalendarData'
+    );
 
     cy.clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
       .get('.editButton')
@@ -41,9 +44,7 @@ describe('Calendar Widget tests', () => {
       .get('#addCalendarUrl')
       .click()
       .get('input')
-      .type(
-        'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics'
-      )
+      .type(`${icalFrenchHolidays}`)
       .get('#validateCalendarUrls')
       .click();
 
@@ -62,9 +63,7 @@ describe('Calendar Widget tests', () => {
             .click()
             .get('input')
             .eq(1)
-            .type(
-              'https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics'
-            )
+            .type(`${icalUsaHolidays}`)
             .get('#validateCalendarUrls')
             .click();
           cy.wait(['@getFrenchCalendarData', '@getUSCalendarData']).then(() => {
