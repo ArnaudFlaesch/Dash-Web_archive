@@ -158,10 +158,16 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   const additionalActionButtons = (
     <div className="flexRow">
-      <button onClick={markAllFeedAsRead} className="btn btn-default">
+      <button
+        onClick={markAllFeedAsRead}
+        className="btn btn-default markAllArticlesAsRead"
+      >
         <i className="fa fa-check-circle-o" aria-hidden="true" />
       </button>
-      <button onClick={closeFeeds} className="btn btn-default">
+      <button
+        onClick={closeFeeds}
+        className="btn btn-default minimizeAllArticles"
+      >
         <i className="fa fa-window-minimize" aria-hidden="true" />
       </button>
     </div>
