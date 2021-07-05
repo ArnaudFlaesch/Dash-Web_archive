@@ -26,7 +26,7 @@ describe('TabDash tests', () => {
     ReactDOM.unmountComponentAtNode(div);
   });
 
-  it('should render a tab with 4 widgets', async () => {
+  it('Should render a tab', async () => {
     const widgetServiceResponse = {
       data: widgetDataSample
     };
@@ -51,10 +51,14 @@ describe('TabDash tests', () => {
     });
     expect(globalAny.fetch).toHaveBeenCalledTimes(1);
     expect(globalAny.fetch).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`
+      `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`,
+      {
+        headers: {
+          Authorization: '',
+          'Content-type': 'application/json'
+        }
+      }
     );
-    // @FIXME
-    // expect(container.getElementsByClassName('widget').length).toEqual(4);
     expect(container.getElementsByClassName('widget').length).toEqual(0);
   });
 });

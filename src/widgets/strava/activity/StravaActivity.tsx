@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
-import * as React from 'react';
+import { ReactElement } from 'react';
 import { IActivity } from '../IStrava';
 
-export default function StravaActivity(props: IActivity): React.ReactElement {
+export default function StravaActivity(props: IActivity): ReactElement {
   return (
     <div>
       <div>
@@ -11,7 +11,7 @@ export default function StravaActivity(props: IActivity): React.ReactElement {
           {props.name}
         </a>
       </div>
-      <div>Distance : {Math.round(props.distance * 1000) / 1000000} kms</div>
+      <div>Distance : {Math.round(props.distance * 1000) / 10000} kms</div>
       <div>Durée : {props.moving_time / 60} mins</div>
       <div>Denivelé : {props.total_elevation_gain}</div>
       <div>Trophées : {props.achievement_count}</div>

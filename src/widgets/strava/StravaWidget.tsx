@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as queryString from 'query-string';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'reactstrap';
@@ -142,16 +141,19 @@ export default function StravaWidget(props: IProps): React.ReactElement {
   }
 
   function getActivitiesByMonth() {
-    return activities.reduce((activitiesByMonth: IActivity[], activity: IActivity) => {
-      const month = format(new Date(activity.start_date_local), 'yyyy-MM');
-      if (!activitiesByMonth[month]) {
-        activitiesByMonth[month] = [];
-      }
-      activitiesByMonth[month].push(
-        Math.round(activity.distance * 1000) / 1000000
-      );
-      return activitiesByMonth;
-    }, []);
+    return activities.reduce(
+      (activitiesByMonth: IActivity[], activity: IActivity) => {
+        const month = format(new Date(activity.start_date_local), 'yyyy-MM');
+        if (!activitiesByMonth[month]) {
+          activitiesByMonth[month] = [];
+        }
+        activitiesByMonth[month].push(
+          Math.round(activity.distance * 1000) / 1000000
+        );
+        return activitiesByMonth;
+      },
+      []
+    );
   }
 
   function getStatsFromActivities() {
@@ -179,34 +181,44 @@ export default function StravaWidget(props: IProps): React.ReactElement {
 
   const widgetBody = (
     <div className="flexColumn">
-      { (token &&
+      {token &&
         refreshToken &&
-        (tokenExpirationDate &&
-          isAfter(new Date(tokenExpirationDate as number * 1000), new Date()))) && (
+        tokenExpirationDate &&
+        isAfter(
+          new Date((tokenExpirationDate as number) * 1000),
+          new Date()
+        ) && (
           <div>
-            <div style={{ height: "20vh", overflowY: 'scroll' }}>
-              {activities.slice().reverse().map((activity: IActivity) => {
-                return (
-                  <ComponentWithDetail
-                    key={activity.id}
-                    componentRoot={`${format(
-                      new Date(activity.start_date_local),
-                      'dd MMM'
-                    )}  ${activity.name}  ${Math.round(activity.distance * 1000) / 1000000
+            <div style={{ height: '20vh', overflowY: 'scroll' }}>
+              {activities
+                .slice()
+                .reverse()
+                .map((activity: IActivity) => {
+                  return (
+                    <ComponentWithDetail
+                      key={activity.id}
+                      componentRoot={`${format(
+                        new Date(activity.start_date_local),
+                        'dd MMM'
+                      )}  ${activity.name}  ${
+                        Math.round(activity.distance * 1000) / 1000000
                       } kms`}
-                    componentDetail={<StravaActivity {...activity} />}
-                    link={`https://www.strava.com/activities/${activity.id}`}
-                  />
-                );
-              })}
+                      componentDetail={<StravaActivity {...activity} />}
+                      link={`https://www.strava.com/activities/${activity.id}`}
+                    />
+                  );
+                })}
             </div>
 
-
-            <div style={{ minHeight: '25vh', maxHeight: "80vh", flex: '1 0 50%' }}>
+            <div
+              style={{ minHeight: '25vh', maxHeight: '80vh', flex: '1 0 50%' }}
+            >
               <ChartComponent
                 type="bar"
                 data={{
-                  labels: getStatsFromActivities().map(data => format(data.x, 'MMM yyyy')),
+                  labels: getStatsFromActivities().map((data) =>
+                    format(data.x, 'MMM yyyy')
+                  ),
                   datasets: [
                     {
                       label: 'Distance (kms)',
@@ -217,7 +229,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                     },
                     {
                       label: 'Activités',
-                      type: "line",
+                      type: 'line',
                       backgroundColor: 'darkgreen',
                       data: Object.keys(getActivitiesByMonth()).map((month) => {
                         return {
@@ -230,51 +242,35 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                     }
                   ]
                 }}
-                options={{
-                  scales: {
-                    y: [{
-                      id: 'kms',
-                      type: 'linear',
-                      position: 'left'
-                    }, {
-                      id: 'activities',
-                      type: 'linear',
-                      position: 'right'
-                    }]
-                  }
-                }}
               />
             </div>
-
           </div>
         )}
       {(!token ||
         !refreshToken ||
         (tokenExpirationDate &&
-          isBefore(new Date(tokenExpirationDate as number * 1000), new Date()))) && (
-          <a
-            href={`https://www.strava.com/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
-          >
-            <Button>Se connecter</Button>
-          </a>
-        )}
+          isBefore(
+            new Date((tokenExpirationDate as number) * 1000),
+            new Date()
+          ))) && (
+        <a
+          href={`https://www.strava.com/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
+        >
+          <Button>Se connecter</Button>
+        </a>
+      )}
     </div>
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{}}
-        header={widgetHeader}
-        body={widgetBody}
-        editModeComponent={
-          <div />
-        }
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{}}
+      header={widgetHeader}
+      body={widgetBody}
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }

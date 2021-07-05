@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import { useCustomEventListener } from 'react-custom-events';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
 
@@ -7,22 +7,29 @@ interface IProps {
   id: number;
   tabId: number;
   config: Record<string, unknown>;
-  header: React.ReactElement;
-  body: React.ReactElement;
-  editModeComponent: React.ReactElement<IProps>;
+  header: ReactElement;
+  body: ReactElement;
+  additionalActionButtons?: ReactElement;
+  editModeComponent?: ReactElement<IProps>;
   refreshFunction: () => void;
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function Widget(props: IProps): React.ReactElement {
+export default function Widget(props: IProps): ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
+
+  useCustomEventListener('refreshAllWidgets', () => {
+    props.refreshFunction();
+  });
 
   useEffect(() => {
     setMode(ModeEnum.READ);
   }, [props.config]);
 
   function editWidget() {
-    setMode(ModeEnum.EDIT);
+    if (props.editModeComponent) {
+      setMode(ModeEnum.EDIT);
+    }
   }
 
   function cancelDeletion() {
@@ -35,17 +42,20 @@ export default function Widget(props: IProps): React.ReactElement {
 
   return (
     <div>
-      {mode === ModeEnum.READ ? (
+      {mode === ModeEnum.READ && (
         <div>
           <div className="header">
             <div className="leftGroup widgetHeader">{props.header}</div>
             <div className="rightGroup">
-              <button
-                onClick={editWidget}
-                className="btn btn-default editButton"
-              >
-                <i className="fa fa-cog" aria-hidden="true" />
-              </button>
+              {props.additionalActionButtons}
+              {props.editModeComponent && (
+                <button
+                  onClick={editWidget}
+                  className="btn btn-default editButton"
+                >
+                  <i className="fa fa-cog" aria-hidden="true" />
+                </button>
+              )}
               <button
                 onClick={props.refreshFunction}
                 className="btn btn-default refreshButton"
@@ -62,15 +72,17 @@ export default function Widget(props: IProps): React.ReactElement {
           </div>
           {props.body}
         </div>
-      ) : mode === ModeEnum.DELETE ? (
+      )}
+      {mode === ModeEnum.DELETE && (
         <DeleteWidget
           idWidget={props.id}
           onDeleteButtonClicked={props.onDeleteButtonClicked}
           onCancelButtonClicked={cancelDeletion}
         />
-      ) : (
-        props.editModeComponent
       )}
+      {mode === ModeEnum.EDIT &&
+        props.editModeComponent !== null &&
+        props.editModeComponent}
     </div>
   );
 }

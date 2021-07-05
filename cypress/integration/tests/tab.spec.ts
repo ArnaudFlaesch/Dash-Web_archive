@@ -2,8 +2,9 @@
 
 describe('Tab tests', () => {
   before(() => {
-    cy.visit('/');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a new tab', () => {
@@ -19,31 +20,40 @@ describe('Tab tests', () => {
       .get('input')
       .clear()
       .type('Flux RSS')
-      .dblclick();
-    cy.wait('@updateTab').then(() => {
-      cy.get('.tab.selectedItem')
-        .should('have.text', 'Flux RSS')
-
-        .get('.tab')
-        .first()
-        .click()
-        .get('.tab.selectedItem')
-        .should('have.text', 'Nouvel onglet')
-        .get('.tab')
-        .contains('Flux RSS')
-        .click();
-    });
+      .dblclick()
+      .wait('@updateTab')
+      .then(() => {
+        cy.get('.tab.selectedItem')
+          .should('have.text', 'Flux RSS')
+          .get('.tab')
+          .first()
+          .click()
+          .get('.tab.selectedItem')
+          .should('have.text', 'Nouvel onglet')
+          .get('.tab')
+          .contains('Flux RSS')
+          .click()
+          .dblclick()
+          .get('input')
+          .clear()
+          .type('Flux RSS Updated{Enter}')
+          .wait('@updateTab')
+          .then(() => {
+            cy.get('.tab.selectedItem').should('have.text', 'Flux RSS Updated');
+          });
+      });
   });
 
   it('Should delete the created tab', () => {
     cy.intercept('DELETE', '/tab/deleteTab/*').as('deleteTab');
     cy.get('.tab')
-      .contains('Flux RSS')
+      .contains('Flux RSS Updated')
       .dblclick()
       .get('.deleteTabButton')
-      .click();
-    cy.wait('@deleteTab').then(() => {
-      cy.get('.tab').should('have.length', 1);
-    });
+      .click()
+      .wait('@deleteTab')
+      .then(() => {
+        cy.get('.tab').should('have.length', 1);
+      });
   });
 });

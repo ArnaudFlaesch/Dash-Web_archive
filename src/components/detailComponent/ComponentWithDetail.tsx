@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardBody, Collapse } from 'reactstrap';
 import './ComponentWithDetail.scss';
 
@@ -7,11 +6,23 @@ interface IProps {
   componentRoot: React.ReactNode | string;
   componentDetail: React.ReactNode | string;
   link?: string;
+  isClosed?: boolean;
+  onOpenDetail?: () => void;
 }
 
 export default function ComponentWithDetail(props: IProps): React.ReactElement {
   const [openCollapse, setOpenCollapse] = useState(false);
+
+  useEffect(() => {
+    if (props.isClosed) {
+      setOpenCollapse(false);
+    }
+  }, [props.isClosed]);
+
   const toggleCollapse = () => {
+    if (!openCollapse && props.onOpenDetail) {
+      props.onOpenDetail();
+    }
     setOpenCollapse(!openCollapse);
   };
 
@@ -23,7 +34,9 @@ export default function ComponentWithDetail(props: IProps): React.ReactElement {
       <div>
         <Collapse isOpen={openCollapse}>
           <Card>
-            <CardBody>{props.componentDetail}</CardBody>
+            <CardBody>
+              {openCollapse && props.componentDetail && props.componentDetail}
+            </CardBody>
           </Card>
         </Collapse>
       </div>

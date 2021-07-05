@@ -1,17 +1,16 @@
 /// <reference types="cypress" />
 
-import MockDate from 'mockdate';
-
 describe('Weather Widget tests', () => {
   before(() => {
-    cy.visit('/');
-    cy.title().should('equals', 'Dash');
-    cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+    cy.loginAsAdmin()
+      .visit('/')
+      .title()
+      .should('equals', 'Dash')
+      .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
 
   it('Should create a Weather Widget and add it to the dashboard', () => {
     cy.get('#openAddWidgetModal').click();
-    cy.get('.card-title').should('have.length', 4);
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#WEATHER').click();
     cy.wait('@addWidget').then(() => {
@@ -22,42 +21,49 @@ describe('Weather Widget tests', () => {
     });
   });
 
-  it('Should edit Weather widget and add a feed', () => {
-    MockDate.set(1588269600000);
-
-    // @TODO Changer le path de l'URL pas quelque chose de plus parlant que `/proxy/?*`
-    cy.intercept('GET', `/proxy/?*`, { fixture: 'parisWeatherSample.json' }).as(
-      'refreshWidget'
-    );
+  it('Should refresh Weather widget', () => {
+    cy.intercept(
+      'GET',
+      `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`,
+      { fixture: 'parisWeatherSample.json' }
+    ).as('refreshWidget');
 
     cy.get('.editButton')
       .click()
+      .clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
       .get('#cityNameInput')
       .type('Paris')
       .get('#validateButton')
       .click();
     cy.get('.refreshButton').click();
-    cy.wait('@refreshWidget').then(() => {
-      cy.get('.forecast').its('length').should('be.gte', 5);
-    });
+    cy.wait('@refreshWidget')
+      .then(() => {
+        cy.get('.forecast').should('have.length', 6);
+      })
+      .clock()
+      .then((clock) => {
+        clock.restore();
+      });
   });
 
   it("Should toggle between today's, tomorrow's and the week's forecasts", () => {
-    cy.get('#toggleTodayForecast')
+    cy.clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
+      .get('#toggleTodayForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 5)
+      .should('have.length', 6)
       .get('#toggleTomorrowForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 5)
+      .should('have.length', 6)
       .get('#toggleWeekForecast')
       .click()
       .get('.forecast')
-      .its('length')
-      .should('be.gte', 4);
+      .should('have.length', 5)
+      .clock()
+      .then((clock) => {
+        clock.restore();
+      });
   });
 
   it('Should delete previously added widget', () => {

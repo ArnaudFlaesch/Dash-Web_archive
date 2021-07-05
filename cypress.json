@@ -12,6 +12,7 @@
     "video": false,
     "videoCompression": false,
     "env": {
-        "coverage": false
+        "coverage": false,
+        "backend_url": "localhost:8080"
     }
 }

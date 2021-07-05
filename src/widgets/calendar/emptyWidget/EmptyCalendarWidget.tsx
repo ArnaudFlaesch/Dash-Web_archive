@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 import './EmptyCalendarWidget.scss';
 
@@ -37,15 +36,14 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
         {calendarUrls &&
           calendarUrls.map((url, index) => {
             return (
-              <div>
+              <div key={index}>
                 <input
-                  key={index}
                   id={index.toString()}
                   onChange={onCalendarUrlUpdated}
                   value={url}
                   placeholder="Saisissez une URL"
                 />
-                <button className="btn btn-danger" onClick={() => removeCalendarUrl(url)}>Supprimer</button>
+                <button className="removeCalendarUrl btn btn-danger" onClick={() => removeCalendarUrl(url)}>Supprimer</button>
               </div>
             );
           })}

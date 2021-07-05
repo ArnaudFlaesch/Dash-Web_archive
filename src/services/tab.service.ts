@@ -1,16 +1,25 @@
 import axios, { AxiosResponse } from 'axios';
 import { ITab } from '../model/Tab';
+import authorizationBearer from './auth.header';
 
-const headers = {
-  'Content-type': 'application/json'
-};
+export function getTabs(): Promise<AxiosResponse<unknown>> {
+  return axios.get(`${process.env.REACT_APP_BACKEND_URL}/tab`, {
+    headers: {
+      Authorization: authorizationBearer(),
+      'Content-type': 'application/json'
+    }
+  });
+}
 
 export function addTab(label: string): Promise<AxiosResponse<unknown>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/addTab`,
     { label: label },
     {
-      headers
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
+      }
     }
   );
 }
@@ -24,7 +33,10 @@ export function updateTab(
     `${process.env.REACT_APP_BACKEND_URL}/tab/updateTab`,
     { id: id, label: label, tabOrder: tabOrder },
     {
-      headers
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
+      }
     }
   );
 }
@@ -34,7 +46,10 @@ export function updateTabs(tabs: ITab[]): Promise<AxiosResponse<unknown>> {
     `${process.env.REACT_APP_BACKEND_URL}/tab/updateTabs`,
     tabs,
     {
-      headers
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
+      }
     }
   );
 }
@@ -43,7 +58,10 @@ export function deleteTab(id: number): Promise<AxiosResponse<unknown>> {
   return axios.delete(
     `${process.env.REACT_APP_BACKEND_URL}/tab/deleteTab/?id=${id}`,
     {
-      headers
+      headers: {
+        Authorization: authorizationBearer(),
+        'Content-type': 'application/json'
+      }
     }
   );
 }

@@ -1,19 +1,18 @@
 import axios from 'axios';
+import format from 'date-fns/format';
+import getDay from 'date-fns/getDay';
+import { fr } from 'date-fns/locale';
+import parse from 'date-fns/parse';
+import startOfWeek from 'date-fns/startOfWeek';
 import * as ical from 'ical';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { updateWidgetData } from '../../services/WidgetService';
+import { ReactElement, useEffect, useState } from 'react';
+import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
+import authorizationBearer from 'src/services/auth.header';
+import { updateWidgetData } from '../../services/widget.service';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import './CalendarWidget.scss';
 import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
-import startOfWeek from 'date-fns/startOfWeek'
-import getDay from 'date-fns/getDay'
-import { fr } from "date-fns/locale";
-
-import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
 
 export interface IProps {
   id: number;
@@ -22,20 +21,20 @@ export interface IProps {
   onDeleteButtonClicked: (idWidget: number) => void;
 }
 
-export default function CalendarWidget(props: IProps): React.ReactElement {
+export default function CalendarWidget(props: IProps): ReactElement {
   const [calendarUrls, setCalendarUrls] = useState(props.calendars);
   const [schedules, setSchedules] = useState<Event[]>([]);
 
   const locales = {
-    'fr': fr,
-  }
+    fr: fr
+  };
   const localizer = dateFnsLocalizer({
     format,
     parse,
     startOfWeek,
     getDay,
-    locales,
-  })
+    locales
+  });
 
   useEffect(() => {
     refreshWidget();
@@ -44,8 +43,9 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
   function onConfigSubmitted(updatedCalendars: string[]) {
     updateWidgetData(props.id, { calendars: updatedCalendars })
       .then(() => {
-        // Reset des URL pour pouvoir re-trigger le mode READ du widget via le changement de config.
-        setCalendarUrls([]);
+        if (updatedCalendars === calendarUrls) {
+          refreshWidget();
+        }
         setCalendarUrls(updatedCalendars);
       })
       .catch((error) => {
@@ -55,25 +55,30 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
 
   function refreshWidget() {
     setSchedules([]);
-    calendarUrls?.map((calendarUrl: string, index: number) => {
+    calendarUrls?.map((calendarUrl: string) => {
       axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`)
+        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`, {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          }
+        })
         .then((response) => {
           const data = ical.parseICS(response.data);
-          const scheds = index > 0 ? schedules : [];
-          setSchedules([
-            ...scheds,
-            ...Object.keys(data).map((eventKey) => {
-              const event = data[eventKey];
-              const newSchedule: Event = {
-                title: event.summary,
-                start: event.start,
-                end: event.end,
-                allDay: event.end?.getHours() === 0 && event.start?.getHours() === 0
-              };
-              return newSchedule;
-            })
-          ]);
+          setSchedules((oldSchedules) =>
+            oldSchedules.concat(
+              ...Object.keys(data).map((eventKey) => {
+                const event = data[eventKey];
+                return {
+                  title: event.summary,
+                  start: event.start,
+                  end: event.end,
+                  allDay:
+                    event.end?.getHours() === 0 && event.start?.getHours() === 0
+                };
+              })
+            )
+          );
         })
         .catch((error) => {
           logger.error(error);
@@ -87,7 +92,7 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
     <div>
       <Calendar
         localizer={localizer}
-        culture={"fr"}
+        culture={'fr'}
         events={schedules}
         startAccessor="start"
         endAccessor="end"
@@ -95,27 +100,24 @@ export default function CalendarWidget(props: IProps): React.ReactElement {
         popup={true}
         style={{ height: 500 }}
       />
-
     </div>
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{ calendars: calendarUrls }}
-        header={widgetHeader}
-        body={widgetBody}
-        editModeComponent={
-          <EmptyCalendarWidget
-            calendarUrls={calendarUrls}
-            onConfigSubmitted={onConfigSubmitted}
-          />
-        }
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{ calendars: calendarUrls }}
+      header={widgetHeader}
+      body={widgetBody}
+      editModeComponent={
+        <EmptyCalendarWidget
+          calendarUrls={calendarUrls}
+          onConfigSubmitted={onConfigSubmitted}
+        />
+      }
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }

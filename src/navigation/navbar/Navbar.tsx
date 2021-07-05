@@ -1,11 +1,11 @@
-import * as React from 'react';
+import { FunctionComponent } from 'react';
 import { Nav, NavItem } from 'reactstrap';
 import { IMenu } from '../../Dash';
 interface IProps {
   navItems: IMenu[];
 }
 
-const Navbar: React.FunctionComponent<IProps> = (props) => {
+const Navbar: FunctionComponent<IProps> = (props) => {
   return (
     <div className="dashNavbar">
       <Nav vertical={true} navbar={true}>

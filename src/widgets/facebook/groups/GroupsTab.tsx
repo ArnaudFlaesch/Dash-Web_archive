@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 import logger from '../../../utils/LogUtils';
 import { getGroupsData } from '../FacebookAPI';
 import IGroup from './IGroup';
 
-export default function GroupsTab(): React.ReactElement {
+export default function GroupsTab(): ReactElement {
   useEffect(() => {
     getGroupsData()
       .then((result: unknown) => {

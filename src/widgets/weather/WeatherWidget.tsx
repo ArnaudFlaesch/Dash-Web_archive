@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
-
-import * as React from 'react';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { updateWidgetData } from '../../services/WidgetService';
+import authorizationBearer from 'src/services/auth.header';
+import { updateWidgetData } from '../../services/widget.service';
 import {
   adjustTimeWithOffset,
-  formatDateFromTimestamp,
+  formatDateFromTimestamp
 } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
@@ -14,7 +14,6 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
-import { format } from 'date-fns';
 
 interface IProps {
   id: number;
@@ -30,7 +29,7 @@ enum ForecastMode {
 }
 
 export default function WeatherWidget(props: IProps): React.ReactElement {
-  const WEATHER_API = 'http://api.openweathermap.org/data/2.5/';
+  const WEATHER_API = 'https://api.openweathermap.org/data/2.5/';
   const WEATHER_ENDPOINT = 'weather';
   const FORECAST_ENDPOINT = 'forecast';
   const API_OPTIONS = '?units=metric&lang=fr&appid=';
@@ -39,12 +38,18 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const [weather, setWeather] = useState<IWeather>();
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
-  const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
+  const [forecastMode, setForecastMode] = useState<ForecastMode>(
+    ForecastMode.TODAY
+  );
 
   function fetchDataFromWeatherApi() {
     if (cityToQuery) {
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          },
           params: {
             url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
@@ -57,6 +62,10 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         });
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+          headers: {
+            Authorization: authorizationBearer(),
+            'Content-type': 'application/json'
+          },
           params: {
             url: `${WEATHER_API}${FORECAST_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
@@ -99,22 +108,30 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     if (city && forecast) {
       switch (forecastMode) {
         case ForecastMode.WEEK: {
-          return forecast.filter(
-            (forecastDay) => {
-              const forecastElement = formatDateFromTimestamp(
-                forecastDay.dt,
-                adjustTimeWithOffset(city.timezone)
-              )
-              return forecastElement.getHours() === 17
-            }
-          )
+          return forecast.filter((forecastDay) => {
+            const forecastElement = formatDateFromTimestamp(
+              forecastDay.dt,
+              adjustTimeWithOffset(city.timezone)
+            );
+            return forecastElement.getHours() === 17;
+          });
         }
         case ForecastMode.TOMORROW: {
-          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date(+new Date() + 86400000).getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7);
+          return forecast.filter(
+            (forecastDay) =>
+              new Date(forecastDay.dt * 1000).getDay() ===
+                new Date(+new Date() + 86400000).getDay() &&
+              new Date(forecastDay.dt * 1000).getHours() >= 7
+          );
         }
         case ForecastMode.TODAY:
         default: {
-          return forecast.filter((forecastDay) => new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7);
+          return forecast.filter(
+            (forecastDay) =>
+              new Date(forecastDay.dt * 1000).getDay() ===
+                new Date().getDay() &&
+              new Date(forecastDay.dt * 1000).getHours() >= 7
+          );
         }
       }
     } else {
@@ -188,39 +205,71 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         <div>
           <div className="flexRow">
             <span className="bold">Prévisions</span>
-            <span style={{ alignContent: "space-between", display: "flex" }}>
-              <button id="toggleTodayForecast" onClick={selectTodayForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}>Aujourd'hui</button>
-              <button id="toggleTomorrowForecast" onClick={selectTomorrowForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}>Demain</button>
-              <button id="toggleWeekForecast" onClick={selectWeekForecast} style={{ flex: "1" }} className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}>Semaine</button>
+            <span style={{ alignContent: 'space-between', display: 'flex' }}>
+              <button
+                id="toggleTodayForecast"
+                onClick={selectTodayForecast}
+                style={{ flex: '1' }}
+                className={`btn btn-${
+                  forecastMode === ForecastMode.TODAY ? 'success' : 'primary'
+                } mr-5`}
+              >
+                Aujourd'hui
+              </button>
+              <button
+                id="toggleTomorrowForecast"
+                onClick={selectTomorrowForecast}
+                style={{ flex: '1' }}
+                className={`btn btn-${
+                  forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'
+                }`}
+              >
+                Demain
+              </button>
+              <button
+                id="toggleWeekForecast"
+                onClick={selectWeekForecast}
+                style={{ flex: '1' }}
+                className={`btn btn-${
+                  forecastMode === ForecastMode.WEEK ? 'success' : 'primary'
+                }`}
+              >
+                Semaine
+              </button>
             </span>
           </div>
           <br />
-          <div style={{ height: '20vh', maxWidth: "100%" }}>
+          <div style={{ height: '20vh', maxWidth: '100%' }}>
             <Line
               type="line"
               data={{
-                labels:
-                  filterForecastByMode().map((forecastDay) => {
-                    if (forecastMode === ForecastMode.TODAY || forecastMode === ForecastMode.TOMORROW) {
-                      return format(new Date(forecastDay.dt * 1000), 'HH');
-                    } else {
-                      return format(new Date(forecastDay.dt * 1000), 'EEEE dd MMM');
-                    }
+                labels: filterForecastByMode().map((forecastDay) => {
+                  if (
+                    forecastMode === ForecastMode.TODAY ||
+                    forecastMode === ForecastMode.TOMORROW
+                  ) {
+                    return format(new Date(forecastDay.dt * 1000), 'HH');
+                  } else {
+                    return format(
+                      new Date(forecastDay.dt * 1000),
+                      'EEE dd MMM'
+                    );
                   }
-
-                  ),
+                }),
                 datasets: [
                   {
                     label: 'Température',
                     borderColor: 'orange',
-                    data: filterForecastByMode()
-                      .map((forecastDay) => forecastDay.main.temp_max)
+                    data: filterForecastByMode().map(
+                      (forecastDay) => forecastDay.main.temp_max
+                    )
                   },
                   {
                     label: 'Ressenti',
                     borderColor: 'red',
-                    data: filterForecastByMode()
-                      .map((forecastDay) => forecastDay.main.feels_like)
+                    data: filterForecastByMode().map(
+                      (forecastDay) => forecastDay.main.feels_like
+                    )
                   }
                 ]
               }}
@@ -230,14 +279,13 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           <div className="flexRow forecastRow">
             {city &&
               forecast &&
-              filterForecastByMode()
-                .map((forecastDay) => {
-                  return (
-                    <div className="forecastContainer" key={forecastDay.dt}>
-                      <Forecast {...forecastDay} city={city} />
-                    </div>
-                  );
-                })}
+              filterForecastByMode().map((forecastDay) => {
+                return (
+                  <div className="forecastContainer" key={forecastDay.dt}>
+                    <Forecast {...forecastDay} city={city} />
+                  </div>
+                );
+              })}
           </div>
         </div>
       )}
@@ -245,22 +293,20 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   );
 
   return (
-    <div>
-      <Widget
-        id={props.id}
-        tabId={props.tabId}
-        config={{ city: city }}
-        header={widgetHeader}
-        body={widgetBody}
-        editModeComponent={
-          <EmptyWeatherWidget
-            city={cityToQuery}
-            onConfigSubmitted={onConfigSubmitted}
-          />
-        }
-        refreshFunction={refreshWidget}
-        onDeleteButtonClicked={props.onDeleteButtonClicked}
-      />
-    </div>
+    <Widget
+      id={props.id}
+      tabId={props.tabId}
+      config={{ city: city }}
+      header={widgetHeader}
+      body={widgetBody}
+      editModeComponent={
+        <EmptyWeatherWidget
+          city={cityToQuery}
+          onConfigSubmitted={onConfigSubmitted}
+        />
+      }
+      refreshFunction={refreshWidget}
+      onDeleteButtonClicked={props.onDeleteButtonClicked}
+    />
   );
 }

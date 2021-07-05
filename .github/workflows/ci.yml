@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Europe/Paris
+
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
@@ -38,7 +43,27 @@ jobs:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - run: docker-compose up -d
+      - name: Pull database image
+        run: |
+          docker pull postgres:13.2-alpine
+          docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash_test postgres:13.2-alpine
+
+      - name: Pull backend image TEST
+        if: github.ref != 'refs/heads/develop' && !contains(github.ref, 'renovate/') && !contains(github.ref, 'dependabot/')
+        run: |
+          if [[ "$(docker images -q arnaudf93/dashwebservices:${GITHUB_REF#refs/*/} 2> /dev/null)" == "" ]]; then
+            docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+            docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
+          else 
+            docker pull arnaudf93/dashwebservices:latest
+            docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:latest
+          fi
+
+      - name: Pull backend image DEV
+        if: github.ref == 'refs/heads/develop' || contains(github.ref, 'renovate/') || contains(github.ref, 'dependabot/')
+        run: |
+          docker pull arnaudf93/dashwebservices:latest
+          docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:latest
 
       - name: Lint
         run: |
@@ -52,6 +77,8 @@ jobs:
           echo REACT_APP_OPENWEATHERMAP_KEY=${{ secrets.REACT_APP_OPENWEATHERMAP_KEY }} >> .env.production
           echo REACT_APP_STRAVA_CLIENT_ID=${{ secrets.REACT_APP_STRAVA_CLIENT_ID }} >> .env.production
           echo REACT_APP_STRAVA_CLIENT_SECRET=${{ secrets.REACT_APP_STRAVA_CLIENT_SECRET }} >> .env.production
+          echo REACT_APP_STEAM_USER_ID=${{ secrets.REACT_APP_STEAM_USER_ID }} >> .env.production
+          echo REACT_APP_STEAM_API_KEY=${{ secrets.REACT_APP_STEAM_API_KEY }} >> .env.production
           npm run build
 
       - name: Test
@@ -63,11 +90,11 @@ jobs:
           cp cypress-coverage/coverage-final.json coverage-reports/from-cypress.json
           cp jest-coverage/coverage-final.json coverage-reports/from-jest.json
           npx nyc merge coverage-reports && mv coverage.json .nyc_output/out.json
-          npx nyc report --reporter lcov --report-dir coverage
+          npx nyc report --reporter=lcov --reporter=clover --report-dir coverage
 
       - name: Send coverage report
         run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/clover.xml --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -s https://codecov.io/bash)
 
       - name: SonarCloud Scan
