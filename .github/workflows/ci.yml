@@ -48,8 +48,7 @@ jobs:
           docker pull postgres:13.2-alpine
           docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dash_test postgres:13.2-alpine
 
-      - name: Pull backend image TEST
-        if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !contains(github.ref, 'renovate/') && !contains(github.ref, 'dependabot/')
+      - name: Pull backend image
         run: |
           if [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${GITHUB_REF#refs/*/} | wc -l)" == 1 ]]; then
             docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
@@ -58,12 +57,6 @@ jobs:
             docker pull arnaudf93/dashwebservices:latest
             docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:latest
           fi
-
-      - name: Pull backend image DEV
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || contains(github.ref, 'renovate/') || contains(github.ref, 'dependabot/')
-        run: |
-          docker pull arnaudf93/dashwebservices:latest
-          docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:latest
 
       - name: Lint
         run: |
