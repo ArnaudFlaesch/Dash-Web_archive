@@ -2460,10 +2460,10 @@
   resolved "https://registry.npmjs.org/@types/http-cache-semantics/-/http-cache-semantics-4.0.0.tgz"
   integrity sha512-c3Xy026kOF7QOTn00hbIllV1dLR9hG9NkSrLQgCVs8NF6sBU+VGWjD3wLPhmh1TYAc7ugCFsvHYMN4VcBN1U1A==
 
-"@types/ical@0.6.2":
-  version "0.6.2"
-  resolved "https://registry.npmjs.org/@types/ical/-/ical-0.6.2.tgz"
-  integrity sha512-Dn2CHaSr7dQenncgcVOq2W+eUEyWDKf0uHcy7ngoMKeuev7bXb4EcbAoyF+3lVb4y+OoTvhaYImpTThUesXY8w==
+"@types/ical@0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@types/ical/-/ical-0.6.3.tgz#95da30898c64cf0df62d325f7c061d370cf52f95"
+  integrity sha512-Go3w4P45ZxU/f4qYHiXEx+W2f1e7u7sRmU90FJuzqYSK2865o0JeHLdbRdb814dW33wcjUA6MrdJU/Wg7eIuGA==
   dependencies:
     "@types/request" "*"
     rrule "2.6.4"
