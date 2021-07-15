@@ -2616,10 +2616,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-big-calendar@0.33.0":
-  version "0.33.0"
-  resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-0.33.0.tgz#cff5330bfbb336efbd7f6be17ec951e6de934cdc"
-  integrity sha512-wGKfQ8HHXQOZTLW/67UdHrBVn4XTHorei19KYoOkfVxHrlU71VESR27u0Hxvp2jG19M4k5eayjY3AOPibONW4A==
+"@types/react-big-calendar@0.33.1":
+  version "0.33.1"
+  resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-0.33.1.tgz#48463e5b7d27a82dbf5808dea529c03708514b31"
+  integrity sha512-xX5BaxS+7K62+gtEeg0DqaBInNXDSk2LgkHhbgtqjo/CqwEqB8cwuhIE34XnL33z+pzbn/h7i+0W5fJq0kShdQ==
   dependencies:
     "@types/prop-types" "*"
     "@types/react" "*"
