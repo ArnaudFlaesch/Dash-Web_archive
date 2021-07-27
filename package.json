@@ -39,7 +39,7 @@
     "date-fns": "2.23.0",
     "font-awesome": "4.7.0",
     "ical": "0.8.0",
-    "pg": "8.6.0",
+    "pg": "8.7.0",
     "query-string": "7.0.1",
     "react": "17.0.2",
     "react-beautiful-dnd": "13.1.0",
