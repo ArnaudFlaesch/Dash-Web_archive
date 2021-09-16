@@ -223,7 +223,7 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                     {
                       label: 'Distance (kms)',
                       backgroundColor: 'orange',
-                      data: getStatsFromActivities(),
+                      data: getStatsFromActivities().map((act) => act.y),
                       yAxisID: 'kms',
                       order: 2
                     },
@@ -231,12 +231,9 @@ export default function StravaWidget(props: IProps): React.ReactElement {
                       label: 'Activités',
                       type: 'line',
                       backgroundColor: 'darkgreen',
-                      data: Object.keys(getActivitiesByMonth()).map((month) => {
-                        return {
-                          x: new Date(month),
-                          y: getActivitiesByMonth()[month].length
-                        };
-                      }),
+                      data: Object.keys(getActivitiesByMonth()).map(
+                        (month) => getActivitiesByMonth()[month].length
+                      ),
                       yAxisID: 'activities',
                       order: 1
                     }
