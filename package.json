@@ -39,7 +39,7 @@
     "bootstrap": "5.1.1",
     "chart.js": "3.5.1",
     "chartjs-adapter-date-fns": "2.0.0",
-    "date-fns": "2.23.0",
+    "date-fns": "2.24.0",
     "font-awesome": "4.7.0",
     "ical": "0.8.0",
     "pg": "8.7.1",
