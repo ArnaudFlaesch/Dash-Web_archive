@@ -13,8 +13,8 @@ pipeline {
             stages {
                 stage('Install dependencies') {
                     steps {
-                        sh 'yarn install --frozen-lockfile'
-                        sh 'yarn add global wait-on snyk snyk-to-html'
+                        sh 'npm ci'
+                        sh 'npm i -g global wait-on snyk snyk-to-html'
                     }
                 }
 
