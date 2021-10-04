@@ -32,8 +32,8 @@ jobs:
             ${{ runner.os }}-node-
 
       - run: |
+          npm i -g npm-run-all force-resolutions gh-pages
           npm ci
-          npm i -g npm-run-all wait-on gh-pages
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
       - name: Login to Docker Hub
