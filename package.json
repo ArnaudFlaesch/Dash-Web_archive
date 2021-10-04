@@ -24,7 +24,8 @@
     "report:merge": "mochawesome-merge ./cypress/results/mochawesome-report/*.json > tests-report.json",
     "report:generate": "marge tests-report.json -o cypress/reports/html",
     "report:copyScreenshots": "cp -r cypress/screenshots cypress/reports/html/screenshots",
-    "snyk": "snyk test"
+    "snyk": "snyk test",
+    "preinstall": "npx force-resolutions"
   },
   "resolutions": {
     "react-scripts/postcss-preset-env/postcss-custom-properties": "^12.0.0"
