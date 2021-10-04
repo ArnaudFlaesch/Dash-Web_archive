@@ -241,7 +241,6 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           <br />
           <div style={{ height: '20vh', maxWidth: '100%' }}>
             <Line
-              type="line"
               data={{
                 labels: filterForecastByMode().map((forecastDay) => {
                   if (
