@@ -51,7 +51,7 @@ jobs:
 
       - name: Pull backend image
         run: |
-          if [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${GITHUB_REF#refs/*/} | wc -l)" == 1 && ${GITHUB_REF#refs/*/} != 'develop' && ${GITHUB_REF#refs/*/} != 'master' ]]; then
+          if [[ "$(git ls-remote --heads https://github.com/ArnaudFlaesch/Dash-WebServices ${GITHUB_REF#refs/*/} | wc -l)" == 1 && ${GITHUB_REF#refs/*/} != 'master' && ${GITHUB_REF#refs/*/} != 'master' ]]; then
             docker pull arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
             docker run -p 8080:8080 -d --network="host" -e POSTGRES_URL=jdbc:postgresql://localhost:5432/dash_test arnaudf93/dashwebservices:${GITHUB_REF#refs/*/}
           else 
@@ -98,7 +98,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Deploy with gh-pages
-        if: success() && github.ref == 'refs/heads/develop'
+        if: success() && github.ref == 'refs/heads/master'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages-clean
