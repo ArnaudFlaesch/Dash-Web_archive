@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import EmptyRSSWidget from '../rss/emptyWidget/EmptyRSSWidget';
 import Widget from '../Widget';
 /*import * as  crypto from "crypto";
@@ -7,13 +7,13 @@ import * as request from "request";
 import logger from "src/utils/LogUtils";*/
 
 interface IProps {
-    id: number;
-    onDeleteButtonClicked: (id: number) => void;
-    tabId: number;
+  id: number;
+  onDeleteButtonClicked: (id: number) => void;
+  tabId: number;
 }
 
 export default function TwitterWidget(props: IProps): React.ReactElement {
-    /*
+  /*
         // Note: The token is optional for some requests
         const token: unknown = {
             key: '1339340779-hhYTPFrY5EFIieJC42WrXrs8Sg6eMH552Nqjff8',
@@ -54,19 +54,31 @@ export default function TwitterWidget(props: IProps): React.ReactElement {
     
         */
 
-    const widgetHeader =
-        <div>Header</div>
+  const widgetHeader = <div>Header</div>;
 
-    const widgetBody =
-        <div>Body</div>
+  const widgetBody = <div>Body</div>;
 
-    return <div>
-        <Widget id={props.id} tabId={props.tabId}
-            config={{ "url": "url" }}
-            header={widgetHeader}
-            body={widgetBody}
-            editModeComponent={<EmptyRSSWidget url={""} onUrlSubmitted={() => { return null }} />}
-            refreshFunction={() => { return null }}
-            onDeleteButtonClicked={props.onDeleteButtonClicked} />
+  return (
+    <div>
+      <Widget
+        id={props.id}
+        tabId={props.tabId}
+        config={{ url: 'url' }}
+        header={widgetHeader}
+        body={widgetBody}
+        editModeComponent={
+          <EmptyRSSWidget
+            url={''}
+            onUrlSubmitted={() => {
+              return null;
+            }}
+          />
+        }
+        refreshFunction={() => {
+          return null;
+        }}
+        onDeleteButtonClicked={props.onDeleteButtonClicked}
+      />
     </div>
+  );
 }

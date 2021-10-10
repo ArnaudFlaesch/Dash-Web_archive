@@ -7,8 +7,7 @@ export default function StravaActivity(props: IActivity): ReactElement {
     <div>
       <div>
         <a href={`https://www.strava.com/activities/${props.id}`}>
-          {format(new Date(props.start_date_local), 'dd MMM')}{' '}
-          {props.name}
+          {format(new Date(props.start_date_local), 'dd MMM')} {props.name}
         </a>
       </div>
       <div>Distance : {Math.round(props.distance * 1000) / 10000} kms</div>

@@ -25,11 +25,7 @@ const TabNavigation: FunctionComponent<IProps> = (props) => {
             {props.tabList.map((tab: ITab) => {
               return (
                 <div key={tab.title}>
-                  <Route
-                    path={tab.path}
-                    exact={tab.exact}
-                    component={tab.component}
-                  />
+                  <Route path={tab.path} exact={tab.exact} component={tab.component} />
                 </div>
               );
             })}

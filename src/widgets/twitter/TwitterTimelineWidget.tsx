@@ -13,7 +13,9 @@ export default function TwitterTimelineWidget(props: IProps): React.ReactElement
   const [profile, setProfile] = useState<string>('arnaudflaesch');
 
   const widgetBody = (
-    <div>{profile && <Timeline dataSource={{ sourceType: 'profile', screenName: profile }} options={{ theme: 'dark' }} />}</div>
+    <div>
+      {profile && <Timeline dataSource={{ sourceType: 'profile', screenName: profile }} options={{ theme: 'dark' }} />}
+    </div>
   );
 
   useEffect(() => {

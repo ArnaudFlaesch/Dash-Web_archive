@@ -12,11 +12,7 @@ describe('Strava widget tests', () => {
       const onDeleteButtonClicked = () => null;
       Enzyme.shallow(
         <BrowserRouter>
-          <StravaWidget
-            id={1}
-            tabId={1}
-            onDeleteButtonClicked={onDeleteButtonClicked}
-          />
+          <StravaWidget id={1} tabId={1} onDeleteButtonClicked={onDeleteButtonClicked} />
         </BrowserRouter>
       );
     });

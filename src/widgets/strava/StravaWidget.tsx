@@ -154,54 +154,59 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
 
   const widgetBody = (
     <div className="flex flex-column">
-      {token && refreshToken && tokenExpirationDate && isAfter(new Date((tokenExpirationDate as number) * 1000), new Date()) && (
-        <div>
-          <div style={{ height: '20vh', overflowY: 'scroll' }}>
-            {activities
-              .slice()
-              .reverse()
-              .map((activity: IActivity) => {
-                return (
-                  <ComponentWithDetail
-                    key={activity.id}
-                    componentRoot={`${format(new Date(activity.start_date_local), 'dd MMM')}  ${activity.name}  ${
-                      Math.round(activity.distance * 1000) / 1000000
-                    } kms`}
-                    componentDetail={<StravaActivity {...activity} />}
-                    link={`https://www.strava.com/activities/${activity.id}`}
-                  />
-                );
-              })}
-          </div>
+      {token &&
+        refreshToken &&
+        tokenExpirationDate &&
+        isAfter(new Date((tokenExpirationDate as number) * 1000), new Date()) && (
+          <div>
+            <div style={{ height: '20vh', overflowY: 'scroll' }}>
+              {activities
+                .slice()
+                .reverse()
+                .map((activity: IActivity) => {
+                  return (
+                    <ComponentWithDetail
+                      key={activity.id}
+                      componentRoot={`${format(new Date(activity.start_date_local), 'dd MMM')}  ${activity.name}  ${
+                        Math.round(activity.distance * 1000) / 1000000
+                      } kms`}
+                      componentDetail={<StravaActivity {...activity} />}
+                      link={`https://www.strava.com/activities/${activity.id}`}
+                    />
+                  );
+                })}
+            </div>
 
-          <div style={{ minHeight: '25vh', maxHeight: '80vh', flex: '1 0 50%' }}>
-            <ChartComponent
-              type="bar"
-              data={{
-                labels: getStatsFromActivities().map((data) => format(data.x, 'MMM yyyy')),
-                datasets: [
-                  {
-                    label: 'Distance (kms)',
-                    backgroundColor: 'orange',
-                    data: getStatsFromActivities().map((act) => act.y),
-                    yAxisID: 'kms',
-                    order: 2
-                  },
-                  {
-                    label: 'Activités',
-                    type: 'line',
-                    backgroundColor: 'darkgreen',
-                    data: Object.keys(getActivitiesByMonth()).map((month) => getActivitiesByMonth()[month].length),
-                    yAxisID: 'activities',
-                    order: 1
-                  }
-                ]
-              }}
-            />
+            <div style={{ minHeight: '25vh', maxHeight: '80vh', flex: '1 0 50%' }}>
+              <ChartComponent
+                type="bar"
+                data={{
+                  labels: getStatsFromActivities().map((data) => format(data.x, 'MMM yyyy')),
+                  datasets: [
+                    {
+                      label: 'Distance (kms)',
+                      backgroundColor: 'orange',
+                      data: getStatsFromActivities().map((act) => act.y),
+                      yAxisID: 'kms',
+                      order: 2
+                    },
+                    {
+                      label: 'Activités',
+                      type: 'line',
+                      backgroundColor: 'darkgreen',
+                      data: Object.keys(getActivitiesByMonth()).map((month) => getActivitiesByMonth()[month].length),
+                      yAxisID: 'activities',
+                      order: 1
+                    }
+                  ]
+                }}
+              />
+            </div>
           </div>
-        </div>
-      )}
-      {(!token || !refreshToken || (tokenExpirationDate && isBefore(new Date((tokenExpirationDate as number) * 1000), new Date()))) && (
+        )}
+      {(!token ||
+        !refreshToken ||
+        (tokenExpirationDate && isBefore(new Date((tokenExpirationDate as number) * 1000), new Date()))) && (
         <a
           href={`https://www.strava.com/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
         >

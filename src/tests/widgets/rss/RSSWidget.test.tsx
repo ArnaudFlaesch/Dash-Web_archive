@@ -13,12 +13,7 @@ describe('RSS Widget tests', () => {
     act(() => {
       render(
         <Provider store={store}>
-          <RSSWidget
-            id={1}
-            url={url}
-            tabId={4}
-            onDeleteButtonClicked={onDeleteButtonClicked}
-          />
+          <RSSWidget id={1} url={url} tabId={4} onDeleteButtonClicked={onDeleteButtonClicked} />
         </Provider>,
         div
       );

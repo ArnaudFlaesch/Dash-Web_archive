@@ -33,35 +33,20 @@ export default function ImportConfigModal(): ReactElement {
 
   return (
     <div>
-      <Button
-        id="openImportConfigModal"
-        className="dashNavbarLink"
-        onClick={toggleImportConfigModal}
-      >
+      <Button id="openImportConfigModal" className="dashNavbarLink" onClick={toggleImportConfigModal}>
         <i className="fa fa-upload fa-lg" aria-hidden="true" />
       </Button>
       <Modal isOpen={importConfigModal} toggle={toggleImportConfigModal}>
-        <ModalHeader toggle={toggleImportConfigModal}>
-          Importer la configuration
-        </ModalHeader>
+        <ModalHeader toggle={toggleImportConfigModal}>Importer la configuration</ModalHeader>
         <ModalBody>
           <input type="file" id="file" name="file" onChange={selectFile} />
 
-          <button
-            id="uploadFileButton"
-            className="btn btn-success"
-            disabled={!selectedFile}
-            onClick={upload}
-          >
+          <button id="uploadFileButton" className="btn btn-success" disabled={!selectedFile} onClick={upload}>
             Upload
           </button>
         </ModalBody>
         <ModalFooter>
-          <Button
-            id="closeImportConfigModal"
-            color="primary"
-            onClick={toggleImportConfigModal}
-          >
+          <Button id="closeImportConfigModal" color="primary" onClick={toggleImportConfigModal}>
             Fermer
           </Button>
         </ModalFooter>

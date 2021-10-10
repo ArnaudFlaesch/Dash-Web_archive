@@ -65,7 +65,11 @@ export default function Widget(props: IProps): ReactElement {
         </div>
       )}
       {mode === ModeEnum.DELETE && (
-        <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
+        <DeleteWidget
+          idWidget={props.id}
+          onDeleteButtonClicked={props.onDeleteButtonClicked}
+          onCancelButtonClicked={cancelDeletion}
+        />
       )}
       {mode === ModeEnum.EDIT && props.editModeComponent !== null && props.editModeComponent}
     </div>

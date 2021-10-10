@@ -30,13 +30,9 @@ describe('Calendar Widget tests', () => {
   });
 
   it('Should edit Calendar widget and add an Ical feed', () => {
-    cy.intercept('GET', `/proxy/?url=${icalFrenchHolidays}`).as(
-      'getFrenchCalendarData'
-    );
+    cy.intercept('GET', `/proxy/?url=${icalFrenchHolidays}`).as('getFrenchCalendarData');
 
-    cy.intercept('GET', `/proxy/?url=${icalUsaHolidays}`).as(
-      'getUSCalendarData'
-    );
+    cy.intercept('GET', `/proxy/?url=${icalUsaHolidays}`).as('getUSCalendarData');
 
     cy.clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
       .get('.editButton')

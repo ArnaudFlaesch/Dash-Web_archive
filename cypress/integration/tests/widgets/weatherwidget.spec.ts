@@ -14,19 +14,14 @@ describe('Weather Widget tests', () => {
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#WEATHER').click();
     cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal')
-        .click()
-        .get('.widget')
-        .should('have.length', 1);
+      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
     });
   });
 
   it('Should refresh Weather widget', () => {
-    cy.intercept(
-      'GET',
-      `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`,
-      { fixture: 'parisWeatherSample.json' }
-    ).as('refreshWidget');
+    cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`, {
+      fixture: 'parisWeatherSample.json'
+    }).as('refreshWidget');
 
     cy.get('.editButton')
       .click()

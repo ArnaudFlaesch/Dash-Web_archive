@@ -16,12 +16,10 @@ const RSSArticle: FunctionComponent<IArticle> = (props) => {
         <a href={props.link}>{props.title}</a>
       </div>
       <div className="articleContent">
-        {stripHtmlFromContent(props.content) ||
-          stripHtmlFromContent(props.description)}
+        {stripHtmlFromContent(props.content) || stripHtmlFromContent(props.description)}
       </div>
       <div className="articlePubDate">
-        Publié le {formatDateFromUTC(props.pubDate || '')}{' '}
-        {props.author && 'par ' + props.author}
+        Publié le {formatDateFromUTC(props.pubDate || '')} {props.author && 'par ' + props.author}
       </div>
     </div>
   );

@@ -7,9 +7,7 @@ interface IProps {
 }
 
 export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
-  const [calendarUrls, setCalendarUrls] = useState<string[]>(
-    props.calendarUrls || []
-  );
+  const [calendarUrls, setCalendarUrls] = useState<string[]>(props.calendarUrls || []);
   const onValidation = () => {
     props.onConfigSubmitted(calendarUrls);
   };
@@ -27,7 +25,7 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
   };
 
   function removeCalendarUrl(calendarUrl: string) {
-    setCalendarUrls(calendarUrls.filter(url => url !== calendarUrl));
+    setCalendarUrls(calendarUrls.filter((url) => url !== calendarUrl));
   }
 
   return (
@@ -43,7 +41,9 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
                   value={url}
                   placeholder="Saisissez une URL"
                 />
-                <button className="removeCalendarUrl btn btn-danger" onClick={() => removeCalendarUrl(url)}>Supprimer</button>
+                <button className="removeCalendarUrl btn btn-danger" onClick={() => removeCalendarUrl(url)}>
+                  Supprimer
+                </button>
               </div>
             );
           })}

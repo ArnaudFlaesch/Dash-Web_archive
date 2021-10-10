@@ -50,15 +50,12 @@ describe('TabDash tests', () => {
       );
     });
     expect(globalAny.fetch).toHaveBeenCalledTimes(1);
-    expect(globalAny.fetch).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`,
-      {
-        headers: {
-          Authorization: '',
-          'Content-type': 'application/json'
-        }
+    expect(globalAny.fetch).toHaveBeenCalledWith(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=1`, {
+      headers: {
+        Authorization: '',
+        'Content-type': 'application/json'
       }
-    );
+    });
     expect(container.getElementsByClassName('widget').length).toEqual(0);
   });
 });

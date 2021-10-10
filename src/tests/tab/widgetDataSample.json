@@ -1,58 +1,58 @@
 [
-    {
-        "id": 155,
-        "type": 1,
-        "data": {
-            "city": "Montreal",
-            "weather_api_key": "d10750704319701c3f9436134add4d7d"
-        },
-        "widgetOrder": 1,
-        "tab": {
-            "id": 1,
-            "label": "Météo",
-            "tabOrder": 1
-        }
+  {
+    "id": 155,
+    "type": 1,
+    "data": {
+      "city": "Montreal",
+      "weather_api_key": "d10750704319701c3f9436134add4d7d"
     },
-    {
-        "id": 209,
-        "type": 1,
-        "data": {
-            "city": "Paris",
-            "weather_api_key": "d10750704319701c3f9436134add4d7d"
-        },
-        "widgetOrder": 2,
-        "tab": {
-            "id": 1,
-            "label": "Météo",
-            "tabOrder": 1
-        }
-    },
-    {
-        "id": 157,
-        "type": 1,
-        "data": {
-            "city": "Hong Kong",
-            "weather_api_key": "d10750704319701c3f9436134add4d7d"
-        },
-        "widgetOrder": 3,
-        "tab": {
-            "id": 1,
-            "label": "Météo",
-            "tabOrder": 1
-        }
-    },
-    {
-        "id": 158,
-        "type": 1,
-        "data": {
-            "city": "Nice",
-            "weather_api_key": "d10750704319701c3f9436134add4d7d"
-        },
-        "widgetOrder": 4,
-        "tab": {
-            "id": 1,
-            "label": "Météo",
-            "tabOrder": 1
-        }
+    "widgetOrder": 1,
+    "tab": {
+      "id": 1,
+      "label": "Météo",
+      "tabOrder": 1
     }
+  },
+  {
+    "id": 209,
+    "type": 1,
+    "data": {
+      "city": "Paris",
+      "weather_api_key": "d10750704319701c3f9436134add4d7d"
+    },
+    "widgetOrder": 2,
+    "tab": {
+      "id": 1,
+      "label": "Météo",
+      "tabOrder": 1
+    }
+  },
+  {
+    "id": 157,
+    "type": 1,
+    "data": {
+      "city": "Hong Kong",
+      "weather_api_key": "d10750704319701c3f9436134add4d7d"
+    },
+    "widgetOrder": 3,
+    "tab": {
+      "id": 1,
+      "label": "Météo",
+      "tabOrder": 1
+    }
+  },
+  {
+    "id": 158,
+    "type": 1,
+    "data": {
+      "city": "Nice",
+      "weather_api_key": "d10750704319701c3f9436134add4d7d"
+    },
+    "widgetOrder": 4,
+    "tab": {
+      "id": 1,
+      "label": "Météo",
+      "tabOrder": 1
+    }
+  }
 ]

@@ -64,7 +64,9 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
         }
       })
       .then((response) => {
-        setOwnedGames((response.data.response.games as IGameInfo[]).sort((gameA, gameB) => gameA.name.localeCompare(gameB.name)));
+        setOwnedGames(
+          (response.data.response.games as IGameInfo[]).sort((gameA, gameB) => gameA.name.localeCompare(gameB.name))
+        );
       })
       .catch((error) => {
         logger.error(error.message);

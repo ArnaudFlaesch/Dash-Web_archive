@@ -117,7 +117,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         default: {
           return forecast.filter(
             (forecastDay) =>
-              new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7
+              new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() &&
+              new Date(forecastDay.dt * 1000).getHours() >= 7
           );
         }
       }
@@ -163,11 +164,17 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               <div className="spaceBetween">
                 <div>
                   <i className="fa fa-sun-o fa-md" />{' '}
-                  {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}
+                  {formatDateFromTimestamp(
+                    weather.sys.sunrise,
+                    adjustTimeWithOffset(weather.timezone)
+                  ).toLocaleTimeString('fr')}
                 </div>
                 <div>
                   <i className="fa fa-moon-o fa-md" />{' '}
-                  {formatDateFromTimestamp(weather.sys.sunset, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}
+                  {formatDateFromTimestamp(
+                    weather.sys.sunset,
+                    adjustTimeWithOffset(weather.timezone)
+                  ).toLocaleTimeString('fr')}
                 </div>
               </div>
               <div>
