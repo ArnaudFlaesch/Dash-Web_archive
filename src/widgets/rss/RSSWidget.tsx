@@ -145,7 +145,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   const widgetHeader = (
     <div className="rssWidgetTitle">
-      <a href={link} className="flexRow">
+      <a href={link} className="flex flex-row">
         {image && (
           <div>
             <img className="imgLogoRSS" src={image?.url} alt="logo" />
@@ -157,7 +157,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   );
 
   const additionalActionButtons = (
-    <div className="flexRow">
+    <div className="flex flex-row">
       <button
         onClick={markAllFeedAsRead}
         className="btn btn-default markAllArticlesAsRead"

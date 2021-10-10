@@ -1,7 +1,14 @@
 {
-    "extends": "stylelint-config-standard",
-    "rules": {
-        "selector-id-pattern": "^[a-z][a-zA-Z0-9]+$",
-        "selector-class-pattern": "^[a-z][a-zA-Z0-9]+$"
-    }
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["tailwind"]
+      }
+    ],
+    "selector-id-pattern": "^[a-z][a-zA-Z0-9]+$",
+    "selector-class-pattern": "^[a-z][a-zA-Z0-9]+$",
+    "indentation": 2
+  }
 }

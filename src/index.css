@@ -1,14 +1,10 @@
 @import '~font-awesome/css/font-awesome.min.css';
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .bold {
   font-weight: bold;
-}
-
-.mr5 {
-  margin-right: 5px;
-}
-
-.mr10 {
-  margin-right: 10px;
 }

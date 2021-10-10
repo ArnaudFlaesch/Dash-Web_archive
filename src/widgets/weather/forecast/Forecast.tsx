@@ -19,7 +19,7 @@ const Forecast: FunctionComponent<IForecast> = (props) => {
           hour: '2-digit'
         })}
       </div>
-      <div className="flexRow">
+      <div className="flex flex-row">
         <div>
           <img
             src={`https://openweathermap.org/img/wn/${props.weather[0]?.icon}@2x.png`}
@@ -31,21 +31,21 @@ const Forecast: FunctionComponent<IForecast> = (props) => {
         <div>
           <div>
             <i
-              className="fa fa-thermometer-three-quarters fa-sm mr10"
+              className="fa fa-thermometer-three-quarters fa-sm mr-3"
               style={{ color: 'crimson' }}
             />
             {props.main.temp_max}°
           </div>
           <div>
             <i
-              className="fa fa-thermometer-quarter fa-sm mr10"
+              className="fa fa-thermometer-quarter fa-sm mr-3"
               style={{ color: 'blue' }}
             />
             {props.main.temp_min}°
           </div>
           <div>
             <i
-              className="fa fa-tint fa-sm mr10"
+              className="fa fa-tint fa-sm mr-3"
               style={{ color: 'lightblue' }}
             />
             {props.main.humidity}%

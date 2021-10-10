@@ -2,7 +2,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import Dash from './Dash';
-import './index.scss';
+import './index.css';
 import store from './reducers/store';
 import registerServiceWorker from './registerServiceWorker';
 

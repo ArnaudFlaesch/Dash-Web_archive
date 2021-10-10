@@ -16,7 +16,7 @@ interface IProps {
 
 const Store: FunctionComponent<IProps> = (props) => {
   return (
-    <div className="flexRow">
+    <div className="flex flex-row">
       {Object.keys(WidgetTypes).map((key) => {
         return (
           isNaN(parseInt(key, 0)) && (

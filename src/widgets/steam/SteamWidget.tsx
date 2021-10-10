@@ -83,22 +83,22 @@ export default function SteamWidget(props: IProps): React.ReactElement {
 
   const widgetHeader = (
     <div>
-      <a href={playerData?.profileurl}>
+      <a href={playerData?.profileurl} className="flex flex-row">
         <img src={playerData?.avatar} />
-        {playerData?.personaname}
+        <p>{playerData?.personaname}</p>
       </a>
     </div>
   );
 
   const widgetBody = (
-    <div className="flexColumn">
+    <div className="flex flex-column">
       {ownedGames &&
         ownedGames.map((game: IGameInfo) => {
           return (
             <ComponentWithDetail
               key={game.appid}
               componentRoot={
-                <div className="gameInfo flexRow">
+                <div className="gameInfo flex flex-row">
                   <div>
                     <img
                       src={`${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `}

@@ -156,7 +156,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const widgetBody = (
     <div>
       {city && weather && weather.weather && (
-        <div className="flexRow">
+        <div className="flex flex-row">
           <div>
             <img
               style={{ width: '80px' }}
@@ -165,8 +165,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               alt={weather.weather[0].description}
             />
           </div>
-          <div className="flexRow" style={{ placeItems: 'center' }}>
-            <div className="flexColumn mr5">
+          <div className="flex flex-row" style={{ placeItems: 'center' }}>
+            <div className="flexColumn mr-5">
               <div>{weather.weather[0].description}</div>
               <div>
                 <i className="fa fa-thermometer-three-quarters fa-md" />{' '}
@@ -203,7 +203,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       )}
       {city && forecast && (
         <div>
-          <div className="flexRow">
+          <div className="flex flex-row">
             <span className="bold">Prévisions</span>
             <span style={{ alignContent: 'space-between', display: 'flex' }}>
               <button
@@ -275,7 +275,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               options={{ maintainAspectRatio: false }}
             />
           </div>
-          <div className="flexRow forecastRow">
+          <div className="flex flex-row forecastRow">
             {city &&
               forecast &&
               filterForecastByMode().map((forecastDay) => {

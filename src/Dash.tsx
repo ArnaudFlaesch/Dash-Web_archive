@@ -181,7 +181,7 @@ export default function Dash(): React.ReactElement {
     <div className="dash">
       {!authService.getCurrentUser() && <Login />}
       {authService.getCurrentUser() && (
-        <div className="flexRow">
+        <div className="flex flex-row">
           <div className="dashNavbar">
             {activeTab && tabs.length > 0 && (
               <Nav vertical={true} navbar={true}>
@@ -210,14 +210,14 @@ export default function Dash(): React.ReactElement {
             )}
           </div>
 
-          <div className="flexColumn tabsBar">
+          <div className="flex flex-column tabsBar">
             <Nav tabs={true}>
-              <div className="flexRow">
+              <div className="flex flex-row">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
                       <div
-                        className="flexRow"
+                        className="flex flex-row"
                         {...providedDroppable.droppableProps}
                         ref={providedDroppable.innerRef}
                       >

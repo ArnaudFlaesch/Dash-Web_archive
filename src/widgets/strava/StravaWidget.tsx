@@ -172,15 +172,20 @@ export default function StravaWidget(props: IProps): React.ReactElement {
 
   const widgetHeader = (
     <div>
-      <a href={`https://www.strava.com/athletes/${athlete?.id}`}>
+      <a
+        href={`https://www.strava.com/athletes/${athlete?.id}`}
+        className="flex flex-row"
+      >
         <img src={athlete?.profile_medium} />
-        {athlete?.firstname} {athlete?.lastname}
+        <p>
+          {athlete?.firstname} {athlete?.lastname}
+        </p>
       </a>
     </div>
   );
 
   const widgetBody = (
-    <div className="flexColumn">
+    <div className="flex flex-column">
       {token &&
         refreshToken &&
         tokenExpirationDate &&

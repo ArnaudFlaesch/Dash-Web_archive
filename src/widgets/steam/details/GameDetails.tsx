@@ -44,7 +44,7 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
 
   return (
     <div>
-      <div className="flexRow">
+      <div className="flex flex-row">
         <div>{props.name}</div>
         <a href={`${STEAM_COMMUNITY_URL}${props.appid}`}>
           <img
@@ -53,8 +53,8 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
         </a>
       </div>
       {achievements && completedAchievements && achievements.length > 0 && (
-        <div className="flexRow">
-          <div className="flexColumn">
+        <div className="flex flex-row">
+          <div className="flex flex-column">
             <div className="totalachievements">
               Succès : {achievements.length}
             </div>
