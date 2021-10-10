@@ -7,6 +7,7 @@ import startOfWeek from 'date-fns/startOfWeek';
 import * as ical from 'ical';
 import { ReactElement, useEffect, useState } from 'react';
 import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
+import IBaseWidgetConfig from 'src/model/IBaseWidgetConfig';
 import authorizationBearer from 'src/services/auth.header';
 import { updateWidgetData } from '../../services/widget.service';
 import logger from '../../utils/LogUtils';
@@ -14,11 +15,8 @@ import Widget from '../Widget';
 import './CalendarWidget.scss';
 import EmptyCalendarWidget from './emptyWidget/EmptyCalendarWidget';
 
-export interface IProps {
-  id: number;
+export interface IProps extends IBaseWidgetConfig {
   calendars?: string[];
-  tabId: number;
-  onDeleteButtonClicked: (idWidget: number) => void;
 }
 
 export default function CalendarWidget(props: IProps): ReactElement {
@@ -73,8 +71,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
                   title: event.summary,
                   start: event.start,
                   end: event.end,
-                  allDay:
-                    event.end?.getHours() === 0 && event.start?.getHours() === 0
+                  allDay: event.end?.getHours() === 0 && event.start?.getHours() === 0
                 };
               })
             )
@@ -110,12 +107,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
       config={{ calendars: calendarUrls }}
       header={widgetHeader}
       body={widgetBody}
-      editModeComponent={
-        <EmptyCalendarWidget
-          calendarUrls={calendarUrls}
-          onConfigSubmitted={onConfigSubmitted}
-        />
-      }
+      editModeComponent={<EmptyCalendarWidget calendarUrls={calendarUrls} onConfigSubmitted={onConfigSubmitted} />}
       refreshFunction={refreshWidget}
       onDeleteButtonClicked={props.onDeleteButtonClicked}
     />

@@ -2,12 +2,10 @@ import axios, { AxiosResponse } from 'axios';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import IBaseWidgetConfig from 'src/model/IBaseWidgetConfig';
 import authorizationBearer from 'src/services/auth.header';
 import { updateWidgetData } from '../../services/widget.service';
-import {
-  adjustTimeWithOffset,
-  formatDateFromTimestamp
-} from '../../utils/DateUtils';
+import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../utils/DateUtils';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
@@ -15,11 +13,8 @@ import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
 
-interface IProps {
-  id: number;
+interface IProps extends IBaseWidgetConfig {
   city?: string;
-  tabId: number;
-  onDeleteButtonClicked: (idWidget: number) => void;
 }
 
 enum ForecastMode {
@@ -38,9 +33,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const [weather, setWeather] = useState<IWeather>();
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
-  const [forecastMode, setForecastMode] = useState<ForecastMode>(
-    ForecastMode.TODAY
-  );
+  const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
 
   function fetchDataFromWeatherApi() {
     if (cityToQuery) {
@@ -109,18 +102,14 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       switch (forecastMode) {
         case ForecastMode.WEEK: {
           return forecast.filter((forecastDay) => {
-            const forecastElement = formatDateFromTimestamp(
-              forecastDay.dt,
-              adjustTimeWithOffset(city.timezone)
-            );
+            const forecastElement = formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone));
             return forecastElement.getHours() === 17;
           });
         }
         case ForecastMode.TOMORROW: {
           return forecast.filter(
             (forecastDay) =>
-              new Date(forecastDay.dt * 1000).getDay() ===
-                new Date(+new Date() + 86400000).getDay() &&
+              new Date(forecastDay.dt * 1000).getDay() === new Date(+new Date() + 86400000).getDay() &&
               new Date(forecastDay.dt * 1000).getHours() >= 7
           );
         }
@@ -128,9 +117,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         default: {
           return forecast.filter(
             (forecastDay) =>
-              new Date(forecastDay.dt * 1000).getDay() ===
-                new Date().getDay() &&
-              new Date(forecastDay.dt * 1000).getHours() >= 7
+              new Date(forecastDay.dt * 1000).getDay() === new Date().getDay() && new Date(forecastDay.dt * 1000).getHours() >= 7
           );
         }
       }
@@ -169,33 +156,23 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             <div className="flexColumn mr-5">
               <div>{weather.weather[0].description}</div>
               <div>
-                <i className="fa fa-thermometer-three-quarters fa-md" />{' '}
-                {weather.main.temp}°
+                <i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°
               </div>
             </div>
             <div className="flexColumn">
               <div className="spaceBetween">
                 <div>
                   <i className="fa fa-sun-o fa-md" />{' '}
-                  {formatDateFromTimestamp(
-                    weather.sys.sunrise,
-                    adjustTimeWithOffset(weather.timezone)
-                  ).toLocaleTimeString('fr')}
+                  {formatDateFromTimestamp(weather.sys.sunrise, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}
                 </div>
                 <div>
                   <i className="fa fa-moon-o fa-md" />{' '}
-                  {formatDateFromTimestamp(
-                    weather.sys.sunset,
-                    adjustTimeWithOffset(weather.timezone)
-                  ).toLocaleTimeString('fr')}
+                  {formatDateFromTimestamp(weather.sys.sunset, adjustTimeWithOffset(weather.timezone)).toLocaleTimeString('fr')}
                 </div>
               </div>
               <div>
                 <i className="fa fa-clock-o fa-md" />{' '}
-                {formatDateFromTimestamp(
-                  weather.dt,
-                  adjustTimeWithOffset(weather.timezone)
-                ).toLocaleString('fr')}
+                {formatDateFromTimestamp(weather.dt, adjustTimeWithOffset(weather.timezone)).toLocaleString('fr')}
               </div>
             </div>
           </div>
@@ -210,9 +187,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 id="toggleTodayForecast"
                 onClick={selectTodayForecast}
                 style={{ flex: '1' }}
-                className={`btn btn-${
-                  forecastMode === ForecastMode.TODAY ? 'success' : 'primary'
-                } mr-5`}
+                className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}
               >
                 Aujourd'hui
               </button>
@@ -220,9 +195,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 id="toggleTomorrowForecast"
                 onClick={selectTomorrowForecast}
                 style={{ flex: '1' }}
-                className={`btn btn-${
-                  forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'
-                }`}
+                className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}
               >
                 Demain
               </button>
@@ -230,9 +203,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 id="toggleWeekForecast"
                 onClick={selectWeekForecast}
                 style={{ flex: '1' }}
-                className={`btn btn-${
-                  forecastMode === ForecastMode.WEEK ? 'success' : 'primary'
-                }`}
+                className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}
               >
                 Semaine
               </button>
@@ -243,32 +214,22 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             <Line
               data={{
                 labels: filterForecastByMode().map((forecastDay) => {
-                  if (
-                    forecastMode === ForecastMode.TODAY ||
-                    forecastMode === ForecastMode.TOMORROW
-                  ) {
+                  if (forecastMode === ForecastMode.TODAY || forecastMode === ForecastMode.TOMORROW) {
                     return format(new Date(forecastDay.dt * 1000), 'HH');
                   } else {
-                    return format(
-                      new Date(forecastDay.dt * 1000),
-                      'EEE dd MMM'
-                    );
+                    return format(new Date(forecastDay.dt * 1000), 'EEE dd MMM');
                   }
                 }),
                 datasets: [
                   {
                     label: 'Température',
                     borderColor: 'orange',
-                    data: filterForecastByMode().map(
-                      (forecastDay) => forecastDay.main.temp_max
-                    )
+                    data: filterForecastByMode().map((forecastDay) => forecastDay.main.temp_max)
                   },
                   {
                     label: 'Ressenti',
                     borderColor: 'red',
-                    data: filterForecastByMode().map(
-                      (forecastDay) => forecastDay.main.feels_like
-                    )
+                    data: filterForecastByMode().map((forecastDay) => forecastDay.main.feels_like)
                   }
                 ]
               }}
@@ -298,12 +259,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       config={{ city: city }}
       header={widgetHeader}
       body={widgetBody}
-      editModeComponent={
-        <EmptyWeatherWidget
-          city={cityToQuery}
-          onConfigSubmitted={onConfigSubmitted}
-        />
-      }
+      editModeComponent={<EmptyWeatherWidget city={cityToQuery} onConfigSubmitted={onConfigSubmitted} />}
       refreshFunction={refreshWidget}
       onDeleteButtonClicked={props.onDeleteButtonClicked}
     />

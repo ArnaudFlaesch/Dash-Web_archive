@@ -10,7 +10,7 @@ interface IProps {
   header: ReactElement;
   body: ReactElement;
   additionalActionButtons?: ReactElement;
-  editModeComponent?: ReactElement<IProps>;
+  editModeComponent?: ReactElement;
   refreshFunction: () => void;
   onDeleteButtonClicked: (idWidget: number) => void;
 }
@@ -49,23 +49,14 @@ export default function Widget(props: IProps): ReactElement {
             <div className="rightGroup">
               {props.additionalActionButtons}
               {props.editModeComponent && (
-                <button
-                  onClick={editWidget}
-                  className="btn btn-default editButton"
-                >
+                <button onClick={editWidget} className="btn btn-default editButton">
                   <i className="fa fa-cog" aria-hidden="true" />
                 </button>
               )}
-              <button
-                onClick={props.refreshFunction}
-                className="btn btn-default refreshButton"
-              >
+              <button onClick={props.refreshFunction} className="btn btn-default refreshButton">
                 <i className="fa fa-refresh" aria-hidden="true" />
               </button>
-              <button
-                onClick={deleteWidget}
-                className="btn btn-default deleteButton"
-              >
+              <button onClick={deleteWidget} className="btn btn-default deleteButton">
                 <i className="fa fa-trash" aria-hidden="true" />
               </button>
             </div>
@@ -74,15 +65,9 @@ export default function Widget(props: IProps): ReactElement {
         </div>
       )}
       {mode === ModeEnum.DELETE && (
-        <DeleteWidget
-          idWidget={props.id}
-          onDeleteButtonClicked={props.onDeleteButtonClicked}
-          onCancelButtonClicked={cancelDeletion}
-        />
+        <DeleteWidget idWidget={props.id} onDeleteButtonClicked={props.onDeleteButtonClicked} onCancelButtonClicked={cancelDeletion} />
       )}
-      {mode === ModeEnum.EDIT &&
-        props.editModeComponent !== null &&
-        props.editModeComponent}
+      {mode === ModeEnum.EDIT && props.editModeComponent !== null && props.editModeComponent}
     </div>
   );
 }

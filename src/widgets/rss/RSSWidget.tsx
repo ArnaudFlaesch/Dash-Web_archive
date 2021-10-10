@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import RSSParser from 'rss-parser';
+import IBaseWidgetConfig from 'src/model/IBaseWidgetConfig';
 import authorizationBearer from 'src/services/auth.header';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { updateWidgetData } from '../../services/widget.service';
@@ -11,12 +12,9 @@ import RSSArticle from './article/RSSArticle';
 import EmptyRSSWidget from './emptyWidget/EmptyRSSWidget';
 import './RSSWidget.scss';
 
-interface IProps {
-  id: number;
+interface IProps extends IBaseWidgetConfig {
   url?: string;
-  tabId: number;
   readArticlesGuids?: string[];
-  onDeleteButtonClicked: (idWidget: number) => void;
 }
 
 export default function RSSWidget(props: IProps): React.ReactElement {
@@ -27,9 +25,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   const [link, setLink] = useState('');
   const [title, setTitle] = useState('');
   const [isFeedClosed, setFeedClosed] = useState(true);
-  const [readArticles, setReadArticles] = useState<string[]>(
-    props.readArticlesGuids || []
-  );
+  const [readArticles, setReadArticles] = useState<string[]>(props.readArticlesGuids || []);
   const rssParser = new RSSParser();
 
   function fetchDataFromRssFeed() {
@@ -90,11 +86,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
         })
       : '';
     return (
-      <div
-        className={`rssArticle ${
-          readArticles.includes(article.guid) ? 'read' : ''
-        }`}
-      >
+      <div className={`rssArticle ${readArticles.includes(article.guid) ? 'read' : ''}`}>
         {date} {article.title}
       </div>
     );
@@ -158,16 +150,10 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   const additionalActionButtons = (
     <div className="flex flex-row">
-      <button
-        onClick={markAllFeedAsRead}
-        className="btn btn-default markAllArticlesAsRead"
-      >
+      <button onClick={markAllFeedAsRead} className="btn btn-default markAllArticlesAsRead">
         <i className="fa fa-check-circle-o" aria-hidden="true" />
       </button>
-      <button
-        onClick={closeFeeds}
-        className="btn btn-default minimizeAllArticles"
-      >
+      <button onClick={closeFeeds} className="btn btn-default minimizeAllArticles">
         <i className="fa fa-window-minimize" aria-hidden="true" />
       </button>
     </div>
@@ -192,9 +178,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
       header={widgetHeader}
       additionalActionButtons={additionalActionButtons}
       body={widgetBody}
-      editModeComponent={
-        <EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />
-      }
+      editModeComponent={<EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />}
       refreshFunction={refreshWidget}
       onDeleteButtonClicked={props.onDeleteButtonClicked}
     />

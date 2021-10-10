@@ -4,6 +4,7 @@ import { TabPane } from 'reactstrap';
 import authorizationBearer from 'src/services/auth.header';
 import FacebookWidget from 'src/widgets/facebook/FacebookWidget';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
+import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { ITabState } from '../reducers/tabReducer';
 import { deleteWidget } from '../services/widget.service';
@@ -95,6 +96,16 @@ export default function TabDash(props: IProps): React.ReactElement {
       case WidgetTypes.STEAM: {
         return (
           <SteamWidget
+            id={widgetConfig.id}
+            tabId={widgetConfig.tab.id}
+            {...widgetConfig.data}
+            onDeleteButtonClicked={deleteWidgetFromDashboard}
+          />
+        );
+      }
+      case WidgetTypes.TWITTER_TIMELINE: {
+        return (
+          <TwitterTimelineWidget
             id={widgetConfig.id}
             tabId={widgetConfig.tab.id}
             {...widgetConfig.data}

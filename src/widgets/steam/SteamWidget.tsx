@@ -1,17 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ComponentWithDetail from 'src/components/detailComponent/ComponentWithDetail';
+import IBaseWidgetConfig from 'src/model/IBaseWidgetConfig';
 import authorizationBearer from 'src/services/auth.header';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import GameDetails from './details/GameDetails';
 import { IGameInfo } from './IGameInfo';
-
-interface IProps {
-  id: number;
-  tabId: number;
-  onDeleteButtonClicked: (idWidget: number) => void;
-}
 
 interface IPlayerData {
   personaname: string;
@@ -19,15 +14,14 @@ interface IPlayerData {
   avatar: string;
 }
 
-export default function SteamWidget(props: IProps): React.ReactElement {
+export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElement {
   const [playerData, setPlayerData] = useState<IPlayerData>();
   const [ownedGames, setOwnedGames] = useState<IGameInfo[]>();
 
   const STEAM_API_URL = 'https://api.steampowered.com';
   const GET_PLAYER_SUMMARIES_URL = `/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamids=${process.env.REACT_APP_STEAM_USER_ID}`;
   const GET_OWNED_GAMES_URL = `/IPlayerService/GetOwnedGames/v0001/?key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}&format=json&include_appinfo=true`;
-  const STEAM_IMAGE_URL =
-    'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/';
+  const STEAM_IMAGE_URL = 'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/';
   const STEAM_COMMUNITY_URL = 'https://steamcommunity.com/app/';
 
   useEffect(() => {
@@ -70,11 +64,7 @@ export default function SteamWidget(props: IProps): React.ReactElement {
         }
       })
       .then((response) => {
-        setOwnedGames(
-          (response.data.response.games as IGameInfo[]).sort((gameA, gameB) =>
-            gameA.name.localeCompare(gameB.name)
-          )
-        );
+        setOwnedGames((response.data.response.games as IGameInfo[]).sort((gameA, gameB) => gameA.name.localeCompare(gameB.name)));
       })
       .catch((error) => {
         logger.error(error.message);
@@ -100,9 +90,7 @@ export default function SteamWidget(props: IProps): React.ReactElement {
               componentRoot={
                 <div className="gameInfo flex flex-row">
                   <div>
-                    <img
-                      src={`${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `}
-                    />
+                    <img src={`${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `} />
                   </div>
                   <div>{game.name}</div>
                 </div>
