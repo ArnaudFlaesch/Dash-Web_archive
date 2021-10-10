@@ -26,15 +26,12 @@ export default function TabDash(props: IProps): React.ReactElement {
 
   useEffect(() => {
     if (activeTab === props.tabId) {
-      fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`,
-        {
-          headers: {
-            Authorization: authorizationBearer(),
-            'Content-type': 'application/json'
-          }
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`, {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
         }
-      )
+      })
         .then((result) => {
           return result.json();
         })
@@ -130,13 +127,7 @@ export default function TabDash(props: IProps): React.ReactElement {
   return (
     <TabPane tabId={props.tabId}>
       <div className="widgetList">
-        {props.tabId === 1 && (
-          <TwitterWidget
-            id={0}
-            tabId={1}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        )}
+        {props.tabId === 1 && <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />}
 
         <FacebookWidget />
         {widgets &&

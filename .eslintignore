@@ -11,5 +11,8 @@ yarn.lock
 server.js
 src/registerServiceWorker.ts
 
+tailwind.config.js
+craco.config.js
+
 # FIXME
 FacebookWidget.tsx
