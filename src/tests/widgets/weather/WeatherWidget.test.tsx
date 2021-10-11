@@ -16,11 +16,10 @@ jest.mock('react-chartjs-2', () => ({
   Line: () => null
 }));
 
-MockDate.set(1588269600000);
-
 describe('Weather widget tests', () => {
   let container: HTMLElementTagNameMap['div'];
   beforeEach(() => {
+    MockDate.set(1588269600000);
     // setup a DOM element as a render target
     container = document.createElement('div');
     document.body.appendChild(container);
