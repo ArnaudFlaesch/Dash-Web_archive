@@ -10,28 +10,24 @@ describe('Steam Widget tests', () => {
   });
 
   it('Should create a Steam Widget and add it to the dashboard', () => {
-    cy.get('#openAddWidgetModal')
-      .click()
-      .intercept('POST', '/widget/addWidget')
-      .as('addWidget')
-      .get('#STEAM')
-      .click()
-      .wait('@addWidget')
-      .then(() => {
-        cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
-      });
+    cy.get('#openAddWidgetModal').click();
+    cy.intercept('POST', '/widget/addWidget').as('addWidget');
+    cy.get('#STEAM').click();
+    cy.wait('@addWidget').then(() => {
+      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
+    });
   });
 
   it('Should refresh Steam widget and validate data', () => {
     cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUser%2FGetPlayerSummaries%2F*`, {
       fixture: 'playerData.json'
-    })
-      .as('getPlayerData')
-      .intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FIPlayerService%2FGetOwnedGames%2F*`, {
-        fixture: 'gameData.json'
-      })
-      .as('getGameData')
-      .get('.refreshButton')
+    }).as('getPlayerData');
+
+    cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FIPlayerService%2FGetOwnedGames%2F*`, {
+      fixture: 'gameData.json'
+    }).as('getGameData');
+
+    cy.get('.refreshButton')
       .click()
       .wait('@getPlayerData')
       .wait('@getGameData')
@@ -43,9 +39,9 @@ describe('Steam Widget tests', () => {
   it('Should display Half-Life 2: Episode Two details', () => {
     cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUserStats%2FGetPlayerAchievements%2F*`, {
       fixture: 'halfLife2Ep2Achievements.json'
-    })
-      .as('getAchievementData')
-      .contains('Half-Life 2: Episode Two')
+    }).as('getAchievementData');
+
+    cy.contains('Half-Life 2: Episode Two')
       .first()
       .click()
       .wait('@getAchievementData')
@@ -60,17 +56,15 @@ describe('Steam Widget tests', () => {
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*')
-      .as('deleteWidget')
-      .get('.deleteButton')
+    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
+    cy.get('.deleteButton')
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.btn-danger')
-      .click()
-      .wait('@deleteWidget')
-      .then(() => {
-        cy.get('.widget').should('have.length', 0);
-      });
+      .click();
+    cy.wait('@deleteWidget').then(() => {
+      cy.get('.widget').should('have.length', 0);
+    });
   });
 });
