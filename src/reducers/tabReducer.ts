@@ -8,7 +8,7 @@ const initialState: ITabState = {
   activeTab: -1
 };
 
-export default function (state = initialState, action: { type: string; payload: { id: number } }): ITabState {
+export default function (action: { type: string; payload: { id: number } }, state = initialState): ITabState {
   switch (action.type) {
     case TOGGLE_TAB: {
       const { id } = action.payload;
