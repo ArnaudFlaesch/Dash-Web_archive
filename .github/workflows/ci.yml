@@ -67,6 +67,7 @@ jobs:
 
       - name: Test
         run: npm run ci
+        id: tests
         continue-on-error: true
 
       - name: Generate test report
@@ -99,6 +100,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Check on failures
+        if: steps.tests.outputs.status == 'failure'
+        run: exit 1
 
       - name: Deploy with gh-pages
         if: success() && github.ref == 'refs/heads/master'
