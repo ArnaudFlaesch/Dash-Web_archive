@@ -12,7 +12,7 @@ interface IProps extends IBaseWidgetConfig {
 }
 
 export default function TwitterTimelineWidget(props: IProps): React.ReactElement {
-  const [profile, setProfile] = useState<string>('arnaudflaesch');
+  const [profile, setProfile] = useState<string>(props.profile || '');
 
   useEffect(() => {
     if (props.profile) {

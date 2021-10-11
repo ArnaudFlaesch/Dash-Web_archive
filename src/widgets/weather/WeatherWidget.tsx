@@ -188,7 +188,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       {city && forecast && (
         <div>
           <div className="flex flex-row">
-            <span className="bold">Prévisions</span>
+            <span className="font-bold">Prévisions</span>
             <span style={{ alignContent: 'space-between', display: 'flex' }}>
               <button
                 id="toggleTodayForecast"
