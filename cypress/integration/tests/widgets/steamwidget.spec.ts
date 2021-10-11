@@ -51,7 +51,7 @@ describe('Steam Widget tests', () => {
           .get('.completedAchievements')
           .should('have.text', 'Succès complétés : 19')
           .get('.progressValue')
-          .should('have.text', '83%');
+          .should('have.text', '85%');
       });
   });
 
