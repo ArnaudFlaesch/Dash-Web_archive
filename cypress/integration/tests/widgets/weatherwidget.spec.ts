@@ -30,10 +30,11 @@ describe('Weather Widget tests', () => {
       .type('Paris')
       .get('#validateButton')
       .click();
-    cy.get('.refreshButton').click();
-    cy.wait('@refreshWidget')
+    cy.get('.refreshButton')
+      .click()
+      .wait('@refreshWidget')
       .then(() => {
-        cy.get('.forecast').should('have.length', 6);
+        cy.get('.forecast').should('have.length.at.least', 5);
       })
       .clock()
       .then((clock) => {
