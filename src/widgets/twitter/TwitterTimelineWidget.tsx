@@ -20,10 +20,10 @@ export default function TwitterTimelineWidget(props: IProps): React.ReactElement
     }
   }, []);
 
-  function onProfileSubmitted(rssUrl: string): void {
-    updateWidgetData(props.id, { url: rssUrl, guidsList: [] })
+  function onProfileSubmitted(widgetProfile: string): void {
+    updateWidgetData(props.id, { profile: widgetProfile })
       .then(() => {
-        setProfile(rssUrl);
+        setProfile(widgetProfile);
       })
       .catch((error) => {
         logger.error(error.message);
