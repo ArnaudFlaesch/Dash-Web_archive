@@ -30,7 +30,7 @@ export default function TwitterTimelineWidget(props: IProps): React.ReactElement
       });
   }
 
-  const widgetHeader = <div>Timeline de {profile}</div>;
+  const widgetHeader = <div className="timelineHeader">Timeline de {profile}</div>;
 
   const widgetBody = (
     <div>
