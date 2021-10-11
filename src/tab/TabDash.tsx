@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
 import authorizationBearer from 'src/services/auth.header';
-import FacebookWidget from 'src/widgets/facebook/FacebookWidget';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
@@ -13,7 +12,6 @@ import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
-import TwitterWidget from '../widgets/twitter/TwitterWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
 
 interface IProps {
@@ -138,9 +136,6 @@ export default function TabDash(props: IProps): React.ReactElement {
   return (
     <TabPane tabId={props.tabId}>
       <div className="widgetList">
-        {props.tabId === 1 && <TwitterWidget id={0} tabId={1} onDeleteButtonClicked={deleteWidgetFromDashboard} />}
-
-        <FacebookWidget />
         {widgets &&
           widgets.length > 0 &&
           widgets.map((widgetConfig: IWidgetConfig) => {

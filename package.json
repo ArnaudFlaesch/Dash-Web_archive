@@ -39,7 +39,6 @@
     "date-fns": "2.25.0",
     "font-awesome": "4.7.0",
     "ical": "0.8.0",
-    "oauth-1.0a": "^2.2.6",
     "pg": "8.7.1",
     "query-string": "7.0.1",
     "react": "17.0.2",
