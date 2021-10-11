@@ -187,21 +187,19 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       )}
       {city && forecast && (
         <div>
-          <div className="flex flex-row">
+          <div className="flex flex-row space-x-10">
             <span className="font-bold">Prévisions</span>
-            <span style={{ alignContent: 'space-between', display: 'flex' }}>
+            <span className="flex flex-row space-x-1">
               <button
                 id="toggleTodayForecast"
                 onClick={selectTodayForecast}
-                style={{ flex: '1' }}
-                className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} mr-5`}
+                className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} `}
               >
                 Aujourd'hui
               </button>
               <button
                 id="toggleTomorrowForecast"
                 onClick={selectTomorrowForecast}
-                style={{ flex: '1' }}
                 className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}
               >
                 Demain
@@ -209,7 +207,6 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               <button
                 id="toggleWeekForecast"
                 onClick={selectWeekForecast}
-                style={{ flex: '1' }}
                 className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}
               >
                 Semaine
