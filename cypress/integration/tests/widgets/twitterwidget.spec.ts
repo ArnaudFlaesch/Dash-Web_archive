@@ -37,7 +37,7 @@ describe('Twitter Widget tests', () => {
       });
   });
 
-  xit('Should delete previously added widget', () => {
+  it('Should delete previously added widget', () => {
     cy.intercept('DELETE', '/widget/deleteWidget/*')
       .as('deleteWidget')
       .get('.deleteButton')

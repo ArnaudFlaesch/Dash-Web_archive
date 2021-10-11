@@ -67,6 +67,19 @@ jobs:
 
       - name: Test
         run: npm run ci
+        continue-on-error: true
+
+      - name: Generate test report
+        run: |
+          mkdir cypress/screenshots || true
+          npm run report:merge
+          npm run report:generate
+          npm run report:copyScreenshots
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Cypress report
+          path: cypress/reports/html
 
       - name: Generate coverage
         run: |
