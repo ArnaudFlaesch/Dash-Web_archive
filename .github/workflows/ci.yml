@@ -71,7 +71,7 @@ jobs:
 
       - name: Generate test report
         run: |
-          mkdir cypress/screenshots
+          mkdir cypress/screenshots || true
           npm run report:merge
           npm run report:generate
           npm run report:copyScreenshots
