@@ -14,19 +14,14 @@ describe('Weather Widget tests', () => {
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#WEATHER').click();
     cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal')
-        .click()
-        .get('.widget')
-        .should('have.length', 1);
+      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
     });
   });
 
   it('Should refresh Weather widget', () => {
-    cy.intercept(
-      'GET',
-      `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`,
-      { fixture: 'parisWeatherSample.json' }
-    ).as('refreshWidget');
+    cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`, {
+      fixture: 'parisWeatherSample.json'
+    }).as('refreshWidget');
 
     cy.get('.editButton')
       .click()
@@ -35,10 +30,11 @@ describe('Weather Widget tests', () => {
       .type('Paris')
       .get('#validateButton')
       .click();
-    cy.get('.refreshButton').click();
-    cy.wait('@refreshWidget')
+    cy.get('.refreshButton')
+      .click()
+      .wait('@refreshWidget')
       .then(() => {
-        cy.get('.forecast').should('have.length', 6);
+        cy.get('.forecast').should('have.length.at.least', 5);
       })
       .clock()
       .then((clock) => {
@@ -51,11 +47,11 @@ describe('Weather Widget tests', () => {
       .get('#toggleTodayForecast')
       .click()
       .get('.forecast')
-      .should('have.length', 6)
+      .should('have.length.at.least', 5)
       .get('#toggleTomorrowForecast')
       .click()
       .get('.forecast')
-      .should('have.length', 6)
+      .should('have.length.at.least', 5)
       .get('#toggleWeekForecast')
       .click()
       .get('.forecast')

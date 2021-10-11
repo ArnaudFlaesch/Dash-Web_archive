@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TabPane } from 'reactstrap';
 import authorizationBearer from 'src/services/auth.header';
-import FacebookWidget from 'src/widgets/facebook/FacebookWidget';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
+import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { ITabState } from '../reducers/tabReducer';
 import { deleteWidget } from '../services/widget.service';
@@ -25,15 +25,12 @@ export default function TabDash(props: IProps): React.ReactElement {
 
   useEffect(() => {
     if (activeTab === props.tabId) {
-      fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`,
-        {
-          headers: {
-            Authorization: authorizationBearer(),
-            'Content-type': 'application/json'
-          }
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`, {
+        headers: {
+          Authorization: authorizationBearer(),
+          'Content-type': 'application/json'
         }
-      )
+      })
         .then((result) => {
           return result.json();
         })
@@ -104,6 +101,16 @@ export default function TabDash(props: IProps): React.ReactElement {
           />
         );
       }
+      case WidgetTypes.TWITTER_TIMELINE: {
+        return (
+          <TwitterTimelineWidget
+            id={widgetConfig.id}
+            tabId={widgetConfig.tab.id}
+            {...widgetConfig.data}
+            onDeleteButtonClicked={deleteWidgetFromDashboard}
+          />
+        );
+      }
       default: {
         return;
       }
@@ -129,7 +136,6 @@ export default function TabDash(props: IProps): React.ReactElement {
   return (
     <TabPane tabId={props.tabId}>
       <div className="widgetList">
-        <FacebookWidget />
         {widgets &&
           widgets.length > 0 &&
           widgets.map((widgetConfig: IWidgetConfig) => {

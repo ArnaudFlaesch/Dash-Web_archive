@@ -10,12 +10,7 @@ describe('Calendar widget tests', () => {
     await act(async () => {
       const onDeleteButtonClicked = () => null;
       Enzyme.shallow(
-        <CalendarWidget
-          id={1}
-          tabId={1}
-          calendars={['fake_url']}
-          onDeleteButtonClicked={onDeleteButtonClicked}
-        />
+        <CalendarWidget id={1} tabId={1} calendars={['fake_url']} onDeleteButtonClicked={onDeleteButtonClicked} />
       );
     });
   });

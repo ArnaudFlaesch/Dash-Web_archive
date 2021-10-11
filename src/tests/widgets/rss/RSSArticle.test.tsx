@@ -19,7 +19,7 @@ describe('RSS Article component tests', () => {
     ReactDOM.unmountComponentAtNode(div);
   });
 
-  it('CheckboxWithLabel changes the text after click', () => {
+  it('Should display the title in the header', () => {
     const article: IArticle = {
       guid: '1',
       content: 'Test contenu',

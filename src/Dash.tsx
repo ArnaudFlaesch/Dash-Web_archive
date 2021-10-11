@@ -1,12 +1,6 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import { useEffect, useRef, useState } from 'react';
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DroppableProvided,
-  DropResult
-} from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Nav, TabContent } from 'reactstrap';
@@ -130,11 +124,7 @@ export default function Dash(): React.ReactElement {
     setTabs(tabs.filter((tab) => tab.id !== id));
   }
 
-  function reorder(
-    list: unknown[],
-    startIndex: number,
-    endIndex: number
-  ): unknown[] {
+  function reorder(list: unknown[], startIndex: number, endIndex: number): unknown[] {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -146,11 +136,7 @@ export default function Dash(): React.ReactElement {
       return;
     }
 
-    const items = reorder(
-      tabs,
-      result.source.index,
-      result.destination.index
-    ).map((tab, index) => {
+    const items = reorder(tabs, result.source.index, result.destination.index).map((tab, index) => {
       (tab as ITab).tabOrder = index;
       return tab;
     });
@@ -181,26 +167,18 @@ export default function Dash(): React.ReactElement {
     <div className="dash">
       {!authService.getCurrentUser() && <Login />}
       {authService.getCurrentUser() && (
-        <div className="flexRow">
+        <div className="flex flex-row">
           <div className="dashNavbar">
             {activeTab && tabs.length > 0 && (
               <Nav vertical={true} navbar={true}>
                 <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
                 <div>
-                  <Button
-                    id="reloadAllWidgetsButton"
-                    className="dashNavbarLink"
-                    onClick={refreshAllWidgets}
-                  >
+                  <Button id="reloadAllWidgetsButton" className="dashNavbarLink" onClick={refreshAllWidgets}>
                     <i className="fa fa-refresh fa-lg" aria-hidden="true" />
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    id="downloadConfigButton"
-                    className="dashNavbarLink"
-                    onClick={downloadConfig}
-                  >
+                  <Button id="downloadConfigButton" className="dashNavbarLink" onClick={downloadConfig}>
                     <i className="fa fa-download fa-lg" aria-hidden="true" />
                   </Button>
                 </div>
@@ -210,34 +188,28 @@ export default function Dash(): React.ReactElement {
             )}
           </div>
 
-          <div className="flexColumn tabsBar">
+          <div className="flex flex-column tabsBar">
             <Nav tabs={true}>
-              <div className="flexRow">
+              <div className="flex flex-row">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
                       <div
-                        className="flexRow"
+                        className="flex flex-row"
                         {...providedDroppable.droppableProps}
                         ref={providedDroppable.innerRef}
                       >
                         {tabs.length > 0 &&
                           tabs.map((tab: ITab, index: number) => {
                             return (
-                              <Draggable
-                                key={tab.id}
-                                draggableId={tab.id.toString()}
-                                index={index}
-                              >
+                              <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
                                 {(providedDraggable) => (
                                   <div
                                     key={tab.id}
                                     ref={providedDraggable.innerRef}
                                     {...providedDraggable.draggableProps}
                                     {...providedDraggable.dragHandleProps}
-                                    className={`tab ${
-                                      tab.id === activeTab ? 'selectedItem' : ''
-                                    }`}
+                                    className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
                                   >
                                     <NavDash
                                       tab={tab}
@@ -254,15 +226,8 @@ export default function Dash(): React.ReactElement {
                     )}
                   </Droppable>
                 </DragDropContext>
-                <Button
-                  onClick={addNewTab}
-                  id="addNewTabButton"
-                  className="fa fa-plus-circle fa-lg"
-                />
-                <Button
-                  onClick={authService.logout}
-                  className="btn btn-primary"
-                >
+                <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
+                <Button onClick={authService.logout} className="btn btn-primary">
                   Se déconnecter
                 </Button>
               </div>
@@ -270,13 +235,7 @@ export default function Dash(): React.ReactElement {
             <TabContent activeTab={activeTab}>
               {tabs.length > 0 &&
                 tabs.map((tab: ITab) => {
-                  return (
-                    <TabDash
-                      key={tab.id}
-                      newWidget={getNewWidget(tab.id)}
-                      tabId={tab.id}
-                    />
-                  );
+                  return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
                 })}
             </TabContent>
           </div>

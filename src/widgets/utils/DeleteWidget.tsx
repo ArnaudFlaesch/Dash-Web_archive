@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 
 interface IProps {
   idWidget: number;
@@ -14,16 +14,10 @@ export default function DeleteWidget(props: IProps): ReactElement {
   return (
     <div>
       <h4>Êtes-vous sûr de vouloir supprimer ce widget ?</h4>
-      <button
-        onClick={props.onCancelButtonClicked}
-        className="btn btn-primary cancelButton"
-      >
+      <button onClick={props.onCancelButtonClicked} className="btn btn-primary cancelButton">
         Annuler
       </button>
-      <button
-        onClick={confirmDeleteWidget}
-        className="btn btn-danger validateDeletionButton"
-      >
+      <button onClick={confirmDeleteWidget} className="btn btn-danger validateDeletionButton">
         Supprimer
       </button>
     </div>

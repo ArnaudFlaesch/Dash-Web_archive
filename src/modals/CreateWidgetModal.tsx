@@ -15,26 +15,16 @@ export default function CreateWidgetModal(props: IProps): ReactElement {
 
   return (
     <div>
-      <Button
-        id="openAddWidgetModal"
-        className="dashNavbarLink"
-        onClick={toggleCreateWidgetModal}
-      >
+      <Button id="openAddWidgetModal" className="dashNavbarLink" onClick={toggleCreateWidgetModal}>
         <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
       </Button>
-      <Modal isOpen={createWidgetModal} toggle={toggleCreateWidgetModal}>
-        <ModalHeader toggle={toggleCreateWidgetModal}>
-          Ajouter un widget
-        </ModalHeader>
+      <Modal isOpen={createWidgetModal} size="lg" toggle={toggleCreateWidgetModal}>
+        <ModalHeader toggle={toggleCreateWidgetModal}>Ajouter un widget</ModalHeader>
         <ModalBody>
           <Store onWidgetAdded={props.onWidgetAdded} />
         </ModalBody>
         <ModalFooter>
-          <Button
-            id="closeAddWidgetModal"
-            color="primary"
-            onClick={toggleCreateWidgetModal}
-          >
+          <Button id="closeAddWidgetModal" color="primary" onClick={toggleCreateWidgetModal}>
             Fermer
           </Button>
         </ModalFooter>

@@ -3,5 +3,7 @@ export enum WidgetTypes {
   RSS = 2,
   CALENDAR = 3,
   STRAVA = 4,
-  STEAM = 5
+  STEAM = 5,
+  TWITTER = 6,
+  TWITTER_TIMELINE = 7
 }

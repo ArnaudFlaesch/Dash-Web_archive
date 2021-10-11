@@ -39,3 +39,5 @@ snyk-report.json
 .snyk
 
 .env.development
+
+.dccache

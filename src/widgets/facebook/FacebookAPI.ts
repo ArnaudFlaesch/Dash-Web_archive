@@ -2,7 +2,7 @@ import logger from '../../utils/LogUtils';
 import IFBUser from './IFBUser';
 
 interface IFB {
-  api: (url: string, data: unknown, response: (data:unknown) => unknown) => Promise<unknown>;
+  api: (url: string, data: unknown, response: (data: unknown) => unknown) => Promise<unknown>;
 }
 
 declare const FB: IFB;

@@ -36,7 +36,7 @@ export default function NavDash(props: IProps): ReactElement {
     <NavItem className="clickableItem" key={props.tab.id}>
       <NavLink onClick={props.onTabClicked}>
         {isToggled ? (
-          <div className="flexRow">
+          <div className="flex flex-row">
             <input
               onDoubleClick={saveTabName}
               onKeyPress={enterSaveTabName}

@@ -14,19 +14,12 @@ describe('RSS Widget tests', () => {
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#RSS').click();
     cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal')
-        .click()
-        .get('.widget')
-        .should('have.length', 1);
+      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
     });
   });
 
   it('Should edit RSS widget and add a feed URL', () => {
-    cy.intercept(
-      'GET',
-      '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
-      { fixture: 'figaro_rss.xml' }
-    )
+    cy.intercept('GET', '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
       .as('refreshWidget')
       .get('.editButton')
       .click()
@@ -39,10 +32,7 @@ describe('RSS Widget tests', () => {
       .wait('@refreshWidget')
       .then(() => {
         cy.get('.rssTitle')
-          .should(
-            'have.text',
-            'Le Figaro - Actualité en direct et informations en continu'
-          )
+          .should('have.text', 'Le Figaro - Actualité en direct et informations en continu')
           .get('.rssArticle')
           .should('have.length', 20);
       })
@@ -53,24 +43,17 @@ describe('RSS Widget tests', () => {
         cy.get('.rssArticle')
           .should('have.length', 20)
           .first()
-          .contains(
-            'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
-          )
+          .contains('EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse')
           .click()
           .get('.articleTitle:visible')
-          .should(
-            'have.text',
-            'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
-          )
+          .should('have.text', 'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse')
           .get('.articleContent:visible')
           .should(
             'have.text',
             "La deuxième étape de l'allègement des restrictions sanitaires contre le Covid-19 commence ce mercredi. Le couvre-feu est repoussé de 19h à 21h."
           )
           .get('.rssArticle')
-          .contains(
-            'EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse'
-          )
+          .contains('EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse')
           .should('have.class', 'read');
       });
   });
@@ -89,11 +72,7 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should refresh all widgets', () => {
-    cy.intercept(
-      'GET',
-      '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml',
-      { fixture: 'figaro_rss.xml' }
-    )
+    cy.intercept('GET', '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
       .as('refreshWidget')
       .get('#reloadAllWidgetsButton')
       .click()

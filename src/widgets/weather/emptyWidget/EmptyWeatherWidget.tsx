@@ -8,8 +8,7 @@ interface IProps {
 
 export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
   const [city, setCity] = useState(props.city || '');
-  const onCityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setCity(event.target.value);
+  const onCityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => setCity(event.target.value);
   const onValidation = () => {
     props.onConfigSubmitted(city);
   };
@@ -27,10 +26,7 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
         id="validateButton"
         className="btn btn-success"
         onClick={onValidation}
-        disabled={
-          !city ||
-          city?.length < 1
-        }
+        disabled={!city || city?.length < 1}
       >
         Valider
       </button>
