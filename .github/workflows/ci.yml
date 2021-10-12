@@ -28,6 +28,12 @@ jobs:
           npm i -g npm-run-all gh-pages
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
+      - name: Snyk report
+        if: success() && github.ref != 'refs/heads/master'
+        run: |
+          npx snyk test --json-file-output=snyk-report.json
+          npx snyk-to-html -i snyk-report.json -o snyk-report.html
+
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -81,13 +87,6 @@ jobs:
         with:
           name: Cypress report
           path: cypress/reports/html
-
-      - name: Snyk report
-        if: success() && github.ref != 'refs/heads/master'
-        run: |
-          npx snyk auth
-          npx snyk test --json-file-output=snyk-report.json
-          npx snyk-to-html -i snyk-report.json -o snyk-report.html
 
       - name: Generate coverage
         run: |
