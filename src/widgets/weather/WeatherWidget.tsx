@@ -38,7 +38,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   function fetchDataFromWeatherApi() {
     if (cityToQuery) {
       axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+        .get<IWeather>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           headers: {
             Authorization: authorizationBearer(),
             'Content-type': 'application/json'
