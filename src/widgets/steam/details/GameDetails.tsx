@@ -10,23 +10,29 @@ interface IAchievement {
   unlocktime: number;
 }
 
+interface IAchievementResponse {
+  playerstats: {
+    achievements: IAchievement[];
+  };
+}
+
 export default function GameDetails(props: IGameInfo): React.ReactElement {
-  const [achievements, setAchievements] = useState([]);
-  const [completedAchievements, setCompletedAchievements] = useState([]);
+  const [achievements, setAchievements] = useState<IAchievement[]>([]);
+  const [completedAchievements, setCompletedAchievements] = useState<IAchievement[]>([]);
   const STEAM_API_URL = 'https://api.steampowered.com';
   const STEAM_IMAGE_URL = 'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/';
   const STEAM_COMMUNITY_URL = 'https://steamcommunity.com/app/';
-  const GET_ACHIVEMENTS_URL = `${STEAM_API_URL}/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${props.appid}&key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}`;
+  const GET_ACHIEVEMENTS_URL = `${STEAM_API_URL}/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${props.appid}&key=${process.env.REACT_APP_STEAM_API_KEY}&steamid=${process.env.REACT_APP_STEAM_USER_ID}`;
 
   useEffect(() => {
     axios
-      .get<any>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      .get<IAchievementResponse>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
         headers: {
           Authorization: authorizationBearer(),
           'Content-type': 'application/json'
         },
         params: {
-          url: GET_ACHIVEMENTS_URL
+          url: GET_ACHIEVEMENTS_URL
         }
       })
       .then((response) => {
