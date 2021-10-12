@@ -1,12 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
+import { IUser } from './../model/User';
 
 const headers = {
   'Content-type': 'application/json'
 };
 
-function login(username: string, password: string): Promise<AxiosResponse<unknown>> {
+function login(username: string, password: string): Promise<IUser> {
   return axios
-    .post(
+    .post<IUser>(
       `${process.env.REACT_APP_BACKEND_URL}/auth/login`,
       {
         username,
@@ -16,7 +17,7 @@ function login(username: string, password: string): Promise<AxiosResponse<unknow
         headers
       }
     )
-    .then((response) => {
+    .then((response: AxiosResponse<IUser>) => {
       if (response.data.accessToken) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
