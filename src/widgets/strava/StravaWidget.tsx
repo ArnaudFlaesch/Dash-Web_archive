@@ -48,7 +48,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
 
   function getToken(apiCode: string) {
     axios
-      .post('https://www.strava.com/oauth/token', {
+      .post<any>('https://www.strava.com/oauth/token', {
         client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
         client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
         code: apiCode,
@@ -68,7 +68,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
   function refreshTokenFromApi() {
     if (refreshToken) {
       axios
-        .post('https://www.strava.com/oauth/token', {
+        .post<any>('https://www.strava.com/oauth/token', {
           client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
           client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
           refresh_token: refreshToken,
@@ -91,7 +91,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
   function getAthleteData() {
     if (token) {
       axios
-        .get('https://www.strava.com/api/v3/athlete', {
+        .get<IAthlete>('https://www.strava.com/api/v3/athlete', {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((response) => {
@@ -106,7 +106,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
   function getActivities() {
     if (token && tokenExpirationDate && isAfter(new Date((tokenExpirationDate as number) * 1000), new Date())) {
       axios
-        .get(`https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`, {
+        .get<any>(`https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((response) => {

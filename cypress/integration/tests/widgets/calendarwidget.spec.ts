@@ -51,8 +51,7 @@ describe('Calendar Widget tests', () => {
         .click()
         .wait('@getFrenchCalendarData')
         .then(() => {
-          cy.get('.rbc-event')
-            .contains('La fête nationale')
+          cy.contains('La fête nationale')
             .get('.editButton')
             .click()
             .get('#addCalendarUrl')
@@ -63,8 +62,7 @@ describe('Calendar Widget tests', () => {
             .get('#validateCalendarUrls')
             .click();
           cy.wait(['@getFrenchCalendarData', '@getUSCalendarData']).then(() => {
-            cy.get('.rbc-event')
-              .contains('Independence Day')
+            cy.contains('Independence Day')
               .get('.editButton')
               .click()
               .get('.removeCalendarUrl')

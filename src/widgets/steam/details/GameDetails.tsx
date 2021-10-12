@@ -20,7 +20,7 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      .get<any>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
         headers: {
           Authorization: authorizationBearer(),
           'Content-type': 'application/json'

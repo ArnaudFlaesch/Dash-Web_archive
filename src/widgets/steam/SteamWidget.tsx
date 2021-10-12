@@ -35,7 +35,7 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
 
   function getPlayerData(): void {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      .get<any>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
         headers: {
           Authorization: authorizationBearer(),
           'Content-type': 'application/json'
@@ -54,7 +54,7 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
 
   function getOwnedGames(): void {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      .get<any>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
         headers: {
           Authorization: authorizationBearer(),
           'Content-type': 'application/json'
