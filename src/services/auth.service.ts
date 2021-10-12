@@ -5,7 +5,7 @@ const headers = {
   'Content-type': 'application/json'
 };
 
-function login(username: string, password: string): Promise<unknown> {
+function login(username: string, password: string): Promise<IUser> {
   return axios
     .post<IUser>(
       `${process.env.REACT_APP_BACKEND_URL}/auth/login`,
