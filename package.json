@@ -101,7 +101,7 @@
     "snyk-to-html": "2.1.0",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "22.0.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.16",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.17",
     "ts-jest": "27.0.5",
     "tslib": "2.3.1",
     "tslint-react-hooks": "2.2.2",
