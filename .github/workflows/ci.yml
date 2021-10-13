@@ -83,7 +83,7 @@ jobs:
           path: cypress/reports/html
 
       - name: Snyk report
-        if: success() && github.ref != 'refs/heads/master'
+        if: success() && github.ref == 'refs/heads/master'
         run: |
           npx snyk auth ${{ secrets.SNYK_TOKEN }}
           npx snyk test --json-file-output=snyk-report.json || true
