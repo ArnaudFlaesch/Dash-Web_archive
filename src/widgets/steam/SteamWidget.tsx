@@ -7,11 +7,18 @@ import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import GameDetails from './details/GameDetails';
 import { IGameInfo } from './IGameInfo';
+import { IPlayerData } from './IPlayerData';
 
-interface IPlayerData {
-  personaname: string;
-  profileurl: string;
-  avatar: string;
+interface IPlayerDataResponse {
+  response: {
+    players: IPlayerData[];
+  };
+}
+
+interface IOwnedGamesResponse {
+  response: {
+    games: IGameInfo[];
+  };
 }
 
 export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElement {
@@ -35,7 +42,7 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
 
   function getPlayerData(): void {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      .get<IPlayerDataResponse>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
         headers: {
           Authorization: authorizationBearer(),
           'Content-type': 'application/json'
@@ -54,7 +61,7 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
 
   function getOwnedGames(): void {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
+      .get<IOwnedGamesResponse>(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
         headers: {
           Authorization: authorizationBearer(),
           'Content-type': 'application/json'

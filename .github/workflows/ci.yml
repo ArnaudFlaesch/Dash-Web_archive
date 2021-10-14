@@ -82,6 +82,19 @@ jobs:
           name: Cypress report
           path: cypress/reports/html
 
+      - name: Snyk report
+        if: success() && github.ref == 'refs/heads/master'
+        run: |
+          npx snyk auth ${{ secrets.SNYK_TOKEN }}
+          npx snyk test --json-file-output=snyk-report.json || true
+          npx snyk-to-html -i snyk-report.json -o snyk-report.html
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Snyk report
+          path: snyk-report.html
+
       - name: Generate coverage
         run: |
           mkdir coverage-reports || true && mkdir .nyc_output || true

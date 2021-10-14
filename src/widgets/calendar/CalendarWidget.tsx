@@ -55,7 +55,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
     setSchedules([]);
     calendarUrls?.map((calendarUrl: string) => {
       axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`, {
+        .get<string>(`${process.env.REACT_APP_BACKEND_URL}/proxy/?url=${calendarUrl}`, {
           headers: {
             Authorization: authorizationBearer(),
             'Content-type': 'application/json'
