@@ -27,7 +27,7 @@ export interface IMenu {
   icon: string;
 }
 
-interface jwt {
+interface IJwt {
   sub: string;
   iat: number;
   exp: number;
@@ -180,7 +180,7 @@ export default function Dash(): React.ReactElement {
     if (!authenticatedUser || !authenticatedUser.accessToken) {
       return false;
     } else {
-      return Date.now() >= jwt_decode<jwt>(authenticatedUser.accessToken).exp * 1000;
+      return Date.now() >= jwt_decode<IJwt>(authenticatedUser.accessToken).exp * 1000;
     }
   }
 
