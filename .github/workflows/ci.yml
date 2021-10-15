@@ -51,7 +51,7 @@ jobs:
 
       - name: Lint
         run: |
-          npm run lint:styles
+          npm run lint:styles:report
           npm run eslint
 
       - name: Build
