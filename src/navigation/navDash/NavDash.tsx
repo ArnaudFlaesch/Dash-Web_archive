@@ -1,7 +1,9 @@
 import { ReactElement, useState } from 'react';
 import { Button, NavItem, NavLink } from 'reactstrap';
+import logger from 'src/utils/LogUtils';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
+
 interface IProps {
   tab: ITab;
   onTabClicked: () => void;
@@ -13,13 +15,15 @@ export default function NavDash(props: IProps): ReactElement {
   const [isToggled, toggle] = useState(false);
 
   function deleteTabFromDash() {
-    deleteTab(props.tab.id).then(() => props.onTabDeleted(props.tab.id));
+    deleteTab(props.tab.id)
+      .then(() => props.onTabDeleted(props.tab.id))
+      .catch((error) => logger.error(error.message));
   }
 
   function saveTabName() {
-    updateTab(props.tab.id, label, props.tab.tabOrder).then(() => {
-      toggle(!isToggled);
-    });
+    updateTab(props.tab.id, label, props.tab.tabOrder)
+      .then(() => toggle(!isToggled))
+      .catch((error) => logger.error(error.message));
   }
 
   function clickToggle() {

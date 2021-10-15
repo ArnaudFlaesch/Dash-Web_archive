@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import authorizationBearer from 'src/services/auth.header';
+import logger from 'src/utils/LogUtils';
 import CircularProgressBar from 'src/widgets/utils/circular-progress/CircularProgressBar';
 import { IGameInfo } from '../IGameInfo';
 
@@ -42,7 +43,8 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
             response.data.playerstats.achievements.filter((achievement: IAchievement) => achievement.achieved === 1)
           );
         }
-      });
+      })
+      .catch((error) => logger.error(error.message));
   }, [props]);
 
   return (

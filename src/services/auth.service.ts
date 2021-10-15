@@ -31,9 +31,12 @@ function logout(): void {
   window.location.reload();
 }
 
-function getCurrentUser(): unknown {
-  if (localStorage.getItem('user')) {
-    return JSON.parse(localStorage.getItem('user') || '');
+function getCurrentUser(): IUser | null {
+  const userData = localStorage.getItem('user');
+  if (!userData) {
+    return null;
+  } else {
+    return JSON.parse(userData);
   }
 }
 
