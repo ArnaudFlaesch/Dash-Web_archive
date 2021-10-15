@@ -105,8 +105,10 @@ jobs:
 
       - name: Send coverage report
         run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov 
+          chmod +x codecov
+          ./codecov -t ${{ secrets.CODECOV_TOKEN }}
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/clover.xml --project-token ${{ secrets.CODACY_PROJECT_TOKEN }}
-          bash <(curl -s https://codecov.io/bash)
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
