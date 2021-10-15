@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AuthService from '../../services/auth.service';
+import logo from '../../assets/logo.png';
 
 export default function Login(): React.ReactElement {
   const [username, setUsername] = useState('');
@@ -39,51 +40,53 @@ export default function Login(): React.ReactElement {
   }
 
   return (
-    <div className="col-md-12">
-      <div>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            id="inputUsername"
-            type="text"
-            className="form-control"
-            name="username"
-            value={username}
-            onChange={onChangeUsername}
-          />
+    <div className="flex h-screen">
+      <div className="text-center m-auto">
+        <div>
+          <img src={logo} className="mx-auto" alt="dash logo" />
         </div>
-
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            id="inputPassword"
-            type="password"
-            className="form-control"
-            name="password"
-            value={password}
-            onChange={onChangePassword}
-          />
+        <div>
+          <h1 className="text-5xl">Dash</h1>
         </div>
-
-        <div className="form-group">
+        <div className="mt-10 space-y-5">
+          <div>
+            <label htmlFor="username">Username</label>
+            <input
+              id="inputUsername"
+              type="text"
+              className="form-control"
+              name="username"
+              value={username}
+              onChange={onChangeUsername}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input
+              id="inputPassword"
+              type="password"
+              className="form-control"
+              name="password"
+              value={password}
+              onChange={onChangePassword}
+            />
+          </div>
           <button
             id="loginButton"
             disabled={!username || !password || loading}
             onClick={handleLogin}
-            className="btn btn-success btn-block"
+            className="flex mx-auto btn btn-success btn-block"
           >
             {loading && <span className="spinner-border spinner-border-sm"></span>}
             <span>Se connecter</span>
           </button>
-        </div>
 
-        {message && (
-          <div className="form-group">
+          {message && (
             <div className="alert alert-danger" role="alert">
               {message}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

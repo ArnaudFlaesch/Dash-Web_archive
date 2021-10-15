@@ -20,10 +20,17 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
+import jwt_decode from 'jwt-decode';
 
 export interface IMenu {
   link: string;
   icon: string;
+}
+
+interface jwt {
+  sub: string;
+  iat: number;
+  exp: number;
 }
 
 export default function Dash(): React.ReactElement {
@@ -37,8 +44,11 @@ export default function Dash(): React.ReactElement {
   const refreshTimeout = 900000; // 15 minutes
 
   useEffect(() => {
-    const interval = setInterval(refreshAllWidgets, refreshTimeout);
-    return () => clearInterval(interval); // Clear interval on unmount
+    if (isUserAuthenticated()) {
+      initDashboard();
+      const interval = setInterval(refreshAllWidgets, refreshTimeout);
+      return () => clearInterval(interval); // Clear interval on unmount
+    }
   }, []);
 
   useEffect(() => {
@@ -81,11 +91,15 @@ export default function Dash(): React.ReactElement {
 
   function addNewTab() {
     const newTabLabel = 'Nouvel onglet';
-    addTab(newTabLabel).then((response) => {
-      const insertedTab = response.data as ITab;
-      setTabs(tabs.concat(insertedTab));
-      dispatch(toggleSelectedTab(insertedTab.id));
-    });
+    addTab(newTabLabel)
+      .then((response) => {
+        const insertedTab = response.data as ITab;
+        setTabs(tabs.concat(insertedTab));
+        dispatch(toggleSelectedTab(insertedTab.id));
+      })
+      .catch((error) => {
+        logger.error(error.message);
+      });
   }
 
   function getNewWidget(tabId: number) {
@@ -140,9 +154,9 @@ export default function Dash(): React.ReactElement {
       (tab as ITab).tabOrder = index;
       return tab;
     });
-    updateTabs(items as ITab[]).then((response) => {
-      setTabs(response.data as ITab[]);
-    });
+    updateTabs(items as ITab[])
+      .then((response) => setTabs(response.data as ITab[]))
+      .catch((error) => logger.error(error.message));
   }
 
   function downloadConfig(): Promise<void> {
@@ -161,12 +175,23 @@ export default function Dash(): React.ReactElement {
       });
   }
 
-  useEffect(initDashboard, []);
+  function isTokenExpired(): boolean {
+    const authenticatedUser = authService.getCurrentUser();
+    if (!authenticatedUser || !authenticatedUser.accessToken) {
+      return false;
+    } else {
+      return Date.now() >= jwt_decode<jwt>(authenticatedUser.accessToken).exp * 1000;
+    }
+  }
+
+  function isUserAuthenticated(): boolean {
+    return authService.getCurrentUser() !== null && !isTokenExpired();
+  }
 
   return (
     <div className="dash">
-      {!authService.getCurrentUser() && <Login />}
-      {authService.getCurrentUser() && (
+      {!isUserAuthenticated() && <Login />}
+      {isUserAuthenticated() && (
         <div className="flex flex-row">
           <div className="dashNavbar">
             {activeTab && tabs.length > 0 && (
