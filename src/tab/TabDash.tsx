@@ -129,7 +129,7 @@ export default function TabDash(props: IProps): React.ReactElement {
 
   return (
     <TabPane tabId={props.tabId}>
-      <div className="widgetList">
+      <div className="widgetList grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {widgets &&
           widgets.length > 0 &&
           widgets.map((widgetConfig: IWidgetConfig) => {
