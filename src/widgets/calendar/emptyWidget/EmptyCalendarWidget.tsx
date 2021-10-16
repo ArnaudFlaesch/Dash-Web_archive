@@ -1,6 +1,5 @@
 import { Button, Input } from '@mui/material';
 import { useState } from 'react';
-import './EmptyCalendarWidget.scss';
 
 interface IProps {
   calendarUrls?: string[];

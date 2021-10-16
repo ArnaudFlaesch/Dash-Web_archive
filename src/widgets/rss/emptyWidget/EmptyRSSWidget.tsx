@@ -1,6 +1,5 @@
 import { Button, Input } from '@mui/material';
 import { useState } from 'react';
-import './EmptyRSSWidget.scss';
 
 interface IProps {
   url?: string;
