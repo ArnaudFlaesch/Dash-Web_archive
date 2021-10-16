@@ -13,6 +13,7 @@ import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
+import './TabDash.scss';
 
 interface IProps {
   tabId: number;

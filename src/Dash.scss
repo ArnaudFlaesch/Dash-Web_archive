@@ -14,42 +14,6 @@
 
   .tabsBar {
     width: 95vw;
-
-    .widgetList {
-      .widget {
-        margin: 10px 10px 10px 5px;
-        border: 2px solid black;
-        height: 500px;
-        overflow-y: scroll;
-
-        .header {
-          background-color: black;
-          color: white;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          .leftGroup {
-            text-align: start;
-            flex-grow: 1;
-          }
-
-          .rightGroup {
-            display: flex;
-            flex-direction: row;
-            text-align: end;
-
-            button {
-              color: white;
-            }
-          }
-        }
-
-        .widgetBody {
-          height: 100%;
-        }
-      }
-    }
   }
 }
 

@@ -25,6 +25,7 @@ export default function Login(): React.ReactElement {
       AuthService.login(username, password).then(
         () => {
           window.location.reload();
+          setLoading(false);
         },
         (error) => {
           const resMessage =

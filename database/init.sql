@@ -1,1 +1,0 @@
-CREATE DATABASE dash_test;
