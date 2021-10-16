@@ -90,7 +90,7 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
   );
 
   const widgetBody = (
-    <div className="flex flex-column">
+    <div className="flex flex-col">
       {ownedGames &&
         ownedGames.map((game: IGameInfo) => {
           return (

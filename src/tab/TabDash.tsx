@@ -31,15 +31,9 @@ export default function TabDash(props: IProps): React.ReactElement {
           'Content-type': 'application/json'
         }
       })
-        .then((result) => {
-          return result.json();
-        })
-        .then((result) => {
-          setWidgets(result);
-        })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
+        .then((result) => result.json())
+        .then((result) => setWidgets(result))
+        .catch((error: Error) => logger.error(error.message));
     }
   }, [activeTab]);
 

@@ -2,6 +2,10 @@ import { ReactElement, useEffect, useState } from 'react';
 import { useCustomEventListener } from 'react-custom-events';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { IconButton } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface IProps {
   id: number;
@@ -49,16 +53,16 @@ export default function Widget(props: IProps): ReactElement {
             <div className="rightGroup">
               {props.additionalActionButtons}
               {props.editModeComponent && (
-                <button onClick={editWidget} className="btn btn-default editButton">
-                  <i className="fa fa-cog" aria-hidden="true" />
-                </button>
+                <IconButton onClick={editWidget} className="editButton">
+                  <SettingsIcon />
+                </IconButton>
               )}
-              <button onClick={props.refreshFunction} className="btn btn-default refreshButton">
-                <i className="fa fa-refresh" aria-hidden="true" />
-              </button>
-              <button onClick={deleteWidget} className="btn btn-default deleteButton">
-                <i className="fa fa-trash" aria-hidden="true" />
-              </button>
+              <IconButton onClick={props.refreshFunction} className="refreshButton">
+                <RefreshIcon />
+              </IconButton>
+              <IconButton onClick={deleteWidget} className="deleteButton">
+                <DeleteIcon />
+              </IconButton>
             </div>
           </div>
           {props.body}

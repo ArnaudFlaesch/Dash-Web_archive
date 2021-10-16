@@ -1,10 +1,14 @@
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DownloadIcon from '@mui/icons-material/Download';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { Button, IconButton } from '@mui/material';
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Nav, TabContent } from 'reactstrap';
+import { Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
 import CreateWidgetModal from './modals/CreateWidgetModal';
 import ImportConfigModal from './modals/ImportConfigModal';
@@ -21,7 +25,6 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
-
 export interface IMenu {
   link: string;
   icon: string;
@@ -198,14 +201,14 @@ export default function Dash(): React.ReactElement {
               <Nav vertical={true} navbar={true}>
                 <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
                 <div>
-                  <Button id="reloadAllWidgetsButton" className="dashNavbarLink" onClick={refreshAllWidgets}>
-                    <i className="fa fa-refresh fa-lg" aria-hidden="true" />
-                  </Button>
+                  <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                    <RefreshIcon />
+                  </IconButton>
                 </div>
                 <div>
-                  <Button id="downloadConfigButton" className="dashNavbarLink" onClick={downloadConfig}>
-                    <i className="fa fa-download fa-lg" aria-hidden="true" />
-                  </Button>
+                  <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                    <DownloadIcon />
+                  </IconButton>
                 </div>
 
                 <ImportConfigModal />
@@ -213,7 +216,7 @@ export default function Dash(): React.ReactElement {
             )}
           </div>
 
-          <div className="flex flex-column tabsBar">
+          <div className="flex flex-col tabsBar">
             <Nav tabs={true}>
               <div className="flex flex-row">
                 <DragDropContext onDragEnd={onDragEnd}>
@@ -251,8 +254,12 @@ export default function Dash(): React.ReactElement {
                     )}
                   </Droppable>
                 </DragDropContext>
-                <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
-                <Button onClick={authService.logout} className="btn btn-primary">
+
+                <Button id="addNewTabButton" variant="contained" startIcon={<AddCircleOutlineIcon />}>
+                  Ajouter un widget
+                </Button>
+
+                <Button onClick={authService.logout} variant="contained">
                   Se déconnecter
                 </Button>
               </div>

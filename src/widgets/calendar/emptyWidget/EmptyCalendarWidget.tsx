@@ -1,3 +1,4 @@
+import { Button, Input } from '@mui/material';
 import { useState } from 'react';
 import './EmptyCalendarWidget.scss';
 
@@ -34,31 +35,38 @@ export default function EmptyCalendarWidget(props: IProps): React.ReactElement {
         {calendarUrls &&
           calendarUrls.map((url, index) => {
             return (
-              <div key={index}>
-                <input
+              <div key={index} className="flex flex-row">
+                <Input
                   id={index.toString()}
                   onChange={onCalendarUrlUpdated}
                   value={url}
                   placeholder="Saisissez une URL"
                 />
-                <button className="removeCalendarUrl btn btn-danger" onClick={() => removeCalendarUrl(url)}>
+
+                <Button
+                  className="removeCalendarUrl"
+                  variant="contained"
+                  color="error"
+                  onClick={() => removeCalendarUrl(url)}
+                >
                   Supprimer
-                </button>
+                </Button>
               </div>
             );
           })}
-        <button id="addCalendarUrl" className="btn btn-primary" onClick={onCalendarUrlAdded}>
+        <Button id="addCalendarUrl" variant="contained" onClick={onCalendarUrlAdded}>
           Ajouter
-        </button>
+        </Button>
       </div>
-      <button
+      <Button
         id="validateCalendarUrls"
         onClick={onValidation}
         disabled={!calendarUrls || calendarUrls?.length < 1}
-        className="btn btn-success"
+        variant="contained"
+        color="success"
       >
         Valider
-      </button>
+      </Button>
     </div>
   );
 }

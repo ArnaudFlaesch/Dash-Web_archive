@@ -1,7 +1,7 @@
-import { ReactElement, useState, MouseEvent } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { MouseEvent, ReactElement, useState } from 'react';
 import Store from 'src/pages/store/Store';
-
 interface IProps {
   onWidgetAdded: (type: MouseEvent<HTMLButtonElement>) => void;
 }
@@ -15,20 +15,21 @@ export default function CreateWidgetModal(props: IProps): ReactElement {
 
   return (
     <div>
-      <Button id="openAddWidgetModal" className="dashNavbarLink" onClick={toggleCreateWidgetModal}>
-        <i className="fa fa-plus-circle fa-lg" aria-hidden="true" />
-      </Button>
-      <Modal isOpen={createWidgetModal} size="lg" toggle={toggleCreateWidgetModal}>
-        <ModalHeader toggle={toggleCreateWidgetModal}>Ajouter un widget</ModalHeader>
-        <ModalBody>
+      <IconButton id="openAddWidgetModal" color="primary" onClick={toggleCreateWidgetModal}>
+        <AddCircleOutlineIcon />
+      </IconButton>
+      <Dialog onClose={() => setCreateWidgetModal(false)} open={createWidgetModal}>
+        <DialogTitle>Ajouter un widget</DialogTitle>
+        <DialogContent>
           <Store onWidgetAdded={props.onWidgetAdded} />
-        </ModalBody>
-        <ModalFooter>
-          <Button id="closeAddWidgetModal" color="primary" onClick={toggleCreateWidgetModal}>
+        </DialogContent>
+
+        <DialogActions>
+          <Button id="closeAddWidgetModal" onClick={toggleCreateWidgetModal} variant="contained">
             Fermer
           </Button>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

@@ -1,33 +1,34 @@
-import { FunctionComponent, MouseEvent } from 'react';
-import { Button, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle } from 'reactstrap';
+import { CardActions, CardContent, Card, Button } from '@mui/material';
+import { MouseEvent } from 'react';
 import { WidgetTypes } from '../../enums/WidgetsEnum';
 
 interface IProps {
   onWidgetAdded: (type: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Store: FunctionComponent<IProps> = (props) => {
+export default function Store(props: IProps): React.ReactElement {
   return (
     <div className="grid grid-cols-4 gap-3">
       {Object.keys(WidgetTypes).map((key) => {
         return (
           isNaN(parseInt(key, 0)) && (
             <Card key={key}>
-              <CardImg top={true} width="100%" src="/assets/318x180.svg" alt="Card image cap" />
-              <CardBody>
-                <CardTitle>{key}</CardTitle>
-                <CardSubtitle>Widget {key}</CardSubtitle>
-                <CardText>Cliquez ci-dessous pour ajouter un widget {key} au dashboard.</CardText>
-                <Button id={key} onClick={props.onWidgetAdded} className="btn btn-success" value={WidgetTypes[key]}>
+              <CardContent>
+                <div className="flex flex-col space-y-5">
+                  <span>{key}</span>
+                  <span>Widget {key}</span>
+                  <span>Cliquez ci-dessous pour ajouter un widget {key} au dashboard.</span>
+                </div>
+              </CardContent>
+              <CardActions>
+                <Button id={key} onClick={props.onWidgetAdded} variant="contained" value={WidgetTypes[key]}>
                   Ajouter
                 </Button>
-              </CardBody>
+              </CardActions>
             </Card>
           )
         );
       })}
     </div>
   );
-};
-
-export default Store;
+}

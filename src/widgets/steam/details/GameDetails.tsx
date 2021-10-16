@@ -57,7 +57,7 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
       </div>
       {achievements && completedAchievements && achievements.length > 0 && (
         <div className="flex flex-row">
-          <div className="flex flex-column">
+          <div className="flex flex-col">
             <div className="totalachievements">Succès : {achievements.length}</div>
             <div className="completedAchievements">Succès complétés : {completedAchievements.length}</div>
           </div>
