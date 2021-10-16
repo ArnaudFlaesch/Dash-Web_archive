@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import authorizationBearer from 'src/services/auth.header';
 import logger from 'src/utils/LogUtils';
-import CircularProgressWithLabel from 'src/widgets/utils/circular-progress/CircularProgressBar';
+import CircularProgressWithLabel from 'src/widgets/utils/circular-progress/CircularProgressWithLabel';
 import { IGameInfo } from '../IGameInfo';
 
 interface IAchievement {
