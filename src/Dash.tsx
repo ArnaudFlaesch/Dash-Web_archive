@@ -2,7 +2,6 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DownloadIcon from '@mui/icons-material/Download';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Button, IconButton } from '@mui/material';
-import 'font-awesome/fonts/fontawesome-webfont.svg';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
