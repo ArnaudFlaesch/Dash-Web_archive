@@ -1,5 +1,5 @@
+import { Button, Input } from '@mui/material';
 import { useState } from 'react';
-import './EmptyWeatherWidget.scss';
 
 interface IProps {
   city?: string;
@@ -14,22 +14,23 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
   };
 
   return (
-    <div>
-      <input
+    <div className="flex flex-col mx-auto max-w-xs mt-10 space-y-8">
+      <Input
         id="cityNameInput"
         name="city"
         onChange={onCityChangeHandler}
         value={city}
         placeholder="Saisissez de nom de la ville"
       />
-      <button
+      <Button
+        variant="contained"
         id="validateButton"
         className="btn btn-success"
         onClick={onValidation}
         disabled={!city || city?.length < 1}
       >
         Valider
-      </button>
+      </Button>
     </div>
   );
 }
