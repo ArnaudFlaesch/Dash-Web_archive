@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import ITab from '../../tab_facebook/ITab';
-import TabNavigation from '../../tab_facebook/TabNavigation';
 import logger from '../../utils/LogUtils';
 import EventsTab from './events/EventsTab';
 import { getProfileInfo } from './FacebookAPI';
@@ -143,11 +142,7 @@ export default class FacebookWidget extends Component<IProps, IState> {
     return (
       <div>
         {element}
-        {this.state && this.state.userData && (
-          <div>
-            <TabNavigation tabList={tabs} />
-          </div>
-        )}
+        {this.state && this.state.userData && <div>{tabs}</div>}
       </div>
     );
   }

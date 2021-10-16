@@ -1,4 +1,5 @@
 import 'font-awesome/fonts/fontawesome-webfont.svg';
+import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
@@ -20,7 +21,6 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
-import jwt_decode from 'jwt-decode';
 
 export interface IMenu {
   link: string;

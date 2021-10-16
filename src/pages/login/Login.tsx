@@ -1,6 +1,7 @@
+import { Alert, Button, CircularProgress, Input } from '@mui/material';
 import React, { useState } from 'react';
-import AuthService from '../../services/auth.service';
 import logo from '../../assets/logo.png';
+import AuthService from '../../services/auth.service';
 
 export default function Login(): React.ReactElement {
   const [username, setUsername] = useState('');
@@ -24,7 +25,6 @@ export default function Login(): React.ReactElement {
       AuthService.login(username, password).then(
         () => {
           window.location.reload();
-          setLoading(false);
         },
         (error) => {
           const resMessage =
@@ -48,44 +48,28 @@ export default function Login(): React.ReactElement {
         <div>
           <h1 className="text-5xl">Dash</h1>
         </div>
-        <div className="mt-10 space-y-5">
-          <div>
-            <label htmlFor="username">Username</label>
-            <input
-              id="inputUsername"
-              type="text"
-              className="form-control"
-              name="username"
-              value={username}
-              onChange={onChangeUsername}
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              id="inputPassword"
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-            />
-          </div>
-          <button
+        <div className="flex flex-col mt-10 space-y-5">
+          <Input id="inputUsername" placeholder="Username" value={username} onChange={onChangeUsername} />
+
+          <Input
+            id="inputPassword"
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={onChangePassword}
+          />
+
+          <Button
             id="loginButton"
             disabled={!username || !password || loading}
             onClick={handleLogin}
-            className="flex mx-auto btn btn-success btn-block"
+            variant="contained"
+            className="flex mx-auto"
           >
-            {loading && <span className="spinner-border spinner-border-sm"></span>}
+            {loading && <CircularProgress className="mr-5" />}
             <span>Se connecter</span>
-          </button>
-
-          {message && (
-            <div className="alert alert-danger" role="alert">
-              {message}
-            </div>
-          )}
+          </Button>
+          {message && <Alert severity="error">{message}</Alert>}
         </div>
       </div>
     </div>
