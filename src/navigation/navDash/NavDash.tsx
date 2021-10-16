@@ -1,9 +1,10 @@
 import { ReactElement, useState } from 'react';
-import { Button, NavItem, NavLink } from 'reactstrap';
+import { NavItem, NavLink } from 'reactstrap';
 import logger from 'src/utils/LogUtils';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, Input } from '@mui/material';
 interface IProps {
   tab: ITab;
   onTabClicked: () => void;
@@ -41,15 +42,15 @@ export default function NavDash(props: IProps): ReactElement {
       <NavLink onClick={props.onTabClicked}>
         {isToggled ? (
           <div className="flex flex-row">
-            <input
+            <Input
               onDoubleClick={saveTabName}
               onKeyPress={enterSaveTabName}
               onChange={(event) => setLabel(event.target.value)}
               value={label}
             />
-            <Button className="deleteTabButton" onClick={deleteTabFromDash}>
-              <i className="fa fa-trash" />
-            </Button>
+            <IconButton className="deleteTabButton" color="primary" onClick={deleteTabFromDash}>
+              <DeleteIcon />
+            </IconButton>
           </div>
         ) : (
           <span onDoubleClick={clickToggle}>{label}</span>

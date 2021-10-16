@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import axios, { AxiosResponse } from 'axios';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
@@ -190,27 +191,30 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           <div className="flex flex-row space-x-10">
             <span className="font-bold">Prévisions</span>
             <span className="flex flex-row space-x-1">
-              <button
+              <Button
                 id="toggleTodayForecast"
                 onClick={selectTodayForecast}
-                className={`btn btn-${forecastMode === ForecastMode.TODAY ? 'success' : 'primary'} `}
+                variant="contained"
+                color={forecastMode === ForecastMode.TODAY ? 'success' : 'primary'}
               >
                 Aujourd'hui
-              </button>
-              <button
+              </Button>
+              <Button
                 id="toggleTomorrowForecast"
+                variant="contained"
+                color={forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}
                 onClick={selectTomorrowForecast}
-                className={`btn btn-${forecastMode === ForecastMode.TOMORROW ? 'success' : 'primary'}`}
               >
                 Demain
-              </button>
-              <button
+              </Button>
+              <Button
                 id="toggleWeekForecast"
                 onClick={selectWeekForecast}
-                className={`btn btn-${forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}`}
+                variant="contained"
+                color={forecastMode === ForecastMode.WEEK ? 'success' : 'primary'}
               >
                 Semaine
-              </button>
+              </Button>
             </span>
           </div>
           <br />

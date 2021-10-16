@@ -25,7 +25,7 @@ export default function EmptyWeatherWidget(props: IProps): React.ReactElement {
       <Button
         variant="contained"
         id="validateButton"
-        className="btn btn-success"
+        color="success"
         onClick={onValidation}
         disabled={!city || city?.length < 1}
       >

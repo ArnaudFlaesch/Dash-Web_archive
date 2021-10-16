@@ -254,7 +254,12 @@ export default function Dash(): React.ReactElement {
                   </Droppable>
                 </DragDropContext>
 
-                <Button id="addNewTabButton" variant="contained" startIcon={<AddCircleOutlineIcon />}>
+                <Button
+                  id="addNewTabButton"
+                  onClick={addNewTab}
+                  variant="contained"
+                  startIcon={<AddCircleOutlineIcon />}
+                >
                   Ajouter un widget
                 </Button>
 

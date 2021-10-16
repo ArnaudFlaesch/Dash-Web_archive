@@ -24,7 +24,13 @@ export default function EmptyRSSWidget(props: IProps): React.ReactElement {
         value={url}
         placeholder="Saisissez l'URL du flux RSS"
       />
-      <Button variant="contained" onClick={onValidation} disabled={!url || url?.length < 1}>
+      <Button
+        className="validateRssUrl"
+        color="success"
+        variant="contained"
+        onClick={onValidation}
+        disabled={!url || url?.length < 1}
+      >
         Valider
       </Button>
     </div>

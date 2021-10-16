@@ -23,11 +23,11 @@ describe('RSS Widget tests', () => {
       .as('refreshWidget')
       .get('.editButton')
       .click()
-      .get('.btn-success')
+      .get('.validateRssUrl')
       .should('be.disabled')
       .get('input')
       .type('http://www.lefigaro.fr/rss/figaro_actualites.xml')
-      .get('.btn-success')
+      .get('.validateRssUrl')
       .click()
       .wait('@refreshWidget')
       .then(() => {
@@ -89,7 +89,7 @@ describe('RSS Widget tests', () => {
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
-      .get('.btn-danger')
+      .get('.validateDeletionButton')
       .click()
       .wait('@deleteWidget')
       .then(() => {

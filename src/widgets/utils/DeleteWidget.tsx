@@ -18,7 +18,7 @@ export default function DeleteWidget(props: IProps): ReactElement {
       <Button onClick={props.onCancelButtonClicked} variant="contained" color="primary" className="cancelButton">
         Annuler
       </Button>
-      <Button onClick={confirmDeleteWidget} variant="contained" color="error" className=" validateDeletionButton">
+      <Button onClick={confirmDeleteWidget} variant="contained" color="error" className="validateDeletionButton">
         Supprimer
       </Button>
     </div>

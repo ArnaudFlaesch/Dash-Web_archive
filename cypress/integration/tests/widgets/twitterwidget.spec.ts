@@ -26,11 +26,11 @@ describe('Twitter Widget tests', () => {
     cy.intercept('PATCH', '/widget/updateWidgetData')
       .get('.editButton')
       .click()
-      .get('.btn-success')
+      .get('.validateProfileButton')
       .should('be.disabled')
       .get('input')
       .type('nodejs')
-      .get('.btn-success')
+      .get('.validateProfileButton')
       .click()
       .then(() => {
         cy.get('iframe').should('be.visible');
@@ -44,7 +44,7 @@ describe('Twitter Widget tests', () => {
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
-      .get('.btn-danger')
+      .get('.validateDeletionButton')
       .click()
       .wait('@deleteWidget')
       .then(() => {

@@ -91,7 +91,7 @@ describe('Calendar Widget tests', () => {
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
-      .get('.btn-danger')
+      .get('.validateDeletionButton')
       .click()
       .wait('@deleteWidget')
       .then(() => {

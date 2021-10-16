@@ -1,3 +1,6 @@
+import CheckIcon from '@mui/icons-material/Check';
+import MinimizeIcon from '@mui/icons-material/Minimize';
+import { IconButton } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import RSSParser from 'rss-parser';
@@ -150,12 +153,13 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   const additionalActionButtons = (
     <div className="flex flex-row">
-      <button onClick={markAllFeedAsRead} className="btn btn-default markAllArticlesAsRead">
-        <i className="fa fa-check-circle-o" aria-hidden="true" />
-      </button>
-      <button onClick={closeFeeds} className="btn btn-default minimizeAllArticles">
-        <i className="fa fa-window-minimize" aria-hidden="true" />
-      </button>
+      <IconButton className="markAllArticlesAsRead" color="primary" onClick={markAllFeedAsRead}>
+        <CheckIcon />
+      </IconButton>
+
+      <IconButton className="minimizeAllArticles" color="primary" onClick={closeFeeds}>
+        <MinimizeIcon />
+      </IconButton>
     </div>
   );
 
