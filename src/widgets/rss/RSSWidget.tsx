@@ -88,11 +88,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
           minute: '2-digit'
         })
       : '';
-    return (
-      <div className={`rssArticle ${readArticles.includes(article.guid) ? 'read' : ''}`}>
-        {date} {article.title}
-      </div>
-    );
+    return `${date} ${article.title}`;
   }
 
   function onOpenDetail(guid: string): void {
@@ -124,11 +120,19 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   }
 
   function getFeedFromRSS(data: IArticle[]) {
-    return data.map((article) => {
+    return data.map((article, index: number) => {
       return (
         <ComponentWithDetail
           key={article.guid}
-          componentRoot={formatTitleForArticle(article)}
+          componentRoot={
+            <div
+              className={`rssArticle 
+              ${readArticles.includes(article.guid) ? 'read' : ''} 
+              ${index % 2 ? 'bg-gray-200' : ''}`}
+            >
+              {formatTitleForArticle(article)}
+            </div>
+          }
           componentDetail={<RSSArticle {...article} />}
           link={article.link}
           isClosed={isFeedClosed}

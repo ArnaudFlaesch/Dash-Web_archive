@@ -159,6 +159,12 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
     </div>
   );
 
+  function getTitleToDisplay(activity: IActivity): string {
+    return `${format(new Date(activity.start_date_local), 'dd MMM')}  ${activity.name}  ${
+      Math.round(activity.distance * 1000) / 1000000
+    } kms`;
+  }
+
   const widgetBody = (
     <div className="flex flex-col">
       {token &&
@@ -170,13 +176,13 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
               {activities
                 .slice()
                 .reverse()
-                .map((activity: IActivity) => {
+                .map((activity: IActivity, index: number) => {
                   return (
                     <ComponentWithDetail
                       key={activity.id}
-                      componentRoot={`${format(new Date(activity.start_date_local), 'dd MMM')}  ${activity.name}  ${
-                        Math.round(activity.distance * 1000) / 1000000
-                      } kms`}
+                      componentRoot={
+                        <div className={`${index % 2 ? 'bg-gray-200' : ''}`}>{getTitleToDisplay(activity)}</div>
+                      }
                       componentDetail={<StravaActivity {...activity} />}
                       link={`https://www.strava.com/activities/${activity.id}`}
                     />
