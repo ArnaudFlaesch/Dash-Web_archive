@@ -1,7 +1,9 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DownloadIcon from '@mui/icons-material/Download';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { Button, IconButton, Tabs } from '@mui/material';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import { Button, IconButton } from '@mui/material';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
@@ -190,43 +192,45 @@ export default function Dash(): React.ReactElement {
   }
 
   return (
-    <div className="dash">
+    <div>
       {!isUserAuthenticated() && <Login />}
       {isUserAuthenticated() && (
-        <div className="flex flex-col">
-          <div className="flex flex-row justify-between m-1">
-            <Tabs value={activeTab} /*onChange={handleTabChange}*/>
+        <TabContext value={activeTab.toString()}>
+          <div className="flex flex-col">
+            <div className="flex flex-row justify-between m-1">
               <div className="flex flex-row">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
                       <div
-                        className="flex flex-row"
+                        className="flex flex-row space-x-2"
                         {...providedDroppable.droppableProps}
                         ref={providedDroppable.innerRef}
                       >
-                        {tabs.length > 0 &&
-                          tabs.map((tab: ITab, index: number) => {
-                            return (
-                              <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
-                                {(providedDraggable) => (
-                                  <div
-                                    key={tab.id}
-                                    ref={providedDraggable.innerRef}
-                                    {...providedDraggable.draggableProps}
-                                    {...providedDraggable.dragHandleProps}
-                                    className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
-                                  >
-                                    <NavDash
-                                      tab={tab}
-                                      onTabClicked={() => toggleTab(tab.id)}
-                                      onTabDeleted={onTabDeleted}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
-                            );
-                          })}
+                        <TabList>
+                          {tabs.length > 0 &&
+                            tabs.map((tab: ITab, index: number) => {
+                              return (
+                                <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
+                                  {(providedDraggable) => (
+                                    <div
+                                      key={tab.id}
+                                      ref={providedDraggable.innerRef}
+                                      {...providedDraggable.draggableProps}
+                                      {...providedDraggable.dragHandleProps}
+                                      className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
+                                    >
+                                      <NavDash
+                                        tab={tab}
+                                        onTabClicked={() => toggleTab(tab.id)}
+                                        onTabDeleted={onTabDeleted}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              );
+                            })}
+                        </TabList>
                         {providedDroppable.placeholder}
                       </div>
                     )}
@@ -237,29 +241,31 @@ export default function Dash(): React.ReactElement {
                   <AddCircleOutlineIcon />
                 </IconButton>
               </div>
-            </Tabs>
-            <div className="flex flex-row place-content-center">
-              <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-              <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
-                <RefreshIcon />
-              </IconButton>
+              <div className="flex flex-row place-content-center">
+                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
+                <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                  <RefreshIcon />
+                </IconButton>
 
-              <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
-                <DownloadIcon />
-              </IconButton>
+                <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                  <DownloadIcon />
+                </IconButton>
 
-              <ImportConfigModal />
+                <ImportConfigModal />
 
-              <Button onClick={authService.logout} variant="contained">
-                Se déconnecter
-              </Button>
+                <Button onClick={authService.logout} variant="contained">
+                  Déconnexion
+                </Button>
+              </div>
             </div>
+            {tabs.length > 0 &&
+              tabs
+                .filter((tab) => tab.id === activeTab)
+                .map((tab: ITab) => {
+                  return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
+                })}
           </div>
-          {tabs.length > 0 &&
-            tabs.map((tab: ITab) => {
-              return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
-            })}
-        </div>
+        </TabContext>
       )}
     </div>
   );

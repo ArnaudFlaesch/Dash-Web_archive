@@ -4,6 +4,8 @@ import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, Input, Tab } from '@mui/material';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+
 interface IProps {
   tab: ITab;
   onTabClicked: () => void;
@@ -37,7 +39,7 @@ export default function NavDash(props: IProps): ReactElement {
   }
 
   return (
-    <div onClick={props.onTabClicked}>
+    <div onClick={props.onTabClicked} className="border-2 border-gray-800 border-opacity-100">
       {isToggled ? (
         <div className="flex flex-row">
           <Input
@@ -51,7 +53,14 @@ export default function NavDash(props: IProps): ReactElement {
           </IconButton>
         </div>
       ) : (
-        <Tab key={props.tab.id} onDoubleClick={clickToggle} label={label} />
+        <div className="flex flex-row">
+          <div>
+            <Tab onDoubleClick={clickToggle} value={props.tab.id.toString()} label={label} wrapped />
+          </div>
+          <div>
+            <DragHandleIcon />
+          </div>
+        </div>
       )}
     </div>
   );
