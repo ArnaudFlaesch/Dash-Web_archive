@@ -21,7 +21,13 @@ export default function Store(props: IProps): React.ReactElement {
                 </div>
               </CardContent>
               <CardActions>
-                <Button id={key} onClick={props.onWidgetAdded} variant="contained" value={WidgetTypes[key]}>
+                <Button
+                  id={key}
+                  onClick={props.onWidgetAdded}
+                  variant="contained"
+                  color="success"
+                  value={WidgetTypes[key]}
+                >
                   Ajouter
                 </Button>
               </CardActions>
