@@ -6,6 +6,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
+import './Widget.scss';
 
 interface IProps {
   id: number;
@@ -45,12 +46,12 @@ export default function Widget(props: IProps): ReactElement {
   }
 
   return (
-    <div>
+    <div className="widget h-96 m-2 border-2 border-solid border-black">
       {mode === ModeEnum.READ && (
         <div>
-          <div className="header">
-            <div className="leftGroup widgetHeader">{props.header}</div>
-            <div className="rightGroup">
+          <div className="header flex flex-row justify-between">
+            <div className="font-bold">{props.header}</div>
+            <div className="flex flex-row">
               {props.additionalActionButtons}
               {props.editModeComponent && (
                 <IconButton onClick={editWidget} className="editButton">

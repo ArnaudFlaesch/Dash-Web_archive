@@ -1,7 +1,6 @@
 import { FunctionComponent } from 'react';
 import { formatDateFromUTC } from '../../../utils/DateUtils';
 import { IArticle } from './IArticle';
-import './RSSArticle.scss';
 
 function stripHtmlFromContent(content?: string) {
   const div = document.createElement('div');
@@ -11,7 +10,7 @@ function stripHtmlFromContent(content?: string) {
 
 const RSSArticle: FunctionComponent<IArticle> = (props) => {
   return (
-    <div className="article">
+    <div className="border-2 border-gray-500 border-solid">
       <div className="articleTitle">
         <a href={props.link}>{props.title}</a>
       </div>

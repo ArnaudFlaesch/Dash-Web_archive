@@ -13,7 +13,9 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
-
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import Brightness3Icon from '@mui/icons-material/Brightness3';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 interface IProps extends IBaseWidgetConfig {
   city?: string;
 }
@@ -164,14 +166,14 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             <div className="flexColumn">
               <div className="spaceBetween">
                 <div>
-                  <i className="fa fa-sun-o fa-md" />{' '}
+                  <WbSunnyIcon />
                   {formatDateFromTimestamp(
                     weather.sys.sunrise,
                     adjustTimeWithOffset(weather.timezone)
                   ).toLocaleTimeString('fr')}
                 </div>
                 <div>
-                  <i className="fa fa-moon-o fa-md" />{' '}
+                  <Brightness3Icon />
                   {formatDateFromTimestamp(
                     weather.sys.sunset,
                     adjustTimeWithOffset(weather.timezone)
@@ -179,7 +181,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 </div>
               </div>
               <div>
-                <i className="fa fa-clock-o fa-md" />{' '}
+                <ScheduleIcon />
                 {formatDateFromTimestamp(weather.dt, adjustTimeWithOffset(weather.timezone)).toLocaleString('fr')}
               </div>
             </div>

@@ -147,7 +147,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
       <a href={link} className="flex flex-row">
         {image && (
           <div>
-            <img className="imgLogoRSS" src={image?.url} alt="logo" />
+            <img className="max-h-10 max-w-1" src={image?.url} alt="logo" />
           </div>
         )}
         <div className="rssTitle">{title}</div>
@@ -171,7 +171,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
     <div>
       {url && feed && (
         <div>
-          <div className="rssDescription">{description}</div>
+          <div className="font-bold">{description}</div>
           <div className="feed">{getFeedFromRSS(feed)}</div>
         </div>
       )}

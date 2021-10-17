@@ -1,0 +1,13 @@
+.widget {
+  overflow-y: scroll;
+  
+  .header {
+    background-color: black;
+    color: white;
+    align-items: center;
+
+    button {
+        color: white;
+    }
+  }
+}

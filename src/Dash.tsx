@@ -9,7 +9,6 @@ import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
-import './Dash.scss';
 import CreateWidgetModal from './modals/CreateWidgetModal';
 import ImportConfigModal from './modals/ImportConfigModal';
 import { ITab } from './model/Tab';
@@ -218,7 +217,7 @@ export default function Dash(): React.ReactElement {
                                       ref={providedDraggable.innerRef}
                                       {...providedDraggable.draggableProps}
                                       {...providedDraggable.dragHandleProps}
-                                      className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
+                                      className={`tab ${tab.id === activeTab ? 'bg-blue-600' : ''}`}
                                     >
                                       <NavDash
                                         tab={tab}
@@ -259,11 +258,9 @@ export default function Dash(): React.ReactElement {
               </div>
             </div>
             {tabs.length > 0 &&
-              tabs
-                .filter((tab) => tab.id === activeTab)
-                .map((tab: ITab) => {
-                  return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
-                })}
+              tabs.map((tab: ITab) => {
+                return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
+              })}
           </div>
         </TabContext>
       )}
