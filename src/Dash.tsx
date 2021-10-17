@@ -217,7 +217,7 @@ export default function Dash(): React.ReactElement {
                                       ref={providedDraggable.innerRef}
                                       {...providedDraggable.draggableProps}
                                       {...providedDraggable.dragHandleProps}
-                                      className={`tab ${tab.id === activeTab ? 'bg-blue-600' : ''}`}
+                                      className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
                                     >
                                       <NavDash
                                         tab={tab}
