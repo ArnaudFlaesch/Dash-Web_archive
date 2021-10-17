@@ -2,7 +2,6 @@ import axios from 'axios';
 import * as queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button } from 'reactstrap';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
 import { useLocalStorage } from '../../hooks/localStorageHook';
 import logger from '../../utils/LogUtils';
@@ -12,6 +11,7 @@ import { IActivity, IAthlete } from './IStrava';
 import { format, isAfter, isBefore } from 'date-fns';
 import ChartComponent from 'react-chartjs-2';
 import IBaseWidgetConfig from 'src/model/IBaseWidgetConfig';
+import { Button } from '@mui/material';
 
 interface ITokenData {
   access_token: string;
@@ -159,8 +159,14 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
     </div>
   );
 
+  function getTitleToDisplay(activity: IActivity): string {
+    return `${format(new Date(activity.start_date_local), 'dd MMM')}  ${activity.name}  ${
+      Math.round(activity.distance * 1000) / 1000000
+    } kms`;
+  }
+
   const widgetBody = (
-    <div className="flex flex-column">
+    <div className="flex flex-col">
       {token &&
         refreshToken &&
         tokenExpirationDate &&
@@ -170,13 +176,13 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
               {activities
                 .slice()
                 .reverse()
-                .map((activity: IActivity) => {
+                .map((activity: IActivity, index: number) => {
                   return (
                     <ComponentWithDetail
                       key={activity.id}
-                      componentRoot={`${format(new Date(activity.start_date_local), 'dd MMM')}  ${activity.name}  ${
-                        Math.round(activity.distance * 1000) / 1000000
-                      } kms`}
+                      componentRoot={
+                        <div className={`${index % 2 ? 'bg-gray-200' : ''}`}>{getTitleToDisplay(activity)}</div>
+                      }
                       componentDetail={<StravaActivity {...activity} />}
                       link={`https://www.strava.com/activities/${activity.id}`}
                     />
@@ -217,7 +223,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
         <a
           href={`https://www.strava.com/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
         >
-          <Button>Se connecter</Button>
+          <Button variant="contained">Se connecter</Button>
         </a>
       )}
     </div>

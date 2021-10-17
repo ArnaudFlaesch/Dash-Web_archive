@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { TabPane } from 'reactstrap';
 import authorizationBearer from 'src/services/auth.header';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
@@ -13,6 +12,8 @@ import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
+import './TabDash.scss';
+import TabPanel from '@mui/lab/TabPanel';
 
 interface IProps {
   tabId: number;
@@ -31,15 +32,9 @@ export default function TabDash(props: IProps): React.ReactElement {
           'Content-type': 'application/json'
         }
       })
-        .then((result) => {
-          return result.json();
-        })
-        .then((result) => {
-          setWidgets(result);
-        })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
+        .then((result) => result.json())
+        .then((result) => setWidgets(result))
+        .catch((error: Error) => logger.error(error.message));
     }
   }, [activeTab]);
 
@@ -134,18 +129,16 @@ export default function TabDash(props: IProps): React.ReactElement {
   }
 
   return (
-    <TabPane tabId={props.tabId}>
-      <div className="widgetList">
-        {widgets &&
-          widgets.length > 0 &&
-          widgets.map((widgetConfig: IWidgetConfig) => {
-            return (
-              <div key={widgetConfig.id} className="widget">
-                {createWidget(widgetConfig)}
-              </div>
-            );
-          })}
-      </div>
-    </TabPane>
+    <TabPanel value={props.tabId.toString()} className="widgetList grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+      {widgets &&
+        widgets.length > 0 &&
+        widgets.map((widgetConfig: IWidgetConfig) => {
+          return (
+            <div key={widgetConfig.id} className="widget">
+              {createWidget(widgetConfig)}
+            </div>
+          );
+        })}
+    </TabPanel>
   );
 }

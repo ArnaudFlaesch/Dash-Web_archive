@@ -1,8 +1,8 @@
 import { ChangeEvent, ReactElement, useState } from 'react';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { importConfig } from 'src/services/config.service';
 import logger from 'src/utils/LogUtils';
-
+import UploadIcon from '@mui/icons-material/Upload';
 export default function ImportConfigModal(): ReactElement {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [importConfigModal, setImportConfigModal] = useState(false);
@@ -33,24 +33,23 @@ export default function ImportConfigModal(): ReactElement {
 
   return (
     <div>
-      <Button id="openImportConfigModal" className="dashNavbarLink" onClick={toggleImportConfigModal}>
-        <i className="fa fa-upload fa-lg" aria-hidden="true" />
-      </Button>
-      <Modal isOpen={importConfigModal} toggle={toggleImportConfigModal}>
-        <ModalHeader toggle={toggleImportConfigModal}>Importer la configuration</ModalHeader>
-        <ModalBody>
+      <IconButton id="openImportConfigModal" color="primary" onClick={toggleImportConfigModal}>
+        <UploadIcon />
+      </IconButton>
+      <Dialog onClose={() => setImportConfigModal(false)} open={importConfigModal}>
+        <DialogTitle>Importer la configuration</DialogTitle>
+        <DialogContent>
           <input type="file" id="file" name="file" onChange={selectFile} />
-
-          <button id="uploadFileButton" className="btn btn-success" disabled={!selectedFile} onClick={upload}>
-            Upload
-          </button>
-        </ModalBody>
-        <ModalFooter>
-          <Button id="closeImportConfigModal" color="primary" onClick={toggleImportConfigModal}>
-            Fermer
+        </DialogContent>
+        <DialogActions>
+          <Button id="closeImportConfigModal" onClick={toggleImportConfigModal} variant="contained">
+            Annuler
           </Button>
-        </ModalFooter>
-      </Modal>
+          <Button id="uploadFileButton" disabled={!selectedFile} onClick={upload} variant="contained">
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

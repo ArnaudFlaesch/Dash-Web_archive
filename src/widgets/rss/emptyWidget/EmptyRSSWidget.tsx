@@ -1,5 +1,5 @@
+import { Button, Input } from '@mui/material';
 import { useState } from 'react';
-import './EmptyRSSWidget.scss';
 
 interface IProps {
   url?: string;
@@ -16,17 +16,23 @@ export default function EmptyRSSWidget(props: IProps): React.ReactElement {
   };
 
   return (
-    <div>
-      <input
+    <div className="flex flex-col mx-auto max-w-xs mt-10 space-y-8">
+      <Input
         id="rssFeedUrl"
         name="url"
         onChange={onChangeHandler}
         value={url}
         placeholder="Saisissez l'URL du flux RSS"
       />
-      <button onClick={onValidation} disabled={!url || url?.length < 1} className="btn btn-success">
+      <Button
+        className="validateRssUrl"
+        color="success"
+        variant="contained"
+        onClick={onValidation}
+        disabled={!url || url?.length < 1}
+      >
         Valider
-      </button>
+      </Button>
     </div>
   );
 }

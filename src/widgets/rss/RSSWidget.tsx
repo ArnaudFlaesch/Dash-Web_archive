@@ -1,3 +1,6 @@
+import CheckIcon from '@mui/icons-material/Check';
+import MinimizeIcon from '@mui/icons-material/Minimize';
+import { IconButton } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import RSSParser from 'rss-parser';
@@ -85,11 +88,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
           minute: '2-digit'
         })
       : '';
-    return (
-      <div className={`rssArticle ${readArticles.includes(article.guid) ? 'read' : ''}`}>
-        {date} {article.title}
-      </div>
-    );
+    return `${date} ${article.title}`;
   }
 
   function onOpenDetail(guid: string): void {
@@ -121,11 +120,19 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   }
 
   function getFeedFromRSS(data: IArticle[]) {
-    return data.map((article) => {
+    return data.map((article, index: number) => {
       return (
         <ComponentWithDetail
           key={article.guid}
-          componentRoot={formatTitleForArticle(article)}
+          componentRoot={
+            <div
+              className={`rssArticle 
+              ${readArticles.includes(article.guid) ? 'read' : ''} 
+              ${index % 2 ? 'bg-gray-200' : ''}`}
+            >
+              {formatTitleForArticle(article)}
+            </div>
+          }
           componentDetail={<RSSArticle {...article} />}
           link={article.link}
           isClosed={isFeedClosed}
@@ -150,12 +157,13 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   const additionalActionButtons = (
     <div className="flex flex-row">
-      <button onClick={markAllFeedAsRead} className="btn btn-default markAllArticlesAsRead">
-        <i className="fa fa-check-circle-o" aria-hidden="true" />
-      </button>
-      <button onClick={closeFeeds} className="btn btn-default minimizeAllArticles">
-        <i className="fa fa-window-minimize" aria-hidden="true" />
-      </button>
+      <IconButton className="markAllArticlesAsRead" color="primary" onClick={markAllFeedAsRead}>
+        <CheckIcon />
+      </IconButton>
+
+      <IconButton className="minimizeAllArticles" color="primary" onClick={closeFeeds}>
+        <MinimizeIcon />
+      </IconButton>
     </div>
   );
 

@@ -90,16 +90,16 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
   );
 
   const widgetBody = (
-    <div className="flex flex-column">
+    <div className="flex flex-col">
       {ownedGames &&
-        ownedGames.map((game: IGameInfo) => {
+        ownedGames.map((game: IGameInfo, index: number) => {
           return (
             <ComponentWithDetail
               key={game.appid}
               componentRoot={
-                <div className="gameInfo flex flex-row">
+                <div className={`gameInfo flex flex-row ${index % 2 ? 'bg-gray-200' : ''}`}>
                   <div>
-                    <img src={`${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg                  `} />
+                    <img src={`${STEAM_IMAGE_URL}${game.appid}/${game.img_icon_url}.jpg`} />
                   </div>
                   <div>{game.name}</div>
                 </div>

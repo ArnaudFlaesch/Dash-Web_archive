@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import authorizationBearer from 'src/services/auth.header';
 import logger from 'src/utils/LogUtils';
-import CircularProgressBar from 'src/widgets/utils/circular-progress/CircularProgressBar';
+import CircularProgressWithLabel from 'src/widgets/utils/circular-progress/CircularProgressWithLabel';
 import { IGameInfo } from '../IGameInfo';
 
 interface IAchievement {
@@ -52,16 +52,16 @@ export default function GameDetails(props: IGameInfo): React.ReactElement {
       <div className="flex flex-row">
         <div>{props.name}</div>
         <a href={`${STEAM_COMMUNITY_URL}${props.appid}`}>
-          <img src={`${STEAM_IMAGE_URL}${props.appid}/${props.img_logo_url}.jpg                  `} />
+          <img src={`${STEAM_IMAGE_URL}${props.appid}/${props.img_logo_url}.jpg`} />
         </a>
       </div>
       {achievements && completedAchievements && achievements.length > 0 && (
         <div className="flex flex-row">
-          <div className="flex flex-column">
+          <div className="flex flex-col">
             <div className="totalachievements">Succès : {achievements.length}</div>
             <div className="completedAchievements">Succès complétés : {completedAchievements.length}</div>
           </div>
-          <CircularProgressBar value={(completedAchievements.length / achievements.length) * 100} />
+          <CircularProgressWithLabel value={(completedAchievements.length / achievements.length) * 100} />
         </div>
       )}
     </div>

@@ -22,7 +22,7 @@ describe('Strava Widget tests', () => {
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
-      .get('.btn-danger')
+      .get('.validateDeletionButton')
       .click();
     cy.wait('@deleteWidget').then(() => {
       cy.get('.widget').should('have.length', 0);

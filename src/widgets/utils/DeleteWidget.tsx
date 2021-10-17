@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { ReactElement } from 'react';
 
 interface IProps {
@@ -14,12 +15,12 @@ export default function DeleteWidget(props: IProps): ReactElement {
   return (
     <div>
       <h4>Êtes-vous sûr de vouloir supprimer ce widget ?</h4>
-      <button onClick={props.onCancelButtonClicked} className="btn btn-primary cancelButton">
+      <Button onClick={props.onCancelButtonClicked} variant="contained" color="primary" className="cancelButton">
         Annuler
-      </button>
-      <button onClick={confirmDeleteWidget} className="btn btn-danger validateDeletionButton">
+      </Button>
+      <Button onClick={confirmDeleteWidget} variant="contained" color="error" className="validateDeletionButton">
         Supprimer
-      </button>
+      </Button>
     </div>
   );
 }

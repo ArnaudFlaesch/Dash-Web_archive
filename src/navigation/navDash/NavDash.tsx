@@ -1,8 +1,10 @@
 import { ReactElement, useState } from 'react';
-import { Button, NavItem, NavLink } from 'reactstrap';
 import logger from 'src/utils/LogUtils';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, Input, Tab } from '@mui/material';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 interface IProps {
   tab: ITab;
@@ -37,24 +39,29 @@ export default function NavDash(props: IProps): ReactElement {
   }
 
   return (
-    <NavItem className="clickableItem" key={props.tab.id}>
-      <NavLink onClick={props.onTabClicked}>
-        {isToggled ? (
-          <div className="flex flex-row">
-            <input
-              onDoubleClick={saveTabName}
-              onKeyPress={enterSaveTabName}
-              onChange={(event) => setLabel(event.target.value)}
-              value={label}
-            />
-            <Button className="deleteTabButton" onClick={deleteTabFromDash}>
-              <i className="fa fa-trash" />
-            </Button>
+    <div onClick={props.onTabClicked} className="border-2 border-gray-800 border-opacity-100">
+      {isToggled ? (
+        <div className="flex flex-row">
+          <Input
+            onDoubleClick={saveTabName}
+            onKeyPress={enterSaveTabName}
+            onChange={(event) => setLabel(event.target.value)}
+            value={label}
+          />
+          <IconButton className="deleteTabButton" color="primary" onClick={deleteTabFromDash}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      ) : (
+        <div className="flex flex-row">
+          <div>
+            <Tab onDoubleClick={clickToggle} value={props.tab.id.toString()} label={label} wrapped />
           </div>
-        ) : (
-          <span onDoubleClick={clickToggle}>{label}</span>
-        )}
-      </NavLink>
-    </NavItem>
+          <div>
+            <DragHandleIcon />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Button, Input } from '@mui/material';
 import { useState } from 'react';
 
 interface IProps {
@@ -15,16 +16,22 @@ export default function EmptyTwitterTimelineWidget(props: IProps): React.ReactEl
   };
 
   return (
-    <div>
-      <input
+    <div className="flex flex-col mx-auto max-w-xs mt-10 space-y-8">
+      <Input
         id="twitterProfileName"
         onChange={onChangeHandler}
         value={profile}
         placeholder="Saisissez le nom de l'utilisateur"
       />
-      <button onClick={onValidation} disabled={!profile || profile?.length < 1} className="btn btn-success">
+      <Button
+        className="validateProfileButton"
+        variant="contained"
+        color="success"
+        onClick={onValidation}
+        disabled={!profile || profile?.length < 1}
+      >
         Valider
-      </button>
+      </Button>
     </div>
   );
 }

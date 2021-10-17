@@ -1,9 +1,14 @@
-import 'font-awesome/fonts/fontawesome-webfont.svg';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DownloadIcon from '@mui/icons-material/Download';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import { Button, IconButton } from '@mui/material';
+import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
 import CreateWidgetModal from './modals/CreateWidgetModal';
 import ImportConfigModal from './modals/ImportConfigModal';
@@ -20,8 +25,6 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
-import jwt_decode from 'jwt-decode';
-
 export interface IMenu {
   link: string;
   icon: string;
@@ -189,82 +192,80 @@ export default function Dash(): React.ReactElement {
   }
 
   return (
-    <div className="dash">
+    <div>
       {!isUserAuthenticated() && <Login />}
       {isUserAuthenticated() && (
-        <div className="flex flex-row">
-          <div className="dashNavbar">
-            {activeTab && tabs.length > 0 && (
-              <Nav vertical={true} navbar={true}>
-                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-                <div>
-                  <Button id="reloadAllWidgetsButton" className="dashNavbarLink" onClick={refreshAllWidgets}>
-                    <i className="fa fa-refresh fa-lg" aria-hidden="true" />
-                  </Button>
-                </div>
-                <div>
-                  <Button id="downloadConfigButton" className="dashNavbarLink" onClick={downloadConfig}>
-                    <i className="fa fa-download fa-lg" aria-hidden="true" />
-                  </Button>
-                </div>
-
-                <ImportConfigModal />
-              </Nav>
-            )}
-          </div>
-
-          <div className="flex flex-column tabsBar">
-            <Nav tabs={true}>
+        <TabContext value={activeTab.toString()}>
+          <div className="flex flex-col">
+            <div className="flex flex-row justify-between m-1">
               <div className="flex flex-row">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
                       <div
-                        className="flex flex-row"
+                        className="flex flex-row space-x-2"
                         {...providedDroppable.droppableProps}
                         ref={providedDroppable.innerRef}
                       >
-                        {tabs.length > 0 &&
-                          tabs.map((tab: ITab, index: number) => {
-                            return (
-                              <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
-                                {(providedDraggable) => (
-                                  <div
-                                    key={tab.id}
-                                    ref={providedDraggable.innerRef}
-                                    {...providedDraggable.draggableProps}
-                                    {...providedDraggable.dragHandleProps}
-                                    className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
-                                  >
-                                    <NavDash
-                                      tab={tab}
-                                      onTabClicked={() => toggleTab(tab.id)}
-                                      onTabDeleted={onTabDeleted}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
-                            );
-                          })}
+                        <TabList>
+                          {tabs.length > 0 &&
+                            tabs.map((tab: ITab, index: number) => {
+                              return (
+                                <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
+                                  {(providedDraggable) => (
+                                    <div
+                                      key={tab.id}
+                                      ref={providedDraggable.innerRef}
+                                      {...providedDraggable.draggableProps}
+                                      {...providedDraggable.dragHandleProps}
+                                      className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
+                                    >
+                                      <NavDash
+                                        tab={tab}
+                                        onTabClicked={() => toggleTab(tab.id)}
+                                        onTabDeleted={onTabDeleted}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              );
+                            })}
+                        </TabList>
                         {providedDroppable.placeholder}
                       </div>
                     )}
                   </Droppable>
                 </DragDropContext>
-                <Button onClick={addNewTab} id="addNewTabButton" className="fa fa-plus-circle fa-lg" />
-                <Button onClick={authService.logout} className="btn btn-primary">
-                  Se déconnecter
+
+                <IconButton id="addNewTabButton" color="primary" onClick={addNewTab}>
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              </div>
+              <div className="flex flex-row place-content-center">
+                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
+                <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                  <RefreshIcon />
+                </IconButton>
+
+                <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                  <DownloadIcon />
+                </IconButton>
+
+                <ImportConfigModal />
+
+                <Button onClick={authService.logout} variant="contained">
+                  Déconnexion
                 </Button>
               </div>
-            </Nav>
-            <TabContent activeTab={activeTab}>
-              {tabs.length > 0 &&
-                tabs.map((tab: ITab) => {
+            </div>
+            {tabs.length > 0 &&
+              tabs
+                .filter((tab) => tab.id === activeTab)
+                .map((tab: ITab) => {
                   return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
                 })}
-            </TabContent>
           </div>
-        </div>
+        </TabContext>
       )}
     </div>
   );
