@@ -1,10 +1,9 @@
 import { ReactElement, useState } from 'react';
-import { NavItem, NavLink } from 'reactstrap';
 import logger from 'src/utils/LogUtils';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton, Input } from '@mui/material';
+import { IconButton, Input, Tab } from '@mui/material';
 interface IProps {
   tab: ITab;
   onTabClicked: () => void;
@@ -38,24 +37,22 @@ export default function NavDash(props: IProps): ReactElement {
   }
 
   return (
-    <NavItem className="clickableItem" key={props.tab.id}>
-      <NavLink onClick={props.onTabClicked}>
-        {isToggled ? (
-          <div className="flex flex-row">
-            <Input
-              onDoubleClick={saveTabName}
-              onKeyPress={enterSaveTabName}
-              onChange={(event) => setLabel(event.target.value)}
-              value={label}
-            />
-            <IconButton className="deleteTabButton" color="primary" onClick={deleteTabFromDash}>
-              <DeleteIcon />
-            </IconButton>
-          </div>
-        ) : (
-          <span onDoubleClick={clickToggle}>{label}</span>
-        )}
-      </NavLink>
-    </NavItem>
+    <div onClick={props.onTabClicked}>
+      {isToggled ? (
+        <div className="flex flex-row">
+          <Input
+            onDoubleClick={saveTabName}
+            onKeyPress={enterSaveTabName}
+            onChange={(event) => setLabel(event.target.value)}
+            value={label}
+          />
+          <IconButton className="deleteTabButton" color="primary" onClick={deleteTabFromDash}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      ) : (
+        <Tab key={props.tab.id} onDoubleClick={clickToggle} label={label} />
+      )}
+    </div>
   );
 }

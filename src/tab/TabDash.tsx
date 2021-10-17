@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { TabPane } from 'reactstrap';
 import authorizationBearer from 'src/services/auth.header';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
@@ -129,18 +128,17 @@ export default function TabDash(props: IProps): React.ReactElement {
   }
 
   return (
-    <TabPane tabId={props.tabId}>
-      <div className="widgetList grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-        {widgets &&
-          widgets.length > 0 &&
-          widgets.map((widgetConfig: IWidgetConfig) => {
-            return (
-              <div key={widgetConfig.id} className="widget">
-                {createWidget(widgetConfig)}
-              </div>
-            );
-          })}
-      </div>
-    </TabPane>
+    <div className="widgetList grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+      {props.tabId === activeTab &&
+        widgets &&
+        widgets.length > 0 &&
+        widgets.map((widgetConfig: IWidgetConfig) => {
+          return (
+            <div key={widgetConfig.id} className="widget">
+              {createWidget(widgetConfig)}
+            </div>
+          );
+        })}
+    </div>
   );
 }

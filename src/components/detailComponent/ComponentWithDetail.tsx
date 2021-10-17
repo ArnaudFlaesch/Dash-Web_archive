@@ -1,5 +1,5 @@
+import { Card, CardContent, Collapse } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Card, CardBody, Collapse } from 'reactstrap';
 import './ComponentWithDetail.scss';
 
 interface IProps {
@@ -32,9 +32,9 @@ export default function ComponentWithDetail(props: IProps): React.ReactElement {
         {props.componentRoot}
       </div>
       <div>
-        <Collapse isOpen={openCollapse}>
+        <Collapse in={openCollapse}>
           <Card>
-            <CardBody>{openCollapse && props.componentDetail && props.componentDetail}</CardBody>
+            <CardContent>{openCollapse && props.componentDetail && props.componentDetail}</CardContent>
           </Card>
         </Collapse>
       </div>

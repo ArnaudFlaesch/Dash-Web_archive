@@ -1,13 +1,12 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DownloadIcon from '@mui/icons-material/Download';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Tabs } from '@mui/material';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
-import { Nav, TabContent } from 'reactstrap';
 import './Dash.scss';
 import CreateWidgetModal from './modals/CreateWidgetModal';
 import ImportConfigModal from './modals/ImportConfigModal';
@@ -194,29 +193,9 @@ export default function Dash(): React.ReactElement {
     <div className="dash">
       {!isUserAuthenticated() && <Login />}
       {isUserAuthenticated() && (
-        <div className="flex flex-row">
-          <div className="dashNavbar">
-            {activeTab && tabs.length > 0 && (
-              <Nav vertical={true} navbar={true}>
-                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-                <div>
-                  <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
-                    <RefreshIcon />
-                  </IconButton>
-                </div>
-                <div>
-                  <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
-                    <DownloadIcon />
-                  </IconButton>
-                </div>
-
-                <ImportConfigModal />
-              </Nav>
-            )}
-          </div>
-
-          <div className="flex flex-col tabsBar">
-            <Nav tabs={true}>
+        <div className="flex flex-col">
+          <div className="flex flex-row justify-between m-1">
+            <Tabs value={activeTab} /*onChange={handleTabChange}*/>
               <div className="flex flex-row">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
@@ -254,27 +233,32 @@ export default function Dash(): React.ReactElement {
                   </Droppable>
                 </DragDropContext>
 
-                <Button
-                  id="addNewTabButton"
-                  onClick={addNewTab}
-                  variant="contained"
-                  startIcon={<AddCircleOutlineIcon />}
-                >
-                  Ajouter un widget
-                </Button>
-
-                <Button onClick={authService.logout} variant="contained">
-                  Se déconnecter
-                </Button>
+                <IconButton id="addNewTabButton" color="primary" onClick={addNewTab}>
+                  <AddCircleOutlineIcon />
+                </IconButton>
               </div>
-            </Nav>
-            <TabContent activeTab={activeTab}>
-              {tabs.length > 0 &&
-                tabs.map((tab: ITab) => {
-                  return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
-                })}
-            </TabContent>
+            </Tabs>
+            <div className="flex flex-row place-content-center">
+              <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
+              <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                <RefreshIcon />
+              </IconButton>
+
+              <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                <DownloadIcon />
+              </IconButton>
+
+              <ImportConfigModal />
+
+              <Button onClick={authService.logout} variant="contained">
+                Se déconnecter
+              </Button>
+            </div>
           </div>
+          {tabs.length > 0 &&
+            tabs.map((tab: ITab) => {
+              return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
+            })}
         </div>
       )}
     </div>
