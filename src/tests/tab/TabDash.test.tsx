@@ -1,3 +1,4 @@
+import { TabContext } from '@mui/lab';
 import * as Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as ReactDOM from 'react-dom';
@@ -18,7 +19,9 @@ describe('TabDash tests', () => {
     ReactDOM.render(
       <Provider store={store}>
         <BrowserRouter>
-          <TabDash tabId={1} newWidget={undefined} />
+          <TabContext value="1">
+            <TabDash tabId={1} newWidget={undefined} />
+          </TabContext>
         </BrowserRouter>
       </Provider>,
       div
@@ -44,7 +47,9 @@ describe('TabDash tests', () => {
     await act(async () => {
       ReactDOM.render(
         <Provider store={store}>
-          <TabDash tabId={1} newWidget={undefined} />
+          <TabContext value="1">
+            <TabDash tabId={1} newWidget={undefined} />
+          </TabContext>
         </Provider>,
         container
       );
