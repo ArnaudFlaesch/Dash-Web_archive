@@ -144,7 +144,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     setForecastMode(ForecastMode.WEEK);
   }
 
-  const widgetHeader = <div>La météo aujourd'hui à {city?.name}</div>;
+  const widgetHeader = <div>La météo aujourd'hui à {cityToQuery}</div>;
 
   const widgetBody = (
     <div>
@@ -269,7 +269,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={new Map<string, unknown>([['city', city]])}
+      config={new Map<string, unknown>([['city', cityToQuery]])}
       header={widgetHeader}
       body={widgetBody}
       editModeComponent={<EmptyWeatherWidget city={cityToQuery} onConfigSubmitted={onConfigSubmitted} />}
