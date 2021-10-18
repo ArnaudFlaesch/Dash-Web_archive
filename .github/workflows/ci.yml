@@ -64,15 +64,6 @@ jobs:
           echo REACT_APP_STEAM_API_KEY=${{ secrets.REACT_APP_STEAM_API_KEY }} >> .env.production
           npm run build
 
-      - name: Deploy with gh-pages
-        if: success() && github.ref != 'refs/heads/master'
-        run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          npx gh-pages-clean
-          npx gh-pages -b website -d build -u "github-actions-bot <support+actions@github.com>"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Test
         run: npm run ci
 
@@ -123,3 +114,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Deploy with gh-pages
+        if: success() && github.ref == 'refs/heads/master'
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages-clean
+          npx gh-pages -b website -d build -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
