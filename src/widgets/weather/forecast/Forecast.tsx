@@ -4,7 +4,7 @@ import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import OpacityIcon from '@mui/icons-material/Opacity';
 export default function Forecast(props: IForecast): React.ReactElement {
   return (
-    <div className="border-2 border-solid border-black">
+    <div className=" forecast border-2 border-solid border-black">
       <div>
         {formatDateFromTimestamp(props.dt, adjustTimeWithOffset(props.city.timezone)).toLocaleString('fr', {
           weekday: 'short',
