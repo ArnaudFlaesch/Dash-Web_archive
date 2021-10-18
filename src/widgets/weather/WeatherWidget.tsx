@@ -152,22 +152,22 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         <div className="flex flex-row">
           <div>
             <img
-              style={{ width: '80px' }}
+              className="w-16"
               src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
               title={weather.weather[0].description}
               alt={weather.weather[0].description}
             />
           </div>
-          <div className="flex flex-row" style={{ placeItems: 'center' }}>
-            <div className="flexColumn mr-5">
+          <div className="flex flex-row place-items-center">
+            <div className="flex flex-col mr-5">
               <div>{weather.weather[0].description}</div>
               <div>
                 <DeviceThermostatIcon />
                 {weather.main.temp}°
               </div>
             </div>
-            <div className="flexColumn">
-              <div className="spaceBetween">
+            <div className="flex flex-col">
+              <div className="flex justify-between">
                 <div>
                   <WbSunnyIcon />
                   {formatDateFromTimestamp(
@@ -223,7 +223,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             </span>
           </div>
           <br />
-          <div style={{ height: '20vh', maxWidth: '100%' }}>
+          <div className="min-h-24 max-x-full">
             <Line
               data={{
                 labels: filterForecastByMode().map((forecastDay) => {
@@ -269,7 +269,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{ city: city }}
+      config={new Map<string, unknown>([['city', city]])}
       header={widgetHeader}
       body={widgetBody}
       editModeComponent={<EmptyWeatherWidget city={cityToQuery} onConfigSubmitted={onConfigSubmitted} />}

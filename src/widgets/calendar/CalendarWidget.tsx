@@ -95,7 +95,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
         endAccessor="end"
         defaultView="month"
         popup={true}
-        style={{ height: 500 }}
+        className="h-screen"
       />
     </div>
   );
@@ -104,7 +104,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{ calendars: calendarUrls }}
+      config={new Map<string, unknown>([['calendars', calendarUrls]])}
       header={widgetHeader}
       body={widgetBody}
       editModeComponent={<EmptyCalendarWidget calendarUrls={calendarUrls} onConfigSubmitted={onConfigSubmitted} />}

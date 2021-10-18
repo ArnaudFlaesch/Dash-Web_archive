@@ -198,15 +198,11 @@ export default function Dash(): React.ReactElement {
         <TabContext value={activeTab.toString()}>
           <div className="flex flex-col">
             <div className="flex flex-row justify-between m-1">
-              <div className="flex flex-row">
+              <div className="flex flex-row ">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
-                      <div
-                        className="flex flex-row space-x-2"
-                        {...providedDroppable.droppableProps}
-                        ref={providedDroppable.innerRef}
-                      >
+                      <div {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
                         <TabList>
                           {tabs.length > 0 &&
                             tabs.map((tab: ITab, index: number) => {
@@ -218,7 +214,6 @@ export default function Dash(): React.ReactElement {
                                       ref={providedDraggable.innerRef}
                                       {...providedDraggable.draggableProps}
                                       {...providedDraggable.dragHandleProps}
-                                      className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
                                     >
                                       <NavDash
                                         tab={tab}
@@ -241,18 +236,24 @@ export default function Dash(): React.ReactElement {
                   <AddCircleOutlineIcon />
                 </IconButton>
               </div>
-              <div className="flex flex-row place-content-center">
-                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-                <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
-                  <RefreshIcon />
-                </IconButton>
+              <div className="flex flex-row">
+                <div className="flex flex-row m-auto">
+                  <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
 
-                <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
-                  <DownloadIcon />
-                </IconButton>
+                  <div>
+                    <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                      <RefreshIcon />
+                    </IconButton>
+                  </div>
 
-                <ImportConfigModal />
+                  <div>
+                    <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                      <DownloadIcon />
+                    </IconButton>
+                  </div>
 
+                  <ImportConfigModal />
+                </div>
                 <Button onClick={authService.logout} variant="contained">
                   Déconnexion
                 </Button>

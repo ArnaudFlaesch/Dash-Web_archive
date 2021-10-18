@@ -182,7 +182,7 @@ export default function RSSWidget(props: IProps): React.ReactElement {
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{ url: url }}
+      config={new Map<string, unknown>([['url', url]])}
       header={widgetHeader}
       additionalActionButtons={additionalActionButtons}
       body={widgetBody}

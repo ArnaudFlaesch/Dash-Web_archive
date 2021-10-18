@@ -11,7 +11,7 @@ import './Widget.scss';
 interface IProps {
   id: number;
   tabId: number;
-  config: Record<string, unknown>;
+  config: Map<string, unknown>;
   header: ReactElement;
   body: ReactElement;
   additionalActionButtons?: ReactElement;
@@ -45,9 +45,39 @@ export default function Widget(props: IProps): ReactElement {
     setMode(ModeEnum.DELETE);
   }
 
+  function isEmptyWidget(): boolean {
+    const configValues = [];
+    const iterator = props.config.values();
+    let entry = iterator.next();
+    while (!entry.done) {
+      configValues.push(entry.value);
+      entry = iterator.next();
+    }
+    return configValues.some((value) => !value);
+  }
+
   return (
     <div className="widget h-96 m-2 border-2 border-solid border-black">
-      {mode === ModeEnum.READ && (
+      {mode === ModeEnum.DELETE && (
+        <DeleteWidget
+          idWidget={props.id}
+          onDeleteButtonClicked={props.onDeleteButtonClicked}
+          onCancelButtonClicked={cancelDeletion}
+        />
+      )}
+
+      {(mode === ModeEnum.EDIT || (isEmptyWidget() && mode !== ModeEnum.DELETE)) && props.editModeComponent !== null && (
+        <div className="flex flex-col">
+          <div className="grid justify-items-end m-2">
+            <IconButton onClick={deleteWidget} className="deleteButton">
+              <DeleteIcon />
+            </IconButton>
+          </div>
+          <div>{props.editModeComponent}</div>
+        </div>
+      )}
+
+      {mode === ModeEnum.READ && !isEmptyWidget() && (
         <div>
           <div className="header flex flex-row justify-between">
             <div className="font-bold">{props.header}</div>
@@ -69,14 +99,6 @@ export default function Widget(props: IProps): ReactElement {
           {props.body}
         </div>
       )}
-      {mode === ModeEnum.DELETE && (
-        <DeleteWidget
-          idWidget={props.id}
-          onDeleteButtonClicked={props.onDeleteButtonClicked}
-          onCancelButtonClicked={cancelDeletion}
-        />
-      )}
-      {mode === ModeEnum.EDIT && props.editModeComponent !== null && props.editModeComponent}
     </div>
   );
 }

@@ -116,7 +116,7 @@ export default function SteamWidget(props: IBaseWidgetConfig): React.ReactElemen
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{}}
+      config={new Map()}
       header={widgetHeader}
       body={widgetBody}
       refreshFunction={refreshWidget}

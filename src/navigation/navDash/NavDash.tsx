@@ -5,6 +5,8 @@ import { deleteTab, updateTab } from '../../services/tab.service';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, Input, Tab } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
+import { useSelector } from 'react-redux';
+import { ITabState } from 'src/reducers/tabReducer';
 
 interface IProps {
   tab: ITab;
@@ -15,6 +17,7 @@ interface IProps {
 export default function NavDash(props: IProps): ReactElement {
   const [label, setLabel] = useState(props.tab.label);
   const [isToggled, toggle] = useState(false);
+  const activeTab = useSelector((state: ITabState) => state.activeTab);
 
   function deleteTabFromDash() {
     deleteTab(props.tab.id)
@@ -39,7 +42,10 @@ export default function NavDash(props: IProps): ReactElement {
   }
 
   return (
-    <div onClick={props.onTabClicked} className="border-2 border-gray-800 border-opacity-100">
+    <div
+      onClick={props.onTabClicked}
+      className={`tab ${props.tab.id === activeTab ? 'selectedItem' : ''} border-2 border-gray-800 border-opacity-100`}
+    >
       {isToggled ? (
         <div className="flex flex-row">
           <Input

@@ -46,7 +46,7 @@ export default function TwitterTimelineWidget(props: IProps): React.ReactElement
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{ profile }}
+      config={new Map<string, unknown>([['profile', profile]])}
       header={widgetHeader}
       body={widgetBody}
       editModeComponent={<EmptyTwitterTimelineWidget profile={profile} onProfileSubmitted={onProfileSubmitted} />}
