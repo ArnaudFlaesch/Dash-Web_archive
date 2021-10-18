@@ -16,6 +16,8 @@ import './WeatherWidget.scss';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness3Icon from '@mui/icons-material/Brightness3';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+
 interface IProps extends IBaseWidgetConfig {
   city?: string;
 }
@@ -160,7 +162,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             <div className="flexColumn mr-5">
               <div>{weather.weather[0].description}</div>
               <div>
-                <i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°
+                <DeviceThermostatIcon />
+                {weather.main.temp}°
               </div>
             </div>
             <div className="flexColumn">

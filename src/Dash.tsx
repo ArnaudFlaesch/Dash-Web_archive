@@ -24,6 +24,7 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
+import './Dash.scss';
 export interface IMenu {
   link: string;
   icon: string;
