@@ -1,8 +1,5 @@
 /// <reference types="cypress" />
 
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-
 describe('Calendar Widget tests', () => {
   const icalFrenchHolidays =
     'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics';
