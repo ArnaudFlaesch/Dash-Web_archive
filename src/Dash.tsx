@@ -203,7 +203,7 @@ export default function Dash(): React.ReactElement {
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
                       <div {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
-                        <TabList>
+                        <TabList className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-7xl">
                           {tabs.length > 0 &&
                             tabs.map((tab: ITab, index: number) => {
                               return (
