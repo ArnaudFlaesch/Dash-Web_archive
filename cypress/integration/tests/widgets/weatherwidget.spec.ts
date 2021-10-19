@@ -23,9 +23,7 @@ describe('Weather Widget tests', () => {
       fixture: 'parisWeatherSample.json'
     }).as('refreshWidget');
 
-    cy.get('.editButton')
-      .click()
-      .clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
+    cy.clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
       .get('#cityNameInput')
       .type('Paris')
       .get('#validateButton')

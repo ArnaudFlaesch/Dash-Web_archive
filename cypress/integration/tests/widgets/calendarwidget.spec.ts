@@ -35,8 +35,6 @@ describe('Calendar Widget tests', () => {
     cy.intercept('GET', `/proxy/?url=${icalUsaHolidays}`).as('getUSCalendarData');
 
     cy.clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
-      .get('.editButton')
-      .click()
       .get('#addCalendarUrl')
       .click()
       .get('input')
