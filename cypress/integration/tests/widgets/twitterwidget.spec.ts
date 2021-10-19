@@ -24,8 +24,6 @@ describe('Twitter Widget tests', () => {
 
   it('Should display the timeline', () => {
     cy.intercept('PATCH', '/widget/updateWidgetData')
-      .get('.editButton')
-      .click()
       .get('.validateProfileButton')
       .should('be.disabled')
       .get('input')

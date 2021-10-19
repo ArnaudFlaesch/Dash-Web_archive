@@ -1,11 +1,10 @@
-import { FunctionComponent } from 'react';
 import { adjustTimeWithOffset, formatDateFromTimestamp } from '../../../utils/DateUtils';
 import { IForecast } from '../IWeather';
-import './Forecast.scss';
-
-const Forecast: FunctionComponent<IForecast> = (props) => {
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import OpacityIcon from '@mui/icons-material/Opacity';
+export default function Forecast(props: IForecast): React.ReactElement {
   return (
-    <div className="forecast">
+    <div className=" forecast border-2 border-solid border-black">
       <div>
         {formatDateFromTimestamp(props.dt, adjustTimeWithOffset(props.city.timezone)).toLocaleString('fr', {
           weekday: 'short',
@@ -17,28 +16,26 @@ const Forecast: FunctionComponent<IForecast> = (props) => {
         <div>
           <img
             src={`https://openweathermap.org/img/wn/${props.weather[0]?.icon}@2x.png`}
-            className="smallImage"
+            className="max-h-14 max-w-14"
             title={props.weather[0]?.description}
             alt={props.weather[0]?.description}
           />
         </div>
         <div>
           <div>
-            <i className="fa fa-thermometer-three-quarters fa-sm mr-3" style={{ color: 'crimson' }} />
+            <DeviceThermostatIcon style={{ color: 'crimson' }} className="m-r-1" />
             {props.main.temp_max}°
           </div>
           <div>
-            <i className="fa fa-thermometer-quarter fa-sm mr-3" style={{ color: 'blue' }} />
+            <DeviceThermostatIcon style={{ color: 'blue' }} className="m-r-1" />
             {props.main.temp_min}°
           </div>
           <div>
-            <i className="fa fa-tint fa-sm mr-3" style={{ color: 'lightblue' }} />
+            <OpacityIcon style={{ color: 'lightblue' }} className="m-r-1" />
             {props.main.humidity}%
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default Forecast;
+}

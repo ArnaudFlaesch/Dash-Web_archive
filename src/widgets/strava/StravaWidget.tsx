@@ -172,7 +172,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
         tokenExpirationDate &&
         isAfter(new Date((tokenExpirationDate as number) * 1000), new Date()) && (
           <div>
-            <div style={{ height: '20vh', overflowY: 'scroll' }}>
+            <div className="max-h-48 overflow-y-scroll">
               {activities
                 .slice()
                 .reverse()
@@ -190,7 +190,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
                 })}
             </div>
 
-            <div style={{ minHeight: '25vh', maxHeight: '80vh', flex: '1 0 50%' }}>
+            <div className="min-h-24 max-h-96">
               <ChartComponent
                 type="bar"
                 data={{
@@ -233,7 +233,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{}}
+      config={new Map()}
       header={widgetHeader}
       body={widgetBody}
       refreshFunction={refreshWidget}

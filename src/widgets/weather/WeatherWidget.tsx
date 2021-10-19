@@ -13,6 +13,10 @@ import EmptyWeatherWidget from './emptyWidget/EmptyWeatherWidget';
 import Forecast from './forecast/Forecast';
 import { ICity, IForecast, IWeather, IWeatherAPIResponse } from './IWeather';
 import './WeatherWidget.scss';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import Brightness3Icon from '@mui/icons-material/Brightness3';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 
 interface IProps extends IBaseWidgetConfig {
   city?: string;
@@ -140,7 +144,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     setForecastMode(ForecastMode.WEEK);
   }
 
-  const widgetHeader = <div>La météo aujourd'hui à {city?.name}</div>;
+  const widgetHeader = <div>La météo aujourd'hui à {cityToQuery}</div>;
 
   const widgetBody = (
     <div>
@@ -148,30 +152,31 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         <div className="flex flex-row">
           <div>
             <img
-              style={{ width: '80px' }}
+              className="w-16"
               src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
               title={weather.weather[0].description}
               alt={weather.weather[0].description}
             />
           </div>
-          <div className="flex flex-row" style={{ placeItems: 'center' }}>
-            <div className="flexColumn mr-5">
+          <div className="flex flex-row place-items-center">
+            <div className="flex flex-col mr-5">
               <div>{weather.weather[0].description}</div>
               <div>
-                <i className="fa fa-thermometer-three-quarters fa-md" /> {weather.main.temp}°
+                <DeviceThermostatIcon />
+                {weather.main.temp}°
               </div>
             </div>
-            <div className="flexColumn">
-              <div className="spaceBetween">
+            <div className="flex flex-col">
+              <div className="flex justify-between">
                 <div>
-                  <i className="fa fa-sun-o fa-md" />{' '}
+                  <WbSunnyIcon />
                   {formatDateFromTimestamp(
                     weather.sys.sunrise,
                     adjustTimeWithOffset(weather.timezone)
                   ).toLocaleTimeString('fr')}
                 </div>
                 <div>
-                  <i className="fa fa-moon-o fa-md" />{' '}
+                  <Brightness3Icon />
                   {formatDateFromTimestamp(
                     weather.sys.sunset,
                     adjustTimeWithOffset(weather.timezone)
@@ -179,7 +184,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
                 </div>
               </div>
               <div>
-                <i className="fa fa-clock-o fa-md" />{' '}
+                <ScheduleIcon />
                 {formatDateFromTimestamp(weather.dt, adjustTimeWithOffset(weather.timezone)).toLocaleString('fr')}
               </div>
             </div>
@@ -218,7 +223,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             </span>
           </div>
           <br />
-          <div style={{ height: '20vh', maxWidth: '100%' }}>
+          <div className="min-h-24 max-x-full">
             <Line
               data={{
                 labels: filterForecastByMode().map((forecastDay) => {
@@ -264,7 +269,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
     <Widget
       id={props.id}
       tabId={props.tabId}
-      config={{ city: city }}
+      config={new Map<string, unknown>([['city', cityToQuery]])}
       header={widgetHeader}
       body={widgetBody}
       editModeComponent={<EmptyWeatherWidget city={cityToQuery} onConfigSubmitted={onConfigSubmitted} />}

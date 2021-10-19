@@ -9,7 +9,6 @@ import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
-import './Dash.scss';
 import CreateWidgetModal from './modals/CreateWidgetModal';
 import ImportConfigModal from './modals/ImportConfigModal';
 import { ITab } from './model/Tab';
@@ -25,6 +24,7 @@ import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
+import './Dash.scss';
 export interface IMenu {
   link: string;
   icon: string;
@@ -198,16 +198,12 @@ export default function Dash(): React.ReactElement {
         <TabContext value={activeTab.toString()}>
           <div className="flex flex-col">
             <div className="flex flex-row justify-between m-1">
-              <div className="flex flex-row">
+              <div className="flex flex-row ">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
-                      <div
-                        className="flex flex-row space-x-2"
-                        {...providedDroppable.droppableProps}
-                        ref={providedDroppable.innerRef}
-                      >
-                        <TabList>
+                      <div {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
+                        <TabList className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-7xl">
                           {tabs.length > 0 &&
                             tabs.map((tab: ITab, index: number) => {
                               return (
@@ -218,7 +214,6 @@ export default function Dash(): React.ReactElement {
                                       ref={providedDraggable.innerRef}
                                       {...providedDraggable.draggableProps}
                                       {...providedDraggable.dragHandleProps}
-                                      className={`tab ${tab.id === activeTab ? 'selectedItem' : ''}`}
                                     >
                                       <NavDash
                                         tab={tab}
@@ -241,29 +236,33 @@ export default function Dash(): React.ReactElement {
                   <AddCircleOutlineIcon />
                 </IconButton>
               </div>
-              <div className="flex flex-row place-content-center">
-                <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-                <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
-                  <RefreshIcon />
-                </IconButton>
+              <div className="flex flex-row">
+                <div className="flex flex-row m-auto">
+                  <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
 
-                <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
-                  <DownloadIcon />
-                </IconButton>
+                  <div>
+                    <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                      <RefreshIcon />
+                    </IconButton>
+                  </div>
 
-                <ImportConfigModal />
+                  <div>
+                    <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                      <DownloadIcon />
+                    </IconButton>
+                  </div>
 
+                  <ImportConfigModal />
+                </div>
                 <Button onClick={authService.logout} variant="contained">
                   Déconnexion
                 </Button>
               </div>
             </div>
             {tabs.length > 0 &&
-              tabs
-                .filter((tab) => tab.id === activeTab)
-                .map((tab: ITab) => {
-                  return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
-                })}
+              tabs.map((tab: ITab) => {
+                return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
+              })}
           </div>
         </TabContext>
       )}

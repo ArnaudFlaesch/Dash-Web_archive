@@ -12,7 +12,6 @@ import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
-import './TabDash.scss';
 import TabPanel from '@mui/lab/TabPanel';
 
 interface IProps {
@@ -129,16 +128,16 @@ export default function TabDash(props: IProps): React.ReactElement {
   }
 
   return (
-    <TabPanel value={props.tabId.toString()} className="widgetList grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-      {widgets &&
-        widgets.length > 0 &&
-        widgets.map((widgetConfig: IWidgetConfig) => {
-          return (
-            <div key={widgetConfig.id} className="widget">
-              {createWidget(widgetConfig)}
-            </div>
-          );
-        })}
-    </TabPanel>
+    <div>
+      {props.tabId === activeTab && (
+        <TabPanel value={props.tabId.toString()} className="widgetList grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+          {widgets &&
+            widgets.length > 0 &&
+            widgets.map((widgetConfig: IWidgetConfig) => {
+              return <div key={widgetConfig.id}>{createWidget(widgetConfig)}</div>;
+            })}
+        </TabPanel>
+      )}
+    </div>
   );
 }
