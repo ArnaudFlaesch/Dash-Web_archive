@@ -20,12 +20,7 @@ describe('Calendar Widget tests', () => {
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
     cy.get('#CALENDAR').click();
     cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal')
-        .click()
-        .get('.widget')
-        .should('have.length', 1)
-        .get('.rbc-toolbar-label')
-        .should('have.text', format(new Date(), 'MMMM yyyy', { locale: fr }));
+      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
     });
   });
 
