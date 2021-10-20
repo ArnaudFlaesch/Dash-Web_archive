@@ -64,7 +64,7 @@
     "@cypress/code-coverage": "3.9.11",
     "@cypress/instrument-cra": "1.4.0",
     "@types/chart.js": "2.9.34",
-    "@types/enzyme": "3.10.9",
+    "@types/enzyme": "3.10.10",
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/fb": "0.0.28",
     "@types/ical": "0.8.0",
