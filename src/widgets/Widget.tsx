@@ -79,7 +79,7 @@ export default function Widget(props: IProps): ReactElement {
 
       {mode === ModeEnum.READ && !isEmptyWidget() && (
         <div>
-          <div className="header flex flex-row justify-between">
+          <div className="header flex flex-row justify-between sticky top-0">
             <div className="font-bold">{props.header}</div>
             <div className="flex flex-row">
               {props.additionalActionButtons}
@@ -96,7 +96,7 @@ export default function Widget(props: IProps): ReactElement {
               </IconButton>
             </div>
           </div>
-          {props.body}
+          <div className="h-full">{props.body}</div>
         </div>
       )}
     </div>
