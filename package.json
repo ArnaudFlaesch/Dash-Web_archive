@@ -39,7 +39,7 @@
     "@mui/icons-material": "5.0.4",
     "@mui/lab": "5.0.0-alpha.51",
     "@mui/material": "5.0.4",
-    "axios": "0.23.0",
+    "axios": "0.24.0",
     "chart.js": "3.6.0",
     "chartjs-adapter-date-fns": "2.0.0",
     "date-fns": "2.25.0",
