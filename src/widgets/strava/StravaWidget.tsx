@@ -151,7 +151,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
   const widgetHeader = (
     <div>
       <a href={`https://www.strava.com/athletes/${athlete?.id}`} className="flex flex-row">
-        <img src={athlete?.profile_medium} />
+        <img className="h-9 w-9" src={athlete?.profile_medium} />
         <p>
           {athlete?.firstname} {athlete?.lastname}
         </p>
