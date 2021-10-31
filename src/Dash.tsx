@@ -198,7 +198,7 @@ export default function Dash(): React.ReactElement {
         <TabContext value={activeTab.toString()}>
           <div className="flex flex-col">
             <div className="flex flex-row m-1">
-              <div className="flex flex-row overflow-x-auto w-9/12 md:w-10/12">
+              <div className="flex flex-row overflow-x-scroll w-9/12 md:w-10/12">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
