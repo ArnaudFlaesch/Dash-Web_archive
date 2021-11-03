@@ -143,14 +143,10 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   }
 
   const widgetHeader = (
-    <div className="rssWidgetTitle">
+    <div className="h-10">
       <a href={link} className="flex flex-row">
-        {image && (
-          <div>
-            <img className="max-h-10 max-w-1" src={image?.url} alt="logo" />
-          </div>
-        )}
-        <div className="rssTitle">{title}</div>
+        {image && <img className="max-h-9 max-w-1" src={image?.url} alt="logo" />}
+        <div className="rssTitle whitespace-nowrap overflow-hidden overflow-ellipsis">{title}</div>
       </a>
     </div>
   );

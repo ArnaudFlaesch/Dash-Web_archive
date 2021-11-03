@@ -108,7 +108,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         case ForecastMode.WEEK: {
           return forecast.filter((forecastDay) => {
             const forecastElement = formatDateFromTimestamp(forecastDay.dt, adjustTimeWithOffset(city.timezone));
-            return forecastElement.getHours() === 17;
+            return forecastElement.getHours() >= 15 && forecastElement.getHours() <= 18;
           });
         }
         case ForecastMode.TOMORROW: {
@@ -193,7 +193,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
       )}
       {city && forecast && (
         <div>
-          <div className="flex flex-row space-x-10">
+          <div className="flex flex-row flex-wrap space-x-10">
             <span className="font-bold">Prévisions</span>
             <span className="flex flex-row space-x-1">
               <Button
