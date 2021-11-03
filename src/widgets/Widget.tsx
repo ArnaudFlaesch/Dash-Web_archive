@@ -79,9 +79,9 @@ export default function Widget(props: IProps): ReactElement {
 
       {mode === ModeEnum.READ && !isEmptyWidget() && (
         <div>
-          <div className="header flex flex-row justify-between sticky top-0">
-            <div className="font-bold">{props.header}</div>
-            <div className="flex flex-row">
+          <div className="header h-10 flex flex-row justify-between sticky top-0">
+            <div className="font-bold w-1/2">{props.header}</div>
+            <div className="flex flex-row max-w-1/2">
               {props.additionalActionButtons}
               {props.editModeComponent && (
                 <IconButton onClick={editWidget} className="editButton">
@@ -96,7 +96,7 @@ export default function Widget(props: IProps): ReactElement {
               </IconButton>
             </div>
           </div>
-          <div className="h-full">{props.body}</div>
+          <div className="max-h-80 overflow-y-scroll">{props.body}</div>
         </div>
       )}
     </div>

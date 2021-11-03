@@ -197,13 +197,13 @@ export default function Dash(): React.ReactElement {
       {isUserAuthenticated() && (
         <TabContext value={activeTab.toString()}>
           <div className="flex flex-col">
-            <div className="flex flex-row justify-between m-1">
-              <div className="flex flex-row ">
+            <div className="flex flex-row m-1">
+              <div className="flex flex-row overflow-x-auto w-9/12 md:w-10/12">
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable" direction="horizontal">
                     {(providedDroppable: DroppableProvided) => (
                       <div {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
-                        <TabList className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-7xl">
+                        <TabList className="flex flex-row flex-wrap">
                           {tabs.length > 0 &&
                             tabs.map((tab: ITab, index: number) => {
                               return (
@@ -236,7 +236,7 @@ export default function Dash(): React.ReactElement {
                   <AddCircleOutlineIcon />
                 </IconButton>
               </div>
-              <div className="flex flex-row">
+              <div className="flex flex-row w-1/3 md:w-3/12">
                 <div className="flex flex-row m-auto">
                   <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
 
