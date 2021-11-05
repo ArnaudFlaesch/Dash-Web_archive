@@ -92,7 +92,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "gh-pages": "3.2.3",
     "istanbul-lib-coverage": "3.2.0",
-    "mochawesome": "6.3.1",
+    "mochawesome": "7.0.1",
     "mochawesome-merge": "4.2.0",
     "mochawesome-report-generator": "6.0.0",
     "mockdate": "3.0.5",
