@@ -68,7 +68,7 @@
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/fb": "0.0.28",
     "@types/ical": "0.8.0",
-    "@types/jest": "27.0.2",
+    "@types/jest": "27.0.3",
     "@types/node": "16.11.8",
     "@types/pg": "8.6.1",
     "@types/react": "17.0.35",
