@@ -60,7 +60,7 @@
     "winston": "3.3.3"
   },
   "devDependencies": {
-    "@craco/craco": "6.4.1",
+    "@craco/craco": "6.4.2",
     "@cypress/code-coverage": "3.9.11",
     "@cypress/instrument-cra": "1.4.0",
     "@types/chart.js": "2.9.34",
