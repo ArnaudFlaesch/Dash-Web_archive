@@ -101,7 +101,7 @@
     "postcss": "8.4.4",
     "postcss-custom-properties": "12.0.0",
     "prettier": "2.5.0",
-    "sass": "1.43.5",
+    "sass": "1.44.0",
     "snyk": "1.779.0",
     "snyk-to-html": "2.2.0",
     "stylelint": "13.13.1",
