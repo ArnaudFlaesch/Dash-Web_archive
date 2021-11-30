@@ -69,7 +69,7 @@
     "@types/fb": "0.0.28",
     "@types/ical": "0.8.0",
     "@types/jest": "27.0.3",
-    "@types/node": "16.11.10",
+    "@types/node": "16.11.11",
     "@types/pg": "8.6.1",
     "@types/react": "17.0.37",
     "@types/react-beautiful-dnd": "13.1.2",
