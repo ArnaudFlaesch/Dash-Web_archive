@@ -70,7 +70,7 @@
     "@types/ical": "0.8.0",
     "@types/jest": "27.4.0",
     "@types/node": "16.11.19",
-    "@types/pg": "8.6.3",
+    "@types/pg": "8.6.4",
     "@types/react": "17.0.38",
     "@types/react-beautiful-dnd": "13.1.2",
     "@types/react-big-calendar": "0.36.2",
