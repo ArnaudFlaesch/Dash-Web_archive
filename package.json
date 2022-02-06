@@ -106,7 +106,6 @@
     "snyk-to-html": "2.2.1",
     "stylelint": "14.3.0",
     "stylelint-config-prettier-scss": "0.0.1",
-    "stylelint-config-standard": "22.0.0",
     "stylelint-config-standard-scss": "3.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.17",
     "ts-jest": "27.0.7",
