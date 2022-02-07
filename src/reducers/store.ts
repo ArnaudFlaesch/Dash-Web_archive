@@ -1,4 +1,3 @@
 import { createStore } from 'redux';
-import rootReducer from './tabReducer';
-
+import rootReducer from './rootReducer';
 export default createStore(rootReducer);

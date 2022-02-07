@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { useCustomEventListener } from 'react-custom-events';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -7,6 +6,8 @@ import { IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './Widget.scss';
+import { IRefreshWidgetState } from 'src/reducers/refreshWidgetsReducer';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   id: number;
@@ -22,14 +23,13 @@ interface IProps {
 
 export default function Widget(props: IProps): ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
-
-  useCustomEventListener('refreshAllWidgets', () => {
-    props.refreshFunction();
-  });
+  const refreshWidgets = useSelector((state: IRefreshWidgetState) => state.toggleRefreshWidgets);
 
   useEffect(() => {
-    setMode(ModeEnum.READ);
-  }, [props.config]);
+    props.refreshFunction();
+  }, [refreshWidgets]);
+
+  useEffect(() => setMode(ModeEnum.READ), [props.config]);
 
   function editWidget() {
     if (props.editModeComponent) {
