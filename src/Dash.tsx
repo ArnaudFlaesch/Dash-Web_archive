@@ -7,7 +7,6 @@ import { Button, IconButton } from '@mui/material';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
-import { emitCustomEvent } from 'react-custom-events';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateWidgetModal from './modals/CreateWidgetModal';
 import ImportConfigModal from './modals/ImportConfigModal';
@@ -67,9 +66,7 @@ export default function Dash(): React.ReactElement {
         'Content-type': 'application/json'
       }
     })
-      .then((result) => {
-        return result.json();
-      })
+      .then((result) => result.json())
       .then((result) => {
         setTabs(result);
         if (result && result.length > 0) {
@@ -89,7 +86,7 @@ export default function Dash(): React.ReactElement {
   }
 
   function refreshAllWidgets() {
-    emitCustomEvent('refreshAllWidgets');
+    window.dispatchEvent(new CustomEvent('refreshAllWidgets'));
   }
 
   function addNewTab() {

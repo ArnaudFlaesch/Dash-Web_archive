@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { useCustomEventListener } from 'react-custom-events';
 import { ModeEnum } from '../enums/ModeEnum';
 import DeleteWidget from './utils/DeleteWidget';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -23,9 +22,12 @@ interface IProps {
 export default function Widget(props: IProps): ReactElement {
   const [mode, setMode] = useState(ModeEnum.READ);
 
-  useCustomEventListener('refreshAllWidgets', () => {
-    props.refreshFunction();
-  });
+  useEffect(() => {
+    window.addEventListener('refreshAllWidgets', props.refreshFunction);
+    return () => {
+      window.removeEventListener('refreshAllWidgets', props.refreshFunction);
+    };
+  }, []);
 
   useEffect(() => {
     setMode(ModeEnum.READ);
