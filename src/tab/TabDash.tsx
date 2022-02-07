@@ -4,7 +4,7 @@ import authorizationBearer from 'src/services/auth.header';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
-import { ITabState } from '../reducers/tabReducer';
+import { IReducerState } from '../reducers/rootReducer';
 import { deleteWidget } from '../services/widget.service';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
@@ -21,7 +21,7 @@ interface IProps {
 
 export default function TabDash(props: IProps): React.ReactElement {
   const [widgets, setWidgets] = useState([]);
-  const activeTab = useSelector((state: ITabState) => state.activeTab);
+  const activeTab = useSelector((state: IReducerState) => state.activeTab);
 
   useEffect(() => {
     if (activeTab === props.tabId) {

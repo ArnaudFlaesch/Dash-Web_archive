@@ -13,8 +13,8 @@ import ImportConfigModal from './modals/ImportConfigModal';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Login from './pages/login/Login';
-import { toggleSelectedTab } from './reducers/actions';
-import { ITabState } from './reducers/tabReducer';
+import { toggleRefreshWidgets, toggleSelectedTab } from './reducers/actions';
+import { IReducerState } from './reducers/rootReducer';
 import authorizationBearer from './services/auth.header';
 import authService from './services/auth.service';
 import { exportConfig } from './services/config.service';
@@ -39,7 +39,7 @@ export default function Dash(): React.ReactElement {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [newWidget, setNewWidget] = useState<IWidgetConfig>();
 
-  const activeTab = useSelector((state: ITabState) => state.activeTab);
+  const activeTab = useSelector((state: IReducerState) => state.activeTab);
   const dispatch = useDispatch();
   const isMounted = useRef(false);
 
@@ -86,7 +86,7 @@ export default function Dash(): React.ReactElement {
   }
 
   function refreshAllWidgets() {
-    window.dispatchEvent(new CustomEvent('refreshAllWidgets'));
+    dispatch(toggleRefreshWidgets());
   }
 
   function addNewTab() {
@@ -97,9 +97,7 @@ export default function Dash(): React.ReactElement {
         setTabs(tabs.concat(insertedTab));
         dispatch(toggleSelectedTab(insertedTab.id));
       })
-      .catch((error) => {
-        logger.error(error.message);
-      });
+      .catch((error) => logger.error(error.message));
   }
 
   function getNewWidget(tabId: number) {
@@ -119,9 +117,7 @@ export default function Dash(): React.ReactElement {
             setNewWidget(widgetData);
           }
         })
-        .catch((error) => {
-          logger.error(error.message);
-        });
+        .catch((error) => logger.error(error.message));
     }
   }
 

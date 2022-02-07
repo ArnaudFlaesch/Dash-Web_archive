@@ -22,7 +22,7 @@ interface IProps extends IBaseWidgetConfig {
 
 export default function RSSWidget(props: IProps): React.ReactElement {
   const [feed, setFeed] = useState<IArticle[]>([]);
-  const [url, setUrl] = useState(props.url || '');
+  const [url, setUrl] = useState(props.url);
   const [description, setDecription] = useState('');
   const [image, setImage] = useState<ImageContent>();
   const [link, setLink] = useState('');
@@ -51,34 +51,23 @@ export default function RSSWidget(props: IProps): React.ReactElement {
               setLink(result.link);
               setTitle(result.title);
             })
-            .catch((error) => {
-              logger.error(error.message);
-            });
+            .catch((error) => logger.error(error.message));
         })
-        .catch((error) => {
-          logger.error(error.message);
-        });
+        .catch((error) => logger.error(error.message));
     }
   }
 
-  useEffect(() => {
-    fetchDataFromRssFeed();
-  }, [url]);
-
-  function refreshWidget() {
+  function refreshWidget(): void {
     setFeed([]);
     fetchDataFromRssFeed();
   }
 
+  useEffect(refreshWidget, [url]);
+
   function onUrlSubmitted(rssUrl: string): void {
     updateWidgetData(props.id, { url: rssUrl, guidsList: [] })
-      .then(() => {
-        setUrl(rssUrl);
-        refreshWidget();
-      })
-      .catch((error) => {
-        logger.error(error.message);
-      });
+      .then(() => setUrl(rssUrl))
+      .catch((error) => logger.error(error.message));
   }
 
   function formatTitleForArticle(article: IArticle) {
@@ -107,12 +96,8 @@ export default function RSSWidget(props: IProps): React.ReactElement {
       url: url,
       readArticlesGuids: readArticlesGuids
     })
-      .then((result) => {
-        setReadArticles(result.data.data.readArticlesGuids as []);
-      })
-      .catch((error) => {
-        logger.error(error.message);
-      });
+      .then((result) => setReadArticles(result.data.data.readArticlesGuids as []))
+      .catch((error) => logger.error(error.message));
   }
 
   function closeFeeds(): void {
@@ -175,16 +160,19 @@ export default function RSSWidget(props: IProps): React.ReactElement {
   );
 
   return (
-    <Widget
-      id={props.id}
-      tabId={props.tabId}
-      config={new Map<string, unknown>([['url', url]])}
-      header={widgetHeader}
-      additionalActionButtons={additionalActionButtons}
-      body={widgetBody}
-      editModeComponent={<EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />}
-      refreshFunction={refreshWidget}
-      onDeleteButtonClicked={props.onDeleteButtonClicked}
-    />
+    <div>
+      {url}
+      <Widget
+        id={props.id}
+        tabId={props.tabId}
+        config={new Map<string, unknown>([['url', url]])}
+        header={widgetHeader}
+        additionalActionButtons={additionalActionButtons}
+        body={widgetBody}
+        editModeComponent={<EmptyRSSWidget url={url} onUrlSubmitted={onUrlSubmitted} />}
+        refreshFunction={fetchDataFromRssFeed}
+        onDeleteButtonClicked={props.onDeleteButtonClicked}
+      />
+    </div>
   );
 }
