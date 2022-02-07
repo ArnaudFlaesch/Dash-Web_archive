@@ -70,7 +70,7 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should refresh all widgets', () => {
-    cy.intercept('GET', '/proxy/?url=http://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
+    cy.intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
       .as('refreshWidget')
       .get('#reloadAllWidgetsButton')
       .click()
