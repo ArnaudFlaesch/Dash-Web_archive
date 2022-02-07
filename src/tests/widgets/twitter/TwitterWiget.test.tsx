@@ -3,6 +3,8 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
+import { Provider } from 'react-redux';
+import store from 'src/reducers/store';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -25,7 +27,9 @@ describe('Twitter component tests', () => {
     act(() => {
       const onDeleteButtonClicked = () => null;
       render(
-        <TwitterTimelineWidget id={1} profile={profile} tabId={2} onDeleteButtonClicked={onDeleteButtonClicked} />,
+        <Provider store={store}>
+          <TwitterTimelineWidget id={1} profile={profile} tabId={2} onDeleteButtonClicked={onDeleteButtonClicked} />
+        </Provider>,
         container
       );
     });
