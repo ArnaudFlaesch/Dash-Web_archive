@@ -17,7 +17,8 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness3Icon from '@mui/icons-material/Brightness3';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
-
+import { CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js';
+import { Chart as ChartJS } from 'chart.js';
 interface IProps extends IBaseWidgetConfig {
   city?: string;
 }
@@ -39,6 +40,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
   const [forecast, setForecast] = useState<IForecast[]>();
   const [city, setCity] = useState<ICity>();
   const [forecastMode, setForecastMode] = useState<ForecastMode>(ForecastMode.TODAY);
+
+  ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement);
 
   function fetchDataFromWeatherApi() {
     if (cityToQuery) {
