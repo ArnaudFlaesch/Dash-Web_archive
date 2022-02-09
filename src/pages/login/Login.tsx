@@ -30,7 +30,6 @@ export default function Login(): React.ReactElement {
         (error) => {
           const resMessage =
             (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-
           setLoading(false);
           setMessage(resMessage);
         }
@@ -70,7 +69,11 @@ export default function Login(): React.ReactElement {
             {loading && <CircularProgress className="mr-5" />}
             <span>Se connecter</span>
           </Button>
-          {message && <Alert severity="error">{message}</Alert>}
+          {message && (
+            <Alert className="alertError" severity="error">
+              {message}
+            </Alert>
+          )}
         </div>
       </div>
     </div>

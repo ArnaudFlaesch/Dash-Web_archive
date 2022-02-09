@@ -25,6 +25,7 @@ describe('Login tests', () => {
       .wait('@login')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(401);
+        cy.get('.alertError').eq(0).should('have.text', 'Request failed with status code 401');
       });
   });
 

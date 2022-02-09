@@ -1,10 +1,22 @@
 /// <reference types="cypress" />
 
+import { Interception } from 'cypress/types/net-stubbing';
+
 describe('Tab tests', () => {
   before(() => {
     cy.loginAsAdmin()
       .visit('/')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+  });
+
+  it.only('Should fail to get the list of tabs', () => {
+    cy.intercept('GET', '/tab/', { fixture: 'tabs/getTabsError.json', statusCode: 500 }).as('getTabsError');
+    cy.visit('/')
+      .wait('@getTabsError')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(500);
+        cy.get('.alertError').eq(0).should('have.text', 'Erreur interne du serveur.');
+      });
   });
 
   it('Should create a new tab', () => {
