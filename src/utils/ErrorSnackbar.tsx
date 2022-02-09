@@ -21,9 +21,9 @@ export default function ErrorSnackbar(): React.ReactElement {
     }
   }, [errorToHandle]);
 
-  function handleError(error: Error, customMessage: string) {
+  function handleError(error: Error, message: string) {
     logger.error(error.message);
-    setCustomMessage(customMessage);
+    setCustomMessage(message);
   }
 
   function handleClose() {

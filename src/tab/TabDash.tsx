@@ -32,75 +32,36 @@ export default function TabDash(props: IProps): React.ReactElement {
 
   useEffect(() => {
     if (props.newWidget) {
-      setWidgets((widgets as IWidgetConfig[]).concat([props.newWidget]) as []);
+      setWidgets(widgets.concat([props.newWidget]) as []);
     }
   }, [props.newWidget != null && props.newWidget.id]);
 
   function createWidget(widgetConfig: IWidgetConfig) {
+    const props = {
+      id: widgetConfig.id,
+      tabId: widgetConfig.tab.id,
+      ...widgetConfig.data,
+      onDeleteButtonClicked: deleteWidgetFromDashboard
+    };
     switch (widgetConfig.type) {
-      case WidgetTypes.WEATHER: {
-        return (
-          <WeatherWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.RSS: {
-        return (
-          <RSSWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.CALENDAR: {
-        return (
-          <CalendarWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.STRAVA: {
-        return (
-          <StravaWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.STEAM: {
-        return (
-          <SteamWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.TWITTER_TIMELINE: {
-        return (
-          <TwitterTimelineWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      default: {
-        return;
-      }
+      case WidgetTypes.WEATHER:
+        <WeatherWidget {...props} />;
+        break;
+      case WidgetTypes.RSS:
+        <RSSWidget {...props} />;
+        break;
+      case WidgetTypes.CALENDAR:
+        <CalendarWidget {...props} />;
+        break;
+      case WidgetTypes.STRAVA:
+        <StravaWidget {...props} />;
+        break;
+      case WidgetTypes.STEAM:
+        <SteamWidget {...props} />;
+        break;
+      case WidgetTypes.TWITTER_TIMELINE:
+        <TwitterTimelineWidget {...props} />;
+        break;
     }
   }
 
