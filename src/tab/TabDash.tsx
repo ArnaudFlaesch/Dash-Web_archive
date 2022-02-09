@@ -45,23 +45,17 @@ export default function TabDash(props: IProps): React.ReactElement {
     };
     switch (widgetConfig.type) {
       case WidgetTypes.WEATHER:
-        <WeatherWidget {...props} />;
-        break;
+        return <WeatherWidget {...props} />;
       case WidgetTypes.RSS:
-        <RSSWidget {...props} />;
-        break;
+        return <RSSWidget {...props} />;
       case WidgetTypes.CALENDAR:
-        <CalendarWidget {...props} />;
-        break;
+        return <CalendarWidget {...props} />;
       case WidgetTypes.STRAVA:
-        <StravaWidget {...props} />;
-        break;
+        return <StravaWidget {...props} />;
       case WidgetTypes.STEAM:
-        <SteamWidget {...props} />;
-        break;
+        return <SteamWidget {...props} />;
       case WidgetTypes.TWITTER_TIMELINE:
-        <TwitterTimelineWidget {...props} />;
-        break;
+        return <TwitterTimelineWidget {...props} />;
     }
   }
 
