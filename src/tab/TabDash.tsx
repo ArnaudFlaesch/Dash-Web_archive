@@ -115,9 +115,7 @@ export default function TabDash(props: IProps): React.ReactElement {
           );
         }
       })
-      .catch((error: Error) => {
-        logger.error(error.message);
-      });
+      .catch((error: Error) => logger.error(error.message));
   }
 
   return (

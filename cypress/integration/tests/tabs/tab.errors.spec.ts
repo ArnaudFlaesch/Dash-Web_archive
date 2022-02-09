@@ -50,7 +50,25 @@ describe('Tab error tests', () => {
           .get('.tab')
           .should('have.length', 1)
           .eq(0)
-          .should('have.text', 'Nouvel onglet');
+          .should('have.text', 'Flux RSS');
+      });
+  });
+
+  it('Should fail to delete the tab', () => {
+    cy.intercept('DELETE', '/tab/deleteTab/*', { statusCode: 500 }).as('deleteTabError');
+    cy.get('.tab')
+      .should('have.length', 1)
+      .eq(0)
+      .dblclick()
+      .get('.deleteTabButton')
+      .click()
+      .wait('@deleteTabError')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(500);
+        cy.get('#errorSnackbar')
+          .should('have.text', "Erreur lors de la suppression d'un onglet.")
+          .get('.tab')
+          .should('have.length', 1);
       });
   });
 });

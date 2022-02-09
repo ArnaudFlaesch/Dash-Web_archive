@@ -23,17 +23,18 @@ export default function NavDash(props: IProps): ReactElement {
   const dispatch = useDispatch();
 
   const ERROR_MESSAGE_UPDATE_TAB = "Erreur lors de la modification d'un onglet.";
+  const ERROR_MESSAGE_DELETE_TAB = "Erreur lors de la suppression d'un onglet.";
 
   function deleteTabFromDash() {
     deleteTab(props.tab.id)
       .then(() => props.onTabDeleted(props.tab.id))
-      .catch((error) => logger.error(error.message));
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_DELETE_TAB)));
   }
 
   function saveTabName() {
     updateTab(props.tab.id, label, props.tab.tabOrder)
-      .then(() => toggle(!isToggled))
-      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_UPDATE_TAB)));
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_UPDATE_TAB)))
+      .finally(() => toggle(!isToggled));
   }
 
   function clickToggle() {
