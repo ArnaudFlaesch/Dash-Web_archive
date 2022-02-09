@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import authorizationBearer from 'src/services/auth.header';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { IReducerState } from '../reducers/rootReducer';
-import { deleteWidget } from '../services/widget.service';
+import { deleteWidget, getWidgets } from '../services/widget.service';
 import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
@@ -20,19 +19,13 @@ interface IProps {
 }
 
 export default function TabDash(props: IProps): React.ReactElement {
-  const [widgets, setWidgets] = useState([]);
+  const [widgets, setWidgets] = useState<IWidgetConfig[]>([]);
   const activeTab = useSelector((state: IReducerState) => state.activeTab);
 
   useEffect(() => {
     if (activeTab === props.tabId) {
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`, {
-        headers: {
-          Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
-        }
-      })
-        .then((result) => result.json())
-        .then((result) => setWidgets(result))
+      getWidgets(props.tabId)
+        .then((response) => setWidgets(response.data))
         .catch((error: Error) => logger.error(error.message));
     }
   }, [activeTab]);

@@ -2,7 +2,7 @@
 
 import { Interception } from 'cypress/types/net-stubbing';
 
-describe('Tab tests', () => {
+describe('Config tests', () => {
   before(() => {
     cy.loginAsAdmin()
       .visit('/')

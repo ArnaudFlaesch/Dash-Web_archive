@@ -1,13 +1,16 @@
-import { TOGGLE_TAB, TOGGLE_REFRESH_WIDGETS } from './actionTypes';
+import { IErrorToHandle } from './actions';
+import { TOGGLE_TAB, TOGGLE_REFRESH_WIDGETS, HANDLE_ERROR } from './actionTypes';
 
 export interface IReducerState {
   activeTab: number;
   toggleRefreshWidgets: boolean;
+  errorToHandle?: IErrorToHandle;
 }
 
 const initialState: IReducerState = {
   activeTab: -1,
-  toggleRefreshWidgets: false
+  toggleRefreshWidgets: false,
+  errorToHandle: undefined
 };
 
 export default function (state = initialState, action: { type: string; payload: unknown }): IReducerState {
@@ -23,6 +26,14 @@ export default function (state = initialState, action: { type: string; payload: 
       return {
         ...state,
         toggleRefreshWidgets: !state.toggleRefreshWidgets
+      };
+    }
+    case HANDLE_ERROR: {
+      return {
+        ...state,
+        errorToHandle: {
+          ...(action.payload as IErrorToHandle)
+        }
       };
     }
     default:

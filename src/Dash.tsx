@@ -3,7 +3,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
-import { Alert, Button, IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
@@ -13,7 +13,7 @@ import ImportConfigModal from './modals/ImportConfigModal';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Login from './pages/login/Login';
-import { toggleRefreshWidgets, toggleSelectedTab } from './reducers/actions';
+import { handleError, toggleRefreshWidgets, toggleSelectedTab } from './reducers/actions';
 import { IReducerState } from './reducers/rootReducer';
 import authService from './services/auth.service';
 import { exportConfig } from './services/config.service';
@@ -24,6 +24,7 @@ import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
 import './Dash.scss';
 import { AxiosError } from 'axios';
+import ErrorSnackbar from './utils/ErrorSnackbar';
 export interface IMenu {
   link: string;
   icon: string;
@@ -43,8 +44,8 @@ export default function Dash(): React.ReactElement {
   const dispatch = useDispatch();
   const isMounted = useRef(false);
 
-  const [getTabErrorMessage, setGetTabErrorMessage] = useState('');
-
+  const ERROR_MESSAGE_INIT_DASHBOARD = "Erreur lors de l'initialisation du dashboard.";
+  const ERROR_MESSAGE_ADD_TAB = "Erreur lors de l'ajout d'un onglet.";
   const refreshTimeout = 900000; // 15 minutes
 
   useEffect(() => {
@@ -70,16 +71,7 @@ export default function Dash(): React.ReactElement {
         }
         isMounted.current = true;
       })
-      .catch((error: AxiosError) => {
-        if (error && error.response) {
-          const errorToDisplay = error.response.data;
-          logger.error(errorToDisplay.message);
-          setGetTabErrorMessage(errorToDisplay.message);
-        } else {
-          logger.error(error.message);
-          setGetTabErrorMessage(error.message);
-        }
-      });
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_INIT_DASHBOARD)));
   }
 
   function toggleTab(tab: number) {
@@ -96,11 +88,11 @@ export default function Dash(): React.ReactElement {
     const newTabLabel = 'Nouvel onglet';
     addTab(newTabLabel)
       .then((response) => {
-        const insertedTab = response.data as ITab;
+        const insertedTab = response.data;
         setTabs(tabs.concat(insertedTab));
         dispatch(toggleSelectedTab(insertedTab.id));
       })
-      .catch((error) => logger.error(error.message));
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_ADD_TAB)));
   }
 
   function getNewWidget(tabId: number) {
@@ -262,13 +254,9 @@ export default function Dash(): React.ReactElement {
                 })}
             </div>
           </TabContext>
-          {getTabErrorMessage && (
-            <Alert className="alertError" severity="error">
-              {getTabErrorMessage}
-            </Alert>
-          )}
         </div>
       )}
+      <ErrorSnackbar />
     </div>
   );
 }

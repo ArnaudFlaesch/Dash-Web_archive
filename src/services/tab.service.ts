@@ -11,7 +11,7 @@ export function getTabs(): Promise<AxiosResponse<ITab[]>> {
   });
 }
 
-export function addTab(label: string): Promise<AxiosResponse<unknown>> {
+export function addTab(label: string): Promise<AxiosResponse<ITab>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/addTab`,
     { label: label },
