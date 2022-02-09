@@ -1,5 +1,4 @@
 import { ReactElement, useState } from 'react';
-import logger from 'src/utils/LogUtils';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
 import DeleteIcon from '@mui/icons-material/Delete';
