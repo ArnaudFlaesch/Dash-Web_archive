@@ -51,7 +51,15 @@ describe('RSS Widget errors tests', () => {
           .wait('@deleteWidgetError')
           .then((request: Interception) => {
             expect(request.response.statusCode).to.equal(500);
-            cy.get('#errorSnackbar').should('have.text', "Erreur lors de la suppression d'un widget.");
+            cy.get('#errorSnackbar')
+              .should('have.text', "Erreur lors de la suppression d'un widget.")
+              .intercept('DELETE', '/widget/deleteWidget/*')
+              .as('deleteWidget')
+              .wait('@deleteWidget')
+              .then((request: Interception) => {
+                expect(request.response.statusCode).to.equal(200);
+                cy.get('.validateDeletionButton').click().get('.widget').should('have.length', 0);
+              });
           });
       });
   });
