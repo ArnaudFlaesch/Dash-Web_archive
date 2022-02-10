@@ -62,7 +62,7 @@ describe('RSS Widget errors tests', () => {
 
   it('Should delete the widget', () => {
     cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
-    waitForTabToBeVisible()
+    refreshAndWaitForTabToBeVisible()
       .get('.deleteButton')
       .click()
       .get('h4')
