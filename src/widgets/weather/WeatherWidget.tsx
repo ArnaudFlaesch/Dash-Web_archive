@@ -55,12 +55,8 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
             url: `${WEATHER_API}${WEATHER_ENDPOINT}${API_OPTIONS}${process.env.REACT_APP_OPENWEATHERMAP_KEY}&q=${cityToQuery}`
           }
         })
-        .then((result) => {
-          setWeather(result.data);
-        })
-        .catch((error: Error) => {
-          logger.error(error);
-        });
+        .then((result) => setWeather(result.data))
+        .catch((error: Error) => logger.error(error.message));
       axios
         .get(`${process.env.REACT_APP_BACKEND_URL}/proxy/`, {
           headers: {
@@ -75,9 +71,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
           setForecast((result.data as IWeatherAPIResponse).list);
           setCity((result.data as IWeatherAPIResponse).city);
         })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
+        .catch((error: Error) => logger.error(error.message));
     }
   }
 
@@ -100,9 +94,7 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
         setCityToQuery(updatedCity);
         refreshWidget();
       })
-      .catch((error) => {
-        logger.error(error.message);
-      });
+      .catch((error) => logger.error(error.message));
   }
 
   function filterForecastByMode(): IForecast[] {

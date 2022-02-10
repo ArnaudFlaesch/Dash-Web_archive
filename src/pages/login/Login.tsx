@@ -1,5 +1,7 @@
-import { Alert, Button, CircularProgress, Input } from '@mui/material';
+import { Button, CircularProgress, Input } from '@mui/material';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { handleError } from 'src/reducers/actions';
 import logo from '../../assets/logo.png';
 import AuthService from '../../services/auth.service';
 
@@ -7,7 +9,9 @@ export default function Login(): React.ReactElement {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
+
+  const ERROR_AUTHENTICATING_USER = "Erreur lors de la connexion de l'utilisateur.";
 
   const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -18,7 +22,6 @@ export default function Login(): React.ReactElement {
   };
 
   function handleLogin() {
-    setMessage('');
     setLoading(true);
 
     if (username && password) {
@@ -28,11 +31,8 @@ export default function Login(): React.ReactElement {
           setLoading(false);
         },
         (error) => {
-          const resMessage =
-            (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-
           setLoading(false);
-          setMessage(resMessage);
+          dispatch(handleError(error, ERROR_AUTHENTICATING_USER));
         }
       );
     } else {
@@ -70,7 +70,6 @@ export default function Login(): React.ReactElement {
             {loading && <CircularProgress className="mr-5" />}
             <span>Se connecter</span>
           </Button>
-          {message && <Alert severity="error">{message}</Alert>}
         </div>
       </div>
     </div>

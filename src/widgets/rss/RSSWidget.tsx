@@ -161,7 +161,6 @@ export default function RSSWidget(props: IProps): React.ReactElement {
 
   return (
     <div>
-      {url}
       <Widget
         id={props.id}
         tabId={props.tabId}

@@ -1,12 +1,13 @@
 import { ReactElement, useState } from 'react';
-import logger from 'src/utils/LogUtils';
 import { ITab } from '../../model/Tab';
 import { deleteTab, updateTab } from '../../services/tab.service';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, Input, Tab } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IReducerState } from 'src/reducers/rootReducer';
+import { AxiosError } from 'axios';
+import { handleError } from 'src/reducers/actions';
 
 interface IProps {
   tab: ITab;
@@ -18,17 +19,21 @@ export default function NavDash(props: IProps): ReactElement {
   const [label, setLabel] = useState(props.tab.label);
   const [isToggled, toggle] = useState(false);
   const activeTab = useSelector((state: IReducerState) => state.activeTab);
+  const dispatch = useDispatch();
+
+  const ERROR_MESSAGE_UPDATE_TAB = "Erreur lors de la modification d'un onglet.";
+  const ERROR_MESSAGE_DELETE_TAB = "Erreur lors de la suppression d'un onglet.";
 
   function deleteTabFromDash() {
     deleteTab(props.tab.id)
       .then(() => props.onTabDeleted(props.tab.id))
-      .catch((error) => logger.error(error.message));
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_DELETE_TAB)));
   }
 
   function saveTabName() {
     updateTab(props.tab.id, label, props.tab.tabOrder)
-      .then(() => toggle(!isToggled))
-      .catch((error) => logger.error(error.message));
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_UPDATE_TAB)))
+      .finally(() => toggle(!isToggled));
   }
 
   function clickToggle() {

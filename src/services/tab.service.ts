@@ -2,8 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import { ITab } from '../model/Tab';
 import authorizationBearer from './auth.header';
 
-export function getTabs(): Promise<AxiosResponse<unknown>> {
-  return axios.get(`${process.env.REACT_APP_BACKEND_URL}/tab`, {
+export function getTabs(): Promise<AxiosResponse<ITab[]>> {
+  return axios.get(`${process.env.REACT_APP_BACKEND_URL}/tab/`, {
     headers: {
       Authorization: authorizationBearer(),
       'Content-type': 'application/json'
@@ -11,7 +11,7 @@ export function getTabs(): Promise<AxiosResponse<unknown>> {
   });
 }
 
-export function addTab(label: string): Promise<AxiosResponse<unknown>> {
+export function addTab(label: string): Promise<AxiosResponse<ITab>> {
   return axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/tab/addTab`,
     { label: label },
