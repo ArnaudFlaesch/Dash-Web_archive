@@ -47,6 +47,7 @@ export default function Dash(): React.ReactElement {
   const ERROR_MESSAGE_INIT_DASHBOARD = "Erreur lors de l'initialisation du dashboard.";
   const ERROR_MESSAGE_ADD_TAB = "Erreur lors de l'ajout d'un onglet.";
   const ERROR_MESSAGE_ADD_WIDGET = "Erreur lors de l'ajout d'un widget.";
+  const ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
 
   const refreshTimeout = 900000; // 15 minutes
 
@@ -152,8 +153,8 @@ export default function Dash(): React.ReactElement {
       .catch((error) => logger.error(error.message));
   }
 
-  function downloadConfig(): Promise<void> {
-    return exportConfig()
+  function downloadConfig(): void {
+    exportConfig()
       .then((response) => {
         logger.info('Configuration exportée');
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -163,9 +164,7 @@ export default function Dash(): React.ReactElement {
         document.body.appendChild(link);
         link.click();
       })
-      .catch(() => {
-        logger.error("Erreur lors de l'export de la configuration");
-      });
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_EXPORT_CONFIGURATION)));
   }
 
   function isTokenExpired(): boolean {
