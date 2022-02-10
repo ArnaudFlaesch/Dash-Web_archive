@@ -46,9 +46,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
         }
         setCalendarUrls(updatedCalendars);
       })
-      .catch((error) => {
-        logger.error(error.message);
-      });
+      .catch((error) => logger.error(error.message));
   }
 
   function refreshWidget() {
@@ -77,9 +75,7 @@ export default function CalendarWidget(props: IProps): ReactElement {
             )
           );
         })
-        .catch((error) => {
-          logger.error(error);
-        });
+        .catch((error) => logger.error(error));
     });
   }
 
