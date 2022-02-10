@@ -17,7 +17,7 @@ describe('Tab error tests', () => {
   });
 
   it('Should fail to get the widgets', () => {
-    cy.intercept('GET', '/widget/', { statusCode: 500 })
+    cy.intercept('GET', '/widget/*', { statusCode: 500 })
       .as('getWidgetsError')
       .visit('/')
       .wait('@getWidgetsError')
