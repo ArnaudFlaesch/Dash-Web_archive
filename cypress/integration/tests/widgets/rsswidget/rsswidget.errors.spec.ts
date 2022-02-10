@@ -55,10 +55,12 @@ describe('RSS Widget errors tests', () => {
               .should('have.text', "Erreur lors de la suppression d'un widget.")
               .intercept('DELETE', '/widget/deleteWidget/*')
               .as('deleteWidget')
+              .get('.validateDeletionButton')
+              .click()
               .wait('@deleteWidget')
               .then((request: Interception) => {
                 expect(request.response.statusCode).to.equal(200);
-                cy.get('.validateDeletionButton').click().get('.widget').should('have.length', 0);
+                cy.get('.widget').should('have.length', 0);
               });
           });
       });
