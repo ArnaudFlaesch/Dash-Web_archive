@@ -3,7 +3,7 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('RSS Widget errors tests', () => {
-  function waitForTabToBeVisible() {
+  function refreshAndWaitForTabToBeVisible() {
     return cy
       .loginAsAdmin()
       .visit('/')
@@ -12,8 +12,8 @@ describe('RSS Widget errors tests', () => {
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   }
 
-  before(() => {
-    waitForTabToBeVisible();
+  beforeEach(() => {
+    refreshAndWaitForTabToBeVisible();
   });
 
   it('Should fail to create a RSS widget', () => {
