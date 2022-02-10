@@ -16,22 +16,6 @@ describe('RSS Widget errors tests', () => {
     waitForTabToBeVisible();
   });
 
-  after(() => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
-    waitForTabToBeVisible()
-      .get('.deleteButton')
-      .click()
-      .get('h4')
-      .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
-      .get('.validateDeletionButton')
-      .click()
-      .wait('@deleteWidget')
-      .then((request: Interception) => {
-        expect(request.response.statusCode).to.equal(200);
-        cy.get('.widget').should('have.length', 0);
-      });
-  });
-
   // @FIXME skipped test
   xit('Should fail to create a RSS widget', () => {
     cy.intercept('POST', '/widget/addWidget', { statusCode: 500 })
@@ -74,6 +58,22 @@ describe('RSS Widget errors tests', () => {
             expect(request.response.statusCode).to.equal(500);
             cy.get('#errorSnackbar').should('have.text', "Erreur lors de la suppression d'un widget.");
           });
+      });
+  });
+
+  it('Should delete the widget', () => {
+    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
+    waitForTabToBeVisible()
+      .get('.deleteButton')
+      .click()
+      .get('h4')
+      .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
+      .get('.validateDeletionButton')
+      .click()
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
+        cy.get('.widget').should('have.length', 0);
       });
   });
 });
