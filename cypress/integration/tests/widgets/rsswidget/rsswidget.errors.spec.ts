@@ -3,17 +3,22 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('RSS Widget errors tests', () => {
-  before(() => {
-    cy.loginAsAdmin()
+  function waitForTabToBeVisible() {
+    return cy
+      .loginAsAdmin()
       .visit('/')
       .title()
       .should('equals', 'Dash')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
+  }
+
+  before(() => {
+    waitForTabToBeVisible();
   });
 
   after(() => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*')
-      .as('deleteWidget')
+    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
+    waitForTabToBeVisible()
       .get('.deleteButton')
       .click()
       .get('h4')
