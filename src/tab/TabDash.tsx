@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { IReducerState } from '../reducers/rootReducer';
 import { deleteWidget, getWidgets } from '../services/widget.service';
-import logger from '../utils/LogUtils';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
 import TabPanel from '@mui/lab/TabPanel';
+import { handleError } from 'src/reducers/actions';
 
 interface IProps {
   tabId: number;
@@ -21,12 +21,15 @@ interface IProps {
 export default function TabDash(props: IProps): React.ReactElement {
   const [widgets, setWidgets] = useState<IWidgetConfig[]>([]);
   const activeTab = useSelector((state: IReducerState) => state.activeTab);
+  const dispatch = useDispatch();
+  const ERROR_MESSAGE_GET_WIDGETS = 'Erreur lors de la récupération des widgets.';
+  const ERROR_MESSAGE_DELETE_WIDGET = "Erreur lors de la suppression d'un widget.";
 
   useEffect(() => {
     if (activeTab === props.tabId) {
       getWidgets(props.tabId)
         .then((response) => setWidgets(response.data))
-        .catch((error: Error) => logger.error(error.message));
+        .catch((error: Error) => dispatch(handleError(error, ERROR_MESSAGE_GET_WIDGETS)));
     }
   }, [activeTab]);
 
@@ -37,7 +40,7 @@ export default function TabDash(props: IProps): React.ReactElement {
   }, [props.newWidget != null && props.newWidget.id]);
 
   function createWidget(widgetConfig: IWidgetConfig) {
-    const props = {
+    const widgetProps = {
       id: widgetConfig.id,
       tabId: widgetConfig.tab.id,
       ...widgetConfig.data,
@@ -45,17 +48,17 @@ export default function TabDash(props: IProps): React.ReactElement {
     };
     switch (widgetConfig.type) {
       case WidgetTypes.WEATHER:
-        return <WeatherWidget {...props} />;
+        return <WeatherWidget {...widgetProps} />;
       case WidgetTypes.RSS:
-        return <RSSWidget {...props} />;
+        return <RSSWidget {...widgetProps} />;
       case WidgetTypes.CALENDAR:
-        return <CalendarWidget {...props} />;
+        return <CalendarWidget {...widgetProps} />;
       case WidgetTypes.STRAVA:
-        return <StravaWidget {...props} />;
+        return <StravaWidget {...widgetProps} />;
       case WidgetTypes.STEAM:
-        return <SteamWidget {...props} />;
+        return <SteamWidget {...widgetProps} />;
       case WidgetTypes.TWITTER_TIMELINE:
-        return <TwitterTimelineWidget {...props} />;
+        return <TwitterTimelineWidget {...widgetProps} />;
     }
   }
 
@@ -70,7 +73,7 @@ export default function TabDash(props: IProps): React.ReactElement {
           );
         }
       })
-      .catch((error: Error) => logger.error(error.message));
+      .catch((error: Error) => dispatch(handleError(error, ERROR_MESSAGE_DELETE_WIDGET)));
   }
 
   return (

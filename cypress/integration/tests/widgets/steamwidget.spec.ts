@@ -10,12 +10,15 @@ describe('Steam Widget tests', () => {
   });
 
   it('Should create a Steam Widget and add it to the dashboard', () => {
-    cy.get('#openAddWidgetModal').click();
     cy.intercept('POST', '/widget/addWidget').as('addWidget');
-    cy.get('#STEAM').click();
-    cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
-    });
+    cy.get('#openAddWidgetModal')
+      .click()
+      .get('#STEAM')
+      .click()
+      .wait('@addWidget')
+      .then(() => {
+        cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
+      });
   });
 
   it('Should refresh Steam widget and validate data', () => {

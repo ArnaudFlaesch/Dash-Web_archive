@@ -46,6 +46,8 @@ export default function Dash(): React.ReactElement {
 
   const ERROR_MESSAGE_INIT_DASHBOARD = "Erreur lors de l'initialisation du dashboard.";
   const ERROR_MESSAGE_ADD_TAB = "Erreur lors de l'ajout d'un onglet.";
+  const ERROR_MESSAGE_ADD_WIDGET = "Erreur lors de l'ajout d'un widget.";
+
   const refreshTimeout = 900000; // 15 minutes
 
   useEffect(() => {
@@ -112,7 +114,7 @@ export default function Dash(): React.ReactElement {
             setNewWidget(widgetData);
           }
         })
-        .catch((error) => logger.error(error.message));
+        .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_ADD_WIDGET)));
     }
   }
 

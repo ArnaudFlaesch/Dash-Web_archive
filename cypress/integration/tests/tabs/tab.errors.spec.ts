@@ -6,8 +6,9 @@ describe('Tab error tests', () => {
   beforeEach(() => cy.visit('/').waitUntil(() => cy.get('.tab.selectedItem').should('be.visible')));
 
   it('Should fail to get the list of tabs', () => {
-    cy.intercept('GET', '/tab/', { statusCode: 500 }).as('getTabsError');
-    cy.visit('/')
+    cy.intercept('GET', '/tab/', { statusCode: 500 })
+      .as('getTabsError')
+      .visit('/')
       .wait('@getTabsError')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(500);
@@ -15,10 +16,21 @@ describe('Tab error tests', () => {
       });
   });
 
-  it('Should fail to add a tab', () => {
-    cy.intercept('POST', '/tab/addTab', { statusCode: 500 }).as('addTabError');
+  it('Should fail to get the widgets', () => {
+    cy.intercept('GET', '/widget/', { statusCode: 500 })
+      .as('getWidgetsError')
+      .visit('/')
+      .wait('@getWidgetsError')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(500);
+        cy.get('#errorSnackbar').should('have.text', 'Erreur lors de la récupération des widgets.');
+      });
+  });
 
-    cy.get('.tab')
+  it('Should fail to add a tab', () => {
+    cy.intercept('POST', '/tab/addTab', { statusCode: 500 })
+      .as('addTabError')
+      .get('.tab')
       .should('have.length', 1)
       .get('#addNewTabButton')
       .click()
