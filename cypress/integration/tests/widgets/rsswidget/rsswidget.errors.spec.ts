@@ -16,8 +16,7 @@ describe('RSS Widget errors tests', () => {
     waitForTabToBeVisible();
   });
 
-  // @FIXME skipped test
-  xit('Should fail to create a RSS widget', () => {
+  it('Should fail to create a RSS widget', () => {
     cy.intercept('POST', '/widget/addWidget', { statusCode: 500 })
       .as('addWidgetError')
       .get('#openAddWidgetModal')
