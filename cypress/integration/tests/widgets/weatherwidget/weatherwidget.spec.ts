@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { Interception } from 'cypress/types/net-stubbing';
+
 describe('Weather Widget tests', () => {
   before(() => {
     cy.loginAsAdmin()
@@ -10,12 +12,17 @@ describe('Weather Widget tests', () => {
   });
 
   it('Should create a Weather Widget and add it to the dashboard', () => {
-    cy.get('#openAddWidgetModal').click();
-    cy.intercept('POST', '/widget/addWidget').as('addWidget');
-    cy.get('#WEATHER').click();
-    cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
-    });
+    cy.intercept('POST', '/widget/addWidget')
+      .as('addWidget')
+      .get('#openAddWidgetModal')
+      .click()
+      .get('#WEATHER')
+      .click()
+      .wait('@addWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
+        cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
+      });
   });
 
   it('Should refresh Weather widget', () => {
@@ -27,8 +34,8 @@ describe('Weather Widget tests', () => {
       .get('#cityNameInput')
       .type('Paris')
       .get('#validateButton')
-      .click();
-    cy.get('.refreshButton')
+      .click()
+      .get('.refreshButton')
       .click()
       .wait('@refreshWidget')
       .then(() => {
@@ -61,15 +68,17 @@ describe('Weather Widget tests', () => {
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
-    cy.get('.deleteButton')
+    cy.intercept('DELETE', '/widget/deleteWidget/*')
+      .as('deleteWidget')
+      .get('.deleteButton')
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.validateDeletionButton')
-      .click();
-    cy.wait('@deleteWidget').then(() => {
-      cy.get('.widget').should('have.length', 0);
-    });
+      .click()
+      .wait('@deleteWidget')
+      .then(() => {
+        cy.get('.widget').should('have.length', 0);
+      });
   });
 });

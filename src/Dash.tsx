@@ -13,17 +13,18 @@ import ImportConfigModal from './modals/ImportConfigModal';
 import { ITab } from './model/Tab';
 import NavDash from './navigation/navDash/NavDash';
 import Login from './pages/login/Login';
-import { toggleRefreshWidgets, toggleSelectedTab } from './reducers/actions';
+import { handleError, toggleRefreshWidgets, toggleSelectedTab } from './reducers/actions';
 import { IReducerState } from './reducers/rootReducer';
-import authorizationBearer from './services/auth.header';
 import authService from './services/auth.service';
 import { exportConfig } from './services/config.service';
-import { addTab, updateTabs } from './services/tab.service';
+import { addTab, getTabs, updateTabs } from './services/tab.service';
 import { addWidget } from './services/widget.service';
 import TabDash from './tab/TabDash';
 import logger from './utils/LogUtils';
 import { IWidgetConfig } from './widgets/IWidgetConfig';
 import './Dash.scss';
+import { AxiosError } from 'axios';
+import ErrorSnackbar from './utils/ErrorSnackbar';
 export interface IMenu {
   link: string;
   icon: string;
@@ -43,6 +44,11 @@ export default function Dash(): React.ReactElement {
   const dispatch = useDispatch();
   const isMounted = useRef(false);
 
+  const ERROR_MESSAGE_INIT_DASHBOARD = "Erreur lors de l'initialisation du dashboard.";
+  const ERROR_MESSAGE_ADD_TAB = "Erreur lors de l'ajout d'un onglet.";
+  const ERROR_MESSAGE_ADD_WIDGET = "Erreur lors de l'ajout d'un widget.";
+  const ERROR_EXPORT_CONFIGURATION = "Erreur lors de l'export de la configuration.";
+
   const refreshTimeout = 900000; // 15 minutes
 
   useEffect(() => {
@@ -60,23 +66,15 @@ export default function Dash(): React.ReactElement {
   }, [tabs]);
 
   function initDashboard() {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/tab/`, {
-      headers: {
-        Authorization: authorizationBearer(),
-        'Content-type': 'application/json'
-      }
-    })
-      .then((result) => result.json())
+    getTabs()
       .then((result) => {
-        setTabs(result);
-        if (result && result.length > 0) {
-          dispatch(toggleSelectedTab(result[0].id));
+        setTabs(result.data);
+        if (result.data && result.data.length > 0) {
+          dispatch(toggleSelectedTab(result.data[0].id));
         }
         isMounted.current = true;
       })
-      .catch((error: Error) => {
-        logger.error(error.message);
-      });
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_INIT_DASHBOARD)));
   }
 
   function toggleTab(tab: number) {
@@ -93,11 +91,11 @@ export default function Dash(): React.ReactElement {
     const newTabLabel = 'Nouvel onglet';
     addTab(newTabLabel)
       .then((response) => {
-        const insertedTab = response.data as ITab;
+        const insertedTab = response.data;
         setTabs(tabs.concat(insertedTab));
         dispatch(toggleSelectedTab(insertedTab.id));
       })
-      .catch((error) => logger.error(error.message));
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_ADD_TAB)));
   }
 
   function getNewWidget(tabId: number) {
@@ -117,7 +115,7 @@ export default function Dash(): React.ReactElement {
             setNewWidget(widgetData);
           }
         })
-        .catch((error) => logger.error(error.message));
+        .catch((error: AxiosError) => dispatch(handleError(error, ERROR_MESSAGE_ADD_WIDGET)));
     }
   }
 
@@ -155,8 +153,8 @@ export default function Dash(): React.ReactElement {
       .catch((error) => logger.error(error.message));
   }
 
-  function downloadConfig(): Promise<void> {
-    return exportConfig()
+  function downloadConfig(): void {
+    exportConfig()
       .then((response) => {
         logger.info('Configuration exportée');
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -166,9 +164,7 @@ export default function Dash(): React.ReactElement {
         document.body.appendChild(link);
         link.click();
       })
-      .catch(() => {
-        logger.error("Erreur lors de l'export de la configuration");
-      });
+      .catch((error: AxiosError) => dispatch(handleError(error, ERROR_EXPORT_CONFIGURATION)));
   }
 
   function isTokenExpired(): boolean {
@@ -188,77 +184,80 @@ export default function Dash(): React.ReactElement {
     <div>
       {!isUserAuthenticated() && <Login />}
       {isUserAuthenticated() && (
-        <TabContext value={activeTab.toString()}>
-          <div className="flex flex-col">
-            <div className="flex flex-row m-1">
-              <div className="flex flex-row overflow-x-auto w-9/12 md:w-10/12">
-                <DragDropContext onDragEnd={onDragEnd}>
-                  <Droppable droppableId="droppable" direction="horizontal">
-                    {(providedDroppable: DroppableProvided) => (
-                      <div {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
-                        <TabList className="flex flex-row flex-wrap">
-                          {tabs.length > 0 &&
-                            tabs.map((tab: ITab, index: number) => {
-                              return (
-                                <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
-                                  {(providedDraggable) => (
-                                    <div
-                                      key={tab.id}
-                                      ref={providedDraggable.innerRef}
-                                      {...providedDraggable.draggableProps}
-                                      {...providedDraggable.dragHandleProps}
-                                    >
-                                      <NavDash
-                                        tab={tab}
-                                        onTabClicked={() => toggleTab(tab.id)}
-                                        onTabDeleted={onTabDeleted}
-                                      />
-                                    </div>
-                                  )}
-                                </Draggable>
-                              );
-                            })}
-                        </TabList>
-                        {providedDroppable.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+        <div>
+          <TabContext value={activeTab.toString()}>
+            <div className="flex flex-col">
+              <div className="flex flex-row m-1">
+                <div className="flex flex-row overflow-x-auto w-9/12 md:w-10/12">
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId="droppable" direction="horizontal">
+                      {(providedDroppable: DroppableProvided) => (
+                        <div {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
+                          <TabList className="flex flex-row flex-wrap">
+                            {tabs.length > 0 &&
+                              tabs.map((tab: ITab, index: number) => {
+                                return (
+                                  <Draggable key={tab.id} draggableId={tab.id.toString()} index={index}>
+                                    {(providedDraggable) => (
+                                      <div
+                                        key={tab.id}
+                                        ref={providedDraggable.innerRef}
+                                        {...providedDraggable.draggableProps}
+                                        {...providedDraggable.dragHandleProps}
+                                      >
+                                        <NavDash
+                                          tab={tab}
+                                          onTabClicked={() => toggleTab(tab.id)}
+                                          onTabDeleted={onTabDeleted}
+                                        />
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                );
+                              })}
+                          </TabList>
+                          {providedDroppable.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
 
-                <IconButton id="addNewTabButton" color="primary" onClick={addNewTab}>
-                  <AddCircleOutlineIcon />
-                </IconButton>
-              </div>
-              <div className="flex flex-row w-1/3 md:w-3/12">
-                <div className="flex flex-row m-auto">
-                  <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
-
-                  <div>
-                    <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
-                      <RefreshIcon />
-                    </IconButton>
-                  </div>
-
-                  <div>
-                    <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
-                      <DownloadIcon />
-                    </IconButton>
-                  </div>
-
-                  <ImportConfigModal />
+                  <IconButton id="addNewTabButton" color="primary" onClick={addNewTab}>
+                    <AddCircleOutlineIcon />
+                  </IconButton>
                 </div>
-                <Button onClick={authService.logout} variant="contained">
-                  Déconnexion
-                </Button>
+                <div className="flex flex-row w-1/3 md:w-3/12">
+                  <div className="flex flex-row m-auto">
+                    <CreateWidgetModal onWidgetAdded={onWidgetAdded} />
+
+                    <div>
+                      <IconButton id="reloadAllWidgetsButton" color="primary" onClick={refreshAllWidgets}>
+                        <RefreshIcon />
+                      </IconButton>
+                    </div>
+
+                    <div>
+                      <IconButton id="downloadConfigButton" color="primary" onClick={downloadConfig}>
+                        <DownloadIcon />
+                      </IconButton>
+                    </div>
+
+                    <ImportConfigModal />
+                  </div>
+                  <Button onClick={authService.logout} variant="contained">
+                    Déconnexion
+                  </Button>
+                </div>
               </div>
+              {tabs.length > 0 &&
+                tabs.map((tab: ITab) => {
+                  return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
+                })}
             </div>
-            {tabs.length > 0 &&
-              tabs.map((tab: ITab) => {
-                return <TabDash key={tab.id} newWidget={getNewWidget(tab.id)} tabId={tab.id} />;
-              })}
-          </div>
-        </TabContext>
+          </TabContext>
+        </div>
       )}
+      <ErrorSnackbar />
     </div>
   );
 }

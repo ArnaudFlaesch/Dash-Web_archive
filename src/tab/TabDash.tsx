@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import authorizationBearer from 'src/services/auth.header';
+import { useDispatch, useSelector } from 'react-redux';
 import SteamWidget from 'src/widgets/steam/SteamWidget';
 import TwitterTimelineWidget from 'src/widgets/twitter/TwitterTimelineWidget';
 import { WidgetTypes } from '../enums/WidgetsEnum';
 import { IReducerState } from '../reducers/rootReducer';
-import { deleteWidget } from '../services/widget.service';
-import logger from '../utils/LogUtils';
+import { deleteWidget, getWidgets } from '../services/widget.service';
 import CalendarWidget from '../widgets/calendar/CalendarWidget';
 import { IWidgetConfig } from '../widgets/IWidgetConfig';
 import RSSWidget from '../widgets/rss/RSSWidget';
 import StravaWidget from '../widgets/strava/StravaWidget';
 import WeatherWidget from '../widgets/weather/WeatherWidget';
 import TabPanel from '@mui/lab/TabPanel';
+import { handleError } from 'src/reducers/actions';
 
 interface IProps {
   tabId: number;
@@ -20,94 +19,46 @@ interface IProps {
 }
 
 export default function TabDash(props: IProps): React.ReactElement {
-  const [widgets, setWidgets] = useState([]);
+  const [widgets, setWidgets] = useState<IWidgetConfig[]>([]);
   const activeTab = useSelector((state: IReducerState) => state.activeTab);
+  const dispatch = useDispatch();
+  const ERROR_MESSAGE_GET_WIDGETS = 'Erreur lors de la récupération des widgets.';
+  const ERROR_MESSAGE_DELETE_WIDGET = "Erreur lors de la suppression d'un widget.";
 
   useEffect(() => {
     if (activeTab === props.tabId) {
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/widget/?tabId=${props.tabId}`, {
-        headers: {
-          Authorization: authorizationBearer(),
-          'Content-type': 'application/json'
-        }
-      })
-        .then((result) => result.json())
-        .then((result) => setWidgets(result))
-        .catch((error: Error) => logger.error(error.message));
+      getWidgets(props.tabId)
+        .then((response) => setWidgets(response.data))
+        .catch((error: Error) => dispatch(handleError(error, ERROR_MESSAGE_GET_WIDGETS)));
     }
   }, [activeTab]);
 
   useEffect(() => {
     if (props.newWidget) {
-      setWidgets((widgets as IWidgetConfig[]).concat([props.newWidget]) as []);
+      setWidgets(widgets.concat([props.newWidget]) as []);
     }
   }, [props.newWidget != null && props.newWidget.id]);
 
   function createWidget(widgetConfig: IWidgetConfig) {
+    const widgetProps = {
+      id: widgetConfig.id,
+      tabId: widgetConfig.tab.id,
+      ...widgetConfig.data,
+      onDeleteButtonClicked: deleteWidgetFromDashboard
+    };
     switch (widgetConfig.type) {
-      case WidgetTypes.WEATHER: {
-        return (
-          <WeatherWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.RSS: {
-        return (
-          <RSSWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.CALENDAR: {
-        return (
-          <CalendarWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.STRAVA: {
-        return (
-          <StravaWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.STEAM: {
-        return (
-          <SteamWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      case WidgetTypes.TWITTER_TIMELINE: {
-        return (
-          <TwitterTimelineWidget
-            id={widgetConfig.id}
-            tabId={widgetConfig.tab.id}
-            {...widgetConfig.data}
-            onDeleteButtonClicked={deleteWidgetFromDashboard}
-          />
-        );
-      }
-      default: {
-        return;
-      }
+      case WidgetTypes.WEATHER:
+        return <WeatherWidget {...widgetProps} />;
+      case WidgetTypes.RSS:
+        return <RSSWidget {...widgetProps} />;
+      case WidgetTypes.CALENDAR:
+        return <CalendarWidget {...widgetProps} />;
+      case WidgetTypes.STRAVA:
+        return <StravaWidget {...widgetProps} />;
+      case WidgetTypes.STEAM:
+        return <SteamWidget {...widgetProps} />;
+      case WidgetTypes.TWITTER_TIMELINE:
+        return <TwitterTimelineWidget {...widgetProps} />;
     }
   }
 
@@ -122,9 +73,7 @@ export default function TabDash(props: IProps): React.ReactElement {
           );
         }
       })
-      .catch((error: Error) => {
-        logger.error(error.message);
-      });
+      .catch((error: Error) => dispatch(handleError(error, ERROR_MESSAGE_DELETE_WIDGET)));
   }
 
   return (

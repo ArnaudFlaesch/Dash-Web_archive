@@ -22,12 +22,8 @@ export default function TwitterTimelineWidget(props: IProps): React.ReactElement
 
   function onProfileSubmitted(widgetProfile: string): void {
     updateWidgetData(props.id, { profile: widgetProfile })
-      .then(() => {
-        setProfile(widgetProfile);
-      })
-      .catch((error) => {
-        logger.error(error.message);
-      });
+      .then(() => setProfile(widgetProfile))
+      .catch((error) => logger.error(error.message));
   }
 
   const widgetHeader = <div className="timelineHeader">Timeline de {profile}</div>;

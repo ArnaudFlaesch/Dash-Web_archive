@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -67,9 +67,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
         setTokenExpirationDate(response.data.expires_at);
         setAthlete(response.data.athlete);
       })
-      .catch((error: Error) => {
-        logger.error(error.message);
-      });
+      .catch((error: Error) => logger.error(error.message));
   }
 
   function refreshTokenFromApi() {
@@ -87,9 +85,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
           setTokenExpirationDate(response.data.expires_at);
           setAthlete(response.data.athlete);
         })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
+        .catch((error: Error) => logger.error(error.message));
     } else {
       logger.error('No refresh token');
     }
@@ -101,12 +97,8 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
         .get<IAthlete>('https://www.strava.com/api/v3/athlete', {
           headers: { Authorization: `Bearer ${token}` }
         })
-        .then((response) => {
-          setAthlete(response.data);
-        })
-        .catch((error: Error) => {
-          logger.error(error.message);
-        });
+        .then((response) => setAthlete(response.data))
+        .catch((error: Error) => logger.error(error.message));
     }
   }
 
@@ -116,12 +108,8 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
         .get<IActivity[]>(`https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
-        .then((response) => {
-          setActivities(response.data.reverse());
-        })
-        .catch((error) => {
-          logger.error(error.message);
-        });
+        .then((response) => setActivities(response.data.reverse()))
+        .catch((error: AxiosError) => logger.error(error.message));
     } else {
       refreshTokenFromApi();
     }

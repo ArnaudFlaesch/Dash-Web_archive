@@ -1,11 +1,16 @@
 import { ChangeEvent, ReactElement, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { importConfig } from 'src/services/config.service';
-import logger from 'src/utils/LogUtils';
 import UploadIcon from '@mui/icons-material/Upload';
+import { AxiosError } from 'axios';
+import { handleError } from 'src/reducers/actions';
+
 export default function ImportConfigModal(): ReactElement {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [importConfigModal, setImportConfigModal] = useState(false);
+  const dispatch = useDispatch();
+  const ERROR_IMPORT_CONFIGURATION = "Erreur lors de l'import de la configuration.";
 
   function toggleImportConfigModal() {
     setImportConfigModal(!importConfigModal);
@@ -17,17 +22,15 @@ export default function ImportConfigModal(): ReactElement {
     }
   }
 
-  function upload() {
+  function upload(): void {
     if (selectedFile) {
-      return importConfig(selectedFile)
+      importConfig(selectedFile)
         .then((response: boolean) => {
           if (response) {
             toggleImportConfigModal();
           }
         })
-        .catch(() => {
-          logger.error("Erreur lors de l'import du fichier");
-        });
+        .catch((error: AxiosError) => dispatch(handleError(error, ERROR_IMPORT_CONFIGURATION)));
     }
   }
 
