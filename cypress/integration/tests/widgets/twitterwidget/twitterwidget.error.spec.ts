@@ -33,10 +33,10 @@ describe('Twitter Widget error tests', () => {
           .type('nodejs')
           .get('.validateProfileButton')
           .click()
-          .wait('updateWidget')
+          .wait('updateWidgetError')
           .then((request: Interception) => {
             expect(request.response.statusCode).to.equal(500);
-            cy.get('iframe').should('be.visible');
+            cy.get('#errorSnackbar').should('have.text', 'Erreur lors de la modification du widget.');
           });
       });
   });
