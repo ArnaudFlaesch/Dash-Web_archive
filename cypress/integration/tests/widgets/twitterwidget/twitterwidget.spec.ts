@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { Interception } from 'cypress/types/net-stubbing';
+
 describe('Twitter Widget tests', () => {
   before(() => {
     cy.loginAsAdmin()
@@ -17,20 +19,24 @@ describe('Twitter Widget tests', () => {
       .get('#TWITTER_TIMELINE')
       .click()
       .wait('@addWidget')
-      .then(() => {
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
       });
   });
 
   it('Should display the timeline', () => {
     cy.intercept('PATCH', '/widget/updateWidgetData')
+      .as('updateWidget')
       .get('.validateProfileButton')
       .should('be.disabled')
       .get('input')
       .type('nodejs')
       .get('.validateProfileButton')
       .click()
-      .then(() => {
+      .wait('updateWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('iframe').should('be.visible');
       });
   });
