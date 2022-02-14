@@ -17,8 +17,8 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness3Icon from '@mui/icons-material/Brightness3';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
-import { CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js';
-import { Chart as ChartJS } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js';
+
 interface IProps extends IBaseWidgetConfig {
   city?: string;
 }

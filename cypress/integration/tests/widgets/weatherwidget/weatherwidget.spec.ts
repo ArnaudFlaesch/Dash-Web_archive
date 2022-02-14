@@ -77,7 +77,8 @@ describe('Weather Widget tests', () => {
       .get('.validateDeletionButton')
       .click()
       .wait('@deleteWidget')
-      .then(() => {
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('.widget').should('have.length', 0);
       });
   });

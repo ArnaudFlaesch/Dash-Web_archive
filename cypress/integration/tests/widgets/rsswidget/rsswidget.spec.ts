@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { Interception } from 'cypress/types/net-stubbing';
+
 describe('RSS Widget tests', () => {
   before(() => {
     cy.loginAsAdmin()
@@ -17,7 +19,9 @@ describe('RSS Widget tests', () => {
       .get('#RSS')
       .click()
       .wait('@addWidget')
-      .then(() => {
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
       });
   });
@@ -68,7 +72,9 @@ describe('RSS Widget tests', () => {
       .get('.markAllArticlesAsRead')
       .click()
       .wait('@markAllFeedAsRead')
-      .then(() => {
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('.rssArticle.read').should('have.length', 20);
       });
   });
@@ -79,7 +85,9 @@ describe('RSS Widget tests', () => {
       .get('#reloadAllWidgetsButton')
       .click()
       .wait('@refreshWidget')
-      .then(() => {
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('.rssArticle').should('have.length', 20);
       });
   });
@@ -94,7 +102,9 @@ describe('RSS Widget tests', () => {
       .get('.validateDeletionButton')
       .click()
       .wait('@deleteWidget')
-      .then(() => {
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('.widget').should('have.length', 0);
       });
   });

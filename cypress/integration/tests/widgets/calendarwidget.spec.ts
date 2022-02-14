@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { Interception } from 'cypress/types/net-stubbing';
+
 describe('Calendar Widget tests', () => {
   const icalFrenchHolidays =
     'https://calendar.google.com/calendar/ical/fr.french%23holiday%40group.v.calendar.google.com/public/basic.ics';
@@ -13,12 +15,18 @@ describe('Calendar Widget tests', () => {
   });
 
   it('Should create a Calendar Widget and add it to the dashboard', () => {
-    cy.get('#openAddWidgetModal').click();
-    cy.intercept('POST', '/widget/addWidget').as('addWidget');
-    cy.get('#CALENDAR').click();
-    cy.wait('@addWidget').then(() => {
-      cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
-    });
+    cy.intercept('POST', '/widget/addWidget')
+      .as('addWidget')
+      .get('#openAddWidgetModal')
+      .click()
+      .get('#CALENDAR')
+      .click()
+      .wait('@addWidget')
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
+        cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
+      });
   });
 
   it('Should edit Calendar widget and add an Ical feed', () => {
@@ -84,7 +92,9 @@ describe('Calendar Widget tests', () => {
       .get('.validateDeletionButton')
       .click()
       .wait('@deleteWidget')
-      .then(() => {
+      .wait('@deleteWidget')
+      .then((request: Interception) => {
+        expect(request.response.statusCode).to.equal(200);
         cy.get('.widget').should('have.length', 0);
       });
   });

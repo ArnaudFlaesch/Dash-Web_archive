@@ -12,8 +12,9 @@ describe('Tab tests', () => {
   });
 
   it('Should edit the created tab', () => {
-    cy.intercept('POST', '/tab/updateTab').as('updateTab');
-    cy.get('.tab')
+    cy.intercept('POST', '/tab/updateTab')
+      .as('updateTab')
+      .get('.tab')
       .eq(1)
       .should('have.text', 'Nouvel onglet')
       .dblclick()
@@ -45,8 +46,9 @@ describe('Tab tests', () => {
   });
 
   it('Should delete the created tab', () => {
-    cy.intercept('DELETE', '/tab/deleteTab/*').as('deleteTab');
-    cy.get('.tab')
+    cy.intercept('DELETE', '/tab/deleteTab/*')
+      .as('deleteTab')
+      .get('.tab')
       .contains('Flux RSS Updated')
       .dblclick()
       .get('.deleteTabButton')

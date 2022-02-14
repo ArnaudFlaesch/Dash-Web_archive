@@ -3,7 +3,6 @@ import * as queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ComponentWithDetail from '../../components/detailComponent/ComponentWithDetail';
-import { useLocalStorage } from '../../hooks/localStorageHook';
 import logger from '../../utils/LogUtils';
 import Widget from '../Widget';
 import StravaActivity from './activity/StravaActivity';
@@ -12,6 +11,17 @@ import { format, isAfter, isBefore } from 'date-fns';
 import { Chart } from 'react-chartjs-2';
 import IBaseWidgetConfig from 'src/model/IBaseWidgetConfig';
 import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import {
+  Chart as ChartJS,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement
+} from 'chart.js';
+import { handleError } from 'src/reducers/actions';
 
 interface ITokenData {
   access_token: string;
@@ -23,12 +33,30 @@ interface ITokenData {
 export default function StravaWidget(props: IBaseWidgetConfig): React.ReactElement {
   const [activities, setActivities] = useState<IActivity[]>([]);
   const [athlete, setAthlete] = useState<IAthlete>();
-  const [token, setToken] = useLocalStorage('strava_token', null);
-  const [refreshToken, setRefreshToken] = useLocalStorage('strava_refresh_token', null);
-  const [tokenExpirationDate, setTokenExpirationDate] = useLocalStorage('strava_token_expires_at', null);
   const { search } = useLocation();
+  const dispatch = useDispatch();
+
+  const STORAGE_STRAVA_TOKEN_KEY = 'strava_token';
+  const STORAGE_STRAVA_REFRESH_TOKEN_KEY = 'strava_refresh_token';
+  const STORAGE_TOKEN_EXPIRATION_DATE_KEY = 'strava_token_expires_at';
+
+  const token = window.localStorage.getItem(STORAGE_STRAVA_TOKEN_KEY);
+  const refreshToken = window.localStorage.getItem(STORAGE_STRAVA_REFRESH_TOKEN_KEY);
+  const tokenExpirationDate = window.localStorage.getItem(STORAGE_TOKEN_EXPIRATION_DATE_KEY);
+
+  const STRAVA_URL = 'https://www.strava.com';
+  const STRAVA_LOGIN_URL = `${STRAVA_URL}/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`;
+  const STRAVA_API_AUTH = `${STRAVA_URL}/oauth/token`;
+  const STRAVA_API = `${STRAVA_URL}/api/v3`;
+
+  const ERROR_GETTING_TOKEN = 'Erreur lors de la connexion à Strava.';
+  const ERROR_NO_REFRESH_TOKEN = "Vous n'êtes pas connecté à Strava.";
+  const ERROR_GETTING_ATHLETE_DATA = 'Erreur lors de la récupération de vos informations.';
+  const ERROR_GETTING_ACTIVITIES = 'Erreur lors de la récupération des activités.';
 
   const paginationActivities = 20;
+
+  ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, LineElement, PointElement);
 
   useEffect(() => {
     const values = queryString.parse(search);
@@ -36,7 +64,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
       const apiCode = values.code.toString();
       getToken(apiCode);
     }
-    if (!token || !refreshToken || isBefore(new Date((tokenExpirationDate as number) * 1000), new Date())) {
+    if (!token || !refreshToken || isBefore(new Date((tokenExpirationDate as unknown as number) * 1000), new Date())) {
       refreshTokenFromApi();
     }
   }, []);
@@ -53,39 +81,36 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
     getActivities();
   }
 
+  function saveData(response: ITokenData) {
+    window.localStorage.setItem(STORAGE_STRAVA_TOKEN_KEY, response.access_token);
+    window.localStorage.setItem(STORAGE_STRAVA_REFRESH_TOKEN_KEY, response.refresh_token);
+    window.localStorage.setItem(STORAGE_TOKEN_EXPIRATION_DATE_KEY, response.expires_at);
+    setAthlete(response.athlete);
+  }
+
   function getToken(apiCode: string) {
     axios
-      .post<ITokenData>('https://www.strava.com/oauth/token', {
+      .post<ITokenData>(STRAVA_API_AUTH, {
         client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
         client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
         code: apiCode,
         grant_type: 'authorization_code'
       })
-      .then((response) => {
-        setToken(response.data.access_token as string);
-        setRefreshToken(response.data.refresh_token);
-        setTokenExpirationDate(response.data.expires_at);
-        setAthlete(response.data.athlete);
-      })
-      .catch((error: Error) => logger.error(error.message));
+      .then((response) => saveData(response.data))
+      .catch((error: Error) => dispatch(handleError(error, ERROR_GETTING_TOKEN)));
   }
 
   function refreshTokenFromApi() {
     if (refreshToken) {
       axios
-        .post<ITokenData>('https://www.strava.com/oauth/token', {
+        .post<ITokenData>(STRAVA_API_AUTH, {
           client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
           client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
           refresh_token: refreshToken,
           grant_type: 'refresh_token'
         })
-        .then((response) => {
-          setToken(response.data.access_token);
-          setRefreshToken(response.data.refresh_token);
-          setTokenExpirationDate(response.data.expires_at);
-          setAthlete(response.data.athlete);
-        })
-        .catch((error: Error) => logger.error(error.message));
+        .then((response) => saveData(response.data))
+        .catch((error: Error) => dispatch(handleError(error, ERROR_NO_REFRESH_TOKEN)));
     } else {
       logger.error('No refresh token');
     }
@@ -94,22 +119,26 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
   function getAthleteData() {
     if (token) {
       axios
-        .get<IAthlete>('https://www.strava.com/api/v3/athlete', {
+        .get<IAthlete>(`${STRAVA_API}/athlete`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((response) => setAthlete(response.data))
-        .catch((error: Error) => logger.error(error.message));
+        .catch((error: Error) => dispatch(handleError(error, ERROR_GETTING_ATHLETE_DATA)));
     }
   }
 
   function getActivities() {
-    if (token && tokenExpirationDate && isAfter(new Date((tokenExpirationDate as number) * 1000), new Date())) {
+    if (
+      token &&
+      tokenExpirationDate &&
+      isAfter(new Date((tokenExpirationDate as unknown as number) * 1000), new Date())
+    ) {
       axios
-        .get<IActivity[]>(`https://www.strava.com/api/v3/athlete/activities?page=1&per_page=${paginationActivities}`, {
+        .get<IActivity[]>(`${STRAVA_API}/athlete/activities?page=1&per_page=${paginationActivities}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((response) => setActivities(response.data.reverse()))
-        .catch((error: AxiosError) => logger.error(error.message));
+        .catch((error: AxiosError) => dispatch(handleError(error, ERROR_GETTING_ACTIVITIES)));
     } else {
       refreshTokenFromApi();
     }
@@ -137,8 +166,8 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
   }
 
   const widgetHeader = (
-    <div>
-      <a href={`https://www.strava.com/athletes/${athlete?.id}`} className="flex flex-row">
+    <div id="stravaWidgetHeader">
+      <a href={`${STRAVA_URL}/athletes/${athlete?.id}`} className="flex flex-row">
         <img className="h-9 w-9" src={athlete?.profile_medium} />
         <p>
           {athlete?.firstname} {athlete?.lastname}
@@ -158,7 +187,7 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
       {token &&
         refreshToken &&
         tokenExpirationDate &&
-        isAfter(new Date((tokenExpirationDate as number) * 1000), new Date()) && (
+        isAfter(new Date((tokenExpirationDate as unknown as number) * 1000), new Date()) && (
           <div>
             <div className="max-h-48 overflow-y-scroll">
               {activities
@@ -169,10 +198,12 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
                     <ComponentWithDetail
                       key={activity.id}
                       componentRoot={
-                        <div className={`${index % 2 ? 'bg-gray-200' : ''}`}>{getTitleToDisplay(activity)}</div>
+                        <div className={`${index % 2 ? 'bg-gray-200' : ''} stravaActivity`}>
+                          {getTitleToDisplay(activity)}
+                        </div>
                       }
                       componentDetail={<StravaActivity {...activity} />}
-                      link={`https://www.strava.com/activities/${activity.id}`}
+                      link={`${STRAVA_URL}/activities/${activity.id}`}
                     />
                   );
                 })}
@@ -207,10 +238,8 @@ export default function StravaWidget(props: IBaseWidgetConfig): React.ReactEleme
         )}
       {(!token ||
         !refreshToken ||
-        (tokenExpirationDate && isBefore(new Date((tokenExpirationDate as number) * 1000), new Date()))) && (
-        <a
-          href={`https://www.strava.com/oauth/authorize?client_id=${process.env.REACT_APP_STRAVA_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_FRONTEND_URL}&response_type=code&scope=read,activity:read`}
-        >
+        (tokenExpirationDate && isBefore(new Date((tokenExpirationDate as unknown as number) * 1000), new Date()))) && (
+        <a href={STRAVA_LOGIN_URL}>
           <Button variant="contained">Se connecter</Button>
         </a>
       )}

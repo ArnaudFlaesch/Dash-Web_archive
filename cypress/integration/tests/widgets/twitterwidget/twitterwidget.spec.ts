@@ -34,7 +34,7 @@ describe('Twitter Widget tests', () => {
       .type('nodejs')
       .get('.validateProfileButton')
       .click()
-      .wait('updateWidget')
+      .wait('@updateWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
         cy.get('iframe').should('be.visible');
