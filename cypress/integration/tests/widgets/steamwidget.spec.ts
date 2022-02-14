@@ -36,11 +36,9 @@ describe('Steam Widget tests', () => {
 
     cy.get('.refreshButton')
       .click()
-      .wait('@getPlayerData')
-      .wait('@getGameData')
-      .wait('@deleteWidget')
-      .then((request: Interception) => {
-        expect(request.response.statusCode).to.equal(200);
+      .wait(['@getPlayerData, @getGameData'])
+      .then((requests: Interception) => {
+        expect(requests[0].response.statusCode).to.equal(200);
         cy.get('.gameInfo').should('have.length', 10);
       });
   });

@@ -71,7 +71,6 @@ describe('RSS Widget tests', () => {
       .get('.markAllArticlesAsRead')
       .click()
       .wait('@markAllFeedAsRead')
-      .wait('@deleteWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
         cy.get('.rssArticle.read').should('have.length', 20);
