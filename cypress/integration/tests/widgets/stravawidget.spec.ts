@@ -8,13 +8,12 @@ describe('Strava Widget tests', () => {
   const TOKEN_EXPIRATION_DATE = Date.now() + 3600;
 
   before(() => {
-    window.localStorage.setItem('strava_token', STRAVA_TOKEN);
-    window.localStorage.setItem('strava_refresh_token', STRAVA_REFRESH_TOKEN);
-    window.localStorage.setItem('strava_token_expires_at', TOKEN_EXPIRATION_DATE.toString());
     cy.loginAsAdmin()
       .visit('/')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
   });
+
+  afterEach(() => cy.clearLocalStorage());
 
   it('Should create a Strava Widget and add it to the dashboard', () => {
     cy.intercept('POST', '/widget/addWidget')
@@ -31,6 +30,9 @@ describe('Strava Widget tests', () => {
   });
 
   it('Should fail to load date because of wrong token', () => {
+    window.localStorage.setItem('strava_token', STRAVA_TOKEN);
+    window.localStorage.setItem('strava_refresh_token', STRAVA_REFRESH_TOKEN);
+    window.localStorage.setItem('strava_token_expires_at', TOKEN_EXPIRATION_DATE.toString());
     cy.intercept('https://www.strava.com/api/v3/athlete')
       .as('getAthleteData')
       .intercept('https://www.strava.com/api/v3/athlete/activities?page=1&per_page=20')
@@ -45,25 +47,39 @@ describe('Strava Widget tests', () => {
   });
 
   it('Should load the widget with a fake token', () => {
-    cy.intercept('https://www.strava.com/api/v3/athlete', { fixture: 'strava/strava_athleteData.json' })
-      .as('getAthleteData')
-      .intercept('https://www.strava.com/api/v3/athlete/activities?page=1&per_page=20', {
-        fixture: 'strava/strava_activities.json'
-      })
-      .as('getActivities')
+    window.localStorage.removeItem('strava_token');
+    window.localStorage.setItem('strava_refresh_token', STRAVA_REFRESH_TOKEN);
+    cy.intercept('https://www.strava.com/oauth/token')
+      .as('refreshToken')
       .reload()
-      .wait(['@getAthleteData', '@getActivities'])
-      .then((request: Interception[]) => {
-        const getAthleteResponse = request[0].response;
-        const getActivitiesResponse = request[1].response;
-        expect(getAthleteResponse.statusCode).to.equal(200);
-        expect(getActivitiesResponse.statusCode).to.equal(200);
-        cy.get('#stravaWidgetHeader')
-          .should('have.text', 'Arnaud Flaesch')
-          .get('.stravaActivity')
-          .should('have.length', 5)
-          .first()
-          .contains('Afternoon Run 12.5188 kms');
+      .get('.refreshButton')
+      .click()
+      .wait('@refreshToken')
+      .then((requests: Interception) => {
+        expect(requests.response.statusCode).to.equal(400);
+        cy.get('#errorSnackbar').should('have.text', "Vous n'êtes pas connecté à Strava.");
+        window.localStorage.setItem('strava_token', STRAVA_TOKEN);
+        window.localStorage.setItem('strava_token_expires_at', TOKEN_EXPIRATION_DATE.toString());
+        cy.intercept('https://www.strava.com/api/v3/athlete', { fixture: 'strava/strava_athleteData.json' })
+          .as('getAthleteData')
+          .intercept('https://www.strava.com/api/v3/athlete/activities?page=1&per_page=20', {
+            fixture: 'strava/strava_activities.json'
+          })
+          .as('getActivities')
+          .reload()
+          .wait(['@getAthleteData', '@getActivities'])
+          .then((request: Interception[]) => {
+            const getAthleteResponse = request[0].response;
+            const getActivitiesResponse = request[1].response;
+            expect(getAthleteResponse.statusCode).to.equal(200);
+            expect(getActivitiesResponse.statusCode).to.equal(200);
+            cy.get('#stravaWidgetHeader')
+              .should('have.text', 'Arnaud Flaesch')
+              .get('.stravaActivity')
+              .should('have.length', 5)
+              .first()
+              .contains('Afternoon Run 12.5188 kms');
+          });
       });
   });
 
