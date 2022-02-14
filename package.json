@@ -39,8 +39,8 @@
     "@mui/icons-material": "5.4.1",
     "@mui/lab": "5.0.0-alpha.68",
     "@mui/material": "5.4.1",
-    "axios": "0.25.0",
-    "chart.js": "3.7.0",
+    "axios": "0.26.0",
+    "chart.js": "3.7.1",
     "chartjs-adapter-date-fns": "2.0.0",
     "date-fns": "2.28.0",
     "ical": "0.8.0",
@@ -56,7 +56,7 @@
     "react-scripts": "4.0.3",
     "react-twitter-widgets": "1.10.0",
     "rss-parser": "3.12.0",
-    "winston": "3.5.1"
+    "winston": "3.6.0"
   },
   "devDependencies": {
     "@craco/craco": "6.4.3",
@@ -100,7 +100,7 @@
     "postcss-custom-properties": "12.1.4",
     "prettier": "2.5.1",
     "sass": "1.49.7",
-    "snyk": "1.851.0",
+    "snyk": "1.852.0",
     "snyk-to-html": "2.2.1",
     "stylelint": "14.5.0",
     "stylelint-config-prettier-scss": "0.0.1",
