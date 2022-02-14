@@ -19,7 +19,6 @@ describe('RSS Widget tests', () => {
       .get('#RSS')
       .click()
       .wait('@addWidget')
-      .wait('@deleteWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
         cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
@@ -85,7 +84,6 @@ describe('RSS Widget tests', () => {
       .get('#reloadAllWidgetsButton')
       .click()
       .wait('@refreshWidget')
-      .wait('@deleteWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
         cy.get('.rssArticle').should('have.length', 20);
@@ -101,7 +99,6 @@ describe('RSS Widget tests', () => {
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.validateDeletionButton')
       .click()
-      .wait('@deleteWidget')
       .wait('@deleteWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);

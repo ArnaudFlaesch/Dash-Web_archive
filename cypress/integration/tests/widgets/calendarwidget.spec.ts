@@ -22,7 +22,6 @@ describe('Calendar Widget tests', () => {
       .get('#CALENDAR')
       .click()
       .wait('@addWidget')
-      .wait('@deleteWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
         cy.get('#closeAddWidgetModal').click().get('.widget').should('have.length', 1);
@@ -91,7 +90,6 @@ describe('Calendar Widget tests', () => {
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
       .get('.validateDeletionButton')
       .click()
-      .wait('@deleteWidget')
       .wait('@deleteWidget')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
