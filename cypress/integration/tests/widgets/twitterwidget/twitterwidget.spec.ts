@@ -26,7 +26,7 @@ describe('Twitter Widget tests', () => {
   });
 
   it('Should display the timeline', () => {
-    cy.intercept('PATCH', '/widget/updateWidgetData')
+    cy.intercept('PATCH', '/widget/updateWidgetData/*')
       .as('updateWidget')
       .get('.validateProfileButton')
       .should('be.disabled')

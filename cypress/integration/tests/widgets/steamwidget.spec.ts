@@ -36,8 +36,8 @@ describe('Steam Widget tests', () => {
 
     cy.get('.refreshButton')
       .click()
-      .wait(['@getPlayerData, @getGameData'])
-      .then((requests: Interception) => {
+      .wait(['@getPlayerData', '@getGameData'])
+      .then((requests: Interception[]) => {
         expect(requests[0].response.statusCode).to.equal(200);
         cy.get('.gameInfo').should('have.length', 10);
       });

@@ -25,7 +25,7 @@ describe('Twitter Widget error tests', () => {
           .click()
           .get('.widget')
           .should('have.length', 1)
-          .intercept('PATCH', '/widget/updateWidgetData', { statusCode: 500 })
+          .intercept('PATCH', '/widget/updateWidgetData/*', { statusCode: 500 })
           .as('updateWidgetError')
           .get('.validateProfileButton')
           .should('be.disabled')
