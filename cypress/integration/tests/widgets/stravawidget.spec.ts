@@ -66,7 +66,8 @@ describe('Strava Widget tests', () => {
             fixture: 'strava/strava_activities.json'
           })
           .as('getActivities')
-          .reload()
+          .get('.refreshButton')
+          .click()
           .wait(['@getAthleteData', '@getActivities'])
           .then((request: Interception[]) => {
             const getAthleteResponse = request[0].response;
