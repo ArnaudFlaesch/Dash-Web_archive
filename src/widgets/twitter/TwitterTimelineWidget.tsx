@@ -16,7 +16,7 @@ interface IProps extends IBaseWidgetConfig {
 export default function TwitterTimelineWidget(props: IProps): React.ReactElement {
   const [profile, setProfile] = useState<string>(props.profile || '');
   const dispatch = useDispatch();
-  const ERROR_UPDATING_TIMELINE = 'Erreur lors de la modification du widget';
+  const ERROR_UPDATING_TIMELINE = 'Erreur lors de la modification du widget.';
 
   useEffect(() => {
     if (props.profile) {
