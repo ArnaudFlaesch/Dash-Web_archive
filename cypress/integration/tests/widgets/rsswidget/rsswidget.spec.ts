@@ -92,18 +92,24 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*')
+    cy.intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
+      .as('getWidgetData')
+      .intercept('DELETE', '/widget/deleteWidget/*')
       .as('deleteWidget')
-      .get('.deleteButton')
-      .click()
-      .get('h4')
-      .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
-      .get('.validateDeletionButton')
-      .click()
-      .wait('@deleteWidget')
+      .wait('@getWidgetData')
       .then((request: Interception) => {
         expect(request.response.statusCode).to.equal(200);
-        cy.get('.widget').should('have.length', 0);
+        cy.get('.deleteButton')
+          .click()
+          .get('h4')
+          .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
+          .get('.validateDeletionButton')
+          .click()
+          .wait('@deleteWidget')
+          .then((request: Interception) => {
+            expect(request.response.statusCode).to.equal(200);
+            cy.get('.widget').should('have.length', 0);
+          });
       });
   });
 });
