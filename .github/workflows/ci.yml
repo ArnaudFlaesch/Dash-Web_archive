@@ -68,9 +68,10 @@ jobs:
         run: npm run test:coverage
 
       - name: E2E tests
-        run: npm run test:e2e
+        run: npm run test:coverage
 
       - name: Generate test report
+        if: always()
         run: |
           mkdir cypress/screenshots || true
           npm run report:merge
@@ -78,6 +79,7 @@ jobs:
           npm run report:copyScreenshots
 
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: Cypress report
           path: cypress/reports/html
