@@ -78,7 +78,6 @@ jobs:
           npm run report:copyScreenshots
 
       - uses: actions/upload-artifact@v2
-        if: always()
         with:
           name: Cypress report
           path: cypress/reports/html
