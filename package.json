@@ -13,7 +13,7 @@
     "build": "craco build --prod",
     "test": "craco test --env=jsdom --testPathIgnorePatterns=./cypress/",
     "test:coverage": "npm run test -- --coverage --coverageDirectory=jest-coverage --watchAll=false",
-    "ci": "npm run test:coverage && run-p -r start:ci cy:run:ci",
+    "test:e2e": "run-p -r start:ci cy:run:ci",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && cypress run --headless --browser chrome",
     "cy:run:ci": "npm run cy:run -- --config-file cypress-test.json",
