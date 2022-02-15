@@ -3,7 +3,7 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('Config tests', () => {
-  before(() => {
+  beforeEach(() => {
     cy.loginAsAdmin()
       .visit('/')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));

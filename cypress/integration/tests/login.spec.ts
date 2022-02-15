@@ -3,14 +3,7 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('Login tests', () => {
-  before(() => {
-    window.localStorage.setItem('user', null);
-    cy.visit('/');
-  });
-
-  beforeEach(() => {
-    cy.intercept('POST', '/auth/login').as('login');
-  });
+  beforeEach(() => cy.intercept('POST', '/auth/login').as('login').visit('/'));
 
   it('Should fail to login', () => {
     cy.get('#loginButton')
@@ -29,7 +22,7 @@ describe('Login tests', () => {
       });
   });
 
-  it('Should login', () => {
+  it('Should login and logout', () => {
     cy.get('#inputUsername')
       .clear()
       .type('admintest')
@@ -44,7 +37,11 @@ describe('Login tests', () => {
         expect(request.response.statusCode).to.equal(200);
         cy.waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'))
           .get('.tab')
-          .should('have.length', 1);
+          .should('have.length', 1)
+          .get('#logoutButton')
+          .click()
+          .waitUntil(() => cy.get('#loginPageTitle').should('have.text', 'Dash'))
+          .then(() => expect(localStorage.getItem('user')).to.be.null);
       });
   });
 });

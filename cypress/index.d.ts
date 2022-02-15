@@ -2,7 +2,7 @@
 
 declare namespace Cypress {
   interface Chainable {
-    loginAsAdmin(): Chainable<Response>;
-    loginAsUser(): Chainable<Response>;
+    loginAsAdmin(): Chainable;
+    loginAsUser(): Chainable;
   }
 }

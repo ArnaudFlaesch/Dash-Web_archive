@@ -3,7 +3,7 @@
 import { Interception } from 'cypress/types/net-stubbing';
 
 describe('Twitter Widget tests', () => {
-  before(() => {
+  beforeEach(() => {
     cy.loginAsAdmin()
       .visit('/')
       .title()

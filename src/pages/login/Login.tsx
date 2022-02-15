@@ -47,7 +47,9 @@ export default function Login(): React.ReactElement {
           <img src={logo} className="mx-auto" alt="dash logo" />
         </div>
         <div>
-          <h1 className="text-5xl">Dash</h1>
+          <h1 id="loginPageTitle" className="text-5xl">
+            Dash
+          </h1>
         </div>
         <div className="flex flex-col mt-10 space-y-5">
           <Input id="inputUsername" placeholder="Username" value={username} onChange={onChangeUsername} />

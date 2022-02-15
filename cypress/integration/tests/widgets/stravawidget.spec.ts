@@ -7,7 +7,7 @@ describe('Strava Widget tests', () => {
   const STRAVA_REFRESH_TOKEN = 'FAKE_REFRESH_TOKEN';
   const TOKEN_EXPIRATION_DATE = Date.now() + 3600;
 
-  before(() => {
+  beforeEach(() => {
     cy.loginAsAdmin()
       .visit('/')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));
@@ -66,8 +66,7 @@ describe('Strava Widget tests', () => {
             fixture: 'strava/strava_activities.json'
           })
           .as('getActivities')
-          .get('.refreshButton')
-          .click()
+          .reload()
           .wait(['@getAthleteData', '@getActivities'])
           .then((request: Interception[]) => {
             const getAthleteResponse = request[0].response;

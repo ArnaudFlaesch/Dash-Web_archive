@@ -8,7 +8,7 @@ describe('Calendar Widget tests', () => {
   const icalUsaHolidays =
     'https://calendar.google.com/calendar/ical/fr.usa%23holiday%40group.v.calendar.google.com/public/basic.ics';
 
-  before(() => {
+  beforeEach(() => {
     cy.loginAsAdmin()
       .visit('/')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));

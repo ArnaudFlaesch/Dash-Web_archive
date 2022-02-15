@@ -43,7 +43,3 @@ Cypress.on('test:after:run', (test, runnable) => {
     addContext({ test }, imageUrl);
   }
 });
-
-Cypress.LocalStorage.clear = function () {
-  return;
-};

@@ -244,7 +244,7 @@ export default function Dash(): React.ReactElement {
 
                     <ImportConfigModal />
                   </div>
-                  <Button onClick={authService.logout} variant="contained">
+                  <Button id="logoutButton" onClick={authService.logout} variant="contained">
                     Déconnexion
                   </Button>
                 </div>

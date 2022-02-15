@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 describe('Tab tests', () => {
-  before(() => {
+  beforeEach(() => {
     cy.loginAsAdmin()
       .visit('/')
       .waitUntil(() => cy.get('.tab.selectedItem').should('be.visible'));

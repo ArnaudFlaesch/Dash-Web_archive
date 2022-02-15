@@ -25,7 +25,6 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import 'cypress-wait-until';
-
 import 'cypress-file-upload';
 
 Cypress.Commands.add('loginAsAdmin', (): Cypress.Chainable<Response> => {
@@ -37,13 +36,14 @@ Cypress.Commands.add('loginAsUser', (): Cypress.Chainable<Response> => {
 });
 
 function loginAs(username: string, password: string): Cypress.Chainable<Response> {
-  return cy
-    .request('POST', `${process.env.REACT_APP_BACKEND_URL || Cypress.env('backend_url')}/auth/login`, {
-      username: username,
-      password: password
+  return cy.session([username, password], () => {
+    cy.request('POST', `${process.env.REACT_APP_BACKEND_URL || Cypress.env('backend_url')}/auth/login`, {
+      username,
+      password
     })
-    .its('body')
-    .then((response) => {
-      window.localStorage.setItem('user', JSON.stringify(response));
-    });
+      .its('body')
+      .then((response) => {
+        window.localStorage.setItem('user', JSON.stringify(response));
+      });
+  });
 }
