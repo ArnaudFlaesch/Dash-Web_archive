@@ -244,17 +244,17 @@ export default function WeatherWidget(props: IProps): React.ReactElement {
               options={{ maintainAspectRatio: false }}
             />
           </div>
-          <div className="flex flex-row forecastRow">
-            {city &&
-              forecast &&
-              filterForecastByMode().map((forecastDay) => {
+          {city && forecast && (
+            <div className="flex flex-row forecastRow">
+              {filterForecastByMode().map((forecastDay) => {
                 return (
                   <div className="forecastContainer" key={forecastDay.dt}>
                     <Forecast {...forecastDay} city={city} />
                   </div>
                 );
               })}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>

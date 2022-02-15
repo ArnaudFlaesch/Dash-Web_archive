@@ -48,9 +48,15 @@ describe('Weather Widget tests', () => {
   });
 
   it("Should toggle between today's, tomorrow's and the week's forecasts", () => {
-    cy.clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
+    cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.openweathermap.org%2Fdata%2F2.5%2F*`, {
+      fixture: 'parisWeatherSample.json'
+    })
+      .as('refreshWidget')
+      .clock(new Date(2020, 6, 15, 0, 0, 0).getTime())
       .get('#toggleTodayForecast')
       .click()
+      .get('.forecastRow')
+      .scrollIntoView()
       .get('.forecast')
       .should('have.length.at.least', 5)
       .get('#toggleTomorrowForecast')

@@ -40,7 +40,14 @@ describe('RSS Widget tests', () => {
           .should('have.text', 'Le Figaro - Actualité en direct et informations en continu')
           .get('.rssArticle')
           .should('have.length', 20);
-      })
+      });
+  });
+
+  it('Should read all articles', () => {
+    cy.intercept('PATCH', '/widget/updateWidgetData/*')
+      .as('markAllFeedAsRead')
+      .intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
+      .as('refreshWidget')
       .get('.refreshButton')
       .click()
       .wait('@refreshWidget')
@@ -59,21 +66,16 @@ describe('RSS Widget tests', () => {
           )
           .get('.rssArticle')
           .contains('EN DIRECT - Déconfinement : les Français savourent leur première soirée en terrasse')
-          .should('have.class', 'read');
-      });
-  });
-
-  it('Should read all articles', () => {
-    cy.intercept('PATCH', '/widget/updateWidgetData/*')
-      .as('markAllFeedAsRead')
-      .get('.rssArticle.read')
-      .should('have.length', 1)
-      .get('.markAllArticlesAsRead')
-      .click()
-      .wait('@markAllFeedAsRead')
-      .then((request: Interception) => {
-        expect(request.response.statusCode).to.equal(200);
-        cy.get('.rssArticle.read').should('have.length', 20);
+          .should('have.class', 'read')
+          .get('.rssArticle.read')
+          .should('have.length', 1)
+          .get('.markAllArticlesAsRead')
+          .click()
+          .wait('@markAllFeedAsRead')
+          .then((request: Interception) => {
+            expect(request.response.statusCode).to.equal(200);
+            cy.get('.rssArticle.read').should('have.length', 20);
+          });
       });
   });
 
