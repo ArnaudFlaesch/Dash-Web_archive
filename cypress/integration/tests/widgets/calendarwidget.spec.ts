@@ -85,6 +85,7 @@ describe('Calendar Widget tests', () => {
   it('Should delete previously added widget', () => {
     cy.intercept('DELETE', '/widget/deleteWidget/*')
       .as('deleteWidget')
+      .waitUntil(() => cy.get('.rbc-toolbar').should('be.visible'))
       .get('.deleteButton')
       .click()
       .get('h4')
