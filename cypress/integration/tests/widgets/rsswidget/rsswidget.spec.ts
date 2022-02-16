@@ -4,9 +4,7 @@ import { Interception } from 'cypress/types/net-stubbing';
 
 describe('RSS Widget tests', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
-      .as('refreshWidget')
-      .loginAsAdmin()
+    cy.loginAsAdmin()
       .visit('/')
       .title()
       .should('equals', 'Dash')
@@ -28,7 +26,9 @@ describe('RSS Widget tests', () => {
   });
 
   it('Should edit RSS widget and add a feed URL', () => {
-    cy.get('.validateRssUrl')
+    cy.intercept('GET', '/proxy/?url=https://www.lefigaro.fr/rss/figaro_actualites.xml', { fixture: 'figaro_rss.xml' })
+      .as('refreshWidget')
+      .get('.validateRssUrl')
       .should('be.disabled')
       .get('input')
       .type('https://www.lefigaro.fr/rss/figaro_actualites.xml')

@@ -29,62 +29,63 @@ describe('Calendar Widget tests', () => {
   });
 
   it('Should edit Calendar widget and add an Ical feed', () => {
-    cy.intercept('GET', `/proxy/?url=${icalFrenchHolidays}`).as('getFrenchCalendarData');
-
-    cy.intercept('GET', `/proxy/?url=${icalUsaHolidays}`).as('getUSCalendarData');
-
-    cy.clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
+    cy.intercept('GET', `/proxy/?url=${icalFrenchHolidays}`)
+      .as('getFrenchCalendarData')
+      .intercept('GET', `/proxy/?url=${icalUsaHolidays}`)
+      .as('getUSCalendarData')
+      .clock(new Date(2021, 6, 1, 0, 0, 0).getTime())
       .get('#addCalendarUrl')
       .click()
       .get('input')
       .type(`${icalFrenchHolidays}`)
       .get('#validateCalendarUrls')
-      .click();
-
-    cy.wait('@getFrenchCalendarData').then(() => {
-      cy.get('.rbc-toolbar-label')
-        .should('have.text', 'juillet 2021')
-        .get('.refreshButton')
-        .click()
-        .wait('@getFrenchCalendarData')
-        .then(() => {
-          cy.contains('La fête nationale')
-            .get('.editButton')
-            .click()
-            .get('#addCalendarUrl')
-            .click()
-            .get('input')
-            .eq(1)
-            .type(`${icalUsaHolidays}`)
-            .get('#validateCalendarUrls')
-            .click();
-          cy.wait(['@getFrenchCalendarData', '@getUSCalendarData']).then(() => {
-            cy.contains('Independence Day')
+      .click()
+      .wait('@getFrenchCalendarData')
+      .then(() => {
+        cy.get('.rbc-toolbar-label')
+          .should('have.text', 'juillet 2021')
+          .get('.refreshButton')
+          .click()
+          .wait('@getFrenchCalendarData')
+          .then(() => {
+            cy.contains('La fête nationale')
               .get('.editButton')
               .click()
-              .get('.removeCalendarUrl')
+              .get('#addCalendarUrl')
+              .click()
+              .get('input')
               .eq(1)
-              .click()
+              .type(`${icalUsaHolidays}`)
               .get('#validateCalendarUrls')
-              .click()
-              .wait('@getFrenchCalendarData')
-              .then(() =>
-                cy
-                  .get('.rbc-event')
-                  .should('have.length', 1)
-                  .clock()
-                  .then((clock) => {
-                    clock.restore();
-                  })
-              );
+              .click();
+            cy.wait(['@getFrenchCalendarData', '@getUSCalendarData']).then(() => {
+              cy.contains('Independence Day')
+                .get('.editButton')
+                .click()
+                .get('.removeCalendarUrl')
+                .eq(1)
+                .click()
+                .get('#validateCalendarUrls')
+                .click()
+                .wait('@getFrenchCalendarData')
+                .then(() =>
+                  cy
+                    .get('.rbc-event')
+                    .should('have.length', 1)
+                    .clock()
+                    .then((clock) => {
+                      clock.restore();
+                    })
+                );
+            });
           });
-        });
-    });
+      });
   });
 
   it('Should delete previously added widget', () => {
-    cy.intercept('DELETE', '/widget/deleteWidget/*').as('deleteWidget');
-    cy.get('.deleteButton')
+    cy.intercept('DELETE', '/widget/deleteWidget/*')
+      .as('deleteWidget')
+      .get('.deleteButton')
       .click()
       .get('h4')
       .should('have.text', 'Êtes-vous sûr de vouloir supprimer ce widget ?')
