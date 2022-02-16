@@ -28,38 +28,36 @@ describe('Steam Widget tests', () => {
   it('Should refresh Steam widget and validate data', () => {
     cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUser%2FGetPlayerSummaries%2F*`, {
       fixture: 'steam/playerData.json'
-    }).as('getPlayerData');
-
-    cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FIPlayerService%2FGetOwnedGames%2F*`, {
-      fixture: 'steam/gameData.json'
-    }).as('getGameData');
-
-    cy.get('.refreshButton')
+    })
+      .as('getPlayerData')
+      .intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FIPlayerService%2FGetOwnedGames%2F*`, {
+        fixture: 'steam/gameData.json'
+      })
+      .as('getGameData')
+      .intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUserStats%2FGetPlayerAchievements%2F*`, {
+        fixture: 'steam/halfLife2Ep2Achievements.json'
+      })
+      .as('getAchievementData')
+      .get('.refreshButton')
       .click()
       .wait(['@getPlayerData', '@getGameData'])
       .then((requests: Interception[]) => {
         expect(requests[0].response.statusCode).to.equal(200);
-        cy.get('.gameInfo').should('have.length', 10);
-      });
-  });
-
-  it('Should display Half-Life 2: Episode Two details', () => {
-    cy.intercept('GET', `/proxy/?url=https:%2F%2Fapi.steampowered.com%2FISteamUserStats%2FGetPlayerAchievements%2F*`, {
-      fixture: 'steam/halfLife2Ep2Achievements.json'
-    }).as('getAchievementData');
-
-    cy.contains('Half-Life 2: Episode Two')
-      .first()
-      .click()
-      .wait('@getAchievementData')
-      .then((request: Interception) => {
-        expect(request.response.statusCode).to.equal(200);
-        cy.get('.totalachievements')
-          .should('have.text', 'Succès : 23')
-          .get('.completedAchievements')
-          .should('have.text', 'Succès complétés : 19')
-          .get('.progressValue')
-          .should('have.text', '83%');
+        cy.get('.gameInfo')
+          .should('have.length', 10)
+          .contains('Half-Life 2: Episode Two')
+          .first()
+          .click()
+          .wait('@getAchievementData')
+          .then((request: Interception) => {
+            expect(request.response.statusCode).to.equal(200);
+            cy.get('.totalachievements')
+              .should('have.text', 'Succès : 23')
+              .get('.completedAchievements')
+              .should('have.text', 'Succès complétés : 19')
+              .get('.progressValue')
+              .should('have.text', '83%');
+          });
       });
   });
 
