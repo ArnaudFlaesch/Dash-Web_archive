@@ -66,7 +66,7 @@
     "@types/enzyme": "3.10.11",
     "@types/fb": "0.0.28",
     "@types/ical": "0.8.0",
-    "@types/jest": "27.4.0",
+    "@types/jest": "27.4.1",
     "@types/node": "16.11.25",
     "@types/pg": "8.6.4",
     "@types/react": "17.0.39",
